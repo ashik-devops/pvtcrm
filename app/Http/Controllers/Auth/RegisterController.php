@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\User;
 use App\Http\Controllers\Controller;
+use App\User_profile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -36,7 +37,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware('auth');
     }
 
     /**
@@ -51,6 +52,15 @@ class RegisterController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
+            'initial'=>'required|string|max:8|unique:user_profiles',
+            'primary_phone_no'=>'required|string|max:32|unique:user_profiles',
+            'secondary_phone_no'=>'string|max:32|unique:user_profiles',
+            'street_address_1'=>'required|string|max:128',
+            'street_address_2'=>'string|max:128',
+            'city'=>'required|string|max:32',
+            'state'=>'required|string|max:32',
+            'country'=>'required|string|max:32',
+            'zip'=>'required|string|max:8',
         ]);
     }
 
@@ -62,10 +72,29 @@ class RegisterController extends Controller
      */
     protected function create(array $data)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-        ]);
+        /*Create the user*/
+
+        $user = new user();
+        $user->name = $data['name'];
+        $user->email = $data['email'];
+        $user->password = bcrypt($data['password']);
+        $user->status=1;
+        $user->save();
+
+        $user_profile=new User_profile();
+        $user_profile->user_id=$user->id;
+        $user_profile->initial=$data['initial'];
+        $user_profile->primary_phone_no=$data['primary_phone_no'];
+        $user_profile->secondary_phone_no=$data['secondary_phone_no'];
+        $user_profile->address_line_1=$data['street_address_1'];
+        $user_profile->address_line_2=$data['street_address_2'];
+        $user_profile->city=$data['city'];
+        $user_profile->state=$data['state'];
+        $user_profile->country=$data['country'];
+        $user_profile->zip=$data['zip'];
+        $user->profile->save();
+
+
+        $this->redirectPath('/user/profile/'.$user);
     }
 }
