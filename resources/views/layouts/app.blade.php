@@ -10,8 +10,22 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
+    @yield('before-head-style');
+    <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/metisMenu.css">
+    <link rel="stylesheet" href="assets/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/elegant-icons.css">
+    <link rel="stylesheet" href="assets/css/pe-7-icons.css">
+    <link rel="stylesheet" href="assets/css/pe-7-icons-helper.css">
+    <link rel="stylesheet" href="assets/css/tether-shepherd.css">
+    <link rel="stylesheet" href="assets/css/jstree-default.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
+    @yield('after-head-style');
+    @yield('before-head-script');
+    @yield('after-head-script');
     <!-- Styles -->
-    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+
 </head>
 <body>
     <div id="app">
