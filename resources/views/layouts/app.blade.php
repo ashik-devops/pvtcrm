@@ -1,3 +1,8 @@
+@include('layouts.header')
+@include('layouts.main-navigation')
+@include('layouts.copyright')
+@include('layouts.side-panel')
+
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 <head>
@@ -10,7 +15,7 @@
 
     <title>{{ config('app.name', 'Laravel') }}</title>
 
-    @yield('before-head-style');
+    @yield('before-head-style')
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="assets/css/bootstrap.css">
     <link rel="stylesheet" href="assets/css/metisMenu.css">
@@ -22,71 +27,41 @@
     <link rel="stylesheet" href="assets/css/jstree-default.css">
     <link rel="stylesheet" href="assets/css/styles.css">
     @yield('after-head-style');
-    @yield('before-head-script');
-    @yield('after-head-script');
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
+    @yield('before-head-script')
+    @yield('after-head-script')
     <!-- Styles -->
 
 </head>
-<body>
-    <div id="app">
-        <nav class="navbar navbar-default navbar-static-top navbar-inverse">
-            <div class="container">
-                <div class="navbar-header">
+<body class="preload">
 
-                    <!-- Collapsed Hamburger -->
-                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#app-navbar-collapse">
-                        <span class="sr-only">Toggle Navigation</span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-
-                    <!-- Branding Image -->
-                    <a class="navbar-brand" href="{{ url('/') }}">
-                        {{ config('app.name', 'Laravel') }}
-                    </a>
-                </div>
-                @if(!Auth::guest())
-                <div class="collapse navbar-collapse" id="app-navbar-collapse">
-                    <!-- Left Side Of Navbar -->
-                    <ul class="nav navbar-nav">
-                        &nbsp;
-                    </ul>
-
-                    <!-- Right Side Of Navbar -->
-                    <ul class="nav navbar-nav navbar-right">
-                        <!-- Authentication Links -->
-
-                            <li class="dropdown">
-                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
-                                    {{ Auth::user()->name }} <span class="caret"></span>
-                                </a>
-
-                                <ul class="dropdown-menu" role="menu">
-                                    <li>
-                                        <a href="{{ route('logout') }}"
-                                            onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                            Logout
-                                        </a>
-
-                                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                            {{ csrf_field() }}
-                                        </form>
-                                    </li>
-                                </ul>
-                            </li>
-
-                    </ul>
-                </div>
-                @endif
-            </div>
-        </nav>
+        @yield('header')
+        @yield('main-nav')
 
         @yield('content')
-    </div>
 
-    <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+        <footer>
+            @yield('copyright')
+        </footer>
+
+        @yield('side-panel')
+
+        @yield('before-footer-script')
+        <script src="/assets/js/jquery.js"></script>
+        <script src="/assets/js/bootstrap.js"></script>
+        <script src="/assets/js/metisMenu.js"></script>
+        <script src="/assets/js/imagesloaded.js"></script>
+        <script src="/assets/js/masonry.js"></script>
+        <script src="/assets/js/pace.js"></script>
+        <script src="/assets/js/tether.js"></script>
+        <script src="/assets/js/tether-shepherd.js"></script>
+        <script src="/assets/js/main.js"></script>
+        @yield('after-footer-script')
+
 </body>
 </html>

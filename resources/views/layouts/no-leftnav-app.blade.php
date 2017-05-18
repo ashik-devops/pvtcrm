@@ -1,3 +1,4 @@
+@include('layouts.copyright')
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
 <head>
@@ -22,6 +23,12 @@
     <link rel="stylesheet" href="/assets/css/jstree-default.css">
     <link rel="stylesheet" href="/assets/css/styles.css">
     @yield('after-head-style')
+
+<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+
     @yield('before-head-script')
     @yield('after-head-script')
     <!-- Styles -->
@@ -31,7 +38,7 @@
     @yield('content')
 <!-- Scripts -->
     <footer>
-        @include('layouts.copyright')
+        @yield('copyright')
     </footer>
     @yield('before-footer-script')
     <script src="/assets/js/jquery.js"></script>
