@@ -21,6 +21,7 @@ class UsersTableSeeder extends Seeder
 
         $user_profile=new User_profile();
         $user_profile->user_id=$user->id;
+        $user_profile->role_id=1;
         $user_profile->initial = 'Rode';
         $user_profile->primary_phone_no = '+8801711722828';
         $user_profile->address_line_1='House 15, Road 21';
