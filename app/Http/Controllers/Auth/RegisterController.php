@@ -9,6 +9,8 @@ use App\User_profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Auth\Events\Registered;
+
 
 class RegisterController extends Controller
 {
@@ -30,7 +32,7 @@ class RegisterController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/home';
+    protected $redirectTo = '/users';
 
     public function __construct()
     {
@@ -51,14 +53,14 @@ class RegisterController extends Controller
             'password' => 'required|string|min:6|confirmed',
             'initial'=>'required|string|max:8|unique:user_profiles',
             'primary_phone_no'=>'required|string|max:32|unique:user_profiles',
-            'secondary_phone_no'=>'string|max:32|unique:user_profiles',
+            'secondary_phone_no'=>'string|max:32|nullable',
             'street_address_1'=>'required|string|max:128',
-            'street_address_2'=>'string|max:128',
+            'street_address_2'=>'string|max:128|nullable',
             'city'=>'required|string|max:32',
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
-            'role'=>'required|integer|min:2'
+            'role'=>'required|integer'
         ]);
     }
 
@@ -129,16 +131,6 @@ class RegisterController extends Controller
         ]);
     }
 
-    /**
-     * The user has been registered.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  mixed  $user
-     * @return mixed
-     */
-    protected function registered(Request $request, $user)
-    {
-        redirect('/all-users');
-    }
+
 
 }

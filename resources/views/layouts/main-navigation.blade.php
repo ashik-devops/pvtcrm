@@ -46,9 +46,9 @@
                 </a>
             </li>
             <li  class=" ">
-                <a href="members.html">
+                <a href="/users">
                     <span aria-hidden="true" class="icon icon_group"></span>
-                    <span class="nav-label">Members</span>
+                    <span class="nav-label">Users</span>
                 </a>
             </li>
             <li  class=" ">
