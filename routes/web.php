@@ -14,4 +14,4 @@
 //Route::group(['middleware'=>'web'])
 Route::get('/', 'HomeController@dashboard')->name('dashboard');
 Auth::routes();
-
+Route::get('/all-users', 'UsersController@index');

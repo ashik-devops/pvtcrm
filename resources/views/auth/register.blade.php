@@ -1,6 +1,14 @@
 @extends('layouts.app')
 
+
 @section('content')
+
+
+
+@endsection
+
+
+@section('content-old')
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">

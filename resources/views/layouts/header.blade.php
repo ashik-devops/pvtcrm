@@ -206,7 +206,18 @@
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu-user" >
                     <li><span class="arrow"></span><a role="menuitem" href="user-profile.html"><span class="pe-icon pe-7s-user icon"></span>My Account</a></li>
                     <li><a role="menuitem" href="pricing.html"><span class="pe-icon pe-7s-paper-plane icon"></span>Upgrade Plan</a></li>
-                    <li><a role="menuitem" href="login.html"><span class="pe-icon pe-7s-power icon"></span>Sign Out</a></li>
+                    <li>
+                        <a href="{{ route('logout') }}"
+                           onclick="event.preventDefault();
+                                                     document.getElementById('logout-form').submit();">
+                            Logout
+                        </a>
+
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            {{ csrf_field() }}
+                        </form>
+
+                    </li>
                 </ul>
             </div>
         </div>
