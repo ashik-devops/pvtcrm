@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Role;
 use Illuminate\Http\Request;
 use App\User;
 class UsersController extends Controller
@@ -12,6 +13,11 @@ class UsersController extends Controller
     }
 
     public function index(){
-        return view('user.index')->with('users', User::all());
+        $users = User::all(['id','name', 'email']);
+        $roles=Role::all(['id','name']);
+        return view('user.index')->with([
+            'users' => $users,
+            'roles'=>$roles
+        ]);
     }
 }

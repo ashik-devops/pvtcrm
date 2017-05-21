@@ -6,5 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Role extends Model
 {
-    //
+    public function profile(){
+        return $this->hasMany('App\User_profile');
+    }
 }

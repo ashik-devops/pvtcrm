@@ -48,7 +48,7 @@
         <footer>
             @yield('copyright')
         </footer>
-
+        @yield('modal')
         @yield('side-panel')
 
         @yield('before-footer-script')

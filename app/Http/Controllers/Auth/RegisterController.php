@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\User;
+use App\Role;
 use App\Http\Controllers\Controller;
 use App\User_profile;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
@@ -30,11 +32,6 @@ class RegisterController extends Controller
      */
     protected $redirectTo = '/home';
 
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth');
@@ -61,7 +58,26 @@ class RegisterController extends Controller
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
+            'role'=>'required|integer|min:2'
         ]);
+    }
+
+    /**
+     * Handle a registration request for the application.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function register(Request $request)
+    {
+        $this->validator($request->all())->validate();
+
+        event(new Registered($user = $this->create($request->all())));
+
+//        $this->guard()->login($user);
+
+        return $this->registered($request, $user)
+            ?: redirect($this->redirectPath());
     }
 
     /**
@@ -82,8 +98,9 @@ class RegisterController extends Controller
         $user->save();
 
         $user_profile=new User_profile();
-        $user_profile->user_id=$user->id;
+//        $user_profile->user_id=$user->id;
         $user_profile->initial=$data['initial'];
+        $user_profile->role_id=$data['role'];
         $user_profile->primary_phone_no=$data['primary_phone_no'];
         $user_profile->secondary_phone_no=$data['secondary_phone_no'];
         $user_profile->address_line_1=$data['street_address_1'];
@@ -92,9 +109,36 @@ class RegisterController extends Controller
         $user_profile->state=$data['state'];
         $user_profile->country=$data['country'];
         $user_profile->zip=$data['zip'];
-        $user->profile->save();
+        $user->profile()->save($user_profile);
 
 
-        $this->redirectPath('/user/profile/'.$user);
+       return $user;
     }
+
+    /**
+     * Show the application registration form.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function showRegistrationForm()
+    {
+        $roles=Role::all(['id','name']);
+        return view('auth.register')->with([
+            'roles'=>$roles
+        ]);
+    }
+
+    /**
+     * The user has been registered.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  mixed  $user
+     * @return mixed
+     */
+    protected function registered(Request $request, $user)
+    {
+        redirect('/all-users');
+    }
+
 }

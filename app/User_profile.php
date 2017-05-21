@@ -9,4 +9,7 @@ class User_profile extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+    public function role(){
+        return $this->belongsTo('App\Role');
+    }
 }
