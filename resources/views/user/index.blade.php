@@ -29,7 +29,7 @@
                                                     <a class="profile-img" href="#"><img src="{{is_null($user->profile->profile_pic)?'assets/images/profiles/profile-7.png':$user->profile->profile_pic}}" alt="" /></a>
                                                     <ul class="info list-unstyled">
                                                         <li class="name"><a href="#">{{$user->name}}</a></li>
-                                                        <li class="role">{{$user->profile->role->name}}</li>
+                                                        <li class="role">{{$user->role->name or "Not Set"}}</li>
                                                         <li class="team"><a href="#">{{$user->email}}</a></li>
                                                     </ul>
                                                 </div>

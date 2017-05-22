@@ -30,4 +30,7 @@ class User extends Authenticatable
     public function profile(){
         return $this->hasOne('App\User_profile');
     }
+    public function role(){
+        return $this->belongsTo('App\Role');
+    }
 }

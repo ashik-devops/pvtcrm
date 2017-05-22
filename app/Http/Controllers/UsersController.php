@@ -13,7 +13,7 @@ class UsersController extends Controller
     }
 
     public function index(){
-        $users = User::all(['id','name', 'email']);
+        $users = User::all(['id', 'role_id', 'name', 'email']);
         $roles=Role::all(['id','name']);
         return view('user.index')->with([
             'users' => $users,

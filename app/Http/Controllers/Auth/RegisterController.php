@@ -97,12 +97,12 @@ class RegisterController extends Controller
         $user->email = $data['email'];
         $user->password = bcrypt($data['password']);
         $user->status=1;
+        $user->role_id=$data['role'];
         $user->save();
 
         $user_profile=new User_profile();
 //        $user_profile->user_id=$user->id;
         $user_profile->initial=$data['initial'];
-        $user_profile->role_id=$data['role'];
         $user_profile->primary_phone_no=$data['primary_phone_no'];
         $user_profile->secondary_phone_no=$data['secondary_phone_no'];
         $user_profile->address_line_1=$data['street_address_1'];
