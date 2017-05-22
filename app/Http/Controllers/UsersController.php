@@ -17,7 +17,7 @@ class UsersController extends Controller
         $roles=Role::all(['id','name']);
         return view('user.index')->with([
             'users' => $users,
-            'roles'=>$roles
+            'roles' => $roles
         ]);
     }
 }
