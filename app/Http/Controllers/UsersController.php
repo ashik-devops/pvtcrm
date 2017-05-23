@@ -99,7 +99,7 @@ class UsersController extends Controller
 
         /*handle image upload*/
         if ($request->hasFile('pro_pic') && $request->file('pro_pic')->isValid()) {
-            $user->profile->profile_pic = $request->file('pro_pic')->store('assets/images/profiles', ['disk'=>'public']);
+            $user->profile->profile_pic = $request->file('pro_pic')->storePublicly('assets/images/profiles', ['disk'=>'public']);
 
         }
 
