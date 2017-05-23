@@ -25,3 +25,6 @@
 @endsection
 
 
+@section('after-footer-script')
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+@endsection

@@ -32,5 +32,5 @@
 @endsection
 
 @section('after-footer-script')
-    <script src="assets/js/parsley.js"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 @endsection

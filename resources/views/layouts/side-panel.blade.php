@@ -22,7 +22,7 @@
             </div>
             <div class="item">
                 <div class="symbol-holder">
-                    <img class="user-profile" src="assets/images/profiles/profile-20.png" alt="" />
+                    <img class="user-profile" src="/assets/images/profiles/profile-20.png" alt="" />
                 </div>
                 <div class="content-holder">
                     <div class="subject-line">
@@ -53,7 +53,7 @@
             </div>
             <div class="item">
                 <div class="symbol-holder">
-                    <img class="user-profile" src="assets/images/profiles/profile-15.png" alt="" />
+                    <img class="user-profile" src="/assets/images/profiles/profile-15.png" alt="" />
                 </div>
                 <div class="content-holder">
                     <div class="subject-line">

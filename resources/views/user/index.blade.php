@@ -2,7 +2,7 @@
 @include('auth.registration-form')
 
 @section('after-head-style')
-    <link rel="stylesheet" href="assets/css/members.css">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/members.css')}}">
 @endsection
 
 @section('content')
@@ -26,11 +26,15 @@
                                         <div class="item">
                                             <div class="row">
                                                 <div class="profile col-md-3 col-sm-3 col-xs-12">
-                                                    <a class="profile-img" href="#"><img src="{{is_null($user->profile->profile_pic)?'assets/images/profiles/profile-7.png':$user->profile->profile_pic}}" alt="" /></a>
+                                                    <a class="profile-img" href="{{route('profile-edit', [$user->id])}}"><img src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" /></a>
                                                     <ul class="info list-unstyled">
-                                                        <li class="name"><a href="#">{{$user->name}}</a></li>
+                                                        <li class="name"><a href="{{route('profile-edit', [$user->id])}}">{{$user->name}}</a></li>
                                                         <li class="role">{{$user->role->name or "Not Set"}}</li>
-                                                        <li class="team"><a href="#">{{$user->email}}</a></li>
+                                                        <li class="email"><a href="mailto:{{$user->email}}">{{$user->email}}</a></li>
+                                                        <li class="phone"><a href="tel:{{$user->profile->primary_phone_no}}">{{$user->profile->primary_phone_no}}</a></li>
+                                                        @if(!is_null($user->profile->secondary_phone_no))
+                                                            <li class="phone"><a href="tel:{{$user->profile->secondary_phone_no}}">{{$user->profile->secondary_phone_no}}</a></li>
+                                                        @endif
                                                     </ul>
                                                 </div>
                                                 <div class="contact col-md-6 col-sm-6 col-xs-12">
@@ -89,6 +93,6 @@
                 </div>
             </div>
         </div>
-    </div><!--//modal-->
+    </div><!--/modal-->
 @endsection
 

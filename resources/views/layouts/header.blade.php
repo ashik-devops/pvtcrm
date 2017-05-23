@@ -3,7 +3,7 @@
     <div class="branding float-left">
         <h1 class="logo text-center">
             <a href="index.html">
-                <img class="logo-icon" src="assets/images/logo-icon.svg" alt="icon" />
+                <img class="logo-icon" src="{{asset('storage/assets/images/logo-icon.svg')}}" alt="icon" />
                 <span class="nav-label">
 							<span class="highlight">Pvt</span>CRM
 						</span>
@@ -45,7 +45,7 @@
                             <div class="notification-items no-overflow">
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img src="assets/images/profiles/profile-8.png" alt="" />
+                                        <img src="{{asset('storage/assets/images/profiles/profile-8.png')}}'" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -58,7 +58,7 @@
                                 </div>
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img src="assets/images/profiles/profile-7.png" alt="" />
+                                        <img src="{{asset('storage/assets/images/profiles/profile-7.png')}}" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -71,7 +71,7 @@
                                 </div>
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img src="assets/images/profiles/profile-2.png" alt="" />
+                                        <img src="{{asset('storage/assets/images/profiles/profile-2.png')}}" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -98,7 +98,7 @@
                             <div class="message-items no-overflow">
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img class="profile" src="assets/images/profiles/profile-7.png" alt="" />
+                                        <img class="profile" src="{{asset('storage/assets/images/profiles/profile-7.png')}}" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -113,7 +113,7 @@
                                 </div>
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img class="profile" src="assets/images/profiles/profile-1.png" alt="" />
+                                        <img class="profile" src="{{asset('storage/assets/images/profiles/profile-1.png')}}" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -128,7 +128,7 @@
                                 </div>
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img class="profile" src="assets/images/profiles/profile-4.png" alt="" />
+                                        <img class="profile" src="{{asset('storage/assets/images/profiles/profile-4.png')}}" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -143,7 +143,7 @@
                                 </div>
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img class="profile" src="assets/images/profiles/profile-5.png" alt="" />
+                                        <img class="profile" src="{{asset('storage/assets/images/profiles/profile-5.png')}}" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -158,7 +158,7 @@
                                 </div>
                                 <div class="item media">
                                     <div class="media-left profile">
-                                        <img class="profile" src="assets/images/profiles/profile-6.png" alt="" />
+                                        <img class="profile" src="{{asset('storage/assets/images/profiles/profile-6.png')}}" alt="" />
                                     </div>
                                     <div class="media-body">
                                         <a href="#">
@@ -200,7 +200,7 @@
             </div>
             <div class="user-container dropdown">
                 <div class="dropdown-toggle" id="dropdownMenu-user" data-toggle="dropdown" aria-expanded="true" role="button">
-                    <img src="assets/images/profiles/profile-3.png" alt="" />
+                    <img src="{{asset('storage/assets/images/profiles/profile-3.png')}}" alt="" />
                     <i class="fa fa-caret-down"></i>
                 </div>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu-user" >

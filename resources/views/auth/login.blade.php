@@ -1,7 +1,7 @@
 @extends('layouts.no-leftnav-app')
 @include('auth.login-form')
 @section('after-head-style')
-    <link rel="stylesheet" href="assets/css/authentication.css">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/authentication.css')}}">
 @endsection
 
 @section('content')

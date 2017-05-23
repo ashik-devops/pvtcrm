@@ -44,7 +44,7 @@
         </div>
         <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
             <label class="sr-only">Password</label>
-            <input type="password" name="password"minlength="6"  class="form-control" id="password" placeholder="Enter Password" required data-parsley-trigger="change focusout" data-parsley-required-message="You must enter a password.">
+            <input type="password" name="password" minlength="6"  class="form-control" id="password" placeholder="Enter Password" required data-parsley-trigger="change focusout" data-parsley-required-message="You must enter a password.">
             @if ($errors->has('password'))
                 <span class="help-block">
                                         <strong>{{ $errors->first('password') }}</strong>
@@ -53,7 +53,7 @@
         </div>
         <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
             <label class="sr-only">Confirm Password</label>
-            <input type="password" name="password_confirmation"minlength="6"  class="form-control" placeholder="Enter Password Again" required data-parsley-trigger="change focusout" data-parsley-equalto="#password" data-parsley-equalto-message="Passwords does not match" data-parsley-required-message="You must enter password again.">
+            <input type="password" name="password_confirmation" minlength="6"  class="form-control" placeholder="Enter Password Again" required data-parsley-trigger="change focusout" data-parsley-equalto="#password" data-parsley-equalto-message="Passwords does not match" data-parsley-required-message="You must enter password again.">
             @if ($errors->has('password_confirmation'))
                 <span class="help-block">
                                         <strong>{{ $errors->first('password_confirmation') }}</strong>
@@ -153,14 +153,11 @@
         </div>
 
 
-        <button type="register()" class="btn btn-success margin-top-md center-block">Add Member</button>
+        <button type="submit" class="btn btn-success margin-top-md center-block">Add User</button>
 
     </form>
 @endsection
 
 @section('after-footer-script')
-    <script src="assets/js/parsley.js"></script>
-    <script type="text/javascript">
-
-    </script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 @endsection

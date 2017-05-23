@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('after-head-style')
-    <link rel="stylesheet" href="assets/css/dashboard-projects.css">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/dashboard-projects.css')}}">
 @endsection
 
 @section('content')
@@ -468,7 +468,7 @@
                                             <h3 class="figure-total text-highlight">$64,456<span class="meta">(Current Month)</span></h3>
                                             <ul class="list-unstyled list-currency">
                                                 <li class="dollars">
-                                                    <img class="flag" src="assets/images/flags/US.png" alt="" />
+                                                    <img class="flag" src="{{asset('storage/assets/images/flags/US.png')}}" alt="" />
                                                     <span class="progress-container">
 														<span class="progress-pc">82%</span>
 												<span class="progress">
@@ -482,7 +482,7 @@
                                                     <span class="figure-sub">$52,854</span>
                                                 </li>
                                                 <li class="pounds">
-                                                    <img class="flag" src="assets/images/flags/UK.png" alt="" />
+                                                    <img class="flag" src="{{asset('storage/assets/images/flags/UK.png')}}" alt="" />
                                                     <span class="progress-container">
 														<span class="progress-pc">6%</span>
 												<span class="progress">
@@ -496,7 +496,7 @@
                                                     <span class="figure-sub">£2,320</span>
                                                 </li>
                                                 <li class="euros">
-                                                    <img class="flag" src="assets/images/flags/EU.png" alt="" />
+                                                    <img class="flag" src="{{asset('storage/assets/images/flags/EU.png')}}" alt="" />
                                                     <span class="progress-container">
 														<span class="progress-pc">12%</span>
 												<span class="progress">
@@ -569,7 +569,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-1.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-1.png')}}" alt="" />
                                                                 <span class="status offline" data-toggle="tooltip" data-placement="right" title="Offline"></span>
                                                             </div>
 
@@ -589,7 +589,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-2.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-2.png')}}'" alt="" />
                                                                 <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
                                                             </div>
 
@@ -612,7 +612,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-3.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-3.png')}}" alt="" />
                                                                 <span class="status busy" data-toggle="tooltip" data-placement="right" title="Busy"></span>
                                                             </div>
 
@@ -635,7 +635,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-4.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-4.png')}}" alt="" />
                                                                 <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
                                                             </div>
 
@@ -661,7 +661,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-1.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-1.png')}}" alt="" />
                                                                 <span class="status offline" data-toggle="tooltip" data-placement="right" title="Offline"></span>
                                                             </div>
 
@@ -684,7 +684,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-3.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-3.png')}}" alt="" />
                                                                 <span class="status busy" data-toggle="tooltip" data-placement="right" title="Busy"></span>
                                                             </div>
 
@@ -710,7 +710,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-4.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-4.png')}}" alt="" />
                                                                 <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
                                                             </div>
 
@@ -736,7 +736,7 @@
                                                     <div class="item">
                                                         <div class="profile">
                                                             <div class="profile-inner">
-                                                                <img src="assets/images/profiles/profile-2.png" alt="" />
+                                                                <img src="{{asset('storage/assets/images/profiles/profile-2.png')}}" alt="" />
                                                                 <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
                                                             </div>
 
@@ -783,5 +783,5 @@
 
 
 @section('after-footer-script')
-    <script src="assets/js/dashboard-projects.js"></script>
+    <script src="{{asset('storage/assets/js/dashboard-projects.js')}}"></script>
 @endsection
