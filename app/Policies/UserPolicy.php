@@ -21,7 +21,7 @@ class UserPolicy
     public function view(User $authenticated_user, User $user)
     {
 
-        return $user->id==$authenticated_user->id || !is_null($authenticated_user->policies()->find(
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->find(
             Policy::whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','view'])->first()->id
         ));
@@ -50,7 +50,7 @@ class UserPolicy
      */
     public function update(User $authenticated_user, User $user)
     {
-        return $user->id==$authenticated_user->id || !is_null($authenticated_user->policies()->find(
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->find(
             Policy::whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','edit'])->first()->id
         ));
