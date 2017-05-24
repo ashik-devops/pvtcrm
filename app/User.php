@@ -33,4 +33,8 @@ class User extends Authenticatable
     public function role(){
         return $this->belongsTo('App\Role');
     }
+
+    public function policies(){
+        return $this->belongsToMany('App\Policy', 'users_policies', 'user_id', 'policy_id');
+    }
 }
