@@ -91,6 +91,22 @@
                                                 @endif
                                             </div>
                                         </div>
+
+                                        <div class="form-group"{{ $errors->has('status') ? ' has-error' : '' }}>
+                                            <label for="status" class="col-md-2 col-sm-3 col-xs-12 control-label">Status</label>
+                                            <div class="col-md-10 col-sm-9 col-xs-12">
+                                            <select name="status" class="form-control" id="status" required value="{{old('status')}}">
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+
+                                            @if ($errors->has('status'))
+                                                <span class="help-block">
+                                        <strong>{{ $errors->first('zip') }}</strong>
+                                    </span>
+                                            @endif
+                                            </div>
+                                        </div>
                                     </fieldset>
                                     <fieldset class="fieldset">
                                         <h3 class="fieldset-title">Contact Info</h3>

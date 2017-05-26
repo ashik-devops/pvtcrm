@@ -3,7 +3,6 @@
 namespace App\Policies;
 
 use App\Policy;
-use App\Role;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
@@ -50,6 +49,7 @@ class UserPolicy
      */
     public function update(User $authenticated_user, User $user)
     {
+
         return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->find(
             Policy::whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','edit'])->first()->id
@@ -70,4 +70,6 @@ class UserPolicy
                 ->whereIn('action',['*','delete'])->first()->id
         ));
     }
+
+
 }

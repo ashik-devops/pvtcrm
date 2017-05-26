@@ -151,6 +151,20 @@
                                     </span>
             @endif
         </div>
+        <div class="form-group"{{ $errors->has('status') ? ' has-error' : '' }}>
+            <label for="status" class="sr-only">Status</label>
+
+            <select name="status" id="status" required value="{{old('status')}}">
+                <option value="1">Active</option>
+                <option value="0">Inactive</option>
+            </select>
+
+            @if ($errors->has('status'))
+                <span class="help-block">
+                                        <strong>{{ $errors->first('zip') }}</strong>
+                                    </span>
+            @endif
+        </div>
 
 
         <button type="submit" class="btn btn-success margin-top-md center-block">Add User</button>

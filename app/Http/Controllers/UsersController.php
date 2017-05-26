@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Policies\UserPolicy;
 use App\Role;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -36,7 +37,8 @@ class UsersController extends Controller
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
-            'role'=>'required|integer'
+            'role'=>'required|integer',
+            'status'=>'required|integer|max:1'
         ]);
     }
 
@@ -61,7 +63,6 @@ class UsersController extends Controller
      */
 
     public function edit(User $user){
-
         return view('user.view-profile')->with([
             'user' => $user,
             'roles'=>Role::all()
@@ -85,7 +86,7 @@ class UsersController extends Controller
         $data = $request->all();
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->status=1;
+        $user->status=$data['status'];
         $user->role_id=$data['role'];
         $user->profile->initial=$data['initial'];
         $user->profile->primary_phone_no=$data['primary_phone_no'];
