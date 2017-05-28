@@ -48,7 +48,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $users = User::all(['id', 'role_id', 'name', 'email']);
+        $users = User::paginate(3);
         $roles=Role::all(['id','name']);
         return view('user.index')->with([
             'users' => $users,

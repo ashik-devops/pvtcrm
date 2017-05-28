@@ -1,6 +1,5 @@
 @extends('layouts.app')
 @include('auth.registration-form')
-
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/members.css')}}">
 @endsection
@@ -22,7 +21,7 @@
                             <div class="module-content">
                                 <div class="module-content-inner no-padding-bottom">
                                     <div class="members-list">
-                                        @foreach ($users as $user)
+                                        @foreach ($users->items() as $user)
                                         <div class="item">
                                             <div class="row">
                                                 <div class="profile col-md-3 col-sm-3 col-xs-12">
@@ -57,15 +56,7 @@
                                         </div>
                                         @endforeach
 
-
-                                        <nav class="text-center pagination-wrapper">
-                                            <p class="pagination-info">Displaying members 1-10 of 356</p>
-                                            <ul class="pagination pagination-sm">
-                                                <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                                                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                                                <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
-                                            </ul>
-                                        </nav>
+                                        {{$users->links()}}
                                     </div>
                                 </div>
                             </div>
