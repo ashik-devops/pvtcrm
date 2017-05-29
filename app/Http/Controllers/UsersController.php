@@ -48,7 +48,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $users = User::paginate(3);
+        $users = User::paginate(10);
         $roles=Role::all(['id','name']);
         return view('user.index')->with([
             'users' => $users,
