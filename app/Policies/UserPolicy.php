@@ -11,6 +11,22 @@ class UserPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can list all users.
+     *
+     * @param  \App\User  $authenticated_user
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function list(User $authenticated_user, User $user)
+    {
+
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->find(
+                Policy::whereIn('scope', ['*', 'user'])
+                    ->whereIn('action',['*','list'])->first()->id
+            ));
+    }
+
+    /**
      * Determine whether the user can view the user.
      *
      * @param  \App\User  $authenticated_user
