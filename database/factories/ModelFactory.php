@@ -12,13 +12,29 @@
 */
 
 /** @var \Illuminate\Database\Eloquent\Factory $factory */
-$factory->define(App\User::class, function (Faker\Generator $faker) {
-    static $password;
+$factory->define(App\Customer::class, function (Faker\Generator $faker) {
 
+    static $titles = ['CEO', 'GM', 'COO', 'MRO', 'HR'];
     return [
-        'name' => $faker->name,
-        'email' => $faker->unique()->safeEmail,
-        'password' => $password ?: $password = bcrypt('secret'),
-        'remember_token' => str_random(10),
+        'first_name'=>$faker->firstName,
+        'last_name'=>$faker->lastName,
+        'title'=>$titles[rand(0, 4)],
+        'email'=>$faker->email,
+        'phone_no'=>$faker->phoneNumber,
+        'user_id'=>rand(2,4)
+    ];
+});
+
+$factory->define(App\Address::class, function (Faker\Generator $faker) {
+    return [
+        'customer_id'=>rand(1,50),
+        'street_address_1'=>$faker->streetAddress,
+        'street_address_2'=>$faker->streetName,
+        'city'=>$faker->city,
+        'state'=>$faker->state,
+        'country'=>$faker->country,
+        'zip'=>$faker->postcode,
+        'email'=>$faker->unique()->email,
+        'phone_no'=>$faker->unique()->phoneNumber
     ];
 });
