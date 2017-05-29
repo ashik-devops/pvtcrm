@@ -25,8 +25,8 @@
     <link rel="stylesheet" href="{{asset('storage/assets/css/pe-7-icons-helper.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/tether-shepherd.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jstree-default.css')}}">
-    <link rel="stylesheet" href="{{asset('storage/assets/css/styles.css')}}">
     @yield('after-head-style')
+    <link rel="stylesheet" href="{{asset('storage/assets/css/styles.css')}}">
 
     <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>

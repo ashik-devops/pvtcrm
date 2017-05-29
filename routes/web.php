@@ -17,3 +17,5 @@ Auth::routes();
 Route::get('/users', 'UsersController@index');
 Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-edit')->middleware('can:update,user');
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update')->middleware('can:update,user');
+Route::get('/customers', 'CustomersController@index');
+Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data');

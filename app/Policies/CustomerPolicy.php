@@ -11,6 +11,22 @@ class CustomerPolicy
     use HandlesAuthorization;
 
     /**
+     * Determine whether the user can list all customers.
+     *
+     * @param  \App\User  $authenticated_user
+     * @param  \App\User  $user
+     * @return mixed
+     */
+    public function list(User $user, Customer $customer)
+    {
+
+        return $user->id === $customer->user->id || !is_null($user->policies()->find(
+                Policy::whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','list'])->first()->id
+            ));
+    }
+
+    /**
      * Determine whether the user can view the customer.
      *
      * @param  \App\User  $user
@@ -19,7 +35,10 @@ class CustomerPolicy
      */
     public function view(User $user, Customer $customer)
     {
-        //
+        return $user->id === $customer->user->id || !is_null($user->policies()->find(
+                Policy::whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','view'])->first()->id
+            ));
     }
 
     /**
@@ -30,7 +49,10 @@ class CustomerPolicy
      */
     public function create(User $user)
     {
-        //
+        return  !is_null($user->policies()->find(
+                Policy::whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','create'])->first()->id
+            ));
     }
 
     /**
@@ -42,7 +64,10 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer)
     {
-        //
+        return $user->id === $customer->user->id || !is_null($user->policies()->find(
+                Policy::whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','edit'])->first()->id
+            ));
     }
 
     /**
@@ -54,6 +79,9 @@ class CustomerPolicy
      */
     public function delete(User $user, Customer $customer)
     {
-        //
+        return $user->id === $customer->user->id || !is_null($user->policies()->find(
+                Policy::whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','delete'])->first()->id
+            ));
     }
 }

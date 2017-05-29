@@ -13,9 +13,15 @@ class PoliciesSeeder extends Seeder
     public function run()
     {
         $policies = [
-            '*'=>['*'],
+            '*'=>['create','view','list','edit','delete', '*'],
             'user'=>[
-                'view','list','edit','delete', '*'
+                'create','view','list','edit','delete', '*'
+            ],
+            'customer'=>[
+               'create','view','list','edit','delete', '*'
+            ],
+            'team'=>[
+                'create','view','list','edit','delete','*'
             ]
 
         ];

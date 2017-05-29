@@ -26,6 +26,7 @@ $factory->define(App\Customer::class, function (Faker\Generator $faker) {
 });
 
 $factory->define(App\Address::class, function (Faker\Generator $faker) {
+    $address_types=['BILLING', 'SHIPPING', 'CONTACT'];
     return [
         'customer_id'=>rand(1,50),
         'street_address_1'=>$faker->streetAddress,
@@ -35,6 +36,7 @@ $factory->define(App\Address::class, function (Faker\Generator $faker) {
         'country'=>$faker->country,
         'zip'=>$faker->postcode,
         'email'=>$faker->unique()->email,
-        'phone_no'=>$faker->unique()->phoneNumber
+        'phone_no'=>$faker->unique()->phoneNumber,
+        'type'=>$address_types[rand(0,2)]
     ];
 });

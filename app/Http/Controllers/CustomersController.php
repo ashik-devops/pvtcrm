@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Customer;
+use function foo\func;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Validator;
+use Yajra\Datatables\Datatables;
 class CustomersController extends Controller
 {
 
@@ -19,7 +21,7 @@ class CustomersController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    public function validate(array $data)
+    protected function validator(array $data)
     {
         return Validator::make($data, [
             'first_name' => 'required|string|max:32',
@@ -42,10 +44,32 @@ class CustomersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        $customers = Customer::paginate(10);
-        return view('customer.index')->with([
-            'customers' => $customers,
-        ]);
+        return view('customer.index');
+    }
+
+    public function getCustomersAjax(){
+        return Datatables::of(Customer::select('id', 'first_name', 'last_name' ,'email', 'phone_no'))
+            ->addColumn('action',
+                function ($customer){
+                    return
+                        '<a href="#edit/'.$customer->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a><a href="#view/'.$customer->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a><a href="#quick-view/" data-id="'.$customer->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
+                        ;
+                })
+            ->addColumn('name',
+                function ($customer){
+                    return '<a href="#view/'.$customer->id.'" >'.implode(', ', [$customer->last_name, $customer->first_name] ).' </a>';
+                })
+            ->addColumn('email',
+                function ($customer){
+                    return '<a href="mailto:'.$customer->email.'" >'.$customer->email.' </a>';
+                })
+            ->addColumn('phone',
+                function ($customer){
+                    return '<a href="tel:'.$customer->phone_no.'" >'.$customer->phone_no.' </a>';
+                })
+            ->removeColumn('phone_no')
+            ->rawColumns(['name', 'email', 'phone', 'action'])
+            ->make(true);
     }
 
 }
