@@ -17,13 +17,11 @@ class UserPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function list(User $authenticated_user, User $user)
+    public function list(User $authenticated_user)
     {
 
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->find(
-                Policy::whereIn('scope', ['*', 'user'])
-                    ->whereIn('action',['*','list'])->first()->id
-            ));
+        return !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
+                    ->whereIn('action',['*','list'])->first()->id);
     }
 
     /**
@@ -36,10 +34,8 @@ class UserPolicy
     public function view(User $authenticated_user, User $user)
     {
 
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->find(
-            Policy::whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','view'])->first()->id
-        ));
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','view'])->first()->id);
     }
 
     /**
@@ -50,10 +46,8 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return !is_null($user->policies()->find(
-            Policy::whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','create'])->first()->id
-        ));
+        return !is_null($user->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','create'])->first()->id);
     }
 
     /**
@@ -66,10 +60,8 @@ class UserPolicy
     public function update(User $authenticated_user, User $user)
     {
 
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->find(
-            Policy::whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','edit'])->first()->id
-        ));
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','edit'])->first()->id);
     }
 
     /**
@@ -79,12 +71,10 @@ class UserPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function delete(User $authenticated_user, User $user)
+    public function delete(User $authenticated_user)
     {
-        return !is_null($authenticated_user->policies()->find(
-            Policy::whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','delete'])->first()->id
-        ));
+        return !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','delete'])->first()->id);
     }
 
 
