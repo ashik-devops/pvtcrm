@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\User;
 use App\Customer;
+use App\Policy;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerPolicy
@@ -17,13 +18,11 @@ class CustomerPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function list(User $user, Customer $customer)
+    public function list(User $user)
     {
 
-        return $user->id === $customer->user->id || !is_null($user->policies()->find(
-                Policy::whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','list'])->first()->id
-            ));
+        return !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','list'])->first()->id);
     }
 
     /**
@@ -35,10 +34,9 @@ class CustomerPolicy
      */
     public function view(User $user, Customer $customer)
     {
-        return $user->id === $customer->user->id || !is_null($user->policies()->find(
-                Policy::whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','view'])->first()->id
-            ));
+        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','view'])->first()->id);
+
     }
 
     /**
@@ -49,10 +47,8 @@ class CustomerPolicy
      */
     public function create(User $user)
     {
-        return  !is_null($user->policies()->find(
-                Policy::whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','create'])->first()->id
-            ));
+        return  !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','create'])->first()->id);
     }
 
     /**
@@ -64,10 +60,8 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer)
     {
-        return $user->id === $customer->user->id || !is_null($user->policies()->find(
-                Policy::whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','edit'])->first()->id
-            ));
+        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','edit'])->first()->id);
     }
 
     /**
@@ -79,9 +73,7 @@ class CustomerPolicy
      */
     public function delete(User $user, Customer $customer)
     {
-        return $user->id === $customer->user->id || !is_null($user->policies()->find(
-                Policy::whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','delete'])->first()->id
-            ));
+        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+                    ->whereIn('action',['*','delete'])->first()->id);
     }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Customer;
+use App\Policies\CustomerPolicy;
 use App\Policies\UserPolicy;
 use App\User;
 use Gate;
@@ -17,6 +19,7 @@ class AuthServiceProvider extends ServiceProvider
      */
     protected $policies = [
         User::class => UserPolicy::class,
+        Customer::class => CustomerPolicy::class
     ];
 
     /**
@@ -27,6 +30,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
-        Gate::resource('user', UserPolicy::class);
+        Gate::resource('user', UserPolicy::class, [
+            'list'=>UserPolicy::class.'@list'
+        ]);
+        Gate::resource('customer', CustomerPolicy::class, [
+            'list'=>CustomerPolicy::class.'@list'
+        ]);
     }
 }

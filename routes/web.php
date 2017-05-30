@@ -17,5 +17,5 @@ Auth::routes();
 Route::get('/users', 'UsersController@index')->middleware('can:list,App\User');
 Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-edit')->middleware('can:update,user');
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update')->middleware('can:update,user');
-Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:list,App\Post');
-Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:list,App\Post');
+Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:list,App\Customer');
+Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:list,App\Customer');
