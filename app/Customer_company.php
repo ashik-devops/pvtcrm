@@ -14,5 +14,4 @@ class Customer_company extends Model
         return $this->hasManyThrough('App\Address', 'App\Customer');
     }
 
-
 }

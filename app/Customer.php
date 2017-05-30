@@ -9,10 +9,6 @@ class Customer extends Model
 {
     use SoftDeletes;
 
-    public function addresses(){
-        return $this->hasMany('App\Address');
-    }
-
     public function user(){
         return $this->belongsTo('App\User');
     }
@@ -20,4 +16,5 @@ class Customer extends Model
     public function company(){
         return $this->belongsTo('App\Customer_company');
     }
+
 }

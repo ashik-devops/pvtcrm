@@ -17,9 +17,7 @@ class CreateCustomerCompaniesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->string('website')->nullable()->unique();
-            $table->string('phone_no', 32);
-            $table->string('email', 64);
-            $table->integer('default_contact')->unsigned()->unique()->nullable();
+            $table->integer('default_customer')->unsigned()->unique()->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -21,7 +21,8 @@ $factory->define(App\Customer::class, function (Faker\Generator $faker) {
         'title'=>$titles[rand(0, 4)],
         'email'=>$faker->unique()->email,
         'phone_no'=>$faker->unique()->phoneNumber,
-        'user_id'=>rand(2,4)
+        'user_id'=>rand(2,4),
+        'customer_company_id'=>rand(1,50)
     ];
 });
 

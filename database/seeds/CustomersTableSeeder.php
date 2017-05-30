@@ -14,8 +14,12 @@ class CustomersTableSeeder extends Seeder
        factory(\App\Customer::class, 50)->create()->each(function ($c){
            $c->addresses()->save(factory(\App\Address::class)->make());
            $c->addresses()->save(factory(\App\Address::class)->make());
-           $c->company = (rand(1,50));
        });
+
+       foreach (\App\Customer_company::all() as $company){
+           $company->default_customer = is_null($company->employees->first())?NULL:$company->employees->first()->id;
+           $company->save();
+       }
 
     }
 }

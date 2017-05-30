@@ -20,7 +20,8 @@ class CreateCustomerTable extends Migration
             $table->string('title', 32);
             $table->string('email', 64)->unique();
             $table->string('phone_no', 32)->unique();
-            $table->integer('user_id')->nullable();
+            $table->integer('user_id')->unsigned()->nullable();
+            $table->integer('customer_company_id')->usigned();
             $table->softDeletes();
             $table->timestamps();
         });

@@ -56,6 +56,9 @@ class CompanyController extends Controller
     }
 
     public function view(Company $company){
-
+        return $this->view('customer-company.view')->with([
+            'company'=>$company,
+            'default_customer'=>$company->employees()->where('customers.id', $company->default_customer)->first()
+        ]);
     }
 }
