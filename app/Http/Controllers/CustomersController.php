@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Customer;
 use function foo\func;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
 class CustomersController extends Controller
@@ -44,7 +45,7 @@ class CustomersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-        return view('customer.index');
+            return view('customer.index-datatable');
     }
 
     public function getCustomersAjax(){

@@ -16,4 +16,8 @@ class Customer extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+
+    public function company(){
+        return $this->belongsTo('App\Customer_company');
+    }
 }

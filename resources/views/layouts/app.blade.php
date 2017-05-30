@@ -38,7 +38,7 @@
     <!-- Styles -->
 
 </head>
-<body class="preload">
+<body class="preload nav-toggled">
 
         @yield('header')
         @yield('main-nav')

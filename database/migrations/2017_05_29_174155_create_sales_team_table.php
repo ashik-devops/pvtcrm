@@ -29,6 +29,6 @@ class CreateSalesTeamTable extends Migration
      */
     public function down()
     {
-        //
+        Schema::dropIfExists('sales_team');
     }
 }

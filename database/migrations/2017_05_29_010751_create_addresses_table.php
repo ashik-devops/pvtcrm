@@ -24,7 +24,6 @@ class CreateAddressesTable extends Migration
             $table->string('zip');
             $table->string('phone_no')->nullable();
             $table->string('email')->nullable();
-            $table->enum('type', ['BILLING', 'SHIPPING', 'CONTACT'])->nullable();
             $table->timestamps();
 
         });

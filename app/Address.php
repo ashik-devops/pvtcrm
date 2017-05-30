@@ -8,7 +8,5 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Address extends Model
 {
     use SoftDeletes;
-    public function user(){
-        return $this->belongsTo('App\Customer');
-    }
+
 }
