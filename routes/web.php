@@ -19,3 +19,5 @@ Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-e
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update')->middleware('can:update,user');
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:list,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:list,App\Customer');
+Route::get('/companies', 'CompanyController@index')->name('company-index');//->middleware('can:list,App\Customer');
+Route::get('/ajax/companies/data', 'CompanyController@getCompaniesAjax')->name('company-data');//->middleware('can:list,App\Customer');
