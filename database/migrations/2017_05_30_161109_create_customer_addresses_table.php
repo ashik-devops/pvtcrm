@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCustomersAddressesTable extends Migration
+class CreateCustomerAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,7 +14,7 @@ class CreateCustomersAddressesTable extends Migration
     public function up()
     {
         Schema::create('customer_addresses', function (Blueprint $table){
-            $table->increments();
+            $table->increments('id');
             $table->integer('address_id')->unsigned();
             $table->integer('customer_id')->unsigned();
             $table->enum('type', ['CONTACT','BILLING', 'SHIPPING']);

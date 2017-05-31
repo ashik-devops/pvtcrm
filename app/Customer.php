@@ -17,4 +17,8 @@ class Customer extends Model
         return $this->belongsTo('App\Customer_company');
     }
 
+    public function addresses(){
+        return $this->belongsToMany('App\Address', 'customer_addresses', 'customer_id', 'address_id');
+    }
+
 }

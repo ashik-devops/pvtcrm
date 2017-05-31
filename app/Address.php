@@ -9,6 +9,6 @@ class Address extends Model
 {
     use SoftDeletes;
     public function user(){
-        return $this->belongsTo('App\Customer');
+        return $this->belongsToMany('App\Customer', 'customer_addresses', 'address_id', 'customer_id');
     }
 }

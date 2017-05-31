@@ -28,7 +28,6 @@ $factory->define(App\Customer::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Address::class, function (Faker\Generator $faker) {
     return [
-        'customer_id'=>rand(1,50),
         'street_address_1'=>$faker->streetAddress,
         'street_address_2'=>$faker->streetName,
         'city'=>$faker->city,
