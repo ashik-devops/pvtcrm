@@ -116,6 +116,17 @@ return [
     |
     */
 
-    'attributes' => [],
+    'attributes' => [
+        'comapany-name'=>'Company Name',
+        'comapany-email'=>'Company Email',
+        'comapany-phone'=>'Company Phone No',
+        'comapany-website'=>'Company Website Address',
+        'street_address_1'=>'Street Address',
+        'street_address_2'=>'Street Address',
+        'city'=>'City',
+        'state'=>'State',
+        'country'=>'Country',
+        'zip'=>'Zip Code',
+    ],
 
 ];

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Customer_company;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Facades\Datatables;
 
 class CompanyController extends Controller
@@ -13,6 +14,28 @@ class CompanyController extends Controller
     {
         $this->middleware('auth');
     }
+    /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data, User $user = null)
+    {
+
+        return Validator::make($data, [
+            'company-name' => 'required|string',
+            'company-email' => 'required|string|email|unique:customer_companies,email',
+            'company-phone'=>'required|string|unique:customer_companies,phone_no',
+            'company-website'=>'required|url|unique:customer_companies,website',
+            'street_address_1'=>'required|string',
+            'street_address_2'=>'string|nullable',
+            'city'=>'required|string',
+            'state'=>'required|string',
+            'country'=>'required|string',
+            'zip'=>'required|string',
+        ]);
+    }
 
     /**
      * Show the all customers falls under current user scope.
@@ -21,6 +44,10 @@ class CompanyController extends Controller
      */
     public function index(){
         return view('customer-company.index-datatable');
+    }
+
+    public function create(Request $request){
+        $this->validator($request->all())->validate();
     }
 
     /**

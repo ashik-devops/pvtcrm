@@ -21,4 +21,5 @@ Route::get('/customers', 'CustomersController@index')->name('customer-index')->m
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:list,App\Customer');
 Route::get('/companies', 'CompanyController@index')->name('company-index');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/data', 'CompanyController@getCompaniesAjax')->name('company-data');//->middleware('can:list,App\Customer');
+Route::post('/ajax/companies/create', 'CompanyController@create')->name('create-company');//->middleware('can:list,App\Customer');
 Route::get('/company/view/{company}', 'CompanyController@getCompanyQuickDetails')->name('view-company');//->middleware('can:list,App\Customer');

@@ -51,6 +51,26 @@
     </div>
 @endsection
 
+
+@section('modal')
+    <!-- Modal (New Member) -->
+    <div class="modal" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-ticket-label">Add New User</h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+@endsection
+
+
+
 @section('after-footer-script')
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}

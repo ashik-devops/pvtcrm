@@ -115,7 +115,7 @@
             @endif
 
         </div>
-        <div class="form-group"{{ $errors->has('name') ? ' has-error' : '' }}>
+        <div class="form-group"{{ $errors->has('state') ? ' has-error' : '' }}>
             <label for="state" class="sr-only">State</label>
 
 
@@ -128,7 +128,7 @@
 
         </div>
 
-        <div class="form-group"{{ $errors->has('name') ? ' has-error' : '' }}>
+        <div class="form-group"{{ $errors->has('state') ? ' has-error' : '' }}>
             <label for="country" class="sr-only">Country</label>
 
 
@@ -140,7 +140,7 @@
             @endif
 
         </div>
-        <div class="form-group"{{ $errors->has('name') ? ' has-error' : '' }}>
+        <div class="form-group"{{ $errors->has('state') ? ' has-error' : '' }}>
             <label for="zip" class="sr-only">ZIP</label>
 
 
