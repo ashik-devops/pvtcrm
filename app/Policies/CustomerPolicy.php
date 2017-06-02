@@ -18,7 +18,7 @@ class CustomerPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function list(User $user)
+    public function index(User $user)
     {
 
         return !is_null($user->policies()->whereIn('scope', ['*', 'customer'])

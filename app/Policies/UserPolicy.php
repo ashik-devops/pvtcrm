@@ -17,7 +17,7 @@ class UserPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function list(User $authenticated_user)
+    public function index(User $authenticated_user)
     {
 
         return !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
