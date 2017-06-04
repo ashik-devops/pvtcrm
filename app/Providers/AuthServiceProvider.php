@@ -31,10 +31,10 @@ class AuthServiceProvider extends ServiceProvider
     {
         $this->registerPolicies();
         Gate::resource('user', UserPolicy::class, [
-            'list'=>UserPolicy::class.'@index'
+            'index'=>UserPolicy::class.'@index'
         ]);
         Gate::resource('customer', CustomerPolicy::class, [
-            'list'=>CustomerPolicy::class.'@index'
+            'index'=>CustomerPolicy::class.'@index'
         ]);
     }
 }
