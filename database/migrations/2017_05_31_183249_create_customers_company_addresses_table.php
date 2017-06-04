@@ -13,10 +13,10 @@ class CreateCustomersCompanyAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_company_addresses', function (Blueprint $table){
+        Schema::create('customers_company_addresses', function (Blueprint $table){
             $table->increments('id');
             $table->integer('address_id')->unsigned();
-            $table->integer('customer_id')->unsigned();
+            $table->integer('customer_comapny_id')->unsigned();
             $table->enum('type', ['CONTACT','BILLING', 'SHIPPING']);
             $table->timestamps();
         });

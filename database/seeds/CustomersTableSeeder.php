@@ -16,10 +16,5 @@ class CustomersTableSeeder extends Seeder
            $c->addresses()->save(factory(\App\Address::class)->make());
        });
 
-       foreach (\App\Customer_company::all() as $company){
-           $company->default_customer = is_null($company->employees->first())?NULL:$company->employees->first()->id;
-           $company->save();
-       }
-
     }
 }

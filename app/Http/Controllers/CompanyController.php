@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use App\Customer_company;
 use Illuminate\Http\Request;
+
 use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -61,7 +63,8 @@ class CompanyController extends Controller
             ->addColumn('action',
                 function ($company){
                     return
-                        '<a href="#edit/'.$company->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        '<a  class="btn btn-xs btn-primary"  onClick="editCompany('.$company->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteCompany('.$company->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                          <a href="'.route('view-company', [$company->id]).'" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('email', function($company){
@@ -87,5 +90,78 @@ class CompanyController extends Controller
             'company'=>$company,
             'default_customer'=>$company->employees()->where('customers.id', $company->default_customer)->first()
         ]);
+    }
+
+
+    public function createCompany( Request $request){
+        $customer_company = new Customer_company();
+        $customer_company->name = $request->company['companyName'];
+        $customer_company->website = $request->company['companyWebsite'];
+        $customer_company->phone_no = $request->company['companyPhone'];
+        $customer_company->email = $request->company['companyEmail'];
+        $customer_company->save();
+
+        $address = new Address();
+        $address->street_address_1 = $request->company['streetAddress_1'];
+        $address->street_address_2 = $request->company['streetAddress_2'];
+        $address->city = $request->company['city'];
+        $address->state = $request->company['state'];
+        $address->country = $request->company['country'];
+        $address->zip = $request->company['zip'];
+        $address->phone_no = $request->company['companyPhone'];
+        $address->email = $request->company['companyEmail'];
+
+        $customer_company->addresses()->save($address);
+
+
+        echo 'Company is created';
+
+    }
+
+
+    public function editCompany(Request $request){
+        $company = Customer_company::findOrFail($request->id);
+        $company_address = $company->addresses;
+
+        return response()->json([
+            'company' => $company,
+            'company_address' => $company_address,
+        ], 201);
+    }
+
+
+    public function updateCompany( Request $request){
+
+        $id =  $request->company['companyId'];
+        $customer_company = Customer_company::findOrFail($id);
+        $customer_company->name = $request->company['companyName'];
+        $customer_company->website = $request->company['companyWebsite'];
+        $customer_company->phone_no = $request->company['companyPhone'];
+        $customer_company->email = $request->company['companyEmail'];
+        $customer_company->save();
+
+
+        $address = new Address();
+        $address->street_address_1 = $request->company['streetAddress_1'];
+        $address->street_address_2 = $request->company['streetAddress_2'];
+        $address->city = $request->company['city'];
+        $address->state = $request->company['state'];
+        $address->country = $request->company['country'];
+        $address->zip = $request->company['zip'];
+        $address->phone_no = $request->company['companyPhone'];
+        $address->email = $request->company['companyEmail'];
+        $customer_company->addresses()->save($address);
+
+        echo 'Company Information  is updated';
+
+    }
+
+    public function deleteCompany(Request $request){
+        $id =  $request->id;
+        $customer_company = Customer_company::findOrFail($id);
+        $customer_company->delete();
+
+        echo 'Company is sent to Trash';
+
     }
 }
