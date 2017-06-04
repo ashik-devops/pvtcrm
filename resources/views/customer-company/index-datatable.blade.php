@@ -107,7 +107,7 @@
     </script>
 
     {{--Handle create form submission--}}
-    <script type="text/javascript">
+   <!-- <script type="text/javascript">
         jQuery('document').ready(function() {
             jQuery('form.ajax-from').submit(function (e) {
 
@@ -147,5 +147,5 @@
         });
 
 
-    </script>
+    </script>-->
 @endsection

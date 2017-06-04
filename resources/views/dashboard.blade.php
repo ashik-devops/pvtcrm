@@ -785,3 +785,8 @@
 @section('after-footer-script')
     <script src="{{asset('storage/assets/js/dashboard-projects.js')}}"></script>
 @endsection
+@section('after-after-footer-script')
+    <script >
+        console.log('hello');
+    </script>
+@endsection
