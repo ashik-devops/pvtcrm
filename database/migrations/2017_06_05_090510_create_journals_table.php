@@ -20,7 +20,7 @@ class CreateJournalsTable extends Migration
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->enum('status', ['Due', 'Done', 'Cancelled']);
-            $table->string('priority', ['Critical', 'High', 'Medium', 'Low']);
+            $table->enum('priority', ['Critical', 'High', 'Medium', 'Low']);
             $table->softDeletes();
             $table->timestamps();
         });

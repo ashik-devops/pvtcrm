@@ -105,19 +105,23 @@
                         $.post("{{ route('update.company') }}", data, function(result){
                             $('#companyForm')[0].reset();
                             $('#company_id').val('');
-
+                            $('#new_edit_user').text('Add New User');
                             $('#modal-new-member').modal('hide');
                             get_all_company_data();
                             $.notify(result, "success");
                             $('#modal_button').val('Add Company');
+                            $('#new_edit_user').html('<h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Add New User</h4>');
                         });
                     }
                 });
             });
 
             function editCompany(id){
+
+                $('#new_edit_user').html('<h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Edit New User</h4>');
                 $.get("{{ route('edit.modal.data') }}", { id: id} ,function(data){
                     if(data){
+                        console.log('hello');
                         $('#modal_button').val('Update Company');
                         $('#company_id').val(data.company.id);
                         $('#companyName').val(data.company.name);
@@ -152,7 +156,7 @@
                         showCancelButton: true,
                         confirmButtonColor: "#DD6B55",
                         confirmButtonText: "Yes, delete it!",
-                        cancelButtonText: "No, cancel plx!",
+                        cancelButtonText: "No, cancel !",
                         closeOnConfirm: false,
                         closeOnCancel: false
                     },
