@@ -85,11 +85,10 @@ class CompanyController extends Controller
         return $company->toJson();
     }
 
-    public function view(Company $company){
-        return $this->view('customer-company.view')->with([
-            'company'=>$company,
-            'default_customer'=>$company->employees()->where('customers.id', $company->default_customer)->first()
-        ]);
+    public function viewCompany(Customer_company $company){
+       return view('customer-company.view')->with([
+          'company'=>$company
+       ]);
     }
 
 
