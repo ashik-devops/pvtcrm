@@ -17,7 +17,7 @@
                                 <div class="user-info">
 {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
-                                        <li class="name"><h1>{{$company->name}}</h1>
+                                        <li class="name"><h3>{{$company->name}}</h3>
                                             <label class="label label-info"></label></li>
                                         <li>
                                                 <address>
@@ -26,7 +26,7 @@
 
                                         </li>
                                         <li class="email"><a href="mailto:{{$company->email}}">{{$company->email}}</a></li>
-                                        <li class="phone"><a href="tel:{{$company->phone}}">{{$company->phone}}</a></li>
+                                        <li class="phone"><a href="tel:{{$company->phone_no}}">{{$company->phone_no}}</a></li>
                                         <li class="website"><a href="{{$company->website}}">{{$company->website}}</a></li>
                                     </ul>
                                 </div>
