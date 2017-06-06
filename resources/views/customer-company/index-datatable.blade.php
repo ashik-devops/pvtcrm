@@ -55,7 +55,7 @@
 @endsection
 
 @section('modal')
-    <!-- Modal (New Member) -->
+    <!--modal for creating Customer Company-->
     <div class="modal" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -72,7 +72,6 @@
             </div>
         </div>
     </div><!--/modal-->
-@endsection
 
 
 

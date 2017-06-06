@@ -143,6 +143,13 @@
             }
 
 
+            function editCustomer(id){
+
+                console.log(id);
+                $('.customerModel').modal('show');
+            }
+
+
             function deleteCompany(id){
                 var _token = $('input[name="_token"]').val();
                 var data = {
@@ -198,6 +205,43 @@
                     ]
                 });
             }
+        </script>
+
+        <script>
+            //creating customer, editing customer and deleting customer
+
+            $('.checkedOrNotNo').attr('checked',true);
+            function toggleCheckboxYes()
+            {
+                $('.checkedOrNotNo').attr('checked',false);
+                $('.checkedOrNotYes').attr('checked',true);
+                if($('.checkedOrNotYes').prop('checked')) {
+                    //create checked
+                    var companyForm = ' <input id="state_id" type="text" class="form-control" placeholder="State" value="{{ old('state') }}" name="state" maxlength="32" required required data-parsley-required-message = "You must enter state" data-parsley-trigger="change focusout">';
+
+                    $('#companyForm').text(companyForm);
+
+                } else {
+                    //no checked
+                    console.log('No checked');
+                }
+
+            }
+
+            function toggleCheckboxNo(){
+                $('.checkedOrNotNo').attr('checked',true);
+                $('.checkedOrNotYes').attr('checked',false);
+
+                if($('.checkedOrNotNo').prop('checked')) {
+                    //no checked
+
+                } else {
+                    //create checked
+
+                }
+            }
+
+
         </script>
 
 </body>

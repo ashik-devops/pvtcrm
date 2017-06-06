@@ -11,6 +11,9 @@
     <div id="content-wrapper" class="content-wrapper view">
         <div class="container-fluid">
             <h2 class="view-title">Customers</h2>
+            <div class="actions">
+                <button class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Customer</button>
+            </div>
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module module-headings">
@@ -53,16 +56,16 @@
 
 
 @section('modal')
-    <!-- Modal (New Member) -->
-    <div class="modal" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
+    <!-- Modal for creating customer -->
+    <div class="modal customerModel" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-ticket-label">Add New User</h4>
+                    <h4 class="modal-title" id="modal-new-ticket-label">Add New Customer</h4>
                 </div>
                 <div class="modal-body">
-
+                    @include('customer.create-form');
                 </div>
             </div>
         </div>
