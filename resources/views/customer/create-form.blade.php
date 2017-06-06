@@ -1,5 +1,5 @@
 
-<form method="post" class="ajax-from"  data-parsley-validate id="companyForm">
+<form method="post" class="ajax-from"  data-parsley-validate id="customerForm">
 
         {{ csrf_field() }}
         <input type="hidden" id="customer_id">

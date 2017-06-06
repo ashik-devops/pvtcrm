@@ -219,7 +219,7 @@
                     //create checked
                     var companyForm = ' <input id="state_id" type="text" class="form-control" placeholder="State" value="{{ old('state') }}" name="state" maxlength="32" required required data-parsley-required-message = "You must enter state" data-parsley-trigger="change focusout">';
 
-                    $('#companyForm').text(companyForm);
+                    $('#companyForm').html(companyForm);
 
                 } else {
                     //no checked
