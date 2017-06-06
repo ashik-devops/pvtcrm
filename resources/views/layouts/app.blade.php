@@ -26,6 +26,7 @@
     <link rel="stylesheet" href="{{asset('storage/assets/css/pe-7-icons-helper.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/tether-shepherd.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jstree-default.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/select2.min.css')}}">
     @yield('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/styles.css')}}">
 
@@ -63,6 +64,7 @@
         <script src="{{asset('storage/assets/js/pace.js')}}"></script>
         <script src="{{asset('storage/assets/js/tether.js')}}"></script>
         <script src="{{asset('storage/assets/js/tether-shepherd.js')}}"></script>
+        <script src="{{asset('storage/assets/js/select2.full.min.js')}}"></script>
         <script src="{{asset('storage/assets/js/main.js')}}"></script>
         @yield('after-footer-script')
 
