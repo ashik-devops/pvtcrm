@@ -2,128 +2,118 @@
 <form method="post" class="ajax-from"  data-parsley-validate id="customerForm">
 
         {{ csrf_field() }}
-        <input type="hidden" id="customer_id">
-        <div class="form-group {{ $errors->has('customer-name') ? ' has-error' : '' }}" id="customer-name">
-            <label class="sr-only">Company Name</label>
-            <input id="companyName" type="text" name="company-name" class="form-control" placeholder="Comapny Name" data-parsley-trigger="change focusout" data-parsley-required-message="Company Name is required" required value="{{old('company-name')}}">
-            @if ($errors->has('company-name'))
+        <input type="hidden" id="customerId">
+        <div class="form-group {{ $errors->has('first-name') ? ' has-error' : '' }}" id="first-name">
+            <label class="sr-only">First Name</label>
+            <input id="firstName" type="text" name="first-name" class="form-control" placeholder="First Name" data-parsley-trigger="change focusout" data-parsley-required-message="First Name is required" required value="{{old('first-name')}}">
+            @if ($errors->has('first-name'))
                 <span class="help-block">
-                                        <strong>{{ $errors->first('company-name') }}</strong>
-                                    </span>
+                    <strong>{{ $errors->first('first-name') }}</strong>
+                </span>
             @endif
         </div>
-        <div class="form-group {{ $errors->has('company-email') ? ' has-error' : '' }}" id="company-email">
-            <label class="sr-only">Company Name</label>
-            <input  id="companyEmail"  type="email" name="company-email" class="form-control" placeholder="Comapny Email" data-parsley-trigger="change focusout" data-parsley-required-message="Company Email is required" required value="{{old('company-email')}}">
-            @if ($errors->has('company-email'))
-                <span class="help-block">
-                                        <strong>{{ $errors->first('company-email') }}</strong>
-                                    </span>
-            @endif
-        </div>
+    <div class="form-group {{ $errors->has('last-name') ? ' has-error' : '' }}" id="last-name">
+        <label class="sr-only">Last Name</label>
+        <input  id="lastName"  type="text" name="last-name" class="form-control" placeholder="Last Name" data-parsley-trigger="change focusout" data-parsley-required-message="Last Name is required" required value="{{old('last-name')}}">
+        @if ($errors->has('last-name'))
+            <span class="help-block">
+                    <strong>{{ $errors->first('last-name') }}</strong>
+                </span>
+        @endif
+    </div>
+    <div class="form-group"{{ $errors->has('customer-title') ? ' has-error' : '' }} id="customer-title">
+        <select name="customer-title" id="customerTitle" class="form-control" onchange="Select_company_create(this.value)">
+            <option value="-1">Select Customer Title</option>
+            <option>Editor</option>
+            <option>Author</option>
+            <option>Reader</option>
+        </select>
 
-        <div class="form-group {{ $errors->has('company-phone') ? ' has-error' : '' }}" id="company-phone">
-            <label class="sr-only">Company Phone</label>
-            <input  id="companyPhone"  type="text" name="company-phone" class="form-control" placeholder="Comapny Phone" data-parsley-trigger="change focusout" data-parsley-required-message="Company Phone is required" required value="{{old('company-phone')}}">
-            @if ($errors->has('company-phone'))
-                <span class="help-block">
-                                        <strong>{{ $errors->first('company-phone') }}</strong>
-                                    </span>
-            @endif
-        </div>
+    </div>
 
-        <div class="form-group {{ $errors->has('company-website') ? ' has-error' : '' }}" id="company-website">
+    <div class="form-group {{ $errors->has('customer-email') ? ' has-error' : '' }}" id="customer-email">
+        <label class="sr-only">Customer Email</label>
+        <input  id="customerEmail"  type="email" name="customer-email" class="form-control" placeholder="Customer Email" data-parsley-trigger="change focusout" data-parsley-required-message="Customer Email is required" required value="{{old('customer-email')}}">
+        @if ($errors->has('customer-email'))
+            <span class="help-block">
+                <strong>{{ $errors->first('customer-email') }}</strong>
+            </span>
+        @endif
+    </div>
+    <div class="form-group {{ $errors->has('customer-phone') ? ' has-error' : '' }}" id="customer-phone">
+        <label class="sr-only">Customer Phone</label>
+        <input  id="customerPhone"  type="text" name="customer-phone" class="form-control" placeholder="Customer Phone" data-parsley-trigger="change focusout" data-parsley-required-message="Customer Phone is required" required value="{{old('customer-phone')}}">
+        @if ($errors->has('customer-phone'))
+            <span class="help-block">
+                    <strong>{{ $errors->first('customer-phone') }}</strong>
+                </span>
+        @endif
+    </div>
+
+
+
+    <div class="form-group">
+        <label>Do You Create Company</label>
+        <select name="create-company-option" class="form-control" onchange="Select_company_create(this.value)">
+            <option value="0">No, Thanks</option>
+            <option value="1">Create Company</option>
+        </select>
+
+    </div>
+
+    <div id="CompanyDataAtCustomerForm">
+        <div class="form-group">
+            <label class="sr-only">Company Name</label>
+            <input id="companyName" type="text" name="company-name" class="form-control" placeholder="Company Name">
+        </div>
+        <div class="form-group">
             <label class="sr-only">Company Website</label>
-            <input  id="companyWebsite"  type="url" name="company-website" class="form-control" placeholder="Comapny Website" value="{{old('company-website')}}">
-            @if ($errors->has('company-website'))
-                <span class="help-block">
-                                        <strong>{{ $errors->first('company-website') }}</strong>
-                                    </span>
-            @endif
+            <input  id="companyWebsite"  type="url" name="company-website" class="form-control" placeholder="Company Website">
+
         </div>
-
-
-        <div class="form-group {{ $errors->has('street_address_1') || $errors->has('street_address_2')   ? ' has-error' : '' }}" id="street_address">
+        <div class="form-group ">
             <label for="street_address" class="sr-only">Street Address</label>
 
-
             <div style="margin-bottom: 5px;">
-                <input  id="streetAddress_1" type="text" placeholder="Steet Address" class="form-control" data-parsley-trigger="change focusout" value="{{ old('street_address_1') }}" name="street_address_1" maxlength="128" required data-parsley-required-message="Please enter Address">
-                @if ($errors->has('street_address_1'))
-                    <span class="help-block">
-                                        <strong>{{ $errors->first('street_address_1') }}</strong>
-                                    </span>
-                @endif
+                <input  id="streetAddress_1" type="text" placeholder="Steet Address" class="form-control" name="street_address_1" maxlength="128" >
             </div>
             <div style="margin-bottom: 5px;">
-                <input id="streetAddress_2" type="text"  placeholder="Steet Address" class="form-control"  data-parsley-trigger="change focusout" value="{{ old('street_address_2') }}" name="street_address_2" maxlength="128" >
-                @if ($errors->has('street_address_2'))
-                    <span class="help-block">
-                                        <strong>{{ $errors->first('street_address_2') }}</strong>
-                                            </span>
-                @endif
+                <input id="streetAddress_2" type="text"  placeholder="Street Address" class="form-control"   >
             </div>
 
         </div>
 
-        <div class="form-group {{ $errors->has('city') ? ' has-error' : '' }}" id="city">
+        <div class="form-group">
             <label for="city" class="sr-only">City</label>
-
-
-            <input id="city_id" type="text" class="form-control" placeholder="City" value="{{ old('city') }}" name="city" maxlength="32" required data-parsley-trigger="change focusout" required data-parsley-required-message="You must enter city required data-parsley-required-message = "" >
-            @if ($errors->has('city'))
-                <span class="help-block">
-                                        <strong>{{ $errors->first('city') }}</strong>
-                                    </span>
-            @endif
-
+            <input id="city_id" type="text" class="form-control" placeholder="City"  name="city" >
         </div>
-        <div class="form-group"{{ $errors->has('state') ? ' has-error' : '' }} id="state">
+
+        <div class="form-group">
             <label for="state" class="sr-only">State</label>
 
 
-            <input id="state_id" type="text" class="form-control" placeholder="State" value="{{ old('state') }}" name="state" maxlength="32" required required data-parsley-required-message = "You must enter state" data-parsley-trigger="change focusout">
-            @if ($errors->has('state'))
-                <span class="help-block">
-                                        <strong>{{ $errors->first('state') }}</strong>
-                                    </span>
-            @endif
+            <input id="state_id" type="text" class="form-control" placeholder="State"  name="state" >
+
 
         </div>
 
         <div class="form-group"{{ $errors->has('state') ? ' has-error' : '' }} id="country">
             <label for="country" class="sr-only">Country</label>
-
-
-            <input id="country_id" type="text" class="form-control" placeholder="Country" value="{{ old('country') }}" name="country" maxlength="32" required required data-parsley-required-message = "You must enter country" data-parsley-trigger="change focusout">
-            @if ($errors->has('country'))
-                <span class="help-block">
-                                        <strong>{{ $errors->first('country') }}</strong>
-                                    </span>
-            @endif
-
+            <input id="country_id" type="text" class="form-control" placeholder="Country"  name="country" >
         </div>
-        <div class="form-group"{{ $errors->has('state') ? ' has-error' : '' }} id="zip">
+
+        <div class="form-group">
             <label for="zip" class="sr-only">ZIP</label>
-
-
-            <input id="zip_id" type="text" class="form-control" placeholder="Zip" value="{{ old('zip') }}" name="zip" maxlength="8" required required data-parsley-required-message = "You must enter ZIP Code" data-parsley-trigger="change focusout">
-            @if ($errors->has('zip'))
-                <span class="help-block">
-                                        <strong>{{ $errors->first('zip') }}</strong>
-                                    </span>
-            @endif
-        </div>
-        <div class="form-group"{{ $errors->has('state') ? ' has-error' : '' }} id="zip">
-
-            <input type="radio" name="compnay_create" class="checkedOrNotYes" onclick="toggleCheckboxYes()"> Create Company
-            <input type="radio"  name="compnay_create"  class="checkedOrNotNo"   onclick="toggleCheckboxNo()" style="margin-left:200px"> No, Thanks
-        </div>
-        <div id="companyForm">
-
+            <input id="zip_id" type="text" class="form-control" placeholder="Zip" name="zip" >
         </div>
 
-        <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+
+
+    </div>
+
+
+
+    <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
         <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Company">
 
     </form>

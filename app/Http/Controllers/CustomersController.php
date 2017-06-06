@@ -2,12 +2,15 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use App\Customer;
-use function foo\func;
+
+use App\Customer_company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
+
 class CustomersController extends Controller
 {
 
@@ -74,5 +77,62 @@ class CustomersController extends Controller
             ->rawColumns(['name', 'email', 'phone', 'action'])
             ->make(true);
     }
+
+
+    public function createCustomer( Request $request){
+
+        if($request->company['companyName'] && $request->company['companyEmail']){
+
+            $customer_company = new Customer_company();
+            $customer_company->name = $request->company['companyName'];
+            $customer_company->website = $request->company['companyWebsite'];
+            $customer_company->phone_no = $request->company['companyPhone'];
+            $customer_company->email = $request->company['companyEmail'];
+            $customer_company->save();
+
+
+            $address = new Address();
+            $address->street_address_1 = $request->company['streetAddress_1'];
+            $address->street_address_2 = $request->company['streetAddress_2'];
+            $address->city = $request->company['city'];
+            $address->state = $request->company['state'];
+            $address->country = $request->company['country'];
+            $address->zip = $request->company['zip'];
+            $address->phone_no = $request->company['companyPhone'];
+            $address->email = $request->company['companyEmail'];
+
+            $customer_company->addresses()->save($address);
+
+            $customer = new Customer();
+            $customer->first_name = $request->customer['firstName'];
+            $customer->last_name = $request->customer['lastName'];
+            $customer->title = $request->customer['customerTitle'];
+            $customer->email = $request->customer['customerEmail'];
+            $customer->phone_no = $request->customer['customerPhone'];
+            $customer->user_id = Auth::user()->id;
+            $customer->customer_company_id = $customer_company->id;
+
+            $customer->save();
+
+            echo "Customer is saved with company";
+        }else{
+            $customer = new Customer();
+            $customer->first_name = $request->customer['firstName'];
+            $customer->last_name = $request->customer['lastName'];
+            $customer->title = $request->customer['customerTitle'];
+            $customer->email = $request->customer['customerEmail'];
+            $customer->phone_no = $request->customer['customerPhone'];
+            $customer->user_id = Auth::user()->id;
+            $customer->customer_company_id = null;
+
+            $customer->save();
+
+            echo "Customer is saved";
+        }
+
+
+
+    }
+
 
 }

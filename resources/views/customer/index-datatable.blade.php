@@ -102,3 +102,109 @@
         });
     </script>
 @endsection
+@section('customer-create-edit-delete-scripts')')
+    <script>
+        //creating customer, editing customer and deleting customer
+
+        $(document).ready(function(){
+
+
+            $('#CompanyDataAtCustomerForm').hide();
+
+
+            $('#customerForm').on('submit',function(e){
+                e.preventDefault();
+                var _token = $('input[name="_token"]').val();
+
+                var customer = {
+                    customerId : $('#customerId').val(),
+                    firstName : $('#firstName').val(),
+                    lastName : $('#lastName').val(),
+                    customerTitle : $('#customerTitle').val(),
+                    customerEmail : $('#customerEmail').val(),
+                    customerPhone : $('#customerPhone').val(),
+                };
+
+                var company = {
+                    companyName : $('#companyName').val(),
+                    companyEmail : $('#customerEmail').val(),
+                    companyPhone : $('#customerPhone').val(),
+                    companyWebsite : $('#companyWebsite').val(),
+                    streetAddress_1 : $('#streetAddress_1').val(),
+                    streetAddress_2 : $('#streetAddress_2').val(),
+                    city : $('#city_id').val(),
+                    state : $('#state_id').val(),
+                    country : $('#country_id').val(),
+                    zip : $('#zip_id').val()
+                };
+
+
+                var data = {
+                    _token : _token,
+                    company: company,
+                    customer:customer
+                };
+
+                if(customer.customerId === ''){
+                    //customer creating.....
+                    $.post("{{ route('create.customer') }}", data, function(result){
+                        $('#customerForm')[0].reset();
+                        $('#modal-new-member').modal('hide');
+                        get_all_customer_data();
+                        $.notify(result, "success");
+                        console.log(result);
+                    });
+                }else{
+                    //customer editing.....
+                    $.post("", data, function(result){
+
+                    });
+                }
+            });
+
+
+        });
+
+        function Select_company_create(selectVal)
+        {
+            if(selectVal === '1'){
+                //creating customer with company
+                $('#CompanyDataAtCustomerForm').show();
+
+
+
+
+            }
+
+            if(selectVal === '0'){
+                //creating customer without company
+                $('#CompanyDataAtCustomerForm').hide();
+                console.log($('#firstName').val());
+
+            }
+
+        }
+
+        function get_all_customer_data(){
+            $("#customers-table").dataTable().fnDestroy();
+            var datatable = jQuery('#customers-table').DataTable({
+//                responsive: false,
+                select: true,
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('customers-data') !!}',
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name', searchable: false},
+                    { data: 'email', name: 'email' },
+                    { data: 'phone', name: 'phone_no' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'first_name', name: 'first_name', searchable: true, visible:false},
+                    { data: 'last_name', name: 'last_name', searchable: true, visible:false},
+                ]
+            });
+        }
+
+
+    </script>
+@endsection

@@ -21,6 +21,9 @@ Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('pro
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
+Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer');
+
+
 
 Route::get('/companies', 'CompanyController@index')->name('company-index')->middleware('can:index,App\Customer');
 Route::post('/companies/create', 'CompanyController@createCompany')->name('create.company');//->middleware('can:list,App\Customer');
