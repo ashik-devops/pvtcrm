@@ -1,4 +1,4 @@
-
+@section('customer-create-form')
 <form method="post" class="ajax-from"  data-parsley-validate id="customerForm">
 
         {{ csrf_field() }}
@@ -127,4 +127,4 @@
         <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Company">
 
     </form>
-
+@endsection

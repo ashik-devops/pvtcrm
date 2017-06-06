@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@include('customer.create-form');
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -65,7 +65,7 @@
                     <h4 class="modal-title" id="modal-new-ticket-label">Add New Customer</h4>
                 </div>
                 <div class="modal-body">
-                    @include('customer.create-form');
+                    @yield('customer-create-form')
                 </div>
             </div>
         </div>
