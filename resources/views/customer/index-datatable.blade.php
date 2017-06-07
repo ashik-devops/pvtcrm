@@ -156,13 +156,13 @@
                         $('#modal-new-member').modal('hide');
                         get_all_customer_data();
                         $.notify(result, "success");
-                        console.log(result);
+
                     });
                 }else{
                     //updating customer.....
                     $.post("{{ route('update.customer.data') }}", data, function(result){
 
-                        console.log(result);
+
                         $('#customerForm')[0].reset();
                         $('#customerId').val('');
                         $('#new_edit_user').text('Add New User');
@@ -182,12 +182,12 @@
 
 
         function editCustomer(id){
-            console.log(id);
+
 
             $.get("{{ route('edit.customer.data') }}", { id: id} ,function(data){
 
 
-                console.log(data);
+
                 if(data){
 
                     $('#modal_button').val('Update Customer');
