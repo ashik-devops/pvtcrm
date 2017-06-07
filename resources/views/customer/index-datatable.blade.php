@@ -108,7 +108,7 @@
 
         $(document).ready(function(){
 
-
+            $('#hiddenForEditCustomer').show();
             $('#CompanyDataAtCustomerForm').hide();
 
 
@@ -126,6 +126,8 @@
                 };
 
                 var company = {
+                    companyId : $('#companyId').val(),
+                    addressId : $('#addressId').val(),
                     companyName : $('#companyName').val(),
                     companyEmail : $('#customerEmail').val(),
                     companyPhone : $('#customerPhone').val(),
@@ -145,6 +147,8 @@
                     customer:customer
                 };
 
+
+
                 if(customer.customerId === ''){
                     //customer creating.....
                     $.post("{{ route('create.customer') }}", data, function(result){
@@ -155,15 +159,93 @@
                         console.log(result);
                     });
                 }else{
-                    //customer editing.....
-                    $.post("", data, function(result){
+                    //updating customer.....
+                    $.post("{{ route('update.customer.data') }}", data, function(result){
+
+                        console.log(result);
+                        $('#customerForm')[0].reset();
+                        $('#customerId').val('');
+                        $('#new_edit_user').text('Add New User');
+                        $('#modal-new-member').modal('hide');
+                        get_all_customer_data();
+                        $.notify(result, "success");
+                        $('#modal_button').val('Add Customer');
+                        $('#new_edit_user').html('<h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Add New Customer</h4>');
 
                     });
                 }
             });
 
-
         });
+
+        // For editing Customer
+
+
+        function editCustomer(id){
+            console.log(id);
+
+            $.get("{{ route('edit.customer.data') }}", { id: id} ,function(data){
+
+
+                console.log(data);
+                if(data){
+
+                    $('#modal_button').val('Update Customer');
+                    $('#customerId').val(data.customer.id);
+                    $('#firstName').val(data.customer.first_name);
+                    $('#lastName').val(data.customer.last_name);
+                    $('#customerTitle').val(data.customer.title);
+                    $('#customerEmail').val(data.customer.email);
+                    $('#customerPhone').val(data.customer.phone_no);
+
+                    if(data.company){
+                        $('#companyId').val(data.company.id);
+                        $('#companyName').val(data.company.name);
+                        $('#companyEmail').val(data.company.email);
+                        $('#companyPhone').val(data.company.phone_no);
+                        $('#companyWebsite').val(data.company.website);
+
+                        if(data.address[0]){
+                            $('#addressId').val(data.address[0].id);
+                            $('#streetAddress_1').val(data.address[0].street_address_1);
+                            $('#streetAddress_2').val(data.address[0].street_address_2);
+                            $('#city_id').val(data.address[0].city);
+                            $('#state_id').val(data.address[0].state);
+                            $('#country_id').val(data.address[0].country);
+                            $('#zip_id').val(data.address[0].zip);
+
+                        }
+                        $('#hiddenForEditCustomer').hide();
+                        $('#CompanyDataAtCustomerForm').show();
+                    }
+
+
+
+
+
+                   /* $('#company_id').val(data.company.id);
+                    $('#companyName').val(data.company.name);
+                    $('#companyEmail').val(data.company.email);
+                    $('#companyPhone').val(data.company.phone_no);
+                    $('#companyWebsite').val(data.company.website);
+
+                    if(data.company_address.length > 0){
+                        $('#streetAddress_1').val(data.company_address[0].street_address_1);
+                        $('#streetAddress_2').val(data.company_address[0].street_address_2);
+                        $('#city_id').val(data.company_address[0].city);
+                        $('#state_id').val(data.company_address[0].state);
+                        $('#country_id').val(data.company_address[0].country);
+                        $('#zip_id').val(data.company_address[0].zip);
+                    } */
+                }
+            });
+
+
+            $('#modal-new-member').modal('show');
+
+
+        }
+
 
         function Select_company_create(selectVal)
         {
@@ -171,15 +253,11 @@
                 //creating customer with company
                 $('#CompanyDataAtCustomerForm').show();
 
-
-
-
             }
 
             if(selectVal === '0'){
                 //creating customer without company
                 $('#CompanyDataAtCustomerForm').hide();
-                console.log($('#firstName').val());
 
             }
 

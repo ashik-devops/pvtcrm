@@ -22,6 +22,8 @@ Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('pro
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
 Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer');
+Route::get('/customer/edit', 'CustomersController@editCustomer')->name('edit.customer.data');
+Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
 
 
 

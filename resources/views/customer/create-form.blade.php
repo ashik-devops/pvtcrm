@@ -3,6 +3,8 @@
 
         {{ csrf_field() }}
         <input type="hidden" id="customerId">
+        <input type="hidden" id="companyId">
+        <input type="hidden" id="addressId">
         <div class="form-group {{ $errors->has('first-name') ? ' has-error' : '' }}" id="first-name">
             <label class="sr-only">First Name</label>
             <input id="firstName" type="text" name="first-name" class="form-control" placeholder="First Name" data-parsley-trigger="change focusout" data-parsley-required-message="First Name is required" required value="{{old('first-name')}}">
@@ -52,7 +54,7 @@
 
 
 
-    <div class="form-group">
+    <div class="form-group" id="hiddenForEditCustomer">
         <label>Do You Create Company</label>
         <select name="create-company-option" class="form-control" onchange="Select_company_create(this.value)">
             <option value="0">No, Thanks</option>

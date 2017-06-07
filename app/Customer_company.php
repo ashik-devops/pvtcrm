@@ -16,6 +16,6 @@ class Customer_company extends Model
     }
 
     public function addresses(){
-        return $this->belongsToMany('App\Address', 'customers_company_addresses', 'customer_comapny_id', 'address_id')->withPivot(['type']);
+        return $this->belongsToMany('App\Address', 'customers_company_addresses', 'customer_company_id', 'address_id')->withPivot(['type']);
     }
 }
