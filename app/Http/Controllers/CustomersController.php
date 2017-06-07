@@ -80,6 +80,16 @@ class CustomersController extends Controller
 
 
     public function createCustomer( Request $request){
+        $customer = new Customer();
+        $customer->first_name = $request->customer['firstName'];
+        $customer->last_name = $request->customer['lastName'];
+        $customer->title = $request->customer['customerTitle'];
+        $customer->email = $request->customer['customerEmail'];
+        $customer->phone_no = $request->customer['customerPhone'];
+        $customer->user_id = Auth::user()->id;
+        $customer->customer_company_id = null;
+
+        $customer->save();
 
         if($request->company['companyName'] && $request->company['companyEmail']){
 
@@ -89,17 +99,6 @@ class CustomersController extends Controller
             $customer_company->phone_no = $request->company['companyPhone'];
             $customer_company->email = $request->company['companyEmail'];
             $customer_company->save();
-
-            $customer = new Customer();
-            $customer->first_name = $request->customer['firstName'];
-            $customer->last_name = $request->customer['lastName'];
-            $customer->title = $request->customer['customerTitle'];
-            $customer->email = $request->customer['customerEmail'];
-            $customer->phone_no = $request->customer['customerPhone'];
-            $customer->user_id = Auth::user()->id;
-            $customer->customer_company_id = $customer_company->id;
-
-            $customer->save();
 
             $address = new Address();
             $address->street_address_1 = $request->company['streetAddress_1'];
@@ -118,16 +117,7 @@ class CustomersController extends Controller
 
             echo "Customer is saved with company";
         }else{
-            $customer = new Customer();
-            $customer->first_name = $request->customer['firstName'];
-            $customer->last_name = $request->customer['lastName'];
-            $customer->title = $request->customer['customerTitle'];
-            $customer->email = $request->customer['customerEmail'];
-            $customer->phone_no = $request->customer['customerPhone'];
-            $customer->user_id = Auth::user()->id;
-            $customer->customer_company_id = null;
 
-            $customer->save();
 
             echo "Customer is saved";
         }
@@ -158,21 +148,20 @@ class CustomersController extends Controller
 
     }
 
-    public function updateCustomer(Request $request){
+    public function updateCustomer(Customer $customer, Request $request){
 
-        $customer_id =  $request->customer['customerId'];
-        if($customer_id){
+        if($customer){
+            $customer->first_name = $request->customer['firstName'];
+            $customer->last_name = $request->customer['lastName'];
+            $customer->title = $request->customer['customerTitle'];
+            $customer->email = $request->customer['customerEmail'];
+            $customer->phone_no = $request->customer['customerPhone'];
+            $customer->user_id = Auth::user()->id;
+            $customer->customer_company_id = null;
+
+            $customer->save();
+
             if($request->company['companyName'] && $request->company['companyEmail']){
-                $customer = Customer::findOrFail($customer_id);
-                $customer->first_name = $request->customer['firstName'];
-                $customer->last_name = $request->customer['lastName'];
-                $customer->title = $request->customer['customerTitle'];
-                $customer->email = $request->customer['customerEmail'];
-                $customer->phone_no = $request->customer['customerPhone'];
-                $customer->user_id = Auth::user()->id;
-                $customer->customer_company_id = $request->company['companyId'];
-
-                $customer->save();
 
                 $customer_company = Customer_company::findOrFail($request->company['companyId']);
                 $customer_company->name = $request->company['companyName'];
@@ -205,16 +194,7 @@ class CustomersController extends Controller
 
 
             }else{
-                $customer = Customer::findOrFail($customer_id);
-                $customer->first_name = $request->customer['firstName'];
-                $customer->last_name = $request->customer['lastName'];
-                $customer->title = $request->customer['customerTitle'];
-                $customer->email = $request->customer['customerEmail'];
-                $customer->phone_no = $request->customer['customerPhone'];
-                $customer->user_id = Auth::user()->id;
-                $customer->customer_company_id = null;
 
-                $customer->save();
                 echo "Customer is saved";
             }
         }
