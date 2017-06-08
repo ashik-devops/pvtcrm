@@ -24,12 +24,12 @@
         @endif
     </div>
     <div class="form-group"{{ $errors->has('customer-title') ? ' has-error' : '' }} id="customer-title">
-        <select name="customer-title" id="customerTitle" class="form-control" onchange="Select_company_create(this.value)">
-            <option value="-1">Select Customer Title</option>
-            <option>Editor</option>
-            <option>Author</option>
-            <option>Reader</option>
-        </select>
+        <input  id="customer-title"  type="email" name="customer-title" class="form-control" placeholder="Customer Title" data-parsley-trigger="change focusout" data-parsley-required-message="Customer Title is required" required value="{{old('customer-title')}}">
+        @if ($errors->has('customer-title'))
+            <span class="help-block">
+                <strong>{{ $errors->first('customer-title') }}</strong>
+            </span>
+        @endif
 
     </div>
 
@@ -55,9 +55,9 @@
 
 
     <div class="form-group" id="hiddenForEditCustomer">
-        <label>Do You Create Company</label>
+        <label class="sr-only">Do You Create Company</label>
         <select name="create-company-option" class="form-control" onchange="Select_company_create(this.value)">
-            <option value="0">No, Thanks</option>
+            <option value="0">N/A</option>
             <option value="1">Create Company</option>
         </select>
 
