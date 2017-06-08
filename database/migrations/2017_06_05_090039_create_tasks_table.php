@@ -19,7 +19,7 @@ class CreateTasksTable extends Migration
             $table->string('description');
             $table->dateTime('due_date');
             $table->enum('status', ['Due', 'Done', 'Cancelled']);
-            $table->string('priority', ['Critical', 'High', 'Medium', 'Low']);
+            $table->enum('priority', ['Critical', 'High', 'Medium', 'Low']);
             $table->softDeletes();
             $table->timestamps();
         });
