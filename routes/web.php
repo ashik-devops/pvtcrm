@@ -24,6 +24,7 @@ Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name
 Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer');
 Route::get('/customer/edit', 'CustomersController@editCustomer')->name('edit.customer.data');
 Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
+Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
 
 
 

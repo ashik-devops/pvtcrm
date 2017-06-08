@@ -57,6 +57,7 @@ class CustomersController extends Controller
                 function ($customer){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editCustomer('.$customer->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteCustomer('.$customer->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                         <a href="#view/'.$customer->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
                         <a href="#quick-view/" data-id="'.$customer->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
                         ;
@@ -148,20 +149,21 @@ class CustomersController extends Controller
 
     }
 
-    public function updateCustomer(Customer $customer, Request $request){
+    public function updateCustomer(Request $request){
 
-        if($customer){
-            $customer->first_name = $request->customer['firstName'];
-            $customer->last_name = $request->customer['lastName'];
-            $customer->title = $request->customer['customerTitle'];
-            $customer->email = $request->customer['customerEmail'];
-            $customer->phone_no = $request->customer['customerPhone'];
-            $customer->user_id = Auth::user()->id;
-            $customer->customer_company_id = null;
-
-            $customer->save();
-
+        $customer_id =  $request->customer['customerId'];
+        if($customer_id){
             if($request->company['companyName'] && $request->company['companyEmail']){
+                $customer = Customer::findOrFail($customer_id);
+                $customer->first_name = $request->customer['firstName'];
+                $customer->last_name = $request->customer['lastName'];
+                $customer->title = $request->customer['customerTitle'];
+                $customer->email = $request->customer['customerEmail'];
+                $customer->phone_no = $request->customer['customerPhone'];
+                $customer->user_id = Auth::user()->id;
+                $customer->customer_company_id = $request->company['companyId'];
+
+                $customer->save();
 
                 $customer_company = Customer_company::findOrFail($request->company['companyId']);
                 $customer_company->name = $request->company['companyName'];
@@ -185,25 +187,33 @@ class CustomersController extends Controller
 
                 }
 
-
-                echo "Customer and company is saved";
-               /*
-                * code will be continuing from here......
-                */
-
-
+                echo "Customer is saved with Company information";
 
             }else{
+                $customer = Customer::findOrFail($customer_id);
+                $customer->first_name = $request->customer['firstName'];
+                $customer->last_name = $request->customer['lastName'];
+                $customer->title = $request->customer['customerTitle'];
+                $customer->email = $request->customer['customerEmail'];
+                $customer->phone_no = $request->customer['customerPhone'];
+                $customer->user_id = Auth::user()->id;
+                $customer->customer_company_id = null;
 
+                $customer->save();
                 echo "Customer is saved";
             }
         }
 
+    }
 
-
-
+    public function deleteCustomer(Request $request){
+        $customer_id =  $request->id;
+        $customer= Customer::findOrFail($customer_id);
+        $customer->delete();
+        echo 'Customer is sent to Trash';
 
     }
+
 
 
 }

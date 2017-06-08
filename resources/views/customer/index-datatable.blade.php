@@ -162,7 +162,7 @@
                     //updating customer.....
                     $.post("{{ route('update.customer.data') }}", data, function(result){
 
-
+                        console.log(result);
                         $('#customerForm')[0].reset();
                         $('#customerId').val('');
                         $('#new_edit_user').text('Add New User');
@@ -244,6 +244,43 @@
             $('#modal-new-member').modal('show');
 
 
+        }
+
+
+        function deleteCustomer(id){
+            console.log(id);
+            var _token = $('input[name="_token"]').val();
+            var data = {
+                _token : _token,
+                id: id
+            };
+            swal({
+                    title: "Are you sure?",
+                    text: "This Information will be trashed!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+
+                        //deletion process is going on....
+                        swal("Deleted!", "Company has been deleted.", "success");
+
+                        $.post("{{ route('delete.customer.data') }}", data, function(result){
+
+                            console.log(result);
+                            get_all_customer_data();
+                            $.notify(result, "danger");
+                        });
+                    } else {
+                        swal("Cancelled", "Company is safe :)", "error");
+                    }
+                });
         }
 
 
