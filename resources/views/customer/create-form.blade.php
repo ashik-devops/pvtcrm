@@ -3,7 +3,6 @@
 
         {{ csrf_field() }}
         <input type="hidden" id="customerId">
-        <input type="hidden" id="companyId">
         <input type="hidden" id="addressId">
         <div class="form-group {{ $errors->has('first-name') ? ' has-error' : '' }}" id="first-name">
             <label class="sr-only">First Name</label>
@@ -24,7 +23,7 @@
         @endif
     </div>
     <div class="form-group"{{ $errors->has('customer-title') ? ' has-error' : '' }} id="customer-title">
-        <input  id="customer-title"  type="email" name="customer-title" class="form-control" placeholder="Customer Title" data-parsley-trigger="change focusout" data-parsley-required-message="Customer Title is required" required value="{{old('customer-title')}}">
+        <input  id="customerTitle"  type="text" name="customer-title" class="form-control" placeholder="Customer Title" data-parsley-trigger="change focusout" data-parsley-required-message="Customer Title is required" required value="{{old('customer-title')}}">
         @if ($errors->has('customer-title'))
             <span class="help-block">
                 <strong>{{ $errors->first('customer-title') }}</strong>
@@ -56,7 +55,7 @@
 
     <div class="form-group" id="hiddenForEditCustomer">
         <label class="sr-only">Do You Want to Create Company</label>
-        <select name="create-company-option" class="form-control" id="company_select" style="width: 100%">
+        <select name="companyId" class="form-control" id="companyId" style="width: 100%">
 
         </select>
 
@@ -72,6 +71,7 @@
             <input  id="companyWebsite"  type="url" name="company-website" class="form-control" placeholder="Company Website">
 
         </div>
+    </div>
         <div class="form-group ">
             <label for="street_address" class="sr-only">Street Address</label>
 
@@ -115,7 +115,7 @@
 
 
     <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
-        <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Company">
+        <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Customer">
 
     </form>
 @endsection

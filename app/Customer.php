@@ -16,7 +16,7 @@ class Customer extends Model
     }
 
     public function company(){
-        return $this->belongsTo('App\Customer_company');
+        return $this->belongsTo('App\Customer_company', 'customer_company_id');
     }
 
     public function addresses(){

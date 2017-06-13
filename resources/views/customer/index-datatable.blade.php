@@ -108,7 +108,7 @@
 
         $(document).ready(function(){
 
-            $company_select=jQuery("#company_select").select2({
+            $company_select=jQuery("#companyId").select2({
                 placeholder: "Select a Company",
                 allowClear:true,
                 ajax: {

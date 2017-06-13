@@ -29,6 +29,6 @@ class CreateCustomersCompanyAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customer_company_addresses');
+        Schema::dropIfExists('customers_company_addresses');
     }
 }
