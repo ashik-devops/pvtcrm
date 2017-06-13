@@ -12,7 +12,7 @@
         <div class="container-fluid">
             <h2 class="view-title">Customers</h2>
             <div class="actions">
-                <button class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Customer</button>
+                <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Customer</button>
             </div>
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -57,12 +57,12 @@
 
 @section('modal')
     <!-- Modal for creating customer -->
-    <div class="modal customerModel" id="modal-new-member" role="dialog" aria-labelledby="modal-new-member">
+    <div class="modal customerModal" id="modal-new-member" role="dialog" aria-labelledby="modal-new-member">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-ticket-label">Add New Customer</h4>
+                    <h4 class="modal-title" id="modal-new-customer-label">Add New Customer</h4>
                 </div>
                 <div class="modal-body">
                     @yield('customer-create-form')
@@ -107,7 +107,11 @@
         //creating customer, editing customer and deleting customer
 
         $(document).ready(function(){
-
+            jQuery("#new-customer-btn").click(function (){
+                jQuery("#customerForm")[0].reset();
+                jQuery(".customerModal .modal-title").html('Add New Customer');
+                jQuery("#companyId").html('');
+            });
             $company_select=jQuery("#companyId").select2({
                 placeholder: "Select a Company",
                 allowClear:true,
@@ -126,6 +130,7 @@
                                 id: -1,
                                 text: "Create New"
                             }]};
+
                         }
 
                         return {
@@ -142,6 +147,7 @@
                 if(selction.id === -1){
                     //creating customer with company
                     $('#CompanyDataAtCustomerForm').show();
+                    $("#CompanyDataAtCustomerForm input").val('');
 
                 }
                 else if(selction.id > 1){
@@ -232,7 +238,7 @@
 
             $.get("{{ route('edit.customer.data') }}", { id: id} ,function(data){
 
-
+                jQuery(".customerModal .modal-title").html('Edit Customer');
 
                 if(data){
 
@@ -245,7 +251,7 @@
                     $('#customerPhone').val(data.customer.phone_no);
 
                     if(data.company){
-                        $('#companyId').val(data.company.id);
+                        jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")
                         $('#companyName').val(data.company.name);
                         $('#companyEmail').val(data.company.email);
                         $('#companyPhone').val(data.company.phone_no);
@@ -262,7 +268,7 @@
 
                         }
                         $('#hiddenForEditCustomer').hide();
-                        $('#CompanyDataAtCustomerForm').show();
+                        $('#CompanyDataAtCustomerForm').hide();
                     }
 
 
@@ -288,7 +294,6 @@
 
 
             $('#modal-new-member').modal('show');
-
 
         }
 

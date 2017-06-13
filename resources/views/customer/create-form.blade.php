@@ -53,11 +53,9 @@
 
 
 
-    <div class="form-group" id="hiddenForEditCustomer">
+    <div class="form-group">
         <label class="sr-only">Do You Want to Create Company</label>
-        <select name="companyId" class="form-control" id="companyId" style="width: 100%">
-
-        </select>
+        <select name="companyId" class="form-control" id="companyId" style="width: 100%"></select>
 
     </div>
 
@@ -108,14 +106,14 @@
             <input id="zip_id" type="text" class="form-control" placeholder="Zip" name="zip" >
         </div>
 
-
+    <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+    <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Customer">
 
     </div>
 
 
 
-    <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
-        <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Customer">
+
 
     </form>
 @endsection
