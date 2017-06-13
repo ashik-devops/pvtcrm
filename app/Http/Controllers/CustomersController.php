@@ -49,7 +49,7 @@ class CustomersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
-            return view('customer.index-datatable');
+        return view('customer.index-datatable');
     }
 
     public function getCustomersAjax(){
@@ -103,7 +103,7 @@ class CustomersController extends Controller
         $address->email = $request->company['companyEmail'];
 
         $customer->addresses()->attach($address);
-        $customer_company = Customer_company::find($request->company['companyId']);
+        $customer_company = Customer_company::findOrFail($request->company['companyId']);
         if(is_null($customer_company)) {
 
             $customer_company = new Customer_company();
@@ -151,60 +151,49 @@ class CustomersController extends Controller
     }
 
     public function updateCustomer(Request $request){
+        $customer = Customer::findOrFail($request->customer['customerId']);
+        $address = Address::findOrFail($request->company['addressId']);
+        $customer_company = Customer_company::findOrFail($request->company['companyId']);
+        if(is_null($customer_company)){
+            $customer_company = new Customer_company();
 
-        $customer_id =  $request->customer['customerId'];
-        if($customer_id){
-            if($request->company['companyName'] && $request->company['companyEmail']){
-                $customer = Customer::findOrFail($customer_id);
-                $customer->first_name = $request->customer['firstName'];
-                $customer->last_name = $request->customer['lastName'];
-                $customer->title = $request->customer['customerTitle'];
-                $customer->email = $request->customer['customerEmail'];
-                $customer->phone_no = $request->customer['customerPhone'];
-                $customer->user_id = Auth::user()->id;
-                $customer->customer_company_id = $request->company['companyId'];
+            $customer_company->name = $request->company['companyName'];
+            $customer_company->website = $request->company['companyWebsite'];
+            $customer_company->phone_no = $request->company['companyPhone'];
+            $customer_company->email = $request->company['companyEmail'];
 
-                $customer->save();
-
-                $customer_company = Customer_company::findOrFail($request->company['companyId']);
-                $customer_company->name = $request->company['companyName'];
-                $customer_company->website = $request->company['companyWebsite'];
-                $customer_company->phone_no = $request->company['companyPhone'];
-                $customer_company->email = $request->company['companyEmail'];
-                $customer_company->save();
-
-                if($request->company['addressId']){
-                    $address = Address::findOrFail($request->company['addressId']);
-                    $address->street_address_1 = $request->company['streetAddress_1'];
-                    $address->street_address_2 = $request->company['streetAddress_2'];
-                    $address->city = $request->company['city'];
-                    $address->state = $request->company['state'];
-                    $address->country = $request->company['country'];
-                    $address->zip = $request->company['zip'];
-                    $address->phone_no = $request->company['companyPhone'];
-                    $address->email = $request->company['companyEmail'];
-                    $address->save();
-
-
-                }
-
-                echo "Customer is saved with Company information";
-
-            }else{
-                $customer = Customer::findOrFail($customer_id);
-                $customer->first_name = $request->customer['firstName'];
-                $customer->last_name = $request->customer['lastName'];
-                $customer->title = $request->customer['customerTitle'];
-                $customer->email = $request->customer['customerEmail'];
-                $customer->phone_no = $request->customer['customerPhone'];
-                $customer->user_id = Auth::user()->id;
-                $customer->customer_company_id = null;
-
-                $customer->save();
-                echo "Customer is saved";
-            }
         }
 
+        if(!is_null($customer) && !is_null($address)) {
+            $customer->first_name = $request->customer['firstName'];
+            $customer->last_name = $request->customer['lastName'];
+            $customer->title = $request->customer['customerTitle'];
+            $customer->email = $request->customer['customerEmail'];
+            $customer->phone_no = $request->customer['customerPhone'];
+
+            $address->street_address_1 = $request->company['streetAddress_1'];
+            $address->street_address_2 = $request->company['streetAddress_2'];
+            $address->city = $request->company['city'];
+            $address->state = $request->company['state'];
+            $address->country = $request->company['country'];
+            $address->zip = $request->company['zip'];
+            $address->phone_no = $request->company['companyPhone'];
+            $address->email = $request->company['companyEmail'];
+
+        }
+        else{
+            return response()->json(['result'=>'Error'], 403);
+        }
+
+
+        DB::beginTransaction();
+        $customer->save();
+        $address->save();
+        $customer_company->save();
+        $customer_company->employees()->save($customer);
+        DB::commit();
+
+        return response()->json(['result'=>"Saved", 'message'=>'Customer is Updated.'], 200);
     }
 
     public function deleteCustomer(Request $request){
