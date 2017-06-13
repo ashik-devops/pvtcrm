@@ -137,16 +137,19 @@
                 }
             });
             $company_select.on("select2:select", function (e) {
-                console.log(e);
-//                if(selectVal === '1'){
-//                    //creating customer with company
-//                    $('#CompanyDataAtCustomerForm').show();
-//
-//                }
-//
-//                if(selectVal === '0'){
-//                    //creating customer without company
-//                    $('#CompanyDataAtCustomerForm').hide();
+               var selction = e.params.data;
+
+                if(selction.id === -1){
+                    //creating customer with company
+                    $('#CompanyDataAtCustomerForm').show();
+
+                }
+                else if(selction.id > 1){
+                    $('#CompanyDataAtCustomerForm').hide();
+                    //now a selection is made select the company
+                }
+
+
 //
                 });
 

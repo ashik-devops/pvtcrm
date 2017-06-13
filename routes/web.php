@@ -35,5 +35,6 @@ Route::get('/companies/edit/', 'CompanyController@editCompany')->name('edit.moda
 Route::post('/companies/update', 'CompanyController@updateCompany')->name('update.company');//->middleware('can:list,App\Customer');
 Route::post('/companies/delete', 'CompanyController@deleteCompany')->name('delete.company');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/data', 'CompanyController@getCompaniesAjax')->name('company-data');//->middleware('can:list,App\Customer');
+Route::get('/ajax/company/data/{company}', 'CompanyController@getCompanyAjax')->name('get-company');
 Route::post('/ajax/companies/create', 'CompanyController@create')->name('create-company');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/list', 'CompanyController@listAll')->name('list-companies');
