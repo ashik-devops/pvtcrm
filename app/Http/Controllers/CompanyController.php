@@ -48,6 +48,17 @@ class CompanyController extends Controller
         return view('customer-company.index-datatable');
     }
 
+    public function listAll(Request $request){
+        $companies = new Customer_company();
+        if(!empty($request->q)){
+
+            $companies = $companies->where('name', 'like', "%$request->q%");
+
+        }
+
+        return response()->json($companies->select(['id', 'name'])->get(),200);
+    }
+
     public function create(Request $request){
         $this->validator($request->all())->validate();
     }

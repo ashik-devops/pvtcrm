@@ -103,10 +103,14 @@
     </script>
 @endsection
 @section('customer-create-edit-delete-scripts')')
-    <script>
+    <script type="text/javascript">
         //creating customer, editing customer and deleting customer
 
         $(document).ready(function(){
+
+            jQuery("#company_select").select2();
+
+
 
             $('#hiddenForEditCustomer').show();
             $('#CompanyDataAtCustomerForm').hide();
