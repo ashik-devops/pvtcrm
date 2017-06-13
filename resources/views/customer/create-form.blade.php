@@ -56,9 +56,8 @@
 
     <div class="form-group" id="hiddenForEditCustomer">
         <label class="sr-only">Do You Want to Create Company</label>
-        <select name="create-company-option" class="form-control" id="company_select" onchange="Select_company_create(this.value)" style="width: 100%">
-            <option value="0">Select Company</option>
-            <option value="1">Create Company</option>
+        <select name="create-company-option" class="form-control" id="company_select" style="width: 100%">
+
         </select>
 
     </div>

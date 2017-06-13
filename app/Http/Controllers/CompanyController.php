@@ -56,7 +56,10 @@ class CompanyController extends Controller
 
         }
 
-        return response()->json($companies->select(['id', 'name'])->get(),200);
+        return response()->json([
+            'items' => $companies->select(['id', 'name'])->get(),
+            'total_count'=>$companies->count()
+        ],200);
     }
 
     public function create(Request $request){

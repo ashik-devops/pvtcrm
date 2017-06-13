@@ -57,7 +57,7 @@
 
 @section('modal')
     <!-- Modal for creating customer -->
-    <div class="modal customerModel" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
+    <div class="modal customerModel" id="modal-new-member" role="dialog" aria-labelledby="modal-new-member">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -108,8 +108,47 @@
 
         $(document).ready(function(){
 
-            jQuery("#company_select").select2();
+            $company_select=jQuery("#company_select").select2({
+                placeholder: "Select a Company",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('list-companies')}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                        };
+                    },
+                    processResults : function (data){
+                        if(data.total_count < 1){
+                            return {results: [{
+                                id: -1,
+                                text: "Create New"
+                            }]};
+                        }
 
+                        return {
+                            results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                        }
+                    },
+
+                    cache: true
+                }
+            });
+            $company_select.on("select2:select", function (e) {
+                console.log(e);
+//                if(selectVal === '1'){
+//                    //creating customer with company
+//                    $('#CompanyDataAtCustomerForm').show();
+//
+//                }
+//
+//                if(selectVal === '0'){
+//                    //creating customer without company
+//                    $('#CompanyDataAtCustomerForm').hide();
+//
+                });
 
 
             $('#hiddenForEditCustomer').show();
@@ -287,22 +326,6 @@
                 });
         }
 
-
-        function Select_company_create(selectVal)
-        {
-            if(selectVal === '1'){
-                //creating customer with company
-                $('#CompanyDataAtCustomerForm').show();
-
-            }
-
-            if(selectVal === '0'){
-                //creating customer without company
-                $('#CompanyDataAtCustomerForm').hide();
-
-            }
-
-        }
 
         function get_all_customer_data(){
             $("#customers-table").dataTable().fnDestroy();
