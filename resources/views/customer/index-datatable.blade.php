@@ -349,13 +349,18 @@
                     if (isConfirm) {
 
                         //deletion process is going on....
-                        swal("Deleted!", "Company has been deleted.", "success");
+
 
                         $.post("{{ route('delete.customer.data') }}", data, function(result){
 
-                            console.log(result);
-                            get_all_customer_data();
-                            $.notify(result, "danger");
+                            if(result.result == 'Success'){
+                                swal("Deleted!", "Company has been deleted.", "success");
+                                get_all_company_data();
+                                $.notify(result, "danger");
+                            }
+                            else{
+                                swal("Failed", "Failed to delete the company", "error");
+                            }
                         });
                     } else {
                         swal("Cancelled", "Company is safe :)", "error");
