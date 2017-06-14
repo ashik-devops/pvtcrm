@@ -2,7 +2,8 @@
     <form method="post" class="ajax-from"  data-parsley-validate id="companyForm">
 
         {{ csrf_field() }}
-        <input type="hidden" id="company_id">
+        <input type="hidden" id="company_id" name="companyId">
+        <input type="hidden" id="address_id" name="addressId">
         <div class="form-group {{ $errors->has('company-name') ? ' has-error' : '' }}" id="company-name">
             <label class="sr-only">Company Name</label>
             <input id="companyName" type="text" name="company-name" class="form-control" placeholder="Comapny Name" data-parsley-trigger="change focusout" data-parsley-required-message="Company Name is required" required value="{{old('company-name')}}">

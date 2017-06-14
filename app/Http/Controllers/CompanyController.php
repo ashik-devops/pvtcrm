@@ -6,6 +6,7 @@ use App\Address;
 use App\Customer_company;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Facades\Datatables;
 
@@ -112,7 +113,7 @@ class CompanyController extends Controller
         $customer_company->website = $request->company['companyWebsite'];
         $customer_company->phone_no = $request->company['companyPhone'];
         $customer_company->email = $request->company['companyEmail'];
-        $customer_company->save();
+
 
         $address = new Address();
         $address->street_address_1 = $request->company['streetAddress_1'];
@@ -124,10 +125,16 @@ class CompanyController extends Controller
         $address->phone_no = $request->company['companyPhone'];
         $address->email = $request->company['companyEmail'];
 
+        DB::beginTransaction();
+        $customer_company->save();
+        $address->save();
         $customer_company->addresses()->save($address);
+        DB::commit();
 
-
-        echo 'Company is created';
+        return response()->json([
+            'result'=>'Saved',
+            'message'=>'Company has been created successfully.'
+        ]);
 
     }
 
@@ -145,36 +152,63 @@ class CompanyController extends Controller
 
     public function updateCompany( Request $request){
 
-        $id =  $request->company['companyId'];
-        $customer_company = Customer_company::findOrFail($id);
-        $customer_company->name = $request->company['companyName'];
-        $customer_company->website = $request->company['companyWebsite'];
-        $customer_company->phone_no = $request->company['companyPhone'];
-        $customer_company->email = $request->company['companyEmail'];
-        $customer_company->save();
+        $customer_company = Customer_company::findOrFail($request->company['companyId']);
+        $address = Address::findOrFail($request->company['addressId']);
+
+        if(!is_null($customer_company) && !is_null($address)){
+
+            $customer_company->name = $request->company['companyName'];
+            $customer_company->website = $request->company['companyWebsite'];
+            $customer_company->phone_no = $request->company['companyPhone'];
+            $customer_company->email = $request->company['companyEmail'];
+            $address->street_address_1 = $request->company['streetAddress_1'];
+            $address->street_address_2 = $request->company['streetAddress_2'];
+            $address->city = $request->company['city'];
+            $address->state = $request->company['state'];
+            $address->country = $request->company['country'];
+            $address->zip = $request->company['zip'];
+            $address->phone_no = $request->company['companyPhone'];
+            $address->email = $request->company['companyEmail'];
 
 
-        $address = new Address();
-        $address->street_address_1 = $request->company['streetAddress_1'];
-        $address->street_address_2 = $request->company['streetAddress_2'];
-        $address->city = $request->company['city'];
-        $address->state = $request->company['state'];
-        $address->country = $request->company['country'];
-        $address->zip = $request->company['zip'];
-        $address->phone_no = $request->company['companyPhone'];
-        $address->email = $request->company['companyEmail'];
-        $customer_company->addresses()->save($address);
+            DB::beginTransaction();
+            $customer_company->save();
+            $address->save();
+            DB::commit();
 
-        echo 'Company Information  is updated';
+            return response()->json([
+                'result'=>'Saved',
+                'message'=>'Company has been updated successfully.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Failed to update company information.'
+        ]);
 
     }
 
     public function deleteCompany(Request $request){
-        $id =  $request->id;
-        $customer_company = Customer_company::findOrFail($id);
-        $customer_company->delete();
+        $customer_company = Customer_company::findOrFail($request->id);
+        if(!is_null($customer_company)){
+            DB::beginTransaction();
+            foreach ($customer_company->emoloyees as $employee)
+                $employee->delete();
 
-        echo 'Company is sent to Trash';
+            $customer_company->delete();
+            DB::commit();
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Company has been successfully deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Company not found.'
+        ]);
+
 
     }
 }

@@ -201,29 +201,58 @@
 
 
 
-                if(customer.customerId === ''){
+                if(customer.customerId < 1){
                     //customer creating.....
-                    $.post("{{ route('create.customer') }}", data, function(result){
-                        $('#customerForm')[0].reset();
-                        $('#modal-new-member').modal('hide');
-                        get_all_customer_data();
-                        $.notify(result, "success");
 
+
+                    var request = jQuery.ajax({
+                        url: "{{ route('create.customer') }}",
+                        data: data,
+                        method: "POST",
+                        dataType: "json"
                     });
+                    request.done(function (response) {
+                        if(response.result == 'Saved') {
+                            $('#customerForm')[0].reset();
+                            jQuery("#companyId").html("");
+                            $('#modal-new-member').modal('hide');
+                            get_all_customer_data();
+                            $.notify(response.message, "success");
+                        }
+                        else{
+                            jQuery.notify(response.message, "error");
+                        }
+                    })
+
+                    request.fail(function (jqXHT, textStatus) {
+                        $.notify(textStatus, "error");
+                    });
+
                 }else{
                     //updating customer.....
-                    $.post("{{ route('update.customer.data') }}", data, function(result){
 
-                        console.log(result);
-                        $('#customerForm')[0].reset();
-                        $('#customerId').val('');
-                        $('#new_edit_user').text('Add New User');
-                        $('#modal-new-member').modal('hide');
-                        get_all_customer_data();
-                        $.notify(result, "success");
-                        $('#modal_button').val('Add Customer');
-                        $('#new_edit_user').html('<h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Add New Customer</h4>');
+                    var request = jQuery.ajax({
+                        url: "{{ route('update.customer.data') }}",
+                        data: data,
+                        method: "POST",
+                        dataType: "json"
+                    });
+                    request.done(function (response) {
+                        if(response.result == 'Saved'){
+                            $('#customerForm')[0].reset();
+                            jQuery("#companyId").html("");
+                            $('#customerId').val('');
+                            $('#modal-new-member').modal('hide');
+                            get_all_customer_data();
+                            $.notify(response.message, "success");
+                        }
+                        else{
+                            jQuery.notify(response.message, "error");
+                        }
+                    })
 
+                    request.fail(function (jqXHT, textStatus) {
+                        $.notify(textStatus, "error");
                     });
                 }
             });

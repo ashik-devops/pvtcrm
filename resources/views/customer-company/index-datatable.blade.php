@@ -13,7 +13,7 @@
         <div class="container-fluid">
             <h2 class="view-title">Customer Companies</h2>
             <div class="actions">
-                <button class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Company</button>
+                <button class="btn btn-success" id="new-company" data-toggle="modal" data-target="#modal-new-company"><i class="fa fa-plus"></i> New Company</button>
             </div>
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -56,13 +56,13 @@
 
 @section('modal')
     <!--modal for creating Customer Company-->
-    <div class="modal" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
+    <div class="modal" id="modal-new-company" tabindex="-1" role="dialog" aria-labelledby="modal-new-company">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div id="new_edit_user">
-                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Add New User</h4>
+                    <div id="new_edit_company">
+                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New Company</h4>
                     </div>
 
                 </div>
@@ -156,6 +156,9 @@
 
     <script>
         $(document).ready(function(){
+            jQuery("button#new-company").click(function (){
+                $('#new_edit_company .modal-title').html('Create New Company');
+            });
             //For creating Company....
             $('#companyForm').on('submit',function(e){
                 e.preventDefault();
@@ -163,6 +166,7 @@
 
                 var company = {
                     companyId : $('#company_id').val(),
+                    addressId : $('#address_id').val(),
                     companyName : $('#companyName').val(),
                     companyEmail : $('#companyEmail').val(),
                     companyPhone : $('#companyPhone').val(),
@@ -182,34 +186,65 @@
 
                 if(company.companyId === ''){
                     //company creating.....
-                    $.post("{{ route('create.company') }}", data, function(result){
-                        $('#companyForm')[0].reset();
-                        $('#modal-new-member').modal('hide');
-                        get_all_company_data();
-                        $.notify(result, "success");
+
+
+                    var request = jQuery.ajax({
+                        url: "{{ route('create.company') }}",
+                        data: data,
+                        method: "POST",
+                        dataType: "json"
+                    });
+                    request.done(function (response) {
+                        if(response.result == 'Saved'){
+                            $('#companyForm')[0].reset();
+                            $('#modal-new-company').modal('hide');
+                            get_all_company_data();
+                            $.notify(response.message, "success");
+                        }
+                        else{
+                            jQuery.notify(response.message, "error");
+                        }
+                    })
+
+                    request.fail(function (jqXHT, textStatus) {
+                        $.notify(textStatus, "error");
                     });
                 }else{
                     //company editing.....
-                    $.post("{{ route('update.company') }}", data, function(result){
-                        $('#companyForm')[0].reset();
-                        $('#company_id').val('');
-                        $('#new_edit_user').text('Add New User');
-                        $('#modal-new-member').modal('hide');
-                        get_all_company_data();
-                        $.notify(result, "success");
-                        $('#modal_button').val('Add Company');
-                        $('#new_edit_user').html('<h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Add New User</h4>');
+
+                    var request = jQuery.ajax({
+                        url: "{{ route('update.company') }}",
+                        data: data,
+                        method: "POST",
+                        dataType: "json"
                     });
+                    request.done(function (response) {
+                        if(response.result == 'Saved'){
+                            $('#companyForm')[0].reset();
+                            $('#company_id').val('');
+                            $('#modal-new-company').modal('hide');
+                            get_all_company_data();
+                            $.notify(response.message, "success");
+                        }
+                        else{
+                            jQuery.notify(response.message, "error");
+                        }
+                    })
+
+                    request.fail(function (jqXHT, textStatus) {
+                        $.notify(textStatus, "error");
+                    });
+
                 }
             });
         });
 
         function editCompany(id){
 
-            $('#new_edit_user').html('<h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Edit New User</h4>');
+            $('#new_edit_company .modal-title').html('Edit Company');
+
             $.get("{{ route('edit.modal.data') }}", { id: id} ,function(data){
                 if(data){
-                    console.log('hello');
                     $('#modal_button').val('Update Company');
                     $('#company_id').val(data.company.id);
                     $('#companyName').val(data.company.name);
@@ -218,6 +253,7 @@
                     $('#companyWebsite').val(data.company.website);
 
                     if(data.company_address.length > 0){
+                        $('#address_id').val(data.company_address[0].id);
                         $('#streetAddress_1').val(data.company_address[0].street_address_1);
                         $('#streetAddress_2').val(data.company_address[0].street_address_2);
                         $('#city_id').val(data.company_address[0].city);
@@ -227,7 +263,7 @@
                     }
                 }
             });
-            $('#modal-new-member').modal('show');
+            $('#modal-new-company').modal('show');
         }
 
 
