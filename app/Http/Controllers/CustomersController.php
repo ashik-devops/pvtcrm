@@ -197,10 +197,19 @@ class CustomersController extends Controller
     }
 
     public function deleteCustomer(Request $request){
-        $customer_id =  $request->id;
-        $customer= Customer::findOrFail($customer_id);
-        $customer->delete();
-        echo 'Customer is sent to Trash';
+        $customer= Customer::findOrFail($request->id);
+        if(!is_null($customer)){
+            $customer->delete();
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Customer has been successfully deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Customer not found.'
+        ]);
 
     }
 

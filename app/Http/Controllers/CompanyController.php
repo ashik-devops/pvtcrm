@@ -191,13 +191,11 @@ class CompanyController extends Controller
 
     public function deleteCompany(Request $request){
         $customer_company = Customer_company::findOrFail($request->id);
+
         if(!is_null($customer_company)){
-            DB::beginTransaction();
-            foreach ($customer_company->emoloyees as $employee)
-                $employee->delete();
 
             $customer_company->delete();
-            DB::commit();
+
             return response()->json([
                 'result'=>'Success',
                 'message'=>'Company has been successfully deleted.'
