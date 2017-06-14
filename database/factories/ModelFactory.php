@@ -47,3 +47,16 @@ $factory->define(App\Customer_company::class, function(Faker\Generator $faker) {
         'email'=>$faker->unique()->email
     ];
 });
+
+$factory->define(App\Task::class, function(Faker\Generator $faker) {
+    $statuses=['Due', 'Done', 'Cancelled'];
+    $priority=['Critical', 'High', 'Medium', 'Low'];
+    return [
+        'customer_id'=>rand(1,100),
+        'title'=>$faker->title,
+        'description'=>$faker->text(200),
+        'due_date'=>$faker->date(),
+        'status'=>$statuses[rand(0,2)],
+        'priority'=>$priority[rand(0,3)]
+    ];
+});

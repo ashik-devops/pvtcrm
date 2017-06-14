@@ -17,7 +17,7 @@ class CreateTasksTable extends Migration
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
             $table->string('title');
-            $table->string('description');
+            $table->text('description');
             $table->dateTime('due_date');
             $table->enum('status', ['Due', 'Done', 'Cancelled']);
             $table->enum('priority', ['Critical', 'High', 'Medium', 'Low']);
