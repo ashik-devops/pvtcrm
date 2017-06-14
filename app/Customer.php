@@ -22,4 +22,7 @@ class Customer extends Model
     public function addresses(){
         return $this->belongsToMany('App\Address', 'customer_addresses', 'customer_id', 'address_id')->withPivot(['type']);
     }
+    public function tasks(){
+        return $this->hasMany('App\Task');
+    }
 }
