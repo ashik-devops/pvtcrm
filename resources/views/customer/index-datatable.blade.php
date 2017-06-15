@@ -100,10 +100,7 @@
             });
 
         });
-    </script>
-@endsection
-@section('customer-create-edit-delete-scripts')')
-    <script type="text/javascript">
+
         //creating customer, editing customer and deleting customer
 
         $(document).ready(function(){

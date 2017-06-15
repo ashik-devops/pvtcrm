@@ -108,51 +108,7 @@
 
     </script>
 
-    {{--Handle create form submission--}}
-   <!-- <script type="text/javascript">
-        jQuery('document').ready(function() {
-            jQuery('form.ajax-from').submit(function (e) {
 
-                //clear errors
-                jQuery('span.help-block').remove();
-                jQuery('.has-error').removeClass('has-error');
-
-                var url = jQuery(this).attr('action'); // the script where you handle the form input.
-                var data= jQuery(this).serialize();
-                $.ajax({
-                    type: "POST",
-                    url: url,
-                    data: data, // serializes the form's elements.
-                    success: function(data)
-                    {
-//                        alert(data); // show response from the php script.
-                    },
-                    error : function (data ) {
-                        var errors = data.responseJSON;
-                        console.log(errors);
-                        for(var key in errors)
-                        {
-                            var el = jQuery('#'+key);
-
-                            el.addClass('has-error');
-                            el.append("<span class='help-block'><strong>"+errors[key][0]+"</strong></span>");
-
-
-                        }
-                    }
-
-                });
-
-                e.preventDefault();
-
-            });
-        });
-
-
-    </script>-->
-@endsection
-
-@section('company-create-edit-delete-scripts')
 
     <script>
         $(document).ready(function(){

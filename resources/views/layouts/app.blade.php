@@ -18,7 +18,6 @@
     @yield('before-head-style')
     <link href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" rel='stylesheet' type='text/css'>
     <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap.css')}}">
-    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap.css')}}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/font-awesome.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/elegant-icons.css')}}">
@@ -67,12 +66,6 @@
         <script src="{{asset('storage/assets/js/select2.full.min.js')}}"></script>
         <script src="{{asset('storage/assets/js/main.js')}}"></script>
         @yield('after-footer-script')
-        @yield('company-create-edit-delete-scripts')
-        @yield('customer-create-edit-delete-scripts')
-
-
-
-
 
 </body>
 </html>
