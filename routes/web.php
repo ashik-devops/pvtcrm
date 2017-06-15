@@ -28,6 +28,15 @@ Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('del
 
 
 
+Route::get('/tasks', 'TasksController@index')->name('customer-index')->middleware('can:index,App\Customer');
+Route::get('/get-all-customer', 'TasksController@getAllCustomer')->name('get-all-customer');
+Route::get('/ajax/tasks/data', 'TasksController@getTasksAjax')->name('task-data');
+Route::post('/task/create', 'TasksController@createTask')->name('create.task');
+Route::get('/customer/edit', 'TasksController@editTask')->name('edit.task.data');
+Route::post('/task/update', 'TasksController@updateTask')->name('update.task');
+Route::post('/task/delete', 'TasksController@deleteTask')->name('delete.task');
+
+
 Route::get('/companies', 'CompanyController@index')->name('company-index')->middleware('can:index,App\Customer');
 Route::post('/companies/create', 'CompanyController@createCompany')->name('create.company');//->middleware('can:list,App\Customer');
 Route::get('/companies/view/{company}', 'CompanyController@viewCompany')->name('view-company');//->middleware('can:list,App\Customer');

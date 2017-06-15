@@ -69,6 +69,7 @@
         @yield('after-footer-script')
         @yield('company-create-edit-delete-scripts')
         @yield('customer-create-edit-delete-scripts')
+        @yield('task-create-edit-delete-scripts')
 
 
 
