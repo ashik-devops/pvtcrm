@@ -67,5 +67,6 @@
         <script src="{{asset('storage/assets/js/main.js')}}"></script>
         @yield('after-footer-script')
 
+
 </body>
 </html>

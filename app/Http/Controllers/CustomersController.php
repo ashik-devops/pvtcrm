@@ -213,6 +213,21 @@ class CustomersController extends Controller
 
     }
 
+    public function getCustomerOptions(){
+
+        return response()->json([
+            'customers' =>Customer::all()->map(
+                function($customer){
+                $name=implode(', ', [$customer->last_name, $customer->first_name]);
+                if($customer->has('company')){
+                    $name.='@'.$customer->company->name;
+                }
+
+                return ['id'=>$customer->id,'text'=>$name];
+            })
+        ]);
+    }
+
 
 
 }
