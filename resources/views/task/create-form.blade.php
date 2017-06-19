@@ -31,7 +31,7 @@
 
     <div class="form-group {{ $errors->has('due-date') ? ' has-error' : '' }}" id="due-date">
         <label class="sr-only">Date</label>
-        <input id="taskDueDate" type="date" name="due-date" class="form-control" placeholder="Due Date" data-parsley-trigger="change focusout" data-parsley-required-message="Date is required" required value="{{old('due-date')}}">
+        <input id="taskDueDate" type="text" name="due-date" class="form-control datepicker" placeholder="Due Date" data-parsley-trigger="change focusout" data-parsley-required-message="Due Date is required" required value="{{old('due-date')}}">
         @if ($errors->has('due-date'))
             <span class="help-block">
                 <strong>{{ $errors->first('due-date') }}</strong>

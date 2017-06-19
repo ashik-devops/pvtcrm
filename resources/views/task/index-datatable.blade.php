@@ -5,6 +5,7 @@
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datepicker.css')}}">
 @endsection
 
 @section('content')
@@ -79,6 +80,7 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-datepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
         jQuery('document').ready(function() {
@@ -100,6 +102,31 @@
 
                 ]
             });
+
+            jQuery("#taskCustomerId").select2({
+                placeholder: "Select a Customer",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('get-customer-options')}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                        };
+                    },
+                    processResults : function (data){
+                        console.log(data);
+                        return {
+                            results: data.customers
+                        }
+                    },
+
+                    cache: true
+                }
+            });
+
+            jQuery('#taskDueDate').datepicker();
 
         });
 
@@ -188,7 +215,7 @@
                     $('#taskCustomerId').val(data.task.customer_id);
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
-                    $('#taskDueDate').val(data.task.due_date);
+                    jQuery('#taskDueDate').datepicker('setDate', new Date(data.task.due_date));
                     $('#taskPriority').val(data.task.priority);
                     $('#taskStatus').val(data.task.status);
 
@@ -260,28 +287,5 @@
             });
         }
 
-
-        jQuery("#taskCustomerId").select2({
-            placeholder: "Select a Customer",
-            allowClear:true,
-            ajax: {
-                url: "{{route('get-customer-options')}}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term, // search term
-                    };
-                },
-                processResults : function (data){
-                    console.log(data);
-                    return {
-                        results: data.customers
-                    }
-                },
-
-                cache: true
-            }
-        });
     </script>
 @endsection
