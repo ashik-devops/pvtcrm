@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datepicker.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-clockpicker.css')}}">
 @endsection
 
 @section('content')
@@ -13,7 +14,7 @@
         <div class="container-fluid">
             <h2 class="view-title">Tasks</h2>
             <div class="actions">
-                <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Task</button>
+                <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#task-modal"><i class="fa fa-plus"></i> New Task</button>
             </div>
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -58,7 +59,7 @@
 
 @section('modal')
     <!-- Modal for creating customer -->
-    <div class="modal customerModal" id="modal-new-member" role="dialog" aria-labelledby="modal-new-member">
+    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -81,6 +82,7 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
     <script src="{{asset('storage/assets/js/bootstrap-datepicker.js')}}"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-clockpicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
         jQuery('document').ready(function() {
@@ -126,7 +128,10 @@
                 }
             });
 
-            jQuery('#taskDueDate').datepicker();
+            jQuery('#taskDueDate').datepicker('setDate', new Date());
+            jQuery('#taskDueTime').clockpicker({
+                donetext: "Done"
+            });
 
         });
 
@@ -142,7 +147,8 @@
                 taskCustomerId : $('#taskCustomerId').val(),
                 taskTitle : $('#taskTitle').val(),
                 taskDescription : $('#taskDescription').val(),
-                taskDueDate : $('#taskDueDate').val(),
+                taskDueDate : $('#taskDueDate').val()+ ' '+jQuery('#taskDueTime').val(),
+                taskDueTime: jQuery('#taskDueTime').val(),
                 taskStatus : $('#taskStatus').val(),
                 taskPriority : $('#taskPriority').val(),
 
@@ -164,7 +170,7 @@
                 request.done(function (response) {
                     if(response.result == 'Saved'){
                         $('#taskForm')[0].reset();
-                        $('#modal-new-member').modal('hide');
+                        $('#task-modal').modal('hide');
                         get_all_task_data();
                         $.notify(response.message, "success");
                     }
@@ -189,7 +195,7 @@
                     if(response.result == 'Saved'){
                         $('#taskForm')[0].reset();
                         $('#task_id').val('');
-                        $('#modal-new-member').modal('hide');
+                        $('#task-modal').modal('hide');
                         get_all_task_data();
                         jQuery.notify(response.message, "success");
                     }
@@ -213,9 +219,11 @@
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);
+                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
                     jQuery('#taskDueDate').datepicker('setDate', new Date(data.task.due_date));
+                    jQuery("#taskDueTime").val(extract_time(data.task.due_date));
                     $('#taskPriority').val(data.task.priority);
                     $('#taskStatus').val(data.task.status);
 
@@ -223,7 +231,12 @@
 
             });
 
-            $('#modal-new-member').modal('show');
+            $('#task-modal').modal('show');
+        }
+
+        function extract_time(datestring){
+            var d=datestring.split(' ')[1].split(':');
+            return d[0]+":"+d[1];
         }
 
         function deleteTask(id){
