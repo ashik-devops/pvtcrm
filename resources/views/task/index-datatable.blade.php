@@ -5,7 +5,13 @@
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
-    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.min.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
+
+    <style type="text/css">
+        .datetimepicker{
+            z-index: 999 !important;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -80,8 +86,8 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
-    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
         jQuery('document').ready(function() {
@@ -126,6 +132,14 @@
                     cache: true
                 }
             });
+            jQuery('.modal').on('shown.bs.modal', function () {
+
+                jQuery(function () {
+                    $('#taskDueDate').datetimepicker();
+                });
+
+            });
+
 
         });
 
