@@ -26,6 +26,12 @@
                     <span class="nav-label">Customers</span>
                 </a>
             </li>
+            <li {{ Request::is('users') ? ' class="active"' : null }}>
+                <a href="{{route('users-index')}}">
+                    <span aria-hidden="true" class="icon icon_group"></span>
+                    <span class="nav-label">Users</span>
+                </a>
+            </li>
         </ul>
     </nav>
 </div>
