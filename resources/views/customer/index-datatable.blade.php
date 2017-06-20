@@ -278,7 +278,7 @@
                     $('#customerPhone').val(data.customer.phone_no);
 
                     if(data.company){
-                        jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>");
+                        jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")
                         $('#companyName').val(data.company.name);
                         $('#companyEmail').val(data.company.email);
                         $('#companyPhone').val(data.company.phone_no);
