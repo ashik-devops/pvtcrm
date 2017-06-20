@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('task.create-form');
+@include('task.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -81,6 +81,7 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.min.js')}}"></script>
+    <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
         jQuery('document').ready(function() {
