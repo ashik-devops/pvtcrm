@@ -135,7 +135,7 @@
             jQuery('.modal').on('shown.bs.modal', function () {
 
                 jQuery(function () {
-                    $('#taskDueDate').datetimepicker();
+                    $('#taskDueDateTimePicker').datetimepicker();
                 });
 
             });

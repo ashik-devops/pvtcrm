@@ -31,7 +31,7 @@
 
     <div class="form-group {{ $errors->has('due-date') ? ' has-error' : '' }}" id="due-date">
         <label class="sr-only">Date</label>
-        <div class="input-group date">
+        <div class="input-group date" id="taskDueDateTimePicker">
             <input id="taskDueDate" type="text" name="due-date" class="form-control" placeholder="Due Date" data-parsley-trigger="change focusout" data-parsley-required-message="Due Date is required" required value="{{old('due-date')}}">
 
             <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
