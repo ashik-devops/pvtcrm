@@ -128,7 +128,7 @@ class CustomersController extends Controller
 
     }
 
-    public function editCustomer(Request $request){
+    public function getCustomer(Request $request){
 
         $customer = Customer::findOrFail($request->id);
 

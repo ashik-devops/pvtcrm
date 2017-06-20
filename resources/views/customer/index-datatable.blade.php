@@ -263,7 +263,7 @@
         function editCustomer(id){
 
 
-            $.get("{{ route('edit.customer.data') }}", { id: id} ,function(data){
+            $.get("{{ route('get.customer.data') }}", { id: id} ,function(data){
 
                 jQuery(".customerModal .modal-title").html('Edit Customer');
 

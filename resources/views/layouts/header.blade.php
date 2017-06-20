@@ -2,7 +2,7 @@
 <header class="header">
     <div class="branding float-left">
         <h1 class="logo text-center">
-            <a href="index.html">
+            <a href="/">
                 <img class="logo-icon" src="{{asset('storage/assets/images/logo-icon.svg')}}" alt="icon" />
                 <span class="nav-label">
 							<span class="highlight">Pvt</span>CRM

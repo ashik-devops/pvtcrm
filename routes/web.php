@@ -22,13 +22,13 @@ Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('pro
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
 Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer');
-Route::get('/customer/edit', 'CustomersController@editCustomer')->name('edit.customer.data');
+Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
 Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
 Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
 
 
 
-Route::get('/tasks', 'TasksController@index')->name('customer-index')->middleware('can:index,App\Customer');
+Route::get('/tasks', 'TasksController@index')->name('task-index');//->middleware('can:index,App\Customer');
 Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options');
 Route::get('/ajax/tasks/data', 'TasksController@getTasksAjax')->name('task-data');
 Route::post('/task/create', 'TasksController@createTask')->name('create.task');
