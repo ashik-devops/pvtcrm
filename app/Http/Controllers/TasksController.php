@@ -82,7 +82,7 @@ class TasksController extends Controller
                 })
             ->addColumn('due_date',
                 function ($task){
-                    return  Carbon::createFromTimeStamp(strtotime($task->due_date))->diffForHumans();
+                    return  Carbon::createFromTimeStamp(strtotime($task->due_date))->toFormattedDateString();
                 })
             ->rawColumns(['title', 'description', 'due_date' ,'status', 'priority', 'action'])
             ->make(true);
@@ -93,7 +93,7 @@ class TasksController extends Controller
         $task->title = $request->task['taskTitle'];
         $task->customer_id = $request->task['taskCustomerId'];
         $task->description = $request->task['taskDescription'];
-        $task->due_date = $request->task['taskDueDate'];
+        $task->due_date = Carbon::createFromFormat('m/d/Y H:i', $request->task['taskDueDate']);
         $task->status = $request->task['taskStatus'];
         $task->priority = $request->task['taskPriority'];
 
@@ -112,7 +112,7 @@ class TasksController extends Controller
     }
 
     public function editTask(Request $request){
-        $task = Task::findOrFail($request->id);
+        $task = Task::with('customer', 'customer.company')->findOrFail($request->id);
 
 
         return response()->json([
@@ -129,7 +129,7 @@ class TasksController extends Controller
             $task->customer_id = $request->task['taskCustomerId'];
             $task->title = $request->task['taskTitle'];
             $task->description = $request->task['taskDescription'];
-            $task->due_date= $request->task['taskDueDate'];
+            $task->due_date = Carbon::createFromFormat('m/d/Y H:i', $request->task['taskDueDate']);
             $task->priority= $request->task['taskPriority'];
             $task->status= $request->task['taskStatus'];
 

@@ -32,7 +32,7 @@
     <div class="form-group {{ $errors->has('due-date') ? ' has-error' : '' }}" id="due-date">
         <label class="sr-only">Date</label>
         <div class="input-group input-group-icon-click">
-            <input id="taskDueDate" type="text" name="due-date" class="form-control datepicker" placeholder="Due Date" data-parsley-trigger="change focusout" data-parsley-required-message="Due Date is required" required value="{{old('due-date')}}">
+            <input id="taskDueDate" type="text" name="due-date" class="form-control datetimepicker" placeholder="Due Date" data-parsley-trigger="change focusout" data-parsley-required-message="Due Date is required" required value="{{old('due-date')}}">
 
             <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
         </div>
@@ -43,20 +43,7 @@
             </span>
         @endif
     </div>
-<div class="form-group {{ $errors->has('due-date') ? ' has-error' : '' }}" id="due-time">
-        <label class="sr-only">Date</label>
-    <div class="input-group clockpicker">
-        <input type="text" id="taskDueTime" class="form-control clockpicker" value="09:00">
-        <span class="input-group-addon"><i class="fa fa-clock-o cursor-pointer"></i></span>
-    </div>
 
-
-@if ($errors->has('due-time'))
-            <span class="help-block">
-                <strong>{{ $errors->first('due-date') }}</strong>
-            </span>
-        @endif
-    </div>
 
     <div class="form-group {{ $errors->has('status') ? ' has-error' : '' }}" id="status">
         <label class="sr-only">Status</label>

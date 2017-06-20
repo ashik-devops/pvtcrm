@@ -5,8 +5,7 @@
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
-    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datepicker.css')}}">
-    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-clockpicker.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.min.css')}}">
 @endsection
 
 @section('content')
@@ -81,8 +80,7 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
-    <script src="{{asset('storage/assets/js/bootstrap-datepicker.js')}}"></script>
-    <script src="{{asset('storage/assets/js/bootstrap-clockpicker.js')}}"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
         jQuery('document').ready(function() {
@@ -128,11 +126,6 @@
                 }
             });
 
-            jQuery('#taskDueDate').datepicker('setDate', new Date());
-            jQuery('#taskDueTime').clockpicker({
-                donetext: "Done"
-            });
-
         });
 
         //creating task
@@ -147,8 +140,7 @@
                 taskCustomerId : $('#taskCustomerId').val(),
                 taskTitle : $('#taskTitle').val(),
                 taskDescription : $('#taskDescription').val(),
-                taskDueDate : $('#taskDueDate').val()+ ' '+jQuery('#taskDueTime').val(),
-                taskDueTime: jQuery('#taskDueTime').val(),
+                taskDueDate : $('#taskDueDate').val(),
                 taskStatus : $('#taskStatus').val(),
                 taskPriority : $('#taskPriority').val(),
 
@@ -223,7 +215,6 @@
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
                     jQuery('#taskDueDate').datepicker('setDate', new Date(data.task.due_date));
-                    jQuery("#taskDueTime").val(extract_time(data.task.due_date));
                     $('#taskPriority').val(data.task.priority);
                     $('#taskStatus').val(data.task.status);
 
@@ -234,10 +225,6 @@
             $('#task-modal').modal('show');
         }
 
-        function extract_time(datestring){
-            var d=datestring.split(' ')[1].split(':');
-            return d[0]+":"+d[1];
-        }
 
         function deleteTask(id){
             var _token = $('input[name="_token"]').val();

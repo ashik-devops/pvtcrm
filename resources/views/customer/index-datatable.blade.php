@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('customer.create-form');
+@include('customer.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -278,7 +278,7 @@
                     $('#customerPhone').val(data.customer.phone_no);
 
                     if(data.company){
-                        jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")
+                        jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>");
                         $('#companyName').val(data.company.name);
                         $('#companyEmail').val(data.company.email);
                         $('#companyPhone').val(data.company.phone_no);
