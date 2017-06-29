@@ -151,25 +151,23 @@ class AppointmentsController extends Controller
 
         if(is_numeric($request->appointment['aptCustomerId'])) {
             $customer = Customer::findOrFail($request->appointment['aptCustomerId']);
+
+
+            $appointment = Appointment::findOrFail($request->appointment['appointmentId']);
+            $appointment->title = $request->appointment['appointmentTitle'];
+            $appointment->description = $request->appointment['appointmentDescription'];
+            $appointment->status = $request->appointment['appointmentStatus'];
+            $appointment->start_time = Carbon::parse($request->appointment['startTime']);
+            $appointment->end_time = Carbon::parse($request->appointment['endTime']);
+
+
+            DB::beginTransaction();
+            $customer->appointments()->save($appointment);
+            DB::commit();
+            $result['result']= 'Saved';
+            $result['message']= 'Appointment has been updated successfully.';
         }
-
-        $appointment = Appointment::findOrFail($request->appointment['appointmentId']);
-        $appointment->title = $request->appointment['appointmentTitle'];
-        $appointment->description = $request->appointment['appointmentDescription'];
-        $appointment->status = $request->appointment['appointmentStatus'];
-        $appointment->start_time = Carbon::parse($request->appointment['startTime']);
-        $appointment->end_time = Carbon::parse($request->appointment['endTime']);
-
-
-
-        DB::beginTransaction();
-        $customer->appointments()->save($appointment);
-        DB::commit();
-
-        return response()->json([
-            'result'=>'Saved',
-            'message'=>'Appointment has been updated successfully.'
-        ]);
+        return response()->json($result, 200);
     }
 
     public function deleteAppointment(Request $request){
