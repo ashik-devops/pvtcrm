@@ -37,6 +37,14 @@ Route::post('/task/update', 'TasksController@updateTask')->name('update.task');
 Route::post('/task/delete', 'TasksController@deleteTask')->name('delete.task');
 
 
+Route::get('/appointments', 'AppointmentsController@index')->name('appointment-index');
+Route::get('/ajax/appointment/data', 'AppointmentsController@getAppointmentsAjax')->name('appointment-data');
+Route::post('/appointment/create', 'AppointmentsController@createAppointment')->name('create.appointment');
+Route::get('/appointment/edit', 'AppointmentsController@editAppointment')->name('edit.appointment');
+Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->name('update.appointment');
+Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
+
+
 Route::get('/companies', 'CompanyController@index')->name('company-index')->middleware('can:index,App\Customer');
 Route::post('/companies/create', 'CompanyController@createCompany')->name('create.company');//->middleware('can:list,App\Customer');
 Route::get('/companies/view/{company}', 'CompanyController@viewCompany')->name('view-company');//->middleware('can:list,App\Customer');

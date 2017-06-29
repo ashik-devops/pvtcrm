@@ -60,3 +60,13 @@ $factory->define(App\Task::class, function(Faker\Generator $faker) {
         'priority'=>$priority[rand(0,3)]
     ];
 });
+$factory->define(App\Appointment::class, function(Faker\Generator $faker) {
+
+    return [
+        'title'=>$faker->title,
+        'description'=>$faker->text(200),
+        'start_time'=>$faker->date(),
+        'end_time'=>$faker->date()
+
+    ];
+});

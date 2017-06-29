@@ -1,1 +1,0 @@
-$(document).ready(function(){"use strict";$(".sortable-example").sortable({nested:!1})});
