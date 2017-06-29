@@ -110,6 +110,29 @@
                 ]
             });
 
+            jQuery("#aptCustomerId").select2({
+                placeholder: "Select a Customer",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('get-customer-options')}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                        };
+                    },
+                    processResults : function (data){
+                        console.log(data);
+                        return {
+                            results: data.customers
+                        }
+                    },
+
+                    cache: true
+                }
+            });
+
             jQuery('.modal').on('shown.bs.modal', function () {
 
                 jQuery(function () {
@@ -130,6 +153,7 @@
 
             var appointment = {
                 appointmentId : $('#appointment_id').val(),
+                aptCustomerId : $('#aptCustomerId').val(),
                 appointmentTitle : $('#appointmentTitle').val(),
                 appointmentDescription : $('#appointmentDescription').val(),
                 startTime : $('#startTime').val(),
@@ -207,6 +231,8 @@
                     jQuery('#appointment_id').val(data.appointment.id);
                     jQuery('#appointmentTitle').val(data.appointment.title);
                     jQuery('#appointmentDescription').val(data.appointment.description);
+                    $('#aptCustomerId').val(data.appointment.customer_id);
+                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
 
                     jQuery('#startTime').datetimepicker({date: data.appointment.start_time});
                     jQuery('#endTime').datetimepicker({date: data.appointment.end_time});

@@ -25,4 +25,7 @@ class Customer extends Model
     public function tasks(){
         return $this->hasMany('App\Task');
     }
+    public function appointments(){
+        return $this->hasMany('App\Appointment');
+    }
 }

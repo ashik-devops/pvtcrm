@@ -3,6 +3,12 @@
 
         {{ csrf_field() }}
         <input type="hidden" id="appointment_id" name="appointmentId">
+        <div class="form-group {{ $errors->has('customer-id') ? ' has-error' : '' }}" id="customer-id">
+            <label class="sr-only">Customer</label>
+            <select name="customer-id" id="aptCustomerId" class="form-control" style="width: 100%">
+
+            </select>
+        </div>
         <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}" id="title">
             <label class="sr-only">Title</label>
             <input id="appointmentTitle" type="text" name="title" class="form-control" placeholder="Title" data-parsley-trigger="change focusout" data-parsley-required-message="Title is required" required value="{{old('title')}}">

@@ -63,6 +63,7 @@ $factory->define(App\Task::class, function(Faker\Generator $faker) {
 $factory->define(App\Appointment::class, function(Faker\Generator $faker) {
 
     return [
+        'customer_id'=>rand(1,100),
         'title'=>$faker->title,
         'description'=>$faker->text(200),
         'start_time'=>$faker->date(),

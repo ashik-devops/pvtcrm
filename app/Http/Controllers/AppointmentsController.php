@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Appointment;
 
+use App\Customer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -87,32 +88,42 @@ class AppointmentsController extends Controller
 
     public function createAppointment(Request $request){
 
+        $result=[
+            'result'=>'Error',
+            'message'=>'Something went wrong.'
+        ];
 
-        $appointment = new Appointment();
+        if(is_numeric($request->appointment['aptCustomerId'])){
+            $customer=Customer::findOrFail($request->appointment['aptCustomerId']);
 
-        $appointment->title = $request->appointment['appointmentTitle'];
-        $appointment->description = $request->appointment['appointmentDescription'];
-        $appointment->start_time = Carbon::parse($request->appointment['startTime']);
-        $appointment->end_time = Carbon::parse($request->appointment['endTime']);
+            if(is_null($customer)){
+                $result['message']='Customer Not Found.';
+            }
+            else{
+                $appointment = new Appointment();
 
+                $appointment->title = $request->appointment['appointmentTitle'];
+                $appointment->description = $request->appointment['appointmentDescription'];
+                $appointment->start_time = Carbon::parse($request->appointment['startTime']);
+                $appointment->end_time = Carbon::parse($request->appointment['endTime']);
+                DB::beginTransaction();
+                $customer->appointments()->save($appointment);
+                DB::commit();
 
+                $result['result']='Saved';
+                $result['message']='Appointment Saved Successfully.';
+            }
+        }
+        else{
+            $result['message']='Customer Not Found.';
+        }
 
-
-
-       DB::beginTransaction();
-        $appointment->save();
-
-        DB::commit();
-
-        return response()->json([
-            'result'=>'Saved',
-            'message'=>'Appointment has been created successfully.'
-        ]);
+        return response()->json($result,200);
 
     }
 
     public function editAppointment(Request $request){
-        $appointment = Appointment::findOrFail($request->id);
+        $appointment = Appointment::with('customer', 'customer.company')->findOrFail($request->id);
 
 
         return response()->json([
@@ -121,9 +132,16 @@ class AppointmentsController extends Controller
     }
 
     public function updateAppointment(Request $request){
+        $result=[
+            'result'=>'Error',
+            'message'=>'Something went wrong.'
+        ];
+
+        if(is_numeric($request->appointment['aptCustomerId'])) {
+            $customer = Customer::findOrFail($request->appointment['aptCustomerId']);
+        }
 
         $appointment = Appointment::findOrFail($request->appointment['appointmentId']);
-
         $appointment->title = $request->appointment['appointmentTitle'];
         $appointment->description = $request->appointment['appointmentDescription'];
         $appointment->start_time = Carbon::parse($request->appointment['startTime']);
@@ -132,16 +150,13 @@ class AppointmentsController extends Controller
 
 
         DB::beginTransaction();
-
-        $appointment->save();
+        $customer->appointments()->save($appointment);
         DB::commit();
 
         return response()->json([
             'result'=>'Saved',
             'message'=>'Appointment has been updated successfully.'
         ]);
-
-
     }
 
     public function deleteAppointment(Request $request){

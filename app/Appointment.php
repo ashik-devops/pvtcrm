@@ -11,4 +11,7 @@ class Appointment extends Model
     protected $dates = ['deleted_at'];
     protected $fillable = ['title','description','start_time','end_time'];
 
+    public function customer(){
+        return $this->belongsTo('App\Customer');
+    }
 }
