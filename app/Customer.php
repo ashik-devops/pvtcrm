@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Customer extends Model
 {
     use SoftDeletes;
-
+    public  $with = ['company'];
     protected $dates = ['deleted_at'];
 
     public function user(){

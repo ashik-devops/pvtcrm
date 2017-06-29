@@ -45,6 +45,9 @@ Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
 
 
+
+
+
 Route::get('/companies', 'CompanyController@index')->name('company-index')->middleware('can:index,App\Customer');
 Route::post('/companies/create', 'CompanyController@createCompany')->name('create.company');//->middleware('can:list,App\Customer');
 Route::get('/companies/view/{company}', 'CompanyController@viewCompany')->name('view-company');//->middleware('can:list,App\Customer');

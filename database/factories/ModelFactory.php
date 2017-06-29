@@ -61,11 +61,12 @@ $factory->define(App\Task::class, function(Faker\Generator $faker) {
     ];
 });
 $factory->define(App\Appointment::class, function(Faker\Generator $faker) {
-
+    $statuses=['Due', 'Done', 'Cancelled'];
     return [
         'customer_id'=>rand(1,100),
         'title'=>$faker->title,
         'description'=>$faker->text(200),
+        'status'=>$statuses[rand(0,2)],
         'start_time'=>$faker->date(),
         'end_time'=>$faker->date()
 
