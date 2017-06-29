@@ -32,7 +32,7 @@ Route::get('/tasks', 'TasksController@index')->name('customer-index')->middlewar
 Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options');
 Route::get('/ajax/tasks/data', 'TasksController@getTasksAjax')->name('task-data');
 Route::post('/task/create', 'TasksController@createTask')->name('create.task');
-Route::get('/customer/edit', 'TasksController@editTask')->name('edit.task.data');
+Route::get('/task/edit', 'TasksController@editTask')->name('edit.task.data');
 Route::post('/task/update', 'TasksController@updateTask')->name('update.task');
 Route::post('/task/delete', 'TasksController@deleteTask')->name('delete.task');
 
