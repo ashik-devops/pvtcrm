@@ -92,11 +92,10 @@
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
         jQuery('document').ready(function() {
+             var min_date = moment();
 
 
-            /*$.get("{!! route('appointment-data') !!}", function(data, status){
-                console.log(data);
-            }); */
+
             var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
                 select: true,
@@ -142,8 +141,12 @@
             jQuery('.modal').on('shown.bs.modal', function () {
 
                 jQuery(function () {
-                    $('#start_timeTimePicker').datetimepicker();
-                    $('#end_timeTimePicker').datetimepicker();
+                    $('#start_timeTimePicker').datetimepicker({
+                        minDate: min_date,
+                    });
+                    $('#end_timeTimePicker').datetimepicker({
+                        minDate: min_date,
+                    });
                 });
 
             });
@@ -244,6 +247,9 @@
 
                     jQuery('#startTime').datetimepicker({date: data.appointment.start_time});
                     jQuery('#endTime').datetimepicker({date: data.appointment.end_time});
+
+                    min_date = moment(data.appointment.start_time);
+
 
 
                 }
