@@ -9,8 +9,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 
-
-
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
@@ -55,7 +54,9 @@ class AppointmentsController extends Controller
     }
 
     public function getAppointmentsAjax(){
-        return Datatables::of(Appointment::select('id', 'title', 'description', 'start_time' ,'end_time'))
+
+        //return Datatables::of(Appointment::with('customer')->select('appointments.*'))
+        return Datatables::of(Appointment::all())
             ->addColumn('action',
                 function ($appointment){
                     return
@@ -67,6 +68,14 @@ class AppointmentsController extends Controller
                 })
 
 
+            ->addColumn('first_name',
+                function ($appointment){
+                    $string = '';
+                    $string .= '<a href="#">'.$appointment->customer["last_name"].' '. $appointment->customer['first_name'].'</a> @';
+                    $string .= '<a href="#">'.$appointment->customer['company']['name'].'</a>';
+
+                    return $string;
+            })
             ->addColumn('description',
                 function ($appointment){
                     return  substr($appointment->description,0,70) . ' ....';
@@ -82,9 +91,11 @@ class AppointmentsController extends Controller
 
                 })
 
-            ->rawColumns(['id','title', 'description', 'start_time' ,'end_time',  'action'])
+            ->rawColumns(['id','title', 'first_name', 'description', 'start_time' ,'end_time',  'action'])
             ->make(true);
+
     }
+
 
     public function createAppointment(Request $request){
 
@@ -104,6 +115,7 @@ class AppointmentsController extends Controller
 
                 $appointment->title = $request->appointment['appointmentTitle'];
                 $appointment->description = $request->appointment['appointmentDescription'];
+                $appointment->status = $request->appointment['appointmentStatus'];
                 $appointment->start_time = Carbon::parse($request->appointment['startTime']);
                 $appointment->end_time = Carbon::parse($request->appointment['endTime']);
                 DB::beginTransaction();
@@ -144,6 +156,7 @@ class AppointmentsController extends Controller
         $appointment = Appointment::findOrFail($request->appointment['appointmentId']);
         $appointment->title = $request->appointment['appointmentTitle'];
         $appointment->description = $request->appointment['appointmentDescription'];
+        $appointment->status = $request->appointment['appointmentStatus'];
         $appointment->start_time = Carbon::parse($request->appointment['startTime']);
         $appointment->end_time = Carbon::parse($request->appointment['endTime']);
 

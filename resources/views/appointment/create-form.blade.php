@@ -28,6 +28,14 @@
                 </span>
             @endif
         </div>
+        <div class="form-group {{ $errors->has('status') ? ' has-error' : '' }}" id="status">
+            <label class="sr-only">Status</label>
+            <select name="status" id="appointmentStatus" class="form-control">
+                <option>Due</option>
+                <option>Done</option>
+                <option>Cancelled</option>
+            </select>
+        </div>
 
         <div class="form-group {{ $errors->has('start_time') ? ' has-error' : '' }}" id="start_time">
             <label class="sr-only">Date</label>

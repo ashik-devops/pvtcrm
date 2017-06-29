@@ -42,6 +42,8 @@
                                                 <tr>
                                                     <th>Id</th>
                                                     <th>Title</th>
+                                                    <th>Customer</th>
+
                                                     <th>Description</th>
                                                     <th>Start Time</th>
                                                     <th>End Time</th>
@@ -92,6 +94,9 @@
         jQuery('document').ready(function() {
 
 
+            /*$.get("{!! route('appointment-data') !!}", function(data, status){
+                console.log(data);
+            }); */
             var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
                 select: true,
@@ -101,6 +106,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
+                    {data: 'first_name', name: 'first_name'},
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
@@ -156,6 +162,7 @@
                 aptCustomerId : $('#aptCustomerId').val(),
                 appointmentTitle : $('#appointmentTitle').val(),
                 appointmentDescription : $('#appointmentDescription').val(),
+                appointmentStatus : $('#appointmentStatus').val(),
                 startTime : $('#startTime').val(),
                 endTime : $('#endTime').val()
             };
@@ -231,6 +238,7 @@
                     jQuery('#appointment_id').val(data.appointment.id);
                     jQuery('#appointmentTitle').val(data.appointment.title);
                     jQuery('#appointmentDescription').val(data.appointment.description);
+                    jQuery('#appointmentStatus').val(data.appointment.status);
                     $('#aptCustomerId').val(data.appointment.customer_id);
                     $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
 
@@ -298,6 +306,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
+                    {data: 'first_name', name: 'first_name'},
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
