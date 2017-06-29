@@ -18,6 +18,7 @@ class CreateAppointmentsTable extends Migration
             $table->integer('customer_id');
             $table->string('title');
             $table->text('description');
+            $table->enum('status', ['Due', 'Done', 'Cancelled']);
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->softDeletes();

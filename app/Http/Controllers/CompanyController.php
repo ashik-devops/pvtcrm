@@ -113,6 +113,23 @@ class CompanyController extends Controller
                 })
             ->make(true);
     }
+    /**
+     * Sends json data to datatable of all tasks of company falls under current user scope.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function getCompanyAppointmentsAjax(Customer_company $company){
+        return Datatables::of($company->appointments()->get(['appointments.id', 'appointments.description', 'appointments.title', 'appointments.start_time', 'appointments.end_time']))
+            ->addColumn('action',
+                function ($appointment){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="#" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="#" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                         <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-eye-open"></i> View</a>';
+                })
+            ->make(true);
+    }
 
     public function getCompanyQuickDetails(Customer_company $company){
         return $company->toJson();

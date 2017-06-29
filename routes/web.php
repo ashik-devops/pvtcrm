@@ -53,6 +53,7 @@ Route::post('/companies/update', 'CompanyController@updateCompany')->name('updat
 Route::post('/companies/delete', 'CompanyController@deleteCompany')->name('delete.company');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/data', 'CompanyController@getCompaniesAjax')->name('company-data');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/tasks/{company}', 'CompanyController@getCompanyTasksAjax')->name('company-tasks-list');//->middleware('can:list,App\Customer');
+Route::get('/ajax/companies/appointments/{company}', 'CompanyController@getCompanyAppointmentsAjax')->name('company-appointments-list');//->middleware('can:list,App\Customer');
 Route::get('/ajax/company/data/{company}', 'CompanyController@getCompanyAjax')->name('get-company');
 Route::post('/ajax/companies/create', 'CompanyController@create')->name('create-company');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/list', 'CompanyController@listAll')->name('list-companies');
