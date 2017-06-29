@@ -93,7 +93,7 @@
     <script type="text/javascript">
         jQuery('document').ready(function() {
              var min_date = moment();
-
+             var max_date = moment();
 
 
             var datatable = jQuery('#customers-table').DataTable({
@@ -141,16 +141,37 @@
             jQuery('.modal').on('shown.bs.modal', function () {
 
                 jQuery(function () {
-                    $('#start_timeTimePicker').datetimepicker({
+                    $('#startTime').datetimepicker({
                         minDate: min_date,
+                        date: min_date,
                     });
-                    $('#end_timeTimePicker').datetimepicker({
+                    $('#endTime').datetimepicker({
+                        useCurrent: false,
                         minDate: min_date,
+                        date: max_date
                     });
+                    $("#startTime").on("dp.change", function (e) {
+                        $('#endTime').data("DateTimePicker").minDate(e.date);
+                    });
+                    $("#endTime").on("dp.change", function (e) {
+                        $('#startTime').data("DateTimePicker").maxDate(e.date);
+                    });
+
                 });
 
+                updateDates(min_date, max_date);
+
+
             });
+
         });
+
+        function updateDates(min, max){
+                $('#startTime').data("DateTimePicker").date(min);
+                $('#endTime').data("DateTimePicker").date(max);
+
+
+        }
 
         //creating appointment
         $('#appointment_modal_button').val('Add Appointment');
@@ -245,12 +266,10 @@
                     $('#aptCustomerId').val(data.appointment.customer_id);
                     $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
 
-                    jQuery('#startTime').datetimepicker({date: data.appointment.start_time});
-                    jQuery('#endTime').datetimepicker({date: data.appointment.end_time});
-
                     min_date = moment(data.appointment.start_time);
+                    max_date = moment(data.appointment.end_time);
 
-
+                    updateDates(min_date, max_date);
 
                 }
 
