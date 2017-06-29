@@ -53,22 +53,24 @@ $factory->define(App\Task::class, function(Faker\Generator $faker) {
     $priority=['Critical', 'High', 'Medium', 'Low'];
     return [
         'customer_id'=>rand(1,100),
-        'title'=>$faker->title,
+        'title'=>$faker->text(20),
         'description'=>$faker->text(200),
-        'due_date'=>$faker->date(),
+        'due_date'=>\Carbon\Carbon::create()->addDays(rand(0,30)),
         'status'=>$statuses[rand(0,2)],
         'priority'=>$priority[rand(0,3)]
     ];
 });
 $factory->define(App\Appointment::class, function(Faker\Generator $faker) {
     $statuses=['Due', 'Done', 'Cancelled'];
+    $today=new \Carbon\Carbon();
+    $start=$today->addDays(rand(0,30));
+    $end=$start->addDays(2);
     return [
         'customer_id'=>rand(1,100),
-        'title'=>$faker->title,
+        'title'=>$faker->text(20),
         'description'=>$faker->text(200),
         'status'=>$statuses[rand(0,2)],
-        'start_time'=>$faker->date(),
-        'end_time'=>$faker->date()
-
+        'start_time'=>$start,
+        'end_time'=>$end,
     ];
 });

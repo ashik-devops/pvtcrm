@@ -317,24 +317,9 @@
 
 
         function get_all_appointment_data(){
-            $("#customers-table").dataTable().fnDestroy();
-            var datatable = jQuery('#customers-table').DataTable({
-//              select: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('appointment-data') !!}',
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'title', name: 'title'},
-                    {data: 'first_name', name: 'first_name'},
-                    {data: 'description', name: 'description'},
-                    {data: 'start_time', name: 'start_time'},
-                    {data: 'end_time', name: 'end_time'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
 
 
-                ]
-            });
+            datatable.ajax.reload(null, false);
         }
 
 
