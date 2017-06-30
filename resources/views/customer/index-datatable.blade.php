@@ -4,6 +4,7 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datepicker.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
 @endsection
@@ -80,11 +81,13 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
-        jQuery('document').ready(function() {
+
             var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
+                dom: 'Bfrtip',
                 select: true,
                 processing: true,
                 serverSide: true,
@@ -97,14 +100,33 @@
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                     { data: 'first_name', name: 'first_name', searchable: true, visible:false},
                     { data: 'last_name', name: 'last_name', searchable: true, visible:false},
+                ],
+                buttons: [
+                    {
+                        text: 'Reload',
+                        action: function ( e, dt, node, config ) {
+                            dt.ajax.reload(null, false);
+                        }
+                    },
+                    {
+                        text: 'Select Visible',
+                        action: function () {
+                            datatable.rows().select();
+                        }
+                    },
+                    {
+                        text: 'Select none',
+                        action: function () {
+                            datatable.rows().deselect();
+                        }
+                    }
                 ]
             });
 
-        });
 
         //creating customer, editing customer and deleting customer
 
-        $(document).ready(function(){
+
             jQuery("#new-customer-btn").click(function (){
                 jQuery("#customerForm")[0].reset();
                 jQuery(".customerModal .modal-title").html('Add New Customer');
@@ -255,7 +277,7 @@
                 }
             });
 
-        });
+
 
         // For editing Customer
 
@@ -368,23 +390,7 @@
 
 
         function get_all_customer_data(){
-            $("#customers-table").dataTable().fnDestroy();
-            var datatable = jQuery('#customers-table').DataTable({
-//                responsive: false,
-                select: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('customers-data') !!}',
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name', searchable: false},
-                    { data: 'email', name: 'email' },
-                    { data: 'phone', name: 'phone_no' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
-                    { data: 'first_name', name: 'first_name', searchable: true, visible:false},
-                    { data: 'last_name', name: 'last_name', searchable: true, visible:false},
-                ]
-            });
+            datatable.ajax().reload(null, false);
         }
 
 
