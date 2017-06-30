@@ -7,6 +7,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datepicker.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <style type="text/css">
+        #bulk_action_container{
+            margin-bottom: 15px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -31,6 +36,15 @@
 
                             <div class="module-content collapse in" id="customers">
                                 <div class="module-content-inner no-padding-bottom">
+                                    <div class="row" id="bulk_action_container">
+                                        <div class="col-xs-12 col-md-12">
+                                            <select id="bulk_action" style="min-width: 200px;">
+                                                <option value="" selected>Bulk Action</option>
+                                                <option value="Delete">Delete</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
                                     <div class="table-responsive">
                                         <table id="customers-table" class="table table-bordered display" style="width: 100%;">
                                             <thead>
@@ -123,6 +137,23 @@
                 ]
             });
 
+            //bulk action
+
+            var bulk_action=jQuery("#bulk_action").select2();
+            
+            bulk_action.on('select2:select', function (e) {
+                var action = e.params.data.id;
+                if(action != ''){
+                    var selected_rows = datatable.rows( { selected: true }).data();
+
+                    switch (action){
+                        case "Delete": deleteRows(selected_rows);
+                                    break;
+                    }
+                }
+
+
+            });
 
         //creating customer, editing customer and deleting customer
 
@@ -356,7 +387,7 @@
             };
             swal({
                     title: "Are you sure?",
-                    text: "This Information will be trashed!",
+                    text: "This Information will be deleted!",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -375,22 +406,64 @@
 
                             if(result.result == 'Success'){
                                 swal("Deleted!", "Company has been deleted.", "success");
-                                get_all_company_data();
+                                get_all_customer_data();
                                 $.notify(result, "danger");
                             }
                             else{
-                                swal("Failed", "Failed to delete the company", "error");
+                                swal("Failed", "Failed to delete the customer", "error");
                             }
                         });
                     } else {
-                        swal("Cancelled", "Company is safe :)", "error");
+                        swal("Cancelled", "Customer is safe :)", "error");
+                    }
+                });
+        }
+
+        function deleteRows(rows){
+            var _token = $('input[name="_token"]').val();
+            var data = {
+                _token : _token,
+                ids: rows.map(function(item){
+                    return item.id;
+                }).join(',')
+            };
+            swal({
+                    title: "Are you sure?",
+                    text: "Item(s) will be deleted!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+
+                        //deletion process is going on....
+
+
+                        $.post("{{ route('bulk.delete.customer.data') }}", data, function(result){
+
+                            if(result.result == 'Success'){
+                                swal("Deleted!", "Company has been deleted.", "success");
+                                get_all_customer_data();
+                                $.notify(result, "danger");
+                            }
+                            else{
+                                swal("Failed", "Failed to delete", "error");
+                            }
+                        });
+                    } else {
+                        swal("Cancelled", "Cancelled)", "error");
                     }
                 });
         }
 
 
         function get_all_customer_data(){
-            datatable.ajax().reload(null, false);
+            datatable.ajax.reload(null, false);
         }
 
 

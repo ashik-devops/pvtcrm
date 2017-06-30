@@ -213,6 +213,22 @@ class CustomersController extends Controller
 
     }
 
+    public function bulkDeleteCustomer(Request $request){
+
+        if(Customer::whereIn('id',explode(',', $request->ids))->delete()){
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Customer has been successfully deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Invalid Request.'
+        ]);
+
+    }
+
     public function getCustomerOptions(){
 
         return response()->json([
