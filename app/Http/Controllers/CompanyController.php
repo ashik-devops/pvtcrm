@@ -107,9 +107,9 @@ class CompanyController extends Controller
             ->addColumn('action',
                 function ($task){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="#" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="#" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                         <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->make(true);
     }
@@ -124,12 +124,14 @@ class CompanyController extends Controller
             ->addColumn('action',
                 function ($appointment){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="#" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="#" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                          <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-eye-open"></i> View</a>';
                 })
             ->make(true);
     }
+
+
 
     public function getCompanyQuickDetails(Customer_company $company){
         return $company->toJson();
