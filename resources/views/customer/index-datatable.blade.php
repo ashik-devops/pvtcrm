@@ -3,7 +3,6 @@
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
-    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datepicker.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
@@ -405,12 +404,12 @@
                         $.post("{{ route('delete.customer.data') }}", data, function(result){
 
                             if(result.result == 'Success'){
-                                swal("Deleted!", "Company has been deleted.", "success");
+                                swal("Deleted!", "Customer(s) has been deleted.", "success");
                                 get_all_customer_data();
                                 $.notify(result, "danger");
                             }
                             else{
-                                swal("Failed", "Failed to delete the customer", "error");
+                                swal("Failed", "Failed to delete customer(s)", "error");
                             }
                         });
                     } else {

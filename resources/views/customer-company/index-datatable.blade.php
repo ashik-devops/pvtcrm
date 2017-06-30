@@ -5,7 +5,14 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <style type="text/css">
+        #bulk_action_container{
+            margin-bottom: 15px;
+        }
+    </style>
 @endsection
 
 @section('content')
@@ -30,6 +37,15 @@
 
                             <div class="module-content collapse in" id="customers">
                                 <div class="module-content-inner no-padding-bottom">
+                                    <div class="row" id="bulk_action_container">
+                                        <div class="col-xs-12 col-md-12">
+                                            <select id="bulk_action" style="min-width: 200px;">
+                                                <option value="" selected>Bulk Action</option>
+                                                <option value="Delete">Delete</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="clearfix"></div>
                                     <div class="table-responsive">
                                         <table id="customers-table" class="table table-bordered display" style="width: 100%;">
                                             <thead>
@@ -82,12 +98,13 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     {{--Build the datatables--}}
     <script type="text/javascript">
-        jQuery('document').ready(function() {
             var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
+                dom: 'Bfrtip',
                 select: true,
                 processing: true,
                 serverSide: true,
@@ -100,18 +117,87 @@
                     { data: 'website', name: 'website' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
 
+                ],
+                buttons: [
+                    {
+                        text: 'Reload',
+                        action: function ( e, dt, node, config ) {
+                            dt.ajax.reload(null, false);
+                        }
+                    },
+                    {
+                        text: 'Select Visible',
+                        action: function () {
+                            datatable.rows().select();
+                        }
+                    },
+                    {
+                        text: 'Select none',
+                        action: function () {
+                            datatable.rows().deselect();
+                        }
+                    }
                 ]
             });
 
-        });
+            var bulk_action=jQuery("#bulk_action").select2();
+
+            bulk_action.on('select2:select', function (e) {
+                var action = e.params.data.id;
+                if(action != ''){
+                    var selected_rows = datatable.rows( { selected: true }).data();
+
+                    switch (action){
+                        case "Delete": deleteRows(selected_rows);
+                            break;
+                    }
+                }
 
 
-    </script>
+            });
+
+            function deleteRows(rows){
+                var _token = $('input[name="_token"]').val();
+                var data = {
+                    _token : _token,
+                    ids: rows.map(function(item){
+                        return item.id;
+                    }).join(',')
+                };
+                swal({
+                        title: "Are you sure?",
+                        text: "Item(s) will be deleted!",
+                        type: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#DD6B55",
+                        confirmButtonText: "Yes",
+                        cancelButtonText: "No",
+                        closeOnConfirm: false,
+                        closeOnCancel: false
+                    },
+                    function(isConfirm){
+                        if (isConfirm) {
+
+                            //deletion process is going on....
 
 
+                            $.post("{{ route('bulk.delete.company.data') }}", data, function(result){
 
-    <script>
-        $(document).ready(function(){
+                                if(result.result == 'Success'){
+                                    swal("Deleted!", "Company(s) has been deleted.", "success");
+                                    get_all_company_data();
+                                    $.notify(result, "danger");
+                                }
+                                else{
+                                    swal("Failed", "Failed to delete", "error");
+                                }
+                            });
+                        } else {
+                            swal("Cancelled", "Cancelled)", "error");
+                        }
+                    });
+            }
+
             jQuery("button#new-company").click(function (){
                 $('#new_edit_company .modal-title').html('Create New Company');
             });
@@ -193,7 +279,7 @@
 
                 }
             });
-        });
+
 
         function editCompany(id){
 
@@ -267,24 +353,7 @@
         }
 
         function get_all_company_data(){
-            //$('#customers-table').html('');
-            $("#customers-table").dataTable().fnDestroy();
-            var datatable = jQuery('#customers-table').DataTable({
-//                responsive: false,
-                select: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('company-data') !!}',
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name'},
-                    { data: 'email', name: 'email' },
-                    { data: 'phone_no', name: 'phone_no' },
-                    { data: 'website', name: 'website' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
-
-                ]
-            });
+           datatable.ajax.reload(null, false);
         }
 
 

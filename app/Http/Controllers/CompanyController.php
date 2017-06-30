@@ -246,4 +246,19 @@ class CompanyController extends Controller
 
 
     }
+
+    public function bulkDeleteCompany(Request $request){
+        if(Customer_company::whereIn('id', explode(',', $request->ids))->delete()){
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Company has been successfully deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Invalid Request.'
+        ]);
+
+    }
 }
