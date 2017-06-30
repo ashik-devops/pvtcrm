@@ -53,7 +53,7 @@ class TasksController extends Controller
     }
 
     public function getTasksAjax(){
-        return Datatables::of(Task::select('id', 'customer_id','title', 'description', 'due_date' ,'status', 'priority'))
+        return Datatables::of(Task::with('customer','customer.company'))
             ->addColumn('action',
                 function ($task){
                     return
@@ -64,18 +64,21 @@ class TasksController extends Controller
                         ;
                 })
 
-           /* ->addColumn('customer',
+            ->addColumn('customer',
                 function ($task){
-                    $task_single = Task::findOrFail($task->customer_id);
-                    $customer = Customer::findOrFail($task_single->customer_id);
 
-                    if($customer != null){
-                        return $customer->first_name.' '. $customer->last_name;
+                    $string = '';
+                    $string .= '<a href="#">'.$task->customer["last_name"].', '. $task->customer['first_name'].'</a>';
+                    if($task->customer['company']['name']){
+                        $string .= '@ <a href="#">'.$task->customer['company']['name'].'</a>';
+                    }
+                    if($task->customer["last_name"] == null && $task->customer["first_name"] == null && $task->customer['company']['name'] == null){
+                        $string = '';
                     }
 
-                    return 'Sabuz';
+                    return $string;
 
-                }) */
+                })
             ->addColumn('description',
                 function ($task){
                     return  substr($task->description,0,70) . ' ....';
@@ -84,7 +87,7 @@ class TasksController extends Controller
                 function ($task){
                     return  Carbon::createFromTimeStamp(strtotime($task->due_date))->toFormattedDateString();
                 })
-            ->rawColumns(['title', 'description', 'due_date' ,'status', 'priority', 'action'])
+            ->rawColumns(['title', 'customer', 'description', 'due_date' ,'status', 'priority', 'action'])
             ->make(true);
     }
 
@@ -93,7 +96,7 @@ class TasksController extends Controller
         $task->title = $request->task['taskTitle'];
         $task->customer_id = $request->task['taskCustomerId'];
         $task->description = $request->task['taskDescription'];
-        $task->due_date = Carbon::createFromFormat('m/d/Y H:i', $request->task['taskDueDate']);
+        $task->due_date = Carbon::parse($request->task['taskDueDate']);
         $task->status = $request->task['taskStatus'];
         $task->priority = $request->task['taskPriority'];
 
@@ -129,7 +132,7 @@ class TasksController extends Controller
             $task->customer_id = $request->task['taskCustomerId'];
             $task->title = $request->task['taskTitle'];
             $task->description = $request->task['taskDescription'];
-            $task->due_date = Carbon::createFromFormat('m/d/Y H:i', $request->task['taskDueDate']);
+            $task->due_date = Carbon::parse($request->task['taskDueDate']);
             $task->priority= $request->task['taskPriority'];
             $task->status= $request->task['taskStatus'];
 

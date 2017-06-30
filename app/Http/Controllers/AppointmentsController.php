@@ -56,7 +56,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjax(){
 
         //return Datatables::of(Appointment::with('customer')->select('appointments.*'))
-        return Datatables::of(Appointment::all())
+        return Datatables::of(Appointment::with('customer','customer.company'))
             ->addColumn('action',
                 function ($appointment){
                     return

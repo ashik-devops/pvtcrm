@@ -42,6 +42,7 @@
                                                 <tr>
                                                     <th>Id</th>
                                                     <th>Title</th>
+                                                    <th>Customer</th>
                                                     <th>Description</th>
                                                     <th>Due Date</th>
                                                     <th>Status</th>
@@ -100,6 +101,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
+                    { data: 'customer', name: 'customer'},
                     { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
                     { data: 'status', name: 'status'},
@@ -293,6 +295,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
+                    { data: 'customer', name: 'customer'},
                     { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
                     { data: 'status', name: 'status'},
