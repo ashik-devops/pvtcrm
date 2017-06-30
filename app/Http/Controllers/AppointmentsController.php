@@ -70,9 +70,15 @@ class AppointmentsController extends Controller
 
             ->addColumn('first_name',
                 function ($appointment){
+
                     $string = '';
-                    $string .= '<a href="#">'.$appointment->customer["last_name"].' '. $appointment->customer['first_name'].'</a> @';
-                    $string .= '<a href="#">'.$appointment->customer['company']['name'].'</a>';
+                    $string .= '<a href="#">'.$appointment->customer["last_name"].', '. $appointment->customer['first_name'].'</a>';
+                    if($appointment->customer['company']['name']){
+                        $string .= '@ <a href="#">'.$appointment->customer['company']['name'].'</a>';
+                    }
+                    if($appointment->customer["last_name"] == null && $appointment->customer["first_name"] == null && $appointment->customer['company']['name'] == null){
+                        $string = '';
+                    }
 
                     return $string;
             })
