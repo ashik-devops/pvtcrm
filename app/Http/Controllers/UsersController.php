@@ -64,6 +64,7 @@ class UsersController extends Controller
      */
 
     public function edit(User $user){
+        $this->authorize('update', User::class);
         return view('user.view-profile')->with([
             'user' => $user,
             'roles'=>Role::all()
@@ -80,6 +81,7 @@ class UsersController extends Controller
      */
 
     public function update(User $user, Request $request){
+        $this->authorize('update', User::class);
         $this->validator($request->all(), $user)->validate();
 
 
