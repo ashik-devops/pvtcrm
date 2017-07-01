@@ -304,6 +304,8 @@
                 select: true,
                 processing: true,
                 serverSide: true,
+                paging:true,
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
                 ajax: '{!! route('company-tasks-list', [$company->id]) !!}',
                 columns: [
                     { data: 'id', name: 'id' },
@@ -320,6 +322,8 @@
                 select: true,
                 processing: true,
                 serverSide: true,
+                paging:true,
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
                 ajax: '{!! route('company-appointments-list', [$company->id]) !!}',
                 columns: [
                     {data: 'id', name: 'id'},
