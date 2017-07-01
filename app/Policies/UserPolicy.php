@@ -34,7 +34,7 @@ class UserPolicy
     {
 
         return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','view'])->first()->id);
+                ->whereIn('action',['*','view'])->first());
     }
 
     /**
@@ -46,7 +46,7 @@ class UserPolicy
     public function create(User $user)
     {
         return !is_null($user->role->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','create'])->first()->id);
+                ->whereIn('action',['*','create'])->first());
     }
 
     /**
@@ -60,7 +60,7 @@ class UserPolicy
     {
 
         return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','edit'])->first()->id);
+                ->whereIn('action',['*','edit'])->first());
     }
 
     /**
@@ -73,7 +73,7 @@ class UserPolicy
     public function delete(User $authenticated_user)
     {
         return !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','delete'])->first()->id);
+                ->whereIn('action',['*','delete'])->first());
     }
 
 
