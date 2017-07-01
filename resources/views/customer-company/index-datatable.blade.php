@@ -108,6 +108,8 @@
                 select: true,
                 processing: true,
                 serverSide: true,
+                paging:true,
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
                 ajax: '{!! route('company-data') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
