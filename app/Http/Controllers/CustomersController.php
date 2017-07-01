@@ -49,6 +49,9 @@ class CustomersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+
+        $this->authorize('index');
+
         return view('customer.index-datatable');
     }
 
