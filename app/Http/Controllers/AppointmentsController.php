@@ -149,7 +149,7 @@ class AppointmentsController extends Controller
         ], 201);
     }
 
-    public function updateAppointment(Request $request){
+   public function updateAppointment(Request $request){
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
@@ -175,6 +175,8 @@ class AppointmentsController extends Controller
         }
         return response()->json($result, 200);
     }
+
+
 
     public function deleteAppointment(Request $request){
         $appointment = Appointment::findOrFail($request->id);

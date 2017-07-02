@@ -76,6 +76,7 @@
 
 
 @section('after-footer-script')
+
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
@@ -210,20 +211,27 @@
                         dataType: "json"
                     });
                     request.done(function (response) {
-                        if(response.result == 'Saved') {
-                            $('#customerForm')[0].reset();
-                            jQuery("#companyId").html("");
-                            $('#modal-new-member').modal('hide');
-                            get_all_customer_data();
-                            $.notify(response.message, "success");
+
+                        if(response.result){
+                            if(response.result == 'Saved') {
+                                $('#customerForm')[0].reset();
+                                jQuery("#companyId").html("");
+                                $('#modal-new-member').modal('hide');
+                                get_all_customer_data();
+                                $.notify(response.message, "success");
+
+                            }
+                            else{
+                                jQuery.notify(response.message, "error");
+
+                            }
                         }
-                        else{
-                            jQuery.notify(response.message, "error");
-                        }
+
                     })
 
                     request.fail(function (jqXHT, textStatus) {
                         $.notify(textStatus, "error");
+
                     });
 
                 }else{
