@@ -38,4 +38,11 @@ class User extends Authenticatable
     public function customers(){
         return $this->hasMany('App\Customer');
     }
+
+    public function isAdmin(){
+        return $this->role->name === 'Administrator';
+    }
+    public function isSuperAdmin(){
+        return $this->role->name === 'Super Admin';
+    }
 }
