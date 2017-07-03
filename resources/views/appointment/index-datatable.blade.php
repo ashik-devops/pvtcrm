@@ -90,11 +90,20 @@
     <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
         var min_date = moment();
         var max_date = moment();
 
-
+        var inputMap={
+            appointmentId : 'appointment_id',
+            aptCustomerId : 'aptCustomerId',
+            appointmentTitle : 'appointmentTitle',
+            appointmentDescription : 'appointmentDescription',
+            appointmentStatus : 'appointmentStatus',
+            startTime : 'startTime',
+            endTime : 'endTime'
+        };
 
 
             var datatable = jQuery('#customers-table').DataTable({
@@ -173,19 +182,20 @@
         //creating appointment
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
+
         $('#appointmentForm').on('submit',function(e){
             e.preventDefault();
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
 
             var appointment = {
-                appointmentId : $('#appointment_id').val(),
-                aptCustomerId : $('#aptCustomerId').val(),
-                appointmentTitle : $('#appointmentTitle').val(),
-                appointmentDescription : $('#appointmentDescription').val(),
-                appointmentStatus : $('#appointmentStatus').val(),
-                startTime : $('#startTime').val(),
-                endTime : $('#endTime').val()
+                appointmentId : $('#'+inputMap.appointmentId).val(),
+                aptCustomerId : $('#'+inputMap.aptCustomerId).val(),
+                appointmentTitle : $('#'+inputMap.appointmentTitle).val(),
+                appointmentDescription : $('#'+inputMap.appointmentDescription).val(),
+                appointmentStatus : $('#'+inputMap.appointmentStatus).val(),
+                startTime : $('#'+inputMap.startTime).val(),
+                endTime : $('#'+inputMap.endTime).val()
             };
 
            //console.log(appointment);
@@ -213,9 +223,12 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
-
-                request.fail(function (jqXHT, textStatus) {
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
+                    request.fail(function (jqXHT, textStatus) {
+                    console.log(jqXHT);
                     $.notify(textStatus, "error");
                 });
             }else{
@@ -240,13 +253,34 @@
                         jQuery.notify(response.message, "error");
                     }
                 })
+                request.error(function(xhr){
+                    jQuery.map(jQuery.parseJSON(xhr.responseText),function (data, key){
+                        handle_error(xhr);
+                    });
 
+
+
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
             }
 
         });
+        function handle_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
+                });
+            }
+
+        }
+        function showParselyError(field, msg){
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
 
         function editAppointment(id){
 
