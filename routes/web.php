@@ -19,6 +19,7 @@ Route::get('/users', 'UsersController@index')->name('users-index')->middleware('
 Route::post('/user/create', 'UsersController@createUser')->name('create-user');
 Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-edit')->middleware('can:update,user');
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update')->middleware('can:update,user');
+Route::get('/ajax/users/list', 'UsersController@listAll')->name('list-users');
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index');//->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data');//->middleware('can:index,App\Customer');

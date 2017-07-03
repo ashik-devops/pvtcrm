@@ -59,6 +59,20 @@ class UsersController extends Controller
         ]);
     }
 
+    public function listAll(Request $request){
+        $users = new User();
+        if(!empty($request->q)){
+
+            $users = $users->where('name', 'like', "%$request->q%");
+
+        }
+
+        return response()->json([
+            'items' => $users->select(['id', 'name'])->get(),
+            'total_count'=>$users->count()
+        ],200);
+    }
+
     public function createUser(Request $request){
         $user = new User();
         $user->name = $request->user['userName'];

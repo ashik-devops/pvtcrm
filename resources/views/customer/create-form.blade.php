@@ -62,6 +62,11 @@
     </div>
 
     <div class="form-group">
+        <label class="sr-only">Choose User</label>
+        <select name="userId" class="form-control" id="userId" style="width: 100%"></select>
+
+    </div>
+    <div class="form-group">
         <label class="sr-only">Do You Want to Create Company</label>
         <select name="companyId" class="form-control" id="companyId" style="width: 100%"></select>
 
