@@ -220,7 +220,7 @@
                 });
             }else{
                 //console.log(appointment);
-                //appointment editing.....
+                //appointment updating.....
 
                 var request = jQuery.ajax({
                     url: "{{ route('update.appointment') }}",

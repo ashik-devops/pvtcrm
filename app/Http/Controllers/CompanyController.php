@@ -23,22 +23,7 @@ class CompanyController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data, User $user = null)
-    {
 
-        return Validator::make($data, [
-            'company-name' => 'required|string',
-            'company-email' => 'required|string|email|unique:customer_companies,email',
-            'company-phone'=>'required|string|unique:customer_companies,phone_no',
-            'company-website'=>'required|url|unique:customer_companies,website',
-            'street_address_1'=>'required|string',
-            'street_address_2'=>'string|nullable',
-            'city'=>'required|string',
-            'state'=>'required|string',
-            'country'=>'required|string',
-            'zip'=>'required|string',
-        ]);
-    }
 
     /**
      * Show the all customers falls under current user scope.
@@ -145,6 +130,9 @@ class CompanyController extends Controller
 
 
     public function createCompany( Request $request){
+
+
+
         $customer_company = new Customer_company();
         $customer_company->name = $request->company['companyName'];
         $customer_company->website = $request->company['companyWebsite'];

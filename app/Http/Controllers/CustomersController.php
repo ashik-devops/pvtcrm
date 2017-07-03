@@ -9,8 +9,9 @@ use App\Customer_company;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+
 use Yajra\Datatables\Datatables;
+use Validator;
 
 class CustomersController extends Controller
 {
@@ -42,6 +43,11 @@ class CustomersController extends Controller
             'zip'=>'required|string|max:8',
         ]);
     }
+
+    public function create(Request $request){
+        $this->validator($request->all())->validate();
+    }
+
 
     /**
      * Show the all customers falls under current user scope.
@@ -86,48 +92,50 @@ class CustomersController extends Controller
 
     public function createCustomer( Request $request){
 
-        $customer = new Customer();
-        $customer->first_name = $request->customer['firstName'];
-        $customer->last_name = $request->customer['lastName'];
-        $customer->title = $request->customer['customerTitle'];
-        $customer->email = $request->customer['customerEmail'];
-        $customer->phone_no = $request->customer['customerPhone'];
-        $customer->user_id = Auth::user()->id;
+            $customer = new Customer();
+            $customer->first_name = $request->customer['firstName'];
+            $customer->last_name = $request->customer['lastName'];
+            $customer->title = $request->customer['customerTitle'];
+            $customer->email = $request->customer['customerEmail'];
+            $customer->phone_no = $request->customer['customerPhone'];
+            $customer->user_id = Auth::user()->id;
 
 
-        $address = new Address();
-        $address->street_address_1 = $request->company['streetAddress_1'];
-        $address->street_address_2 = $request->company['streetAddress_2'];
-        $address->city = $request->company['city'];
-        $address->state = $request->company['state'];
-        $address->country = $request->company['country'];
-        $address->zip = $request->company['zip'];
-        $address->phone_no = $request->company['companyPhone'];
-        $address->email = $request->company['companyEmail'];
+            $address = new Address();
+            $address->street_address_1 = $request->company['streetAddress_1'];
+            $address->street_address_2 = $request->company['streetAddress_2'];
+            $address->city = $request->company['city'];
+            $address->state = $request->company['state'];
+            $address->country = $request->company['country'];
+            $address->zip = $request->company['zip'];
+            $address->phone_no = $request->company['companyPhone'];
+            $address->email = $request->company['companyEmail'];
 
-        $customer->addresses()->attach($address);
-        $customer_company = Customer_company::findOrFail($request->company['companyId']);
-        if(is_null($customer_company)) {
+            $customer->addresses()->attach($address);
+            $customer_company = Customer_company::findOrFail($request->company['companyId']);
+            if (is_null($customer_company)) {
 
-            $customer_company = new Customer_company();
-            $customer_company->name = $request->company['companyName'];
-            $customer_company->website = $request->company['companyWebsite'];
-            $customer_company->phone_no = $request->company['companyPhone'];
-            $customer_company->email = $request->company['companyEmail'];
+                $customer_company = new Customer_company();
+                $customer_company->name = $request->company['companyName'];
+                $customer_company->website = $request->company['companyWebsite'];
+                $customer_company->phone_no = $request->company['companyPhone'];
+                $customer_company->email = $request->company['companyEmail'];
 
-        }
-        else{
-            $customer_company = $customer_company->first();
-        }
-        DB::beginTransaction();
-        $customer->save();
-        $address->save();
-        $customer_company->save();
-        $customer_company->addresses()->save($address, ['type'=>'BILLING']);
-        $customer->addresses()->save($address, ['type'=>'CONTACT']);
-        $customer_company->employees()->save($customer);
-        DB::commit();
-        return response()->json(['result'=>"Saved", 'message'=>'Customer is Saved.'], 200);
+            } else {
+                $customer_company = $customer_company->first();
+            }
+            DB::beginTransaction();
+            $customer->save();
+            $address->save();
+            $customer_company->save();
+            $customer_company->addresses()->save($address, ['type' => 'BILLING']);
+            $customer->addresses()->save($address, ['type' => 'CONTACT']);
+            $customer_company->employees()->save($customer);
+            DB::commit();
+            return response()->json(['result' => "Saved", 'message' => 'Customer is Saved.'], 200);
+
+
+
 
     }
 
