@@ -16,21 +16,9 @@
                         <section class="module module-projects-activities">
                             <div class="module-inner">
                                 <div class="module-heading">
-                                    <h3 class="module-title">Recent Activities</h3>
+                                    <h3 class="module-title">Pending Activities</h3>
                                     <ul class="actions list-inline">
-                                        <li class="more-link">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <span class="arrow"></span>
-                                                    <a href="#">Action 1</a>
-                                                </li>
-                                                <li><a href="#">Action 2</a></li>
-                                                <li><a href="#">Action 3</a></li>
-                                                <li role="separator" class="divider"></li>
-                                                <li><a href="#">Separated link</a></li>
-                                            </ul>
-                                        </li>
+
                                         <li><a class="collapse-module" data-toggle="collapse" href="#content-activities" aria-expanded="false" aria-controls="content-activities"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
                                         <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
                                     </ul>
@@ -48,13 +36,12 @@
                                                 <li role="presentation"><a href="#tab-4" aria-controls="tab-4" role="tab" data-toggle="tab">Discussions</a></li>
                                                 <li role="presentation"><a href="#tab-5" aria-controls="tab-5" role="tab" data-toggle="tab">Files</a></li>-->
 
-                                                <li role="presentation"><a href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab">Tasks</a></li>
+                                                <li class="active" role="presentation"><a href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab">Tasks</a></li>
                                                 <li role="presentation"><a href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">Appointments</a></li>
                                             </ul>
                                             <!-- Tab panes -->
                                             <div class="tab-content" >
                                                 <div role="tabpanel" class="tab-pane active" id="tab-1">
-                                                    <div class="item">
                                                         <div class="table-responsive">
                                                             <table id="tasks-table" class="table table-bordered display" style="width: 100%;">
                                                                 <thead>
@@ -72,11 +59,10 @@
                                                                 </thead>
                                                             </table>
                                                         </div>
-                                                    </div>
+
                                                 </div>
 
                                                 <div role="tabpanel" class="tab-pane" id="tab-2">
-                                                    <div class="item">
 
                                                         <div class="table-responsive">
                                                             <table id="appointments-table" class="table table-bordered display" style="width: 100%;">
@@ -95,7 +81,7 @@
                                                         </div>
 
 
-                                                    </div>
+
 
                                                 </div>
 
