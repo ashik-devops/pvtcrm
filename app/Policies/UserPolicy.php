@@ -3,12 +3,13 @@
 namespace App\Policies;
 
 use App\Policy;
+use App\Traits\AdminPolicies;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserPolicy
 {
-    use HandlesAuthorization;
+    use HandlesAuthorization, AdminPolicies;
 
     /**
      * Determine whether the user can list all users.
@@ -19,6 +20,9 @@ class UserPolicy
      */
     public function index(User $authenticated_user)
     {
+        if($this->checkAdmin($authenticated_user)){
+            return true;
+        }
         return !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
                     ->whereIn('action',['*','list'])->first());
     }
@@ -32,7 +36,9 @@ class UserPolicy
      */
     public function view(User $authenticated_user, User $user)
     {
-
+        if($this->checkAdmin($authenticated_user)){
+            return true;
+        }
         return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','view'])->first());
     }
@@ -45,6 +51,9 @@ class UserPolicy
      */
     public function create(User $user)
     {
+        if($this->checkAdmin($user)){
+            return true;
+        }
         return !is_null($user->role->policies()->whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','create'])->first());
     }
@@ -58,6 +67,9 @@ class UserPolicy
      */
     public function update(User $authenticated_user, User $user)
     {
+        if($this->checkAdmin($authenticated_user)){
+            return true;
+        }
 
         return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','edit'])->first());
@@ -72,6 +84,10 @@ class UserPolicy
      */
     public function delete(User $authenticated_user)
     {
+        if($this->checkAdmin($authenticated_user)){
+            return true;
+        }
+
         return !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','delete'])->first());
     }
