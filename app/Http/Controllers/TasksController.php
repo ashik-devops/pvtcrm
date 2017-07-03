@@ -91,6 +91,48 @@ class TasksController extends Controller
             ->make(true);
     }
 
+    public function getTasksAjaxDue(){
+
+
+
+        return Datatables::of(Task::with('customer','customer.company')->where('status','like','Due')->orderBy('created_at','desc'))
+
+            ->addColumn('action',
+                function ($task){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a href="#view/'.$task->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a href="#quick-view/" data-id="'.$task->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
+                        ;
+                })
+            ->addColumn('first_name',
+                function ($task){
+
+                    $string = '';
+                    $string .= '<a href="#">'.$task->customer["last_name"].', '. $task->customer['first_name'].'</a>';
+                    if($task->customer['company']['name']){
+                        $string .= '@ <a href="#">'.$task->customer['company']['name'].'</a>';
+                    }
+                    if($task->customer["last_name"] == null && $task->customer["first_name"] == null && $task->customer['company']['name'] == null){
+                        $string = '';
+                    }
+
+                    return $string;
+
+                })
+            ->addColumn('description',
+                function ($task){
+                    return  substr($task->description,0,70) . ' ....';
+                })
+            ->addColumn('due_date',
+                function ($task){
+                    return  Carbon::createFromTimeStamp(strtotime($task->due_date))->toFormattedDateString();
+                })
+            ->rawColumns(['title','first_name','description','status', 'priority', 'due_date','action' ])
+            ->make(true);
+    }
+
     public function createTask( Request $request){
         $task = new Task();
         $task->title = $request->task['taskTitle'];

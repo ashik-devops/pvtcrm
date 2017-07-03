@@ -102,6 +102,55 @@ class AppointmentsController extends Controller
 
     }
 
+    public function getAppointmentsAjaxCurrentDate(){
+
+
+        return Datatables::of(Appointment::with('customer','customer.company')->whereDate('created_at', DB::raw('CURDATE()')))
+            ->addColumn('action',
+                function ($appointment){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a href="#view/'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a href="#quick-view/" data-id="'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
+                        ;
+                })
+
+
+            ->addColumn('first_name',
+                function ($appointment){
+
+                    $string = '';
+                    $string .= '<a href="#">'.$appointment->customer["last_name"].', '. $appointment->customer['first_name'].'</a>';
+                    if($appointment->customer['company']['name']){
+                        $string .= '@ <a href="#">'.$appointment->customer['company']['name'].'</a>';
+                    }
+                    if($appointment->customer["last_name"] == null && $appointment->customer["first_name"] == null && $appointment->customer['company']['name'] == null){
+                        $string = '';
+                    }
+
+                    return $string;
+            })
+            ->addColumn('description',
+                function ($appointment){
+                    return  substr($appointment->description,0,70) . ' ....';
+                })
+            ->addColumn('start_time',
+                function ($appointment){
+                    return  Carbon::createFromTimeStamp(strtotime($appointment->start_time))->toFormattedDateString();
+
+                })
+            ->addColumn('end_time',
+                function ($appointment){
+                    return  Carbon::createFromTimeStamp(strtotime($appointment->end_time))->toFormattedDateString();
+
+                })
+
+            ->rawColumns(['id','title', 'first_name', 'description', 'start_time' ,'end_time',  'action'])
+            ->make(true);
+
+    }
+
 
     public function createAppointment(Request $request){
 

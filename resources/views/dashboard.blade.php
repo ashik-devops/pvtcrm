@@ -9,8 +9,110 @@
         <div class="container-fluid">
             <h2 class="view-title">Dashboard Use Case 1 (Project Management System)</h2>
             <div class="row">
-                <div class="col-wrapper col-lg-8 col-md-7 col-sm-12 col-xs-12">
+                <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="module-wrapper">
+                        <section class="module module-projects-activities">
+                            <div class="module-inner">
+                                <div class="module-heading">
+                                    <h3 class="module-title">Recent Activities</h3>
+                                    <ul class="actions list-inline">
+                                        <li class="more-link">
+                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
+                                            <ul class="dropdown-menu">
+                                                <li>
+                                                    <span class="arrow"></span>
+                                                    <a href="#">Action 1</a>
+                                                </li>
+                                                <li><a href="#">Action 2</a></li>
+                                                <li><a href="#">Action 3</a></li>
+                                                <li role="separator" class="divider"></li>
+                                                <li><a href="#">Separated link</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a class="collapse-module" data-toggle="collapse" href="#content-activities" aria-expanded="false" aria-controls="content-activities"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
+                                        <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
+                                    </ul>
+
+                                </div>
+
+                                <div class="module-content collapse in" id="content-activities">
+                                    <div class="module-content-inner">
+                                        <div role="tabpanel" class="tab-wrapper">
+                                            <!-- Nav tabs -->
+                                            <ul class="nav nav-tabs nav-tabs-theme-1" role="tablist">
+                                                <!--<li role="presentation" class="active"><a href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab">All</a></li>
+                                                <li role="presentation"><a href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">Projects</a></li>
+                                                <li role="presentation"><a href="#tab-3" aria-controls="tab-3" role="tab" data-toggle="tab">Tickets</a></li>
+                                                <li role="presentation"><a href="#tab-4" aria-controls="tab-4" role="tab" data-toggle="tab">Discussions</a></li>
+                                                <li role="presentation"><a href="#tab-5" aria-controls="tab-5" role="tab" data-toggle="tab">Files</a></li>-->
+
+                                                <li role="presentation"><a href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab">Tasks</a></li>
+                                                <li role="presentation"><a href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">Appointments</a></li>
+                                            </ul>
+                                            <!-- Tab panes -->
+                                            <div class="tab-content" >
+                                                <div role="tabpanel" class="tab-pane active" id="tab-1">
+                                                    <div class="item">
+                                                        <div class="table-responsive">
+                                                            <table id="tasks-table" class="table table-bordered display" style="width: 100%;">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Title</th>
+                                                                    <th>Customer</th>
+                                                                    <th>Description</th>
+                                                                    <th>Status</th>
+                                                                    <th>Priority</th>
+                                                                    <th>Due Date</th>
+                                                                    <th>Action</th>
+
+                                                                </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div role="tabpanel" class="tab-pane" id="tab-2">
+                                                    <div class="item">
+
+                                                        <div class="table-responsive">
+                                                            <table id="appointments-table" class="table table-bordered display" style="width: 100%;">
+                                                                <thead>
+                                                                <tr>
+                                                                    <th>Id</th>
+                                                                    <th>Title</th>
+                                                                    <th>Customer</th>
+                                                                    <th>Description</th>
+                                                                    <th>Start Time</th>
+                                                                    <th>End Time</th>
+                                                                    <th>Action</th>
+                                                                </tr>
+                                                                </thead>
+                                                            </table>
+                                                        </div>
+
+
+                                                    </div>
+
+                                                </div>
+
+
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                    </div>
+                    <!--<div class="module-wrapper">
                         <section class="module module-has-footer module-projects-overview">
                             <div class="module-inner">
                                 <div class="module-heading">
@@ -35,7 +137,9 @@
 
                                 </div>
 
-                                <div class="module-content collapse in" id="content-overview">
+
+
+                               <div class="module-content collapse in" id="content-overview">
                                     <div class="module-content-inner">
                                         <ul class="data-list row text-center">
                                             <li class="item item-1 col-lg-3 col-md-6 col-sm-6 col-xs-6">
@@ -88,7 +192,7 @@
                                         </div>
                                     </div>
 
-                                </div>
+                                </div>-->
 
                             </div>
 
@@ -527,250 +631,7 @@
                     </div>
 
 
-                    <div class="module-wrapper">
-                        <section class="module module-projects-activities">
-                            <div class="module-inner">
-                                <div class="module-heading">
-                                    <h3 class="module-title">Recent Activities</h3>
-                                    <ul class="actions list-inline">
-                                        <li class="more-link">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <span class="arrow"></span>
-                                                    <a href="#">Action 1</a>
-                                                </li>
-                                                <li><a href="#">Action 2</a></li>
-                                                <li><a href="#">Action 3</a></li>
-                                                <li role="separator" class="divider"></li>
-                                                <li><a href="#">Separated link</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="collapse-module" data-toggle="collapse" href="#content-activities" aria-expanded="false" aria-controls="content-activities"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                        <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                    </ul>
 
-                                </div>
-
-                                <div class="module-content collapse in" id="content-activities">
-                                    <div class="module-content-inner">
-                                        <div role="tabpanel" class="tab-wrapper">
-                                            <!-- Nav tabs -->
-                                            <ul class="nav nav-tabs nav-tabs-theme-1" role="tablist">
-                                                <li role="presentation" class="active"><a href="#tab-1" aria-controls="tab-1" role="tab" data-toggle="tab">All</a></li>
-                                                <li role="presentation"><a href="#tab-2" aria-controls="tab-2" role="tab" data-toggle="tab">Projects</a></li>
-                                                <li role="presentation"><a href="#tab-3" aria-controls="tab-3" role="tab" data-toggle="tab">Tickets</a></li>
-                                                <li role="presentation"><a href="#tab-4" aria-controls="tab-4" role="tab" data-toggle="tab">Discussions</a></li>
-                                                <li role="presentation"><a href="#tab-5" aria-controls="tab-5" role="tab" data-toggle="tab">Files</a></li>
-                                            </ul>
-                                            <!-- Tab panes -->
-                                            <div class="tab-content">
-                                                <div role="tabpanel" class="tab-pane active" id="tab-1">
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-1.png')}}" alt="" />
-                                                                <span class="status offline" data-toggle="tooltip" data-placement="right" title="Offline"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Ken D</a> created a new project <a href="#">[Project fringilla vel aliquet nec]</a></p>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> 2 mins ago</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon  icon_toolbox_alt"></span> <a href="#">Project</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-2.png')}}'" alt="" />
-                                                                <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Rachel W</a> shared a folder <a href="#">[UI mocks]</a></p>
-                                                            <div class="excerpt">
-                                                                <a href="#">I’m sharing this folder ahead of the team meeting. Let me know if orem sed massa bibendum maximus quis sit amet diam...</a>
-                                                            </div>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> 5 hrs ago</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon  icon_paperclip"></span> <a href="#">File</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-3.png')}}" alt="" />
-                                                                <span class="status busy" data-toggle="tooltip" data-placement="right" title="Busy"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Rebecca S</a> commented on ticket <a href="#">[#22 Maecenas tempus adipiscing]</a></p>
-                                                            <div class="excerpt">
-                                                                <a href="#">Hmm, is it possible to move mattis semper. Pellentesque mattis libero at vestibulum vehicula. Lorem ipsum dolor sit amet, consectetur. :)</a>
-                                                            </div>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> 3 days ago</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon icon_box-checked"></span> <a href="#">Ticket</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-4.png')}}" alt="" />
-                                                                <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Ryan B</a> started a new discussion <a href="#">[Some suggestions regarding the code review process]</a></p>
-                                                            <div class="excerpt">
-                                                                <a href="#">Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula porttitor eu consequat vitae...</a>
-                                                            </div>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> Mar 23, 2015</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon icon_chat_alt"></span> <a href="#">Discussion</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div role="tabpanel" class="tab-pane" id="tab-2">
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-1.png')}}" alt="" />
-                                                                <span class="status offline" data-toggle="tooltip" data-placement="right" title="Offline"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Ken D</a> created a new project <a href="#">[Project fringilla vel aliquet nec]</a></p>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> 2 mins ago</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon  icon_toolbox_alt"></span> <a href="#">Project</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div role="tabpanel" class="tab-pane" id="tab-3">
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-3.png')}}" alt="" />
-                                                                <span class="status busy" data-toggle="tooltip" data-placement="right" title="Busy"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Rebecca S</a> commented on ticket <a href="#">[#22 Maecenas tempus adipiscing]</a></p>
-                                                            <div class="excerpt">
-                                                                <a href="#">Hmm, is it possible to move mattis semper. Pellentesque mattis libero at vestibulum vehicula. Lorem ipsum dolor sit amet, consectetur. :)</a>
-                                                            </div>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> 3 days ago</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon icon_box-checked"></span> <a href="#">Ticket</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div role="tabpanel" class="tab-pane" id="tab-4">
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-4.png')}}" alt="" />
-                                                                <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Ryan B</a> started a new discussion <a href="#">[Some suggestions regarding the code review process]</a></p>
-                                                            <div class="excerpt">
-                                                                <a href="#">Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula porttitor eu consequat vitae...</a>
-                                                            </div>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> Mar 23, 2015</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon icon_chat_alt"></span> <a href="#">Discussion</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                                <div role="tabpanel" class="tab-pane" id="tab-5">
-                                                    <div class="item">
-                                                        <div class="profile">
-                                                            <div class="profile-inner">
-                                                                <img src="{{asset('storage/assets/images/profiles/profile-2.png')}}" alt="" />
-                                                                <span class="status online" data-toggle="tooltip" data-placement="right" title="Online"></span>
-                                                            </div>
-
-                                                        </div>
-
-                                                        <div class="activity">
-                                                            <p class="summary"><a class="profile-name" href="#">Rachel W</a> shared a folder <a href="#">[UI mocks]</a></p>
-                                                            <div class="excerpt">
-                                                                <a href="#">I’m sharing this folder ahead of the team meeting. Let me know if orem sed massa bibendum maximus quis sit amet diam...</a>
-                                                            </div>
-                                                            <ul class="meta list-inline">
-                                                                <li class="time"><span aria-hidden="true" class="icon icon_clock_alt"></span> 5 hrs ago</li>
-                                                                <li class="type"><span aria-hidden="true" class="icon  icon_paperclip"></span> <a href="#">File</a></li>
-                                                            </ul>
-
-                                                        </div>
-
-                                                    </div>
-
-                                                </div>
-
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    </div>
 
                 </div>
 
@@ -783,10 +644,53 @@
 
 
 @section('after-footer-script')
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/dashboard-projects.js')}}"></script>
-@endsection
-@section('after-after-footer-script')
-    <script >
-        console.log('hello');
+
+    <script>
+
+        var datatable = jQuery('#tasks-table').DataTable({
+//                responsive: false,
+            select: true,
+            processing: true,
+            serverSide: true,
+            ajax: '{!! route('task-data-with-due') !!}',
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'title', name: 'title'},
+                {data: 'first_name', name: 'first_name'},
+                { data: 'description', name: 'description'},
+                { data: 'status', name: 'status'},
+                { data: 'priority', name: 'priority'},
+                { data: 'due_date', name: 'due_date' },
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+
+
+            ]
+        });
+
+
+        var datatable = jQuery('#appointments-table').DataTable({
+//                responsive: false,
+            select: true,
+            processing: true,
+            serverSide: true,
+            ajax: '{!! route('appointment-data-current-date') !!}',
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'title', name: 'title'},
+                {data: 'first_name', name: 'first_name'},
+                {data: 'description', name: 'description'},
+                {data: 'start_time', name: 'start_time'},
+                {data: 'end_time', name: 'end_time'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+
+
+            ]
+        });
+
     </script>
+
+
 @endsection

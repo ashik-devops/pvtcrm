@@ -31,6 +31,9 @@ Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('del
 Route::get('/tasks', 'TasksController@index')->name('task-index');//->middleware('can:index,App\Customer');
 Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options');
 Route::get('/ajax/tasks/data', 'TasksController@getTasksAjax')->name('task-data');
+
+Route::get('/ajax/tasks/data-due', 'TasksController@getTasksAjaxDue')->name('task-data-with-due');
+
 Route::post('/task/create', 'TasksController@createTask')->name('create.task');
 Route::get('/task/edit', 'TasksController@editTask')->name('edit.task.data');
 Route::post('/task/update', 'TasksController@updateTask')->name('update.task');
@@ -39,6 +42,9 @@ Route::post('/task/delete', 'TasksController@deleteTask')->name('delete.task');
 
 Route::get('/appointments', 'AppointmentsController@index')->name('appointment-index');
 Route::get('/ajax/appointment/data', 'AppointmentsController@getAppointmentsAjax')->name('appointment-data');
+
+Route::get('/ajax/appointment/data-current-date', 'AppointmentsController@getAppointmentsAjaxCurrentDate')->name('appointment-data-current-date');
+
 Route::post('/appointment/create', 'AppointmentsController@createAppointment')->name('create.appointment');
 Route::get('/appointment/edit', 'AppointmentsController@editAppointment')->name('edit.appointment');
 Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->name('update.appointment');
