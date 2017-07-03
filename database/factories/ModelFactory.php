@@ -15,6 +15,7 @@
 $factory->define(App\Customer::class, function (Faker\Generator $faker) {
 
     static $titles = ['CEO', 'GM', 'COO', 'MRO', 'HR'];
+    $priority=['Critical', 'High', 'Medium', 'Low'];
     return [
         'first_name'=>$faker->firstName,
         'last_name'=>$faker->lastName,
@@ -22,6 +23,7 @@ $factory->define(App\Customer::class, function (Faker\Generator $faker) {
         'email'=>$faker->unique()->email,
         'phone_no'=>$faker->unique()->phoneNumber,
         'user_id'=>rand(2,4),
+        'priority'=>$priority[rand(0,3)],
         'customer_company_id'=>rand(1,50)
     ];
 });

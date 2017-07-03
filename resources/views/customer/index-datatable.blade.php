@@ -174,6 +174,7 @@
                     customerTitle : $('#customerTitle').val(),
                     customerEmail : $('#customerEmail').val(),
                     customerPhone : $('#customerPhone').val(),
+                    customerPriority : $('#customerPriority').val(),
                 };
 
                 var company = {
@@ -284,6 +285,7 @@
                     $('#customerTitle').val(data.customer.title);
                     $('#customerEmail').val(data.customer.email);
                     $('#customerPhone').val(data.customer.phone_no);
+                    $('#customerPriority').val(data.customer.priority);
 
                     if(data.company){
                         jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")

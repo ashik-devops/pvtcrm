@@ -51,7 +51,15 @@
         @endif
     </div>
 
-
+    <div class="form-group {{ $errors->has('priority') ? ' has-error' : '' }}" id="priority">
+        <label class="sr-only">Priority</label>
+        <select name="priority" id="customerPriority" class="form-control">
+            <option>Low</option>
+            <option>Medium</option>
+            <option>Critical</option>
+            <option>High</option>
+        </select>
+    </div>
 
     <div class="form-group">
         <label class="sr-only">Do You Want to Create Company</label>

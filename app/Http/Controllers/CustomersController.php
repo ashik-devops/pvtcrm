@@ -95,6 +95,7 @@ class CustomersController extends Controller
             $customer->title = $request->customer['customerTitle'];
             $customer->email = $request->customer['customerEmail'];
             $customer->phone_no = $request->customer['customerPhone'];
+            $customer->priority = $request->customer['customerPriority'];
             $customer->user_id = Auth::user()->id;
 
 
@@ -178,6 +179,7 @@ class CustomersController extends Controller
             $customer->title = $request->customer['customerTitle'];
             $customer->email = $request->customer['customerEmail'];
             $customer->phone_no = $request->customer['customerPhone'];
+            $customer->priority = $request->customer['customerPriority'];
 
             $address->street_address_1 = $request->company['streetAddress_1'];
             $address->street_address_2 = $request->company['streetAddress_2'];
