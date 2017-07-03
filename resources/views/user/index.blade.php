@@ -10,7 +10,7 @@
             <div class="projects-heading">
                 <h2 class="view-title">Members</h2>
                 <div class="actions">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Member</button>
+                    <button class="btn btn-success" data-toggle="modal" data-target="#user-modal"><i class="fa fa-plus"></i> New User</button>
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -72,7 +72,7 @@
 
 @section('modal')
     <!-- Modal (New Member) -->
-    <div class="modal" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
+    <div class="modal" id="user-modal" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -87,3 +87,62 @@
     </div><!--/modal-->
 @endsection
 
+@section('after-footer-script')
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+    <script>
+        $('#userForm').on('submit',function(e){
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+            //console.log('hello');
+            var user = {
+
+                userName : $('#userName').val(),
+                userEmail : $('#userEmail').val(),
+                userInitial : $('#userInitial').val(),
+                userRole : $('#userRole').val(),
+                userPassword : $('#userPassword').val(),
+                userPrimaryPhone : $('#userPrimaryPhone').val(),
+                userSecondaryPhone : $('#userSecondaryPhone').val(),
+                userStreetAddress_1 : $('#userStreetAddress_1').val(),
+                userStreetAddress_2 : $('#userStreetAddress_2').val(),
+                userCity : $('#userCity').val(),
+                userState : $('#userState').val(),
+                userCountry : $('#userCountry').val(),
+                userZip : $('#userZip').val(),
+                userStatus : $('#userStatus').val(),
+
+
+            };
+            var data = {
+                _token : _token,
+                user: user
+            };
+
+            var request = jQuery.ajax({
+                url: "{{ route('create-user') }}",
+                data: data,
+                method: "POST",
+                dataType: "json"
+            });
+            request.done(function (response) {
+
+                if(response.result == 'Saved'){
+                    $('#userForm')[0].reset();
+                    $('#user-modal').modal('hide');
+                    //get_all_task_data();
+                    $.notify(response.message, "success");
+                }
+                else{
+                    jQuery.notify(response.message, "error");
+                }
+            })
+
+            request.fail(function (jqXHT, textStatus) {
+                $.notify(textStatus, "error");
+            });
+
+        });
+
+
+    </script>
+@endsection

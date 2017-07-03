@@ -16,6 +16,7 @@ Route::get('/', 'HomeController@dashboard')->name('dashboard');
 Auth::routes();
 
 Route::get('/users', 'UsersController@index')->name('users-index')->middleware('can:index,App\User');
+Route::post('/user/create', 'UsersController@createUser')->name('create-user');
 Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-edit')->middleware('can:update,user');
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update')->middleware('can:update,user');
 
