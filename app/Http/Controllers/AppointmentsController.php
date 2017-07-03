@@ -27,21 +27,24 @@ class AppointmentsController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data, $isUpdateRequest)
     {
-        return Validator::make($data, [
-            'first_name' => 'required|string|max:32',
-            'last_name' => 'required|string|max:32',
-            'email' => 'required|string|email|max:255|unique',
-            'title'=>'required|string|max:32',
-            'primary_phone_no'=>'required|string|max:32|unique',
-            'street_address_1'=>'required|string',
-            'street_address_2'=>'string|nullable',
-            'city'=>'required|string|max:32',
-            'state'=>'required|string|max:32',
-            'country'=>'required|string|max:32',
-            'zip'=>'required|string|max:8',
-        ]);
+        $rules=[
+            'appointmentTitle' => 'required|string',
+            'appointmentDescription' => 'required|string',
+            'appointmentStatus' => 'required|string',
+            'startTime'=>'required|date',
+            'endTime'=>'required|date',
+        ];
+
+        if($isUpdateRequest){
+            $rules=array_merge($rules,[
+            'appointmentId'=>'required|integer|exists:appointments,id',
+            'appointmentCustomerId'=>'required|integer,exists:customers,id'
+            ]);
+        }
+
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -190,6 +193,7 @@ class AppointmentsController extends Controller
     }
 
     public function editAppointment(Request $request){
+
         $appointment = Appointment::with('customer', 'customer.company')->findOrFail($request->id);
 
 
@@ -199,6 +203,9 @@ class AppointmentsController extends Controller
     }
 
    public function updateAppointment(Request $request){
+       $this->validator($request->appointment, true)->validate();
+
+
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'

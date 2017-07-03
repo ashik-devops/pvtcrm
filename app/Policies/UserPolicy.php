@@ -19,9 +19,8 @@ class UserPolicy
      */
     public function index(User $authenticated_user)
     {
-
-        return !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
-                    ->whereIn('action',['*','list'])->first()->id);
+        return !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
+                    ->whereIn('action',['*','list'])->first());
     }
 
     /**
@@ -34,8 +33,8 @@ class UserPolicy
     public function view(User $authenticated_user, User $user)
     {
 
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','view'])->first()->id);
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','view'])->first());
     }
 
     /**
@@ -46,8 +45,8 @@ class UserPolicy
      */
     public function create(User $user)
     {
-        return !is_null($user->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','create'])->first()->id);
+        return !is_null($user->role->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','create'])->first());
     }
 
     /**
@@ -60,8 +59,8 @@ class UserPolicy
     public function update(User $authenticated_user, User $user)
     {
 
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','edit'])->first()->id);
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','edit'])->first());
     }
 
     /**
@@ -73,8 +72,8 @@ class UserPolicy
      */
     public function delete(User $authenticated_user)
     {
-        return !is_null($authenticated_user->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','delete'])->first()->id);
+        return !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
+                ->whereIn('action',['*','delete'])->first());
     }
 
 

@@ -9,9 +9,11 @@
         <div class="container-fluid">
             <div class="projects-heading">
                 <h2 class="view-title">Members</h2>
-                <div class="actions">
-                    <button class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Member</button>
-                </div>
+                @can('create', \App\User::class)
+                    <div class="actions">
+                        <button class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New Member</button>
+                    </div>
+                @endcan
             </div>
             <div class="clearfix"></div>
             <div class="row">
@@ -71,6 +73,7 @@
 
 
 @section('modal')
+    @if(Auth::user()->can('create', \App\User::class) | Auth::user()->can('edit', \App\User::class))
     <!-- Modal (New Member) -->
     <div class="modal" id="modal-new-member" tabindex="-1" role="dialog" aria-labelledby="modal-new-member">
         <div class="modal-dialog" role="document">
@@ -85,5 +88,6 @@
             </div>
         </div>
     </div><!--/modal-->
+    @endif
 @endsection
 

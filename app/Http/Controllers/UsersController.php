@@ -48,6 +48,7 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $this->authorize('index', User::class);
         $users = User::paginate(10);
         $roles=Role::all(['id','name']);
         return view('user.index')->with([
@@ -63,6 +64,7 @@ class UsersController extends Controller
      */
 
     public function edit(User $user){
+        $this->authorize('update', User::class);
         return view('user.view-profile')->with([
             'user' => $user,
             'roles'=>Role::all()
@@ -79,6 +81,7 @@ class UsersController extends Controller
      */
 
     public function update(User $user, Request $request){
+        $this->authorize('update', User::class);
         $this->validator($request->all(), $user)->validate();
 
 

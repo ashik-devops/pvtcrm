@@ -55,6 +55,9 @@ class CustomersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+
+        $this->authorize('index');
+
         return view('customer.index-datatable');
     }
 
@@ -217,6 +220,22 @@ class CustomersController extends Controller
         return response()->json([
             'result'=>'Error',
             'message'=>'Customer not found.'
+        ]);
+
+    }
+
+    public function bulkDeleteCustomer(Request $request){
+
+        if(Customer::whereIn('id',explode(',', $request->ids))->delete()){
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Customer has been successfully deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Invalid Request.'
         ]);
 
     }

@@ -25,6 +25,7 @@ Route::post('/customer/create', 'CustomersController@createCustomer')->name('cre
 Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
 Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
 Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
+Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
 
 
 
@@ -66,6 +67,8 @@ Route::get('/ajax/companies/appointments/{company}', 'CompanyController@getCompa
 Route::get('/ajax/company/data/{company}', 'CompanyController@getCompanyAjax')->name('get-company');
 Route::post('/ajax/companies/create', 'CompanyController@create')->name('create-company');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/list', 'CompanyController@listAll')->name('list-companies');
+Route::post('/companies/bulk/delete', 'CompanyController@bulkDeleteCompany')->name('bulk.delete.company.data');
+
 
 Route::get('/calendar', 'CalendarController@index')->name('calendar');
 Route::get('/ajax/calendar/events', 'CalendarController@getAjaxEvents')->name('ajax-get-events');
