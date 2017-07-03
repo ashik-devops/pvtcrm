@@ -2,12 +2,14 @@
 
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/dashboard-projects.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
 @endsection
 
 @section('content')
     <div id="content-wrapper" class="content-wrapper view projects-view">
         <div class="container-fluid">
-            <h2 class="view-title">Dashboard Use Case 1 (Project Management System)</h2>
+            <h2 class="view-title">Dashboard </h2>
             <div class="row">
                 <div class="col-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="module-wrapper">
@@ -196,439 +198,439 @@
 
                             </div>
 
-                            <div class="module-footer text-center">
-                                <p class="meta">Time Period: 2 weeks (June 01 - June 14, 2016)</p>
-                            </div>
+                            {{--<div class="module-footer text-center">--}}
+                                {{--<p class="meta">Time Period: 2 weeks (June 01 - June 14, 2016)</p>--}}
+                            {{--</div>--}}
 
                         </section>
 
                     </div>
 
 
-                    <div class="row">
-                        <div class="module-wrapper col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                            <section class="module module-has-footer module-projects-list">
-                                <div class="module-inner">
-                                    <div class="module-heading">
-                                        <h3 class="module-title">Latest Projects</h3>
-                                        <ul class="actions list-inline">
-                                            <li class="more-link">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <span class="arrow"></span>
-                                                        <a href="#">Action 1</a>
-                                                    </li>
-                                                    <li><a href="#">Action 2</a></li>
-                                                    <li><a href="#">Action 3</a></li>
-                                                    <li role="separator" class="divider"></li>
-                                                    <li><a href="#">Separated link</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a class="collapse-module" data-toggle="collapse" href="#content-projects" aria-expanded="false" aria-controls="content-projects"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                            <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                        </ul>
-
-                                    </div>
-
-                                    <div class="module-content collapse in" id="content-projects">
-                                        <div class="module-content-inner">
-                                            <div class="table-responsive">
-                                                <table class="table table-simple">
-                                                    <thead>
-                                                    <tr>
-                                                        <th class="truncate">Project Name</th>
-                                                        <th>Budget</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td class="truncate"><a href="project.html">Project lorem ipsum</a></td>
-                                                        <td>
-                                                            <div class="progress-container">
-															<span class="progress progress-sm">
-																	<span class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" style="width: 55%">
-
-																	</span>
-															</span>
-
-                                                                <span class="progress-pc hidden-xs">55%</span>
-                                                            </div>
-
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="truncate"><a href="project.html">Mobile app for egestas vehicula</a></td>
-                                                        <td>
-                                                            <div class="progress-container">
-															<span class="progress progress-sm">
-																	<span class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="110" aria-valuemin="0" aria-valuemax="100" style="width: 110%">
-
-																	</span>
-															</span>
-
-                                                                <span class="progress-pc hidden-xs">110%</span>
-                                                            </div>
-
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="truncate"><a href="project.html">Campaign for vivamus elementum fringilla mauris amet adipiscing</a></td>
-                                                        <td>
-                                                            <div class="progress-container">
-															<span class="progress progress-sm">
-																	<span class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%">
-
-																	</span>
-															</span>
-
-                                                                <span class="progress-pc hidden-xs">25%</span>
-                                                            </div>
-
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="truncate"><a href="project.html">Campaign for Etiam Sit amet</a></td>
-                                                        <td>
-                                                            <div class="progress-container">
-															<span class="progress progress-sm">
-																	<span class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 95%">
-
-																	</span>
-															</span>
-
-                                                                <span class="progress-pc hidden-xs">75%</span>
-                                                            </div>
-
-                                                        </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td class="truncate"><a href="project.html">Webapp for Pede Justo</a></td>
-                                                        <td>
-                                                            <div class="progress-container">
-															<span class="progress progress-sm">
-																	<span class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%">
-
-																	</span>
-															</span>
-
-                                                                <span class="progress-pc hidden-xs">95%</span>
-                                                            </div>
-
-                                                        </td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="module-footer text-center">
-                                    <ul class="shortcuts list-inline">
-                                        <li class="first"><a href="projects.html">View all projects (56)</a></li>
-                                        <li><a href="projects.html">My projects (2)</a></li>
-                                        <li><a href="#">Add Project</a></li>
-                                    </ul>
-                                </div>
-
-                            </section>
-
-                        </div>
-
-
-                        <div class="module-wrapper col-lg-6 col-md-12 col-sm-12 col-xs-12">
-                            <section class="module module-has-footer module-tickets">
-                                <div class="module-inner">
-                                    <div class="module-heading">
-                                        <h3 class="module-title">New Tickets</h3>
-                                        <ul class="actions list-inline">
-                                            <li class="more-link">
-                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                                <ul class="dropdown-menu">
-                                                    <li>
-                                                        <span class="arrow"></span>
-                                                        <a href="#">Action 1</a>
-                                                    </li>
-                                                    <li><a href="#">Action 2</a></li>
-                                                    <li><a href="#">Action 3</a></li>
-                                                    <li role="separator" class="divider"></li>
-                                                    <li><a href="#">Separated link</a></li>
-                                                </ul>
-                                            </li>
-                                            <li><a class="collapse-module" data-toggle="collapse" href="#content-tickets" aria-expanded="false" aria-controls="content-tickets"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                            <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                        </ul>
-
-                                    </div>
-
-                                    <div class="module-content collapse in" id="content-tickets">
-                                        <div class="module-content-inner">
-                                            <div class="table-responsive">
-                                                <table class="table table-simple">
-                                                    <thead>
-                                                    <tr>
-                                                        <th class="number">NO.</th>
-                                                        <th class="truncate">Ticket Name</th>
-                                                        <th>Priority</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td><span class="label label-number">#37</span></td>
-                                                        <td class="truncate"><a href="#">Ticket lorem ipsum sodales sagittis</a></td>
-                                                        <td><span class="label label-normal">Normal</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><span class="label label-number">#212</span></td>
-                                                        <td class="truncate"><a href="#">Refactor fringilla mauris code</a></td>
-                                                        <td><span class="label label-low">Low</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><span class="label label-number">#36</span></td>
-                                                        <td class="truncate"><a href="#">UX workshop for sodales sagittis</a></td>
-                                                        <td><span class="label label-high">High</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><span class="label label-number">#16</span></td>
-                                                        <td class="truncate"><a href="#">Build form modules</a></td>
-                                                        <td><span class="label label-critical">Critical</span></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><span class="label label-number">#23</span></td>
-                                                        <td class="truncate"><a href="#">Lorem ipsum dolor sit amet adipiscing elit</a></td>
-                                                        <td><span class="label label-success">In Progress</span></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-
-                                    </div>
-
-                                </div>
-
-                                <div class="module-footer text-center">
-                                    <ul class="shortcuts list-inline">
-                                        <li class="first"><a href="tickets.html">View all tickets (639)</a></li>
-                                        <li><a href="tickets.html">My tickets (18)</a></li>
-                                        <li><a href="#">Add Ticket</a></li>
-                                    </ul>
-                                </div>
-
-                            </section>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="module-wrapper">
-                        <section class="module module-projects-invoices">
-                            <div class="module-inner">
-                                <div class="module-heading">
-                                    <h3 class="module-title">New Invoices</h3>
-                                    <ul class="actions list-inline">
-                                        <li class="more-link">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <span class="arrow"></span>
-                                                    <a href="#">Action 1</a>
-                                                </li>
-                                                <li><a href="#">Action 2</a></li>
-                                                <li><a href="#">Action 3</a></li>
-                                                <li role="separator" class="divider"></li>
-                                                <li><a href="#">Separated link</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="collapse-module" data-toggle="collapse" href="#content-invoices" aria-expanded="false" aria-controls="content-invoices"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                        <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                    </ul>
-
-                                </div>
-
-                                <div class="module-content collapse in" id="content-invoices">
-                                    <div class="module-content-inner">
-                                        <div class="table-responsive">
-                                            <table class="table table-simple table-striped">
-                                                <thead>
-                                                <tr>
-                                                    <th class="number">Invoice No.</th>
-                                                    <th>Due Date</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr>
-                                                    <td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>
-                                                    <td class="date truncate"><a href="invoice.html">Sep 23, 2015</a></td>
-                                                    <td class="total"><span class="currency hidden-xs">USD</span> <a href="invoice.html">$32,000</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>
-                                                    <td class="date truncate"><a href="invoice.html">Jun 18, 2015</a></td>
-                                                    <td class="total"><span class="currency hidden-xs">EUR</span> <a href="invoice.html">€16,000</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>
-                                                    <td class="date truncate"><a href="invoice.html">May 14, 2015</a></td>
-                                                    <td class="total"><span class="currency hidden-xs">USD</span> <a href="invoice.html">$5,500</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>
-                                                    <td class="date truncate"><a href="#">Apr 07, 2015</a></td>
-                                                    <td class="total"><span class="currency hidden-xs">GBP</span> <a href="invoice.html">£18,400</a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>
-                                                    <td class="date truncate"><a href="invoice.html">Mar 23, 2015</a></td>
-                                                    <td class="total"><span class="currency hidden-xs">USD</span> <a href="invoice.html">$14,200</a></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    </div>
-
-                    <div class="module-wrapper">
-                        <section class="module module-map">
-                            <div class="module-inner">
-                                <div class="module-heading">
-                                    <h3 class="module-title">Client Locations</h3>
-                                    <ul class="actions list-inline">
-                                        <li class="more-link">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <span class="arrow"></span>
-                                                    <a href="#">Action 1</a>
-                                                </li>
-                                                <li><a href="#">Action 2</a></li>
-                                                <li><a href="#">Action 3</a></li>
-                                                <li role="separator" class="divider"></li>
-                                                <li><a href="#">Separated link</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="collapse-module" data-toggle="collapse" href="#content-map" aria-expanded="false" aria-controls="content-map"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                        <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                    </ul>
-
-                                </div>
-
-                                <div class="module-content collapse in" id="content-map">
-                                    <div class="module-content-inner">
-                                        <div id="world-map" class="world-map"></div>
-                                    </div>
-
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    </div>
-
-                </div>
-
-                <div class="col-wrapper col-lg-4 col-md-5 col-sm-12 col-xs-12">
-                    <div class="module-wrapper">
-                        <section class="module module-projects-sales">
-                            <div class="module-inner">
-                                <div class="module-heading">
-                                    <h3 class="module-title">Sales</h3>
-                                    <ul class="actions list-inline">
-                                        <li class="more-link">
-                                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>
-                                            <ul class="dropdown-menu">
-                                                <li>
-                                                    <span class="arrow"></span>
-                                                    <a href="#">Action 1</a>
-                                                </li>
-                                                <li><a href="#">Action 2</a></li>
-                                                <li><a href="#">Action 3</a></li>
-                                                <li role="separator" class="divider"></li>
-                                                <li><a href="#">Separated link</a></li>
-                                            </ul>
-                                        </li>
-                                        <li><a class="collapse-module" data-toggle="collapse" href="#content-sales" aria-expanded="false" aria-controls="content-sales"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                        <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                    </ul>
-
-                                </div>
-
-                                <div class="module-content collapse in" id="content-sales">
-                                    <div class="module-content-inner">
-                                        <div class="sales-info">
-                                            <h3 class="figure-total text-highlight">$64,456<span class="meta">(Current Month)</span></h3>
-                                            <ul class="list-unstyled list-currency">
-                                                <li class="dollars">
-                                                    <img class="flag" src="{{asset('storage/assets/images/flags/US.png')}}" alt="" />
-                                                    <span class="progress-container">
-														<span class="progress-pc">82%</span>
-												<span class="progress">
-															<span class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: 82%">
-
-															</span>
-												</span>
-
-												</span>
-
-                                                    <span class="figure-sub">$52,854</span>
-                                                </li>
-                                                <li class="pounds">
-                                                    <img class="flag" src="{{asset('storage/assets/images/flags/UK.png')}}" alt="" />
-                                                    <span class="progress-container">
-														<span class="progress-pc">6%</span>
-												<span class="progress">
-															<span class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" style="width: 6%">
-
-															</span>
-												</span>
-
-												</span>
-
-                                                    <span class="figure-sub">£2,320</span>
-                                                </li>
-                                                <li class="euros">
-                                                    <img class="flag" src="{{asset('storage/assets/images/flags/EU.png')}}" alt="" />
-                                                    <span class="progress-container">
-														<span class="progress-pc">12%</span>
-												<span class="progress">
-															<span class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" style="width: 12%">
-
-															</span>
-												</span>
-
-												</span>
-
-                                                    <span class="figure-sub">€4,321</span>
-                                                </li>
-                                            </ul>
-
-                                            <div class="chart-container">
-                                                <div id="sales-chart" class="flot-chart"></div>
-                                            </div>
-
-                                        </div>
-
-                                    </div>
-                                </div>
-
-                            </div>
-
-                        </section>
-
-                    </div>
+                    {{--<div class="row">--}}
+                        {{--<div class="module-wrapper col-lg-6 col-md-12 col-sm-12 col-xs-12">--}}
+                            {{--<section class="module module-has-footer module-projects-list">--}}
+                                {{--<div class="module-inner">--}}
+                                    {{--<div class="module-heading">--}}
+                                        {{--<h3 class="module-title">Latest Projects</h3>--}}
+                                        {{--<ul class="actions list-inline">--}}
+                                            {{--<li class="more-link">--}}
+                                                {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>--}}
+                                                {{--<ul class="dropdown-menu">--}}
+                                                    {{--<li>--}}
+                                                        {{--<span class="arrow"></span>--}}
+                                                        {{--<a href="#">Action 1</a>--}}
+                                                    {{--</li>--}}
+                                                    {{--<li><a href="#">Action 2</a></li>--}}
+                                                    {{--<li><a href="#">Action 3</a></li>--}}
+                                                    {{--<li role="separator" class="divider"></li>--}}
+                                                    {{--<li><a href="#">Separated link</a></li>--}}
+                                                {{--</ul>--}}
+                                            {{--</li>--}}
+                                            {{--<li><a class="collapse-module" data-toggle="collapse" href="#content-projects" aria-expanded="false" aria-controls="content-projects"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>--}}
+                                            {{--<li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>--}}
+                                        {{--</ul>--}}
+
+                                    {{--</div>--}}
+
+                                    {{--<div class="module-content collapse in" id="content-projects">--}}
+                                        {{--<div class="module-content-inner">--}}
+                                            {{--<div class="table-responsive">--}}
+                                                {{--<table class="table table-simple">--}}
+                                                    {{--<thead>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<th class="truncate">Project Name</th>--}}
+                                                        {{--<th>Budget</th>--}}
+                                                    {{--</tr>--}}
+                                                    {{--</thead>--}}
+                                                    {{--<tbody>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td class="truncate"><a href="project.html">Project lorem ipsum</a></td>--}}
+                                                        {{--<td>--}}
+                                                            {{--<div class="progress-container">--}}
+															{{--<span class="progress progress-sm">--}}
+																	{{--<span class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100" style="width: 55%">--}}
+
+																	{{--</span>--}}
+															{{--</span>--}}
+
+                                                                {{--<span class="progress-pc hidden-xs">55%</span>--}}
+                                                            {{--</div>--}}
+
+                                                        {{--</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td class="truncate"><a href="project.html">Mobile app for egestas vehicula</a></td>--}}
+                                                        {{--<td>--}}
+                                                            {{--<div class="progress-container">--}}
+															{{--<span class="progress progress-sm">--}}
+																	{{--<span class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="110" aria-valuemin="0" aria-valuemax="100" style="width: 110%">--}}
+
+																	{{--</span>--}}
+															{{--</span>--}}
+
+                                                                {{--<span class="progress-pc hidden-xs">110%</span>--}}
+                                                            {{--</div>--}}
+
+                                                        {{--</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td class="truncate"><a href="project.html">Campaign for vivamus elementum fringilla mauris amet adipiscing</a></td>--}}
+                                                        {{--<td>--}}
+                                                            {{--<div class="progress-container">--}}
+															{{--<span class="progress progress-sm">--}}
+																	{{--<span class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100" style="width: 25%">--}}
+
+																	{{--</span>--}}
+															{{--</span>--}}
+
+                                                                {{--<span class="progress-pc hidden-xs">25%</span>--}}
+                                                            {{--</div>--}}
+
+                                                        {{--</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td class="truncate"><a href="project.html">Campaign for Etiam Sit amet</a></td>--}}
+                                                        {{--<td>--}}
+                                                            {{--<div class="progress-container">--}}
+															{{--<span class="progress progress-sm">--}}
+																	{{--<span class="progress-bar progress-bar-info" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width: 95%">--}}
+
+																	{{--</span>--}}
+															{{--</span>--}}
+
+                                                                {{--<span class="progress-pc hidden-xs">75%</span>--}}
+                                                            {{--</div>--}}
+
+                                                        {{--</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td class="truncate"><a href="project.html">Webapp for Pede Justo</a></td>--}}
+                                                        {{--<td>--}}
+                                                            {{--<div class="progress-container">--}}
+															{{--<span class="progress progress-sm">--}}
+																	{{--<span class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" style="width: 95%">--}}
+
+																	{{--</span>--}}
+															{{--</span>--}}
+
+                                                                {{--<span class="progress-pc hidden-xs">95%</span>--}}
+                                                            {{--</div>--}}
+
+                                                        {{--</td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--</tbody>--}}
+                                                {{--</table>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+
+                                    {{--</div>--}}
+
+                                {{--</div>--}}
+
+                                {{--<div class="module-footer text-center">--}}
+                                    {{--<ul class="shortcuts list-inline">--}}
+                                        {{--<li class="first"><a href="projects.html">View all projects (56)</a></li>--}}
+                                        {{--<li><a href="projects.html">My projects (2)</a></li>--}}
+                                        {{--<li><a href="#">Add Project</a></li>--}}
+                                    {{--</ul>--}}
+                                {{--</div>--}}
+
+                            {{--</section>--}}
+
+                        {{--</div>--}}
+
+
+                        {{--<div class="module-wrapper col-lg-6 col-md-12 col-sm-12 col-xs-12">--}}
+                            {{--<section class="module module-has-footer module-tickets">--}}
+                                {{--<div class="module-inner">--}}
+                                    {{--<div class="module-heading">--}}
+                                        {{--<h3 class="module-title">New Tickets</h3>--}}
+                                        {{--<ul class="actions list-inline">--}}
+                                            {{--<li class="more-link">--}}
+                                                {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>--}}
+                                                {{--<ul class="dropdown-menu">--}}
+                                                    {{--<li>--}}
+                                                        {{--<span class="arrow"></span>--}}
+                                                        {{--<a href="#">Action 1</a>--}}
+                                                    {{--</li>--}}
+                                                    {{--<li><a href="#">Action 2</a></li>--}}
+                                                    {{--<li><a href="#">Action 3</a></li>--}}
+                                                    {{--<li role="separator" class="divider"></li>--}}
+                                                    {{--<li><a href="#">Separated link</a></li>--}}
+                                                {{--</ul>--}}
+                                            {{--</li>--}}
+                                            {{--<li><a class="collapse-module" data-toggle="collapse" href="#content-tickets" aria-expanded="false" aria-controls="content-tickets"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>--}}
+                                            {{--<li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>--}}
+                                        {{--</ul>--}}
+
+                                    {{--</div>--}}
+
+                                    {{--<div class="module-content collapse in" id="content-tickets">--}}
+                                        {{--<div class="module-content-inner">--}}
+                                            {{--<div class="table-responsive">--}}
+                                                {{--<table class="table table-simple">--}}
+                                                    {{--<thead>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<th class="number">NO.</th>--}}
+                                                        {{--<th class="truncate">Ticket Name</th>--}}
+                                                        {{--<th>Priority</th>--}}
+                                                    {{--</tr>--}}
+                                                    {{--</thead>--}}
+                                                    {{--<tbody>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td><span class="label label-number">#37</span></td>--}}
+                                                        {{--<td class="truncate"><a href="#">Ticket lorem ipsum sodales sagittis</a></td>--}}
+                                                        {{--<td><span class="label label-normal">Normal</span></td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td><span class="label label-number">#212</span></td>--}}
+                                                        {{--<td class="truncate"><a href="#">Refactor fringilla mauris code</a></td>--}}
+                                                        {{--<td><span class="label label-low">Low</span></td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td><span class="label label-number">#36</span></td>--}}
+                                                        {{--<td class="truncate"><a href="#">UX workshop for sodales sagittis</a></td>--}}
+                                                        {{--<td><span class="label label-high">High</span></td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td><span class="label label-number">#16</span></td>--}}
+                                                        {{--<td class="truncate"><a href="#">Build form modules</a></td>--}}
+                                                        {{--<td><span class="label label-critical">Critical</span></td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--<tr>--}}
+                                                        {{--<td><span class="label label-number">#23</span></td>--}}
+                                                        {{--<td class="truncate"><a href="#">Lorem ipsum dolor sit amet adipiscing elit</a></td>--}}
+                                                        {{--<td><span class="label label-success">In Progress</span></td>--}}
+                                                    {{--</tr>--}}
+                                                    {{--</tbody>--}}
+                                                {{--</table>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+
+                                    {{--</div>--}}
+
+                                {{--</div>--}}
+
+                                {{--<div class="module-footer text-center">--}}
+                                    {{--<ul class="shortcuts list-inline">--}}
+                                        {{--<li class="first"><a href="tickets.html">View all tickets (639)</a></li>--}}
+                                        {{--<li><a href="tickets.html">My tickets (18)</a></li>--}}
+                                        {{--<li><a href="#">Add Ticket</a></li>--}}
+                                    {{--</ul>--}}
+                                {{--</div>--}}
+
+                            {{--</section>--}}
+
+                        {{--</div>--}}
+
+                    {{--</div>--}}
+
+
+                    {{--<div class="module-wrapper">--}}
+                        {{--<section class="module module-projects-invoices">--}}
+                            {{--<div class="module-inner">--}}
+                                {{--<div class="module-heading">--}}
+                                    {{--<h3 class="module-title">New Invoices</h3>--}}
+                                    {{--<ul class="actions list-inline">--}}
+                                        {{--<li class="more-link">--}}
+                                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>--}}
+                                            {{--<ul class="dropdown-menu">--}}
+                                                {{--<li>--}}
+                                                    {{--<span class="arrow"></span>--}}
+                                                    {{--<a href="#">Action 1</a>--}}
+                                                {{--</li>--}}
+                                                {{--<li><a href="#">Action 2</a></li>--}}
+                                                {{--<li><a href="#">Action 3</a></li>--}}
+                                                {{--<li role="separator" class="divider"></li>--}}
+                                                {{--<li><a href="#">Separated link</a></li>--}}
+                                            {{--</ul>--}}
+                                        {{--</li>--}}
+                                        {{--<li><a class="collapse-module" data-toggle="collapse" href="#content-invoices" aria-expanded="false" aria-controls="content-invoices"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>--}}
+                                        {{--<li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>--}}
+                                    {{--</ul>--}}
+
+                                {{--</div>--}}
+
+                                {{--<div class="module-content collapse in" id="content-invoices">--}}
+                                    {{--<div class="module-content-inner">--}}
+                                        {{--<div class="table-responsive">--}}
+                                            {{--<table class="table table-simple table-striped">--}}
+                                                {{--<thead>--}}
+                                                {{--<tr>--}}
+                                                    {{--<th class="number">Invoice No.</th>--}}
+                                                    {{--<th>Due Date</th>--}}
+                                                    {{--<th>Total</th>--}}
+                                                {{--</tr>--}}
+                                                {{--</thead>--}}
+                                                {{--<tbody>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>--}}
+                                                    {{--<td class="date truncate"><a href="invoice.html">Sep 23, 2015</a></td>--}}
+                                                    {{--<td class="total"><span class="currency hidden-xs">USD</span> <a href="invoice.html">$32,000</a></td>--}}
+                                                {{--</tr>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>--}}
+                                                    {{--<td class="date truncate"><a href="invoice.html">Jun 18, 2015</a></td>--}}
+                                                    {{--<td class="total"><span class="currency hidden-xs">EUR</span> <a href="invoice.html">€16,000</a></td>--}}
+                                                {{--</tr>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>--}}
+                                                    {{--<td class="date truncate"><a href="invoice.html">May 14, 2015</a></td>--}}
+                                                    {{--<td class="total"><span class="currency hidden-xs">USD</span> <a href="invoice.html">$5,500</a></td>--}}
+                                                {{--</tr>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>--}}
+                                                    {{--<td class="date truncate"><a href="#">Apr 07, 2015</a></td>--}}
+                                                    {{--<td class="total"><span class="currency hidden-xs">GBP</span> <a href="invoice.html">£18,400</a></td>--}}
+                                                {{--</tr>--}}
+                                                {{--<tr>--}}
+                                                    {{--<td><a href="invoice.html" class="label label-number-alt">IVN0653</a></td>--}}
+                                                    {{--<td class="date truncate"><a href="invoice.html">Mar 23, 2015</a></td>--}}
+                                                    {{--<td class="total"><span class="currency hidden-xs">USD</span> <a href="invoice.html">$14,200</a></td>--}}
+                                                {{--</tr>--}}
+                                                {{--</tbody>--}}
+                                            {{--</table>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
+
+                                {{--</div>--}}
+
+                            {{--</div>--}}
+
+                        {{--</section>--}}
+
+                    {{--</div>--}}
+
+                    {{--<div class="module-wrapper">--}}
+                        {{--<section class="module module-map">--}}
+                            {{--<div class="module-inner">--}}
+                                {{--<div class="module-heading">--}}
+                                    {{--<h3 class="module-title">Client Locations</h3>--}}
+                                    {{--<ul class="actions list-inline">--}}
+                                        {{--<li class="more-link">--}}
+                                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>--}}
+                                            {{--<ul class="dropdown-menu">--}}
+                                                {{--<li>--}}
+                                                    {{--<span class="arrow"></span>--}}
+                                                    {{--<a href="#">Action 1</a>--}}
+                                                {{--</li>--}}
+                                                {{--<li><a href="#">Action 2</a></li>--}}
+                                                {{--<li><a href="#">Action 3</a></li>--}}
+                                                {{--<li role="separator" class="divider"></li>--}}
+                                                {{--<li><a href="#">Separated link</a></li>--}}
+                                            {{--</ul>--}}
+                                        {{--</li>--}}
+                                        {{--<li><a class="collapse-module" data-toggle="collapse" href="#content-map" aria-expanded="false" aria-controls="content-map"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>--}}
+                                        {{--<li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>--}}
+                                    {{--</ul>--}}
+
+                                {{--</div>--}}
+
+                                {{--<div class="module-content collapse in" id="content-map">--}}
+                                    {{--<div class="module-content-inner">--}}
+                                        {{--<div id="world-map" class="world-map"></div>--}}
+                                    {{--</div>--}}
+
+                                {{--</div>--}}
+
+                            {{--</div>--}}
+
+                        {{--</section>--}}
+
+                    {{--</div>--}}
+
+                {{--</div>--}}
+
+                {{--<div class="col-wrapper col-lg-4 col-md-5 col-sm-12 col-xs-12">--}}
+                    {{--<div class="module-wrapper">--}}
+                        {{--<section class="module module-projects-sales">--}}
+                            {{--<div class="module-inner">--}}
+                                {{--<div class="module-heading">--}}
+                                    {{--<h3 class="module-title">Sales</h3>--}}
+                                    {{--<ul class="actions list-inline">--}}
+                                        {{--<li class="more-link">--}}
+                                            {{--<a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">More</a>--}}
+                                            {{--<ul class="dropdown-menu">--}}
+                                                {{--<li>--}}
+                                                    {{--<span class="arrow"></span>--}}
+                                                    {{--<a href="#">Action 1</a>--}}
+                                                {{--</li>--}}
+                                                {{--<li><a href="#">Action 2</a></li>--}}
+                                                {{--<li><a href="#">Action 3</a></li>--}}
+                                                {{--<li role="separator" class="divider"></li>--}}
+                                                {{--<li><a href="#">Separated link</a></li>--}}
+                                            {{--</ul>--}}
+                                        {{--</li>--}}
+                                        {{--<li><a class="collapse-module" data-toggle="collapse" href="#content-sales" aria-expanded="false" aria-controls="content-sales"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>--}}
+                                        {{--<li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>--}}
+                                    {{--</ul>--}}
+
+                                {{--</div>--}}
+
+                                {{--<div class="module-content collapse in" id="content-sales">--}}
+                                    {{--<div class="module-content-inner">--}}
+                                        {{--<div class="sales-info">--}}
+                                            {{--<h3 class="figure-total text-highlight">$64,456<span class="meta">(Current Month)</span></h3>--}}
+                                            {{--<ul class="list-unstyled list-currency">--}}
+                                                {{--<li class="dollars">--}}
+                                                    {{--<img class="flag" src="{{asset('storage/assets/images/flags/US.png')}}" alt="" />--}}
+                                                    {{--<span class="progress-container">--}}
+														{{--<span class="progress-pc">82%</span>--}}
+												{{--<span class="progress">--}}
+															{{--<span class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: 82%">--}}
+
+															{{--</span>--}}
+												{{--</span>--}}
+
+												{{--</span>--}}
+
+                                                    {{--<span class="figure-sub">$52,854</span>--}}
+                                                {{--</li>--}}
+                                                {{--<li class="pounds">--}}
+                                                    {{--<img class="flag" src="{{asset('storage/assets/images/flags/UK.png')}}" alt="" />--}}
+                                                    {{--<span class="progress-container">--}}
+														{{--<span class="progress-pc">6%</span>--}}
+												{{--<span class="progress">--}}
+															{{--<span class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="6" aria-valuemin="0" aria-valuemax="100" style="width: 6%">--}}
+
+															{{--</span>--}}
+												{{--</span>--}}
+
+												{{--</span>--}}
+
+                                                    {{--<span class="figure-sub">£2,320</span>--}}
+                                                {{--</li>--}}
+                                                {{--<li class="euros">--}}
+                                                    {{--<img class="flag" src="{{asset('storage/assets/images/flags/EU.png')}}" alt="" />--}}
+                                                    {{--<span class="progress-container">--}}
+														{{--<span class="progress-pc">12%</span>--}}
+												{{--<span class="progress">--}}
+															{{--<span class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="12" aria-valuemin="0" aria-valuemax="100" style="width: 12%">--}}
+
+															{{--</span>--}}
+												{{--</span>--}}
+
+												{{--</span>--}}
+
+                                                    {{--<span class="figure-sub">€4,321</span>--}}
+                                                {{--</li>--}}
+                                            {{--</ul>--}}
+
+                                            {{--<div class="chart-container">--}}
+                                                {{--<div id="sales-chart" class="flot-chart"></div>--}}
+                                            {{--</div>--}}
+
+                                        {{--</div>--}}
+
+                                    {{--</div>--}}
+                                {{--</div>--}}
+
+                            {{--</div>--}}
+
+                        {{--</section>--}}
+
+                    {{--</div>--}}
 
 
 

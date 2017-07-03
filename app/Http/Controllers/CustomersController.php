@@ -44,10 +44,6 @@ class CustomersController extends Controller
         ]);
     }
 
-    public function create(Request $request){
-        $this->validator($request->all())->validate();
-    }
-
 
     /**
      * Show the all customers falls under current user scope.
@@ -56,7 +52,7 @@ class CustomersController extends Controller
      */
     public function index(){
 
-        $this->authorize('index');
+//        $this->authorize('index');
 
         return view('customer.index-datatable');
     }
