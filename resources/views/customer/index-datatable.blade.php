@@ -103,9 +103,49 @@
 
         });
 
+
+
+
+
         //creating customer, editing customer and deleting customer
 
         $(document).ready(function(){
+
+            //start select 2 form for user
+            $user_select=jQuery("#userId").select2({
+                placeholder: "Select a User",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('list-users')}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                        };
+                    },
+                    processResults : function (data){
+                        if(data.total_count < 1){
+                            return {results: [{
+                                id: -1,
+                                text: "Create New"
+                            }]};
+
+                        }
+
+                        return {
+                            results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                        }
+                    },
+
+                    cache: true
+                }
+            });
+
+            //end select 2 form for user
+
+
+
             jQuery("#new-customer-btn").click(function (){
                 jQuery("#customerForm")[0].reset();
                 jQuery(".customerModal .modal-title").html('Add New Customer');
@@ -169,6 +209,7 @@
 
                 var customer = {
                     customerId : $('#customerId').val(),
+                    userId : $('#userId').val(),
                     firstName : $('#firstName').val(),
                     lastName : $('#lastName').val(),
                     customerTitle : $('#customerTitle').val(),
@@ -286,6 +327,7 @@
                     $('#customerEmail').val(data.customer.email);
                     $('#customerPhone').val(data.customer.phone_no);
                     $('#customerPriority').val(data.customer.priority);
+                    jQuery("#userId").html("<option selected value='"+data.user.user_id+"'>"+data.user.name+"</option>")
 
                     if(data.company){
                         jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")

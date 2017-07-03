@@ -6,6 +6,7 @@ use App\Address;
 use App\Customer;
 
 use App\Customer_company;
+use App\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -96,7 +97,7 @@ class CustomersController extends Controller
             $customer->email = $request->customer['customerEmail'];
             $customer->phone_no = $request->customer['customerPhone'];
             $customer->priority = $request->customer['customerPriority'];
-            $customer->user_id = Auth::user()->id;
+            $customer->user_id = $request->customer['userId'];
 
 
             $address = new Address();
@@ -140,12 +141,16 @@ class CustomersController extends Controller
     public function getCustomer(Request $request){
 
         $customer = Customer::findOrFail($request->id);
+        $user = User::findOrFail($customer->user_id);
+
 
         if($customer->customer_company_id){
             $company = Customer_company::findOrFail($customer->customer_company_id);
             $address = $customer->addresses;
+
             return response()->json([
                 'customer' => $customer,
+                'user' => $user,
                 'company' => $company,
                 'address' => $address,
             ], 201);
@@ -180,6 +185,7 @@ class CustomersController extends Controller
             $customer->email = $request->customer['customerEmail'];
             $customer->phone_no = $request->customer['customerPhone'];
             $customer->priority = $request->customer['customerPriority'];
+            $customer->user_id = $request->customer['userId'];;
 
             $address->street_address_1 = $request->company['streetAddress_1'];
             $address->street_address_2 = $request->company['streetAddress_2'];
