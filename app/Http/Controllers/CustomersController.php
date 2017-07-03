@@ -7,6 +7,7 @@ use App\Customer;
 
 use App\Customer_company;
 use App\User;
+use App\User_profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -60,7 +61,9 @@ class CustomersController extends Controller
     }
 
     public function getCustomersAjax(){
-        return Datatables::of(Customer::select('id', 'first_name', 'last_name' ,'email', 'phone_no'))
+        //return Customer::with('user')->get();
+
+        return Datatables::of(Customer::with('user'))
             ->addColumn('action',
                 function ($customer){
                     return
@@ -74,6 +77,11 @@ class CustomersController extends Controller
                 function ($customer){
                     return '<a href="#view/'.$customer->id.'" >'.implode(', ', [$customer->last_name, $customer->first_name] ).' </a>';
                 })
+            ->addColumn('user',
+                function ($customer){
+                    $user_profile = User_profile::findOrFail($customer->user->id);
+                    return '<a href="#view/'.$customer->user->id.'" >'.$user_profile->initial .' </a>';
+                })
             ->addColumn('email',
                 function ($customer){
                     return '<a href="mailto:'.$customer->email.'" >'.$customer->email.' </a>';
@@ -83,7 +91,7 @@ class CustomersController extends Controller
                     return '<a href="tel:'.$customer->phone_no.'" >'.$customer->phone_no.' </a>';
                 })
             ->removeColumn('phone_no')
-            ->rawColumns(['name', 'email', 'phone', 'action'])
+            ->rawColumns(['name','user','email', 'phone', 'action'])
             ->make(true);
     }
 

@@ -36,6 +36,7 @@
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Name</th>
+                                                <th>User</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>Actions</th>
@@ -93,6 +94,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name', searchable: false},
+                    { data: 'user', name: 'user', searchable: false},
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone_no' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
@@ -430,6 +432,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name', searchable: false},
+                    { data: 'user', name: 'user', searchable: false},
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone_no' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
