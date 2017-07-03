@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class Policy extends Model
 {
     public function users(){
-        return $this->belongsToMany('App\User', 'users_policies', 'policy_id', 'user_id');
+        return $this->belongsToMany('App\Role', 'roles_policies', 'policy_id', 'role_id');
     }
 }

@@ -22,6 +22,12 @@ class PoliciesSeeder extends Seeder
             ],
             'team'=>[
                 'create','view','list','edit','delete','*'
+            ],
+            'task'=>[
+                'create','view','list','edit','delete','*'
+            ],
+            'appointment'=>[
+                'create','view','list','edit','delete','*'
             ]
 
         ];

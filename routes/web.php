@@ -20,12 +20,13 @@ Route::post('/user/create', 'UsersController@createUser')->name('create-user');
 Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-edit')->middleware('can:update,user');
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update')->middleware('can:update,user');
 
-Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
-Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
+Route::get('/customers', 'CustomersController@index')->name('customer-index');//->middleware('can:index,App\Customer');
+Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data');//->middleware('can:index,App\Customer');
 Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer');
 Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
 Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
 Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
+Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
 
 
 
@@ -67,6 +68,8 @@ Route::get('/ajax/companies/appointments/{company}', 'CompanyController@getCompa
 Route::get('/ajax/company/data/{company}', 'CompanyController@getCompanyAjax')->name('get-company');
 Route::post('/ajax/companies/create', 'CompanyController@create')->name('create-company');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/list', 'CompanyController@listAll')->name('list-companies');
+Route::post('/companies/bulk/delete', 'CompanyController@bulkDeleteCompany')->name('bulk.delete.company.data');
+
 
 Route::get('/calendar', 'CalendarController@index')->name('calendar');
 Route::get('/ajax/calendar/events', 'CalendarController@getAjaxEvents')->name('ajax-get-events');
