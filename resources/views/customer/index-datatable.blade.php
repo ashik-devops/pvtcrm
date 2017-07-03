@@ -50,6 +50,7 @@
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Name</th>
+                                                <th>User</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>Actions</th>
@@ -98,7 +99,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
-
+        jQuery('document').ready(function() {
             var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
                 dom: 'Bfrtip',
@@ -111,6 +112,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name', searchable: false},
+                    { data: 'user', name: 'user', searchable: false},
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone_no' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
@@ -142,7 +144,7 @@
             //bulk action
 
             var bulk_action=jQuery("#bulk_action").select2();
-            
+
             bulk_action.on('select2:select', function (e) {
                 var action = e.params.data.id;
                 if(action != ''){
@@ -156,6 +158,10 @@
 
 
             });
+
+
+
+
 
         //creating customer, editing customer and deleting customer
 
@@ -223,6 +229,7 @@
 
                 var customer = {
                     customerId : $('#customerId').val(),
+                    userId : $('#userId').val(),
                     firstName : $('#firstName').val(),
                     lastName : $('#lastName').val(),
                     customerTitle : $('#customerTitle').val(),
@@ -340,6 +347,7 @@
                     $('#customerEmail').val(data.customer.email);
                     $('#customerPhone').val(data.customer.phone_no);
                     $('#customerPriority').val(data.customer.priority);
+                    jQuery("#userId").html("<option selected value='"+data.user.user_id+"'>"+data.user.name+"</option>")
 
                     if(data.company){
                         jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")
@@ -474,6 +482,24 @@
 
 
         function get_all_customer_data(){
+            $("#customers-table").dataTable().fnDestroy();
+            var datatable = jQuery('#customers-table').DataTable({
+//                responsive: false,
+                select: true,
+                processing: true,
+                serverSide: true,
+                ajax: '{!! route('customers-data') !!}',
+                columns: [
+                    { data: 'id', name: 'id' },
+                    { data: 'name', name: 'name', searchable: false},
+                    { data: 'user', name: 'user', searchable: false},
+                    { data: 'email', name: 'email' },
+                    { data: 'phone', name: 'phone_no' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'first_name', name: 'first_name', searchable: true, visible:false},
+                    { data: 'last_name', name: 'last_name', searchable: true, visible:false},
+                ]
+            });
             datatable.ajax.reload(null, false);
         }
 
