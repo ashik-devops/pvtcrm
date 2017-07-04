@@ -40,7 +40,7 @@ class AppointmentsController extends Controller
         if($isUpdateRequest){
             $rules=array_merge($rules,[
             'appointmentId'=>'required|integer|exists:appointments,id',
-            'appointmentCustomerId'=>'required|integer,exists:customers,id'
+            'appointmentCustomerId'=>'required,exists:customers,id'
             ]);
         }
 
@@ -203,8 +203,10 @@ class AppointmentsController extends Controller
     }
 
    public function updateAppointment(Request $request){
-       $this->validator($request->appointment, true)->validate();
 
+
+
+       $this->validator($request->appointment, true)->validate();
 
         $result=[
             'result'=>'Error',

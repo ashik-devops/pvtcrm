@@ -80,7 +80,6 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         ),
         'F' => 
         array (
-            'Fxp\\Composer\\AssetPlugin\\' => 25,
             'Faker\\' => 6,
         ),
         'D' => 
@@ -210,10 +209,6 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'Illuminate\\' => 
         array (
             0 => __DIR__ . '/..' . '/laravel/framework/src/Illuminate',
-        ),
-        'Fxp\\Composer\\AssetPlugin\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/fxp/composer-asset-plugin',
         ),
         'Faker\\' => 
         array (

@@ -157,7 +157,9 @@ class TasksController extends Controller
     }
 
     public function editTask(Request $request){
-        $task = Task::with('customer', 'customer.company')->findOrFail($request->id);
+
+
+        $task = Task::with('customer')->findOrFail($request->id);
 
 
         return response()->json([
@@ -166,6 +168,7 @@ class TasksController extends Controller
     }
 
     public function updateTask(Request $request){
+
         $task = Task::findOrFail($request->task['taskId']);
 
 

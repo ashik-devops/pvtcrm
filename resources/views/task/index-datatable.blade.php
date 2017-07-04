@@ -277,6 +277,7 @@
             $('#modal-new-task-label').text('Edit Task');
 
             $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                console.log(data.task);
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);

@@ -28,27 +28,27 @@ Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.custom
 Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
 Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
 Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
-Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
+Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options');//->middleware('can:index,App\Customer');
 
 
 
-Route::get('/tasks', 'TasksController@index')->name('task-index')->middleware('can:index,App\Task');
-Route::get('/ajax/tasks/data', 'TasksController@getTasksAjax')->name('task-data')->middleware('can:index,App\Task');
+Route::get('/tasks', 'TasksController@index')->name('task-index');//->middleware('can:index,App\Task');
+Route::get('/ajax/tasks/data', 'TasksController@getTasksAjax')->name('task-data');//->middleware('can:index,App\Task');
 
-Route::get('/ajax/tasks/data-due', 'TasksController@getTasksAjaxDue')->name('task-data-with-due')->middleware('can:index,App\Task');;
+Route::get('/ajax/tasks/data-due', 'TasksController@getTasksAjaxDue')->name('task-data-with-due');//->middleware('can:index,App\Task');
 
-Route::post('/task/create', 'TasksController@createTask')->name('create.task')->middleware('can:create,App\Task');;
+Route::post('/task/create', 'TasksController@createTask')->name('create.task');//->middleware('can:create,App\Task');
 Route::get('/task/edit', 'TasksController@editTask')->name('edit.task.data');
 Route::post('/task/update', 'TasksController@updateTask')->name('update.task');
 Route::post('/task/delete', 'TasksController@deleteTask')->name('delete.task');
 
 
-Route::get('/appointments', 'AppointmentsController@index')->name('appointment-index')->middleware('can:index,App\Appointment');
-Route::get('/ajax/appointment/data', 'AppointmentsController@getAppointmentsAjax')->name('appointment-data')->middleware('can:index,App\Appointment');
+Route::get('/appointments', 'AppointmentsController@index')->name('appointment-index');//->middleware('can:index,App\Appointment');
+Route::get('/ajax/appointment/data', 'AppointmentsController@getAppointmentsAjax')->name('appointment-data');//->middleware('can:index,App\Appointment');
 
-Route::get('/ajax/appointment/data-current-date', 'AppointmentsController@getAppointmentsAjaxCurrentDate')->name('appointment-data-current-date')->middleware('can:index,App\Appointment');
+Route::get('/ajax/appointment/data-current-date', 'AppointmentsController@getAppointmentsAjaxCurrentDate')->name('appointment-data-current-date');//->middleware('can:index,App\Appointment');
 
-Route::post('/appointment/create', 'AppointmentsController@createAppointment')->name('create.appointment')->middleware('can:create,App\Appointment');
+Route::post('/appointment/create', 'AppointmentsController@createAppointment')->name('create.appointment');//->middleware('can:create,App\Appointment');
 Route::get('/appointment/edit', 'AppointmentsController@editAppointment')->name('edit.appointment');
 Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->name('update.appointment');
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
