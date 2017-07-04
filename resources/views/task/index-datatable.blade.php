@@ -148,7 +148,7 @@
                 }
             });
             jQuery('.modal').on('shown.bs.modal', function () {
-                    $('#taskDueDateTimePicker').datetimepicker();
+                    $('#taskDueDateTimePicker').datetimepicker({'showTimepicker': false});
                 updateDates();
             });
 
