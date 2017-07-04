@@ -53,11 +53,11 @@
 
     <div class="form-group {{ $errors->has('priority') ? ' has-error' : '' }}" id="priority">
         <label class="sr-only">Priority</label>
-        <select name="priority" id="customerPriority" class="form-control">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>Critical</option>
-            <option>High</option>
+        <select name="priority" id="customerPriority" class="form-control" style="width: 100%">
+            <option value="Low">Low</option>
+            <option value="Medium">Medium</option>
+            <option value="High">High</option>
+            <option value="Critical">Critical</option>
         </select>
     </div>
 
