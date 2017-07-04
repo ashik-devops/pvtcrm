@@ -22,9 +22,10 @@ class AppointmentPolicy
     public function index(User $user)
     {
         if($this->checkAdmin($user)){
+            dd('Admin');
             return true;
         }
-        return !is_null($user->policies()->where('scope', 'customer')
+        return !is_null($user->role->policies()->where('scope', 'customer')
             ->where('action','list')->first());
     }
 
@@ -42,7 +43,7 @@ class AppointmentPolicy
             return true;
         }
 
-        return $user->id === $appointment->customer->user->id && !is_null($user->role->policies()->where('scope',  'appointment')
+        return !is_null($user->role->policies()->where('scope',  'appointment')
                 ->where('action','view')->first());
 
     }
@@ -74,7 +75,7 @@ class AppointmentPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $appointment->customer->user->id && !is_null($user->role->policies()->where('scope',  'customer')
+        return !is_null($user->role->policies()->where('scope',  'customer')
                 ->where('action','edit')->first());
     }
 
@@ -90,7 +91,7 @@ class AppointmentPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $appointment->customer->user->id && !is_null($user->role->policies()->where('scope',  'customer')
+        return !is_null($user->role->policies()->where('scope',  'customer')
                 ->where('action','delete')->first()->id);
     }
 
