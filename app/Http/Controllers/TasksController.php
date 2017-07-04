@@ -162,7 +162,7 @@ class TasksController extends Controller
 
         return response()->json([
             'task' => $task,
-        ], 201);
+        ], 200);
     }
 
     public function updateTask(Request $request){

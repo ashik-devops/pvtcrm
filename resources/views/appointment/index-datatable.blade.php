@@ -215,7 +215,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#appointmentForm')[0].reset();
+                        reset_form($('#appointmentForm')[0]);
                         $('#appointment-modal').modal('hide');
                         get_all_appointment_data();
                         $.notify(response.message, "success");
@@ -243,7 +243,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#appointmentForm')[0].reset();
+                        reset_form($('#appointmentForm')[0]);
                         $('#appointment_id').val('');
                         $('#appointment-modal').modal('hide');
                         get_all_appointment_data();
@@ -274,6 +274,15 @@
                     showParselyError(key, data[0]);
                 });
             }
+
+        }
+
+        function reset_form(form_el) {
+            form_el.reset();
+            min_date = moment();
+            max_date = moment();
+            $('#'+inputMap.appointmentId).val('');
+            customer_select.val('').trigger('change');
 
         }
         function showParselyError(field, msg){

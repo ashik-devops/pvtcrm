@@ -19,7 +19,7 @@
         <div class="container-fluid">
             <h2 class="view-title">Tasks</h2>
             <div class="actions">
-                <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#task-modal"><i class="fa fa-plus"></i> New Task</button>
+                <button id="new-task-btn" class="btn btn-success" data-toggle="modal" data-target="#task-modal"><i class="fa fa-plus"></i> New Task</button>
             </div>
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -91,7 +91,17 @@
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
-        jQuery('document').ready(function() {
+        var inputMap={
+            taskId : 'task_id',
+            taskCustomerId : 'taskCustomerId',
+            taskTitle : 'taskTitle',
+            taskDescription : 'taskDescription',
+            taskDueDate : 'taskDueDate',
+            taskStatus : 'taskStatus',
+            taskPriority : 'taskPriority',
+        };
+
+        var task_date=moment();
             var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
                 select: true,
@@ -114,7 +124,7 @@
                 ]
             });
 
-            jQuery("#taskCustomerId").select2({
+           var customer_select= jQuery("#taskCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -127,7 +137,6 @@
                         };
                     },
                     processResults : function (data){
-                        console.log(data);
                         return {
                             results: data.customers
                         }
@@ -137,15 +146,29 @@
                 }
             });
             jQuery('.modal').on('shown.bs.modal', function () {
-
-                jQuery(function () {
                     $('#taskDueDateTimePicker').datetimepicker();
-                });
-
+                updateDates();
             });
 
+        function reset_form(form_el) {
+            form_el.reset();
+            task_date=moment();
+            $('#'+inputMap.taskId).val('');
+            customer_select.val('').trigger('change');
 
-        });
+        }
+        jQuery('#new-task-btn').click(function () {
+                console.log($('#'+inputMap.taskId).val() != '');
+               if($('#'+inputMap.taskId).val() != ''){
+                   reset_form($("#taskForm")[0]);
+               }
+            });
+
+        function updateDates(){
+            $('#taskDueDateTimePicker').data("DateTimePicker").date(task_date);
+        }
+
+
 
         //creating task
         $('#task_modal_button').val('Add Task');
@@ -155,13 +178,13 @@
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
             var task = {
-                taskId : $('#task_id').val(),
-                taskCustomerId : $('#taskCustomerId').val(),
-                taskTitle : $('#taskTitle').val(),
-                taskDescription : $('#taskDescription').val(),
-                taskDueDate : $('#taskDueDate').val(),
-                taskStatus : $('#taskStatus').val(),
-                taskPriority : $('#taskPriority').val(),
+                taskId : $('#'+inputMap.taskId).val(),
+                taskCustomerId : $('#'+inputMap.taskCustomerId).val(),
+                taskTitle : $('#'+inputMap.taskTitle).val(),
+                taskDescription : $('#'+inputMap.taskDescription).val(),
+                taskDueDate : $('#'+inputMap.taskDueDate).val(),
+                taskStatus : $('#'+inputMap.taskStatus).val(),
+                taskPriority : $('#'+inputMap.taskPriority).val(),
 
             };
             var data = {
@@ -180,7 +203,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#taskForm')[0].reset();
+                        reset_form($('#taskForm')[0]);
                         $('#task-modal').modal('hide');
                         get_all_task_data();
                         $.notify(response.message, "success");
@@ -188,8 +211,10 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
-
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
@@ -204,7 +229,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#taskForm')[0].reset();
+                        reset_form($('#taskForm')[0]);
                         $('#task_id').val('');
                         $('#task-modal').modal('hide');
                         get_all_task_data();
@@ -214,14 +239,37 @@
                         jQuery.notify(response.message, "error");
                     }
                 })
-
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
 
             }
         });
+        function handle_error(xhr) {
 
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
+                });
+            }
+
+        }
+        function showParselyError(field, msg){
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
+
+        jQuery('.modal').on('shown.bs.modal', function () {
+
+
+            $('#taskDueDate').datetimepicker({date : task_date});
+
+
+        });
         function editTask(id){
             $('#task_modal_button').val('Update Task');
             $('#modal-new-task-label').text('Edit Task');
@@ -233,10 +281,10 @@
                     $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
-                    jQuery('#taskDueDate').datepicker('setDate', new Date(data.task.due_date));
+                    task_date = moment(data.task.due_date);
                     $('#taskPriority').val(data.task.priority);
                     $('#taskStatus').val(data.task.status);
-
+                    updateDates();
                 }
 
             });
@@ -287,24 +335,7 @@
         }
 
         function get_all_task_data(){
-            $("#customers-table").dataTable().fnDestroy();
-            var datatable = jQuery('#customers-table').DataTable({
-//                responsive: false,
-                select: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('task-data') !!}',
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'title', name: 'title'},
-                    { data: 'customer', name: 'customer'},
-                    { data: 'description', name: 'description'},
-                    { data: 'due_date', name: 'due_date' },
-                    { data: 'status', name: 'status'},
-                    { data: 'priority', name: 'priority'},
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
-                ]
-            });
+            datatable.ajax.reload();
         }
 
     </script>
