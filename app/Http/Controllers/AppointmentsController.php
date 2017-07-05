@@ -35,12 +35,12 @@ class AppointmentsController extends Controller
             'appointmentStatus' => 'required|string',
             'startTime'=>'required|date',
             'endTime'=>'required|date',
+            'aptCustomerId'=>'required|integer|exists:customers,id'
         ];
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
             'appointmentId'=>'required|integer|exists:appointments,id',
-            'aptCustomerId'=>'required|integer|exists:customers,id'
             ]);
         }
 
@@ -58,7 +58,7 @@ class AppointmentsController extends Controller
 
     public function getAppointmentsAjax(){
 
-        //return Datatables::of(Appointment::with('customer')->select('appointments.*'))
+
         return Datatables::of(Appointment::with('customer','customer.company'))
             ->addColumn('action',
                 function ($appointment){
@@ -203,8 +203,6 @@ class AppointmentsController extends Controller
     }
 
    public function updateAppointment(Request $request){
-
-
 
        $this->validator($request->appointment, true)->validate();
 

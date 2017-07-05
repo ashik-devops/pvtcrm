@@ -5,6 +5,7 @@
     <link rel="stylesheet" href="{{asset('storage/assets/css/dashboard-projects.css')}}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
 @endsection
 
 @section('content')
@@ -1003,7 +1004,7 @@
                 taskTitle : $('#'+taskInputMap.taskTitle).val(),
                 taskDescription : $('#'+taskInputMap.taskDescription).val(),
                 taskDueDate : $('#'+taskInputMap.taskDueDate).val(),
-                taskStatus : $('#'+inputaskInputMaptMap.taskStatus).val(),
+                taskStatus : $('#'+taskInputMap.taskStatus).val(),
                 taskPriority : $('#'+taskInputMap.taskPriority).val(),
 
             };
