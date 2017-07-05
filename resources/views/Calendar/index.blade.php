@@ -62,6 +62,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.4.0/fullcalendar.min.js"></script>
     <script type="text/javascript">
 
+        var min_date = moment();
+        var max_date = moment();
            /* "use strict";
             $("#calendar").fullCalendar({
                 header: {
@@ -139,7 +141,28 @@
                         $('#startTime').datetimepicker({});
                         $('#endTime').datetimepicker({ useCurrent: false});
 
+
+
+                        updateDates();
+
+
                     });
+
+                    $("#startTime").on("dp.change", function (e) {
+                        min_date=e.date;
+                    });
+                    $("#endTime").on("dp.change", function (e) {
+                        max_date=e.date;
+                    });
+
+
+                    function updateDates(){
+                        $('#startTime').data("DateTimePicker").date(min_date);
+                        $('#startTime').data("DateTimePicker").minDate(moment());
+//                $('#startTime').data("DateTimePicker").maxDate(max_date);
+                        $('#endTime').data("DateTimePicker").date(max_date);
+                        $('#endTime').data("DateTimePicker").minDate(min_date);
+                    }
 
                     $('#appointment_modal_button').val('Update Appointment');
                     $('#modal-new-appointment-label').text('Edit Appointment');
@@ -151,6 +174,11 @@
                     jQuery('#appointmentDescription').val(event.description);
                     jQuery('#appointmentStatus').val(event.status);
                     $('#appointment-modal').modal('show');
+
+                    min_date = moment(data.appointment.start_time);
+                    max_date = moment(data.appointment.end_time);
+
+                    updateDates();
                 },
 
 
