@@ -774,9 +774,11 @@
 
         $("#startTime").on("dp.change", function (e) {
             min_date=e.date;
+            updateAppointmentDates();
         });
         $("#endTime").on("dp.change", function (e) {
             max_date=e.date;
+            updateAppointmentDates();
         });
 
         function updateAppointmentDates(){
