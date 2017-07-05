@@ -22,7 +22,6 @@ class AppointmentPolicy
     public function index(User $user)
     {
         if($this->checkAdmin($user)){
-            dd('Admin');
             return true;
         }
         return !is_null($user->role->policies()->where('scope', 'customer')

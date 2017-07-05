@@ -26,21 +26,26 @@ class TasksController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data, $isUpdateRequest=false)
     {
-        return Validator::make($data, [
-            'first_name' => 'required|string|max:32',
-            'last_name' => 'required|string|max:32',
-            'email' => 'required|string|email|max:255|unique',
-            'title'=>'required|string|max:32',
-            'primary_phone_no'=>'required|string|max:32|unique',
-            'street_address_1'=>'required|string',
-            'street_address_2'=>'string|nullable',
-            'city'=>'required|string|max:32',
-            'state'=>'required|string|max:32',
-            'country'=>'required|string|max:32',
-            'zip'=>'required|string|max:8',
-        ]);
+
+
+        $rules=[
+            'taskTitle' => 'required|string',
+            'taskDescription' => 'required|string',
+            'taskStatus' => 'required|string',
+            'taskDueDate'=>'required|date',
+            'taskPriority'=>'required|string',
+            'taskCustomerId'=>'required|integer|exists:customers,id'
+        ];
+
+        if($isUpdateRequest){
+            $rules=array_merge($rules,[
+                'taskId'=>'required|integer|exists:appointments,id',
+            ]);
+        }
+
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -94,7 +99,7 @@ class TasksController extends Controller
 
 
 
-        return Datatables::of(Task::with('customer','customer.company')->where('status','like','Due')->orderBy('created_at','desc'))
+        return Datatables::of(Task::with('customer','customer.company')->where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
 
             ->addColumn('action',
                 function ($task){
@@ -133,6 +138,7 @@ class TasksController extends Controller
     }
 
     public function createTask( Request $request){
+        $this->validator($request->task)->validate();
         $task = new Task();
         $task->title = $request->task['taskTitle'];
         $task->customer_id = $request->task['taskCustomerId'];
@@ -167,30 +173,24 @@ class TasksController extends Controller
     }
 
     public function updateTask(Request $request){
-
+        $this->validator($request->task, true)->validate();
         $task = Task::findOrFail($request->task['taskId']);
+        $task->customer_id = $request->task['taskCustomerId'];
+        $task->title = $request->task['taskTitle'];
+        $task->description = $request->task['taskDescription'];
+        $task->due_date = Carbon::parse($request->task['taskDueDate']);
+        $task->priority= $request->task['taskPriority'];
+        $task->status= $request->task['taskStatus'];
 
+        DB::beginTransaction();
 
+        $task->save();
+        DB::commit();
 
-
-            $task->customer_id = $request->task['taskCustomerId'];
-            $task->title = $request->task['taskTitle'];
-            $task->description = $request->task['taskDescription'];
-            $task->due_date = Carbon::parse($request->task['taskDueDate']);
-            $task->priority= $request->task['taskPriority'];
-            $task->status= $request->task['taskStatus'];
-
-
-
-            DB::beginTransaction();
-
-            $task->save();
-            DB::commit();
-
-            return response()->json([
-                'result'=>'Saved',
-                'message'=>'Task has been updated successfully.'
-            ]);
+        return response()->json([
+            'result'=>'Saved',
+            'message'=>'Task has been updated successfully.'
+        ]);
 
 
     }

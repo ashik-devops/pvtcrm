@@ -47,7 +47,7 @@ Route::post('/task/delete', 'TasksController@deleteTask')->name('delete.task');
 Route::get('/appointments', 'AppointmentsController@index')->name('appointment-index');//->middleware('can:index,App\Appointment');
 Route::get('/ajax/appointment/data', 'AppointmentsController@getAppointmentsAjax')->name('appointment-data');//->middleware('can:index,App\Appointment');
 
-Route::get('/ajax/appointment/data-current-date', 'AppointmentsController@getAppointmentsAjaxCurrentDate')->name('appointment-data-current-date');//->middleware('can:index,App\Appointment');
+Route::get('/ajax/appointment/data-current-date', 'AppointmentsController@getAppointmentsAjaxPending')->name('appointment-data-current-date');//->middleware('can:index,App\Appointment');
 
 Route::post('/appointment/create', 'AppointmentsController@createAppointment')->name('create.appointment');//->middleware('can:create,App\Appointment');
 Route::get('/appointment/edit', 'AppointmentsController@editAppointment')->name('edit.appointment');
