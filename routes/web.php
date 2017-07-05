@@ -40,6 +40,7 @@ Route::get('/ajax/tasks/data-due', 'TasksController@getTasksAjaxDue')->name('tas
 Route::post('/task/create', 'TasksController@createTask')->name('create.task');//->middleware('can:create,App\Task');
 Route::get('/task/edit', 'TasksController@editTask')->name('edit.task.data');
 Route::post('/task/update', 'TasksController@updateTask')->name('update.task');
+Route::post('/task/cancel', 'TasksController@cancelTask')->name('cancel.task');
 Route::post('/task/delete', 'TasksController@deleteTask')->name('delete.task');
 
 

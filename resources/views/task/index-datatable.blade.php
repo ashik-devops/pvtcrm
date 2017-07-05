@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @include('task.create-form')
+@include('task.task-view')
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -76,6 +77,19 @@
                 </div>
                 <div class="modal-body">
                     @yield('task-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal-view" role="dialog" aria-labelledby="task-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-task-label"> Task View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('task-view')
                 </div>
             </div>
         </div>
@@ -337,9 +351,97 @@
                 });
         }
 
+
+        function cancelTask(id) {
+            var _token = $('input[name="_token"]').val();
+            var data = {
+                _token : _token,
+                id: id
+            };
+            swal({
+                    title: "Are you sure?",
+                    text: "This Information will be cancelled!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, cancel it!",
+                    cancelButtonText: "No, Do not cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+
+                        //deletion process is going on....
+
+
+                        $.post("{{ route('cancel.task') }}", data, function(result){
+
+                            if(result.result == 'Success'){
+                                swal("Cancelled!", "Task has been cancelled.", "success");
+                                get_all_task_data();
+                                $.notify('Task Cancelled successfully', "danger");
+                            }
+                            else{
+                                swal("Failed", "Failed to cancel the task", "error");
+                            }
+
+                            if(result.cancel_message != ''){
+                                swal("Already Cancelled!", "You do not need to cancel it.", "success");
+                                //get_all_task_data();
+                                //$.notify('Task Cancelled successfully', "danger");
+                            }
+
+                        });
+                    } else {
+                        swal("Cancelled", "Task is safe :)", "error");
+                    }
+                });
+        }
+
         function get_all_task_data(){
             datatable.ajax.reload();
         }
 
+        function viewTask(id){
+
+            $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                //console.log(data.task);
+                if(data){
+                    $('#task_id').val(data.task.id);
+                    $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name);
+
+                    $('#viewTaskTitle').html(data.task.title);
+                    $('#taskDescription').html(data.task.description);
+                    $('#viewTaskDeadline').html(data.task.due_date);
+
+                    //task_date = moment(data.task.due_date);
+                    $('#viewTaskPriority').html(data.task.priority);
+                    $('#viewTaskStatus').html(data.task.status);
+                    //updateDates();
+                    //var id = data.task.id;
+                    //console.log(id);
+
+                }
+
+            });
+
+            $('#task-modal-view').modal('show');
+            $('#taskIdForView').val(id);
+
+
+
+
+        }
+
+        function editTaskWithClosingView(){
+            var id = $('#taskIdForView').val();
+
+            $('#task-modal-view').modal('hide');
+
+
+            editTask(id);
+
+        }
     </script>
 @endsection

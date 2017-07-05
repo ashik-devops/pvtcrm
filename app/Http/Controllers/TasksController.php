@@ -58,9 +58,8 @@ class TasksController extends Controller
                 function ($task){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#view/'.$task->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
-                        <a href="#quick-view/" data-id="'.$task->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
+                        <a  class="btn btn-xs btn-danger"  onClick="cancelTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Cancel</a>
+                        <a  class="btn btn-xs btn-primary"   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>'
                         ;
                 })
 
@@ -206,6 +205,34 @@ class TasksController extends Controller
             return response()->json([
                 'result'=>'Success',
                 'message'=>'Task has been successfully deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Task not found.'
+        ]);
+
+    }
+
+    public function cancelTask(Request $request){
+        $task = Task::findOrFail($request->id);
+
+        if(!is_null($task)){
+
+            if($task->status == 'Cancelled'){
+                $cancel_message = 'Already Cancelled';
+            }else{
+                $cancel_message = '';
+                $task->status = 'Cancelled';
+                $task->save();
+            }
+
+
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Task has been cancelled.',
+                'cancel_message' => $cancel_message
             ]);
         }
 
