@@ -1,9 +1,11 @@
 @extends('layouts.app')
-
+@include('appointment.create-form')
+@include('task.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/dashboard-projects.css')}}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
 @endsection
 
 @section('content')
@@ -630,15 +632,51 @@
     </div>
 @endsection
 
+@section('modal')
+    <!-- Modal for creating customer -->
+    <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-appointment-label">Add New Appointment</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('appointment-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('task-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+@endsection
+
+
 
 @section('after-footer-script')
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
+
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
-    <script src="{{asset('storage/assets/js/dashboard-projects.js')}}"></script>
+{{--    <script src="{{asset('storage/assets/js/dashboard-projects.js')}}"></script>--}}
 
     <script>
+        task_date=moment();
 
-        var datatable = jQuery('#tasks-table').DataTable({
+        var task_datatable = jQuery('#tasks-table').DataTable({
 //                responsive: false,
             select: true,
             processing: true,
@@ -658,8 +696,16 @@
             ]
         });
 
+        $("#startTime").on("dp.change", function (e) {
+            min_date=e.date;
+            updateAppointmentDates();
+        });
+        $("#endTime").on("dp.change", function (e) {
+            max_date=e.date;
+            updateAppointmentDates();
+        });
 
-        var datatable = jQuery('#appointments-table').DataTable({
+        var appointment_datatable = jQuery('#appointments-table').DataTable({
 //                responsive: false,
             select: true,
             processing: true,
@@ -677,6 +723,435 @@
 
             ]
         });
+
+        jQuery("#aptCustomerId").select2({
+            placeholder: "Select a Customer",
+            allowClear:true,
+            ajax: {
+                url: "{{route('get-customer-options')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+                    //console.log(data);
+                    return {
+                        results: data.customers
+                    }
+                },
+
+                cache: true
+            }
+        });
+
+
+        var min_date = moment();
+        var max_date = moment();
+
+        var aptinputMap={
+            appointmentId : 'appointment_id',
+            aptCustomerId : 'aptCustomerId',
+            appointmentTitle : 'appointmentTitle',
+            appointmentDescription : 'appointmentDescription',
+            appointmentStatus : 'appointmentStatus',
+            startTime : 'startTime',
+            endTime : 'endTime'
+        };
+
+        jQuery('.modal').on('shown.bs.modal', function () {
+
+
+            $('#startTime').datetimepicker({});
+            $('#endTime').datetimepicker({ useCurrent: false});
+
+            updateAppointmentDates();
+
+            $('#taskDueDateTimePicker').datetimepicker();
+            updateTaskDate();
+        });
+
+        $("#startTime").on("dp.change", function (e) {
+            min_date=e.date;
+            updateAppointmentDates();
+        });
+        $("#endTime").on("dp.change", function (e) {
+            max_date=e.date;
+            updateAppointmentDates();
+        });
+
+        function updateAppointmentDates(){
+            $('#startTime').data("DateTimePicker").date(min_date);
+            $('#startTime').data("DateTimePicker").minDate(moment());
+//                $('#startTime').data("DateTimePicker").maxDate(max_date);
+            $('#endTime').data("DateTimePicker").date(max_date);
+            $('#endTime').data("DateTimePicker").minDate(min_date);
+        }
+
+
+        function updateTaskDate(){
+            $('#taskDueDateTimePicker').data("DateTimePicker").date(task_date);
+        }
+
+
+        $('#appointmentForm').on('submit',function(e){
+            e.preventDefault();
+            var _token = $('#appointmentForm input[name="_token"]').val();
+
+
+            var appointment = {
+                appointmentId : $('#'+aptinputMap.appointmentId).val(),
+                aptCustomerId : $('#'+aptinputMap.aptCustomerId).val(),
+                appointmentTitle : $('#'+aptinputMap.appointmentTitle).val(),
+                appointmentDescription : $('#'+aptinputMap.appointmentDescription).val(),
+                appointmentStatus : $('#'+aptinputMap.appointmentStatus).val(),
+                startTime : $('#'+aptinputMap.startTime).val(),
+                endTime : $('#'+aptinputMap.endTime).val()
+            };
+
+
+
+            var data = {
+                _token : _token,
+                appointment: appointment
+            };
+
+
+                var request = jQuery.ajax({
+                    url: "{{ route('update.appointment') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+
+                        reset_appointment_form($('#appointmentForm')[0]);
+                        $('#appointment_id').val('');
+                        $('#appointment-modal').modal('hide');
+                        get_all_appointment_data();
+                        jQuery.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                })
+                request.error(function(xhr){
+                    jQuery.map(jQuery.parseJSON(xhr.responseText),function (data, key){
+                        handle_appointment_error(xhr);
+                    });
+
+
+
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+
+
+        });
+
+        function reset_appointment_form(form_el) {
+            form_el.reset();
+            min_date = moment();
+            max_date = moment();
+            $('#'+aptinputMap.appointmentId).val('');
+            $('#'+aptinputMap.aptCustomerId).val('').trigger('change');
+
+
+        }
+        function showAptParselyError(field, msg){
+            var el = jQuery("#"+aptinputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
+
+
+        function editAppointment(id){
+
+            $('#appointment_modal_button').val('Update Appointment');
+            $('#modal-new-appointment-label').text('Edit Appointment');
+
+            $.get("{{ route('edit.appointment') }}", { id: id} ,function(data){
+                console.log(data.appointment);
+                if(data){
+                    jQuery('#appointment_id').val(data.appointment.id);
+                    jQuery('#appointmentTitle').val(data.appointment.title);
+                    jQuery('#appointmentDescription').val(data.appointment.description);
+                    jQuery('#appointmentStatus').val(data.appointment.status);
+                    //$('#aptCustomerId').val(data.appointment.customer_id);
+                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
+
+                    min_date = moment(data.appointment.start_time);
+                    max_date = moment(data.appointment.end_time);
+
+                    updateAppointmentDates();
+
+                }
+
+            });
+
+            $('#appointment-modal').modal('show');
+        }
+
+
+        function deleteAppointment(id){
+            var _token = $('input[name="_token"]').val();
+            var data = {
+                _token : _token,
+                id: id
+            };
+            swal({
+                    title: "Are you sure?",
+                    text: "This Information will be trashed!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+
+                        //deletion process is going on....
+
+
+                        $.post("{{ route('delete.appointment') }}", data, function(result){
+
+                            if(result.result == 'Success'){
+                                swal("Deleted!", "Appointment has been deleted.", "success");
+                                get_all_appointment_data();
+                                $.notify('Appointment deleted successfully', "danger");
+                            }
+                            else{
+                                swal("Failed", "Failed to delete the Appointment", "error");
+                            }
+
+                        });
+                    } else {
+                        swal("Cancelled", "Appointment is safe :)", "error");
+                    }
+                });
+        }
+
+
+        function get_all_appointment_data(){
+
+            appointment_datatable.ajax.reload(null, false);
+        }
+
+
+
+//For editing task and deleting task
+
+        var taskInputMap={
+            taskId : 'task_id',
+            taskCustomerId : 'taskCustomerId',
+            taskTitle : 'taskTitle',
+            taskDescription : 'taskDescription',
+            taskDueDate : 'taskDueDate',
+            taskStatus : 'taskStatus',
+            taskPriority : 'taskPriority',
+        };
+
+        var task_date=moment();
+
+        var customer_select= jQuery("#taskCustomerId").select2({
+            placeholder: "Select a Customer",
+            allowClear:true,
+            ajax: {
+                url: "{{route('get-customer-options')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+                    return {
+                        results: data.customers
+                    }
+                },
+
+                cache: true
+            }
+        });
+
+        function reset_task_form(form_el) {
+            form_el.reset();
+            task_date=moment();
+            $('#'+taskInputMap.taskId).val('');
+            customer_select.val('').trigger('change');
+
+        }
+
+        //creating task
+        $('#task_modal_button').val('Add Task');
+        $('#modal-new-task-label').text('Add A Task');
+        $('#taskForm').on('submit',function(e){
+            e.preventDefault();
+            var _token = $('#taskForm input[name="_token"]').val();
+            //console.log('hello');
+            var task = {
+                taskId : $('#'+taskInputMap.taskId).val(),
+                taskCustomerId : $('#'+taskInputMap.taskCustomerId).val(),
+                taskTitle : $('#'+taskInputMap.taskTitle).val(),
+                taskDescription : $('#'+taskInputMap.taskDescription).val(),
+                taskDueDate : $('#'+taskInputMap.taskDueDate).val(),
+                taskStatus : $('#'+taskInputMap.taskStatus).val(),
+                taskPriority : $('#'+taskInputMap.taskPriority).val(),
+
+            };
+            var data = {
+                _token : _token,
+                task: task
+            };
+
+            if(task.taskId === ''){
+                //task creating.....
+
+                var request = jQuery.ajax({
+                    url: "{{ route('create.task') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_task_form($('#taskForm')[0]);
+                        $('#task-modal').modal('hide');
+                        get_all_task_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.error(function(xhr){
+                    handle_task_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            } else{
+                //task editing.....
+
+                var request = jQuery.ajax({
+                    url: "{{ route('update.task') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_task_form($('#taskForm')[0]);
+                        $('#task_id').val('');
+                        $('#task-modal').modal('hide');
+                        get_all_task_data();
+                        jQuery.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                })
+                request.error(function(xhr){
+                    handle_task_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+            }
+        });
+        function handle_task_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showTaskParselyError(key, data[0]);
+                });
+            }
+
+        }
+        function showTaskParselyError(field, msg){
+            var el = jQuery("#"+taskInputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
+
+        function editTask(id){
+            $('#task_modal_button').val('Update Task');
+            $('#modal-new-task-label').text('Edit Task');
+
+            $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                console.log(data.task);
+                if(data){
+                    $('#task_id').val(data.task.id);
+                    $('#taskCustomerId').val(data.task.customer_id);
+                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
+                    $('#taskTitle').val(data.task.title);
+                    $('#taskDescription').val(data.task.description);
+                    task_date = moment(data.task.due_date);
+                    $('#taskPriority').val(data.task.priority);
+                    $('#taskStatus').val(data.task.status);
+                    updateTaskDate();
+                }
+
+            });
+
+            $('#task-modal').modal('show');
+        }
+
+
+        function deleteTask(id){
+            var _token = $('input[name="_token"]').val();
+            var data = {
+                _token : _token,
+                id: id
+            };
+            swal({
+                    title: "Are you sure?",
+                    text: "This Information will be trashed!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm){
+                    if (isConfirm) {
+
+                        //deletion process is going on....
+
+
+                        $.post("{{ route('delete.task') }}", data, function(result){
+
+                            if(result.result == 'Success'){
+                                swal("Deleted!", "Company has been deleted.", "success");
+                                get_all_task_data();
+                                $.notify('Task deleted successfully', "danger");
+                            }
+                            else{
+                                swal("Failed", "Failed to delete the company", "error");
+                            }
+
+                        });
+                    } else {
+                        swal("Cancelled", "Company is safe :)", "error");
+                    }
+                });
+        }
+
+        function get_all_task_data(){
+            task_datatable.ajax.reload(null, false);
+        }
 
     </script>
 
