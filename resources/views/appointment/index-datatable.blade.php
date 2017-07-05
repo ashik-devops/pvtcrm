@@ -130,7 +130,7 @@
                 ]
             });
 
-            jQuery("#aptCustomerId").select2({
+            var customer_select=jQuery("#aptCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -168,9 +168,11 @@
 
         $("#startTime").on("dp.change", function (e) {
             min_date=e.date;
+            updateDates();
         });
         $("#endTime").on("dp.change", function (e) {
             max_date=e.date;
+            updateDates();
         });
 
 
@@ -193,7 +195,7 @@
 
             var appointment = {
                 appointmentId : $('#'+inputMap.appointmentId).val(),
-                aptCustomerId : $('#'+inputMap.aptCustomerId).val(),
+                aptCustomerId : parseInt($('#'+inputMap.aptCustomerId).val()),
                 appointmentTitle : $('#'+inputMap.appointmentTitle).val(),
                 appointmentDescription : $('#'+inputMap.appointmentDescription).val(),
                 appointmentStatus : $('#'+inputMap.appointmentStatus).val(),

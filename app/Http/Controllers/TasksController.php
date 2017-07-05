@@ -95,7 +95,7 @@ class TasksController extends Controller
 
 
 
-        return Datatables::of(Task::with('customer','customer.company')->where('status','like','Due')->orderBy('created_at','desc'))
+        return Datatables::of(Task::with('customer','customer.company')->where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
 
             ->addColumn('action',
                 function ($task){

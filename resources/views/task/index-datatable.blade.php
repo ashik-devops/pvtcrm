@@ -338,7 +338,7 @@
         }
 
         function get_all_task_data(){
-            datatable.ajax.reload();
+            datatable.ajax.reload(null, false);
         }
 
     </script>

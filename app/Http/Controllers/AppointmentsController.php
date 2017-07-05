@@ -40,7 +40,7 @@ class AppointmentsController extends Controller
         if($isUpdateRequest){
             $rules=array_merge($rules,[
             'appointmentId'=>'required|integer|exists:appointments,id',
-            'appointmentCustomerId'=>'required,exists:customers,id'
+            'aptCustomerId'=>'required|integer|exists:customers,id'
             ]);
         }
 
@@ -105,10 +105,10 @@ class AppointmentsController extends Controller
 
     }
 
-    public function getAppointmentsAjaxCurrentDate(){
+    public function getAppointmentsAjaxPending(){
 
 
-        return Datatables::of(Appointment::with('customer','customer.company')->whereDate('created_at', DB::raw('CURDATE()')))
+        return Datatables::of(Appointment::with('customer','customer.company')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
             ->addColumn('action',
                 function ($appointment){
                     return
