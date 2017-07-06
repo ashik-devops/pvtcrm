@@ -29,11 +29,7 @@
                     <section class="module module-headings">
                         <div class="module-inner">
                             <div class="module-heading">
-                                <h3 class="module-title">Appointment</h3>
-                                <ul class="actions list-inline">
-                                    <li><a class="collapse-module" data-toggle="collapse" href="#content-1" aria-expanded="false" aria-controls="content-1"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                    <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                </ul>
+                                {{--<h3 class="module-title">Appointment</h3>--}}
 
                             </div>
 
@@ -130,7 +126,11 @@
                 ]
             });
 
+
             var customer_select =  jQuery("#aptCustomerId").select2({
+
+
+
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -168,9 +168,11 @@
 
         $("#startTime").on("dp.change", function (e) {
             min_date=e.date;
+            updateDates();
         });
         $("#endTime").on("dp.change", function (e) {
             max_date=e.date;
+            updateDates();
         });
 
 
@@ -193,7 +195,7 @@
 
             var appointment = {
                 appointmentId : $('#'+inputMap.appointmentId).val(),
-                aptCustomerId : $('#'+inputMap.aptCustomerId).val(),
+                aptCustomerId : parseInt($('#'+inputMap.aptCustomerId).val()),
                 appointmentTitle : $('#'+inputMap.appointmentTitle).val(),
                 appointmentDescription : $('#'+inputMap.appointmentDescription).val(),
                 appointmentStatus : $('#'+inputMap.appointmentStatus).val(),

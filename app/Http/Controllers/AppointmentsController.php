@@ -35,12 +35,12 @@ class AppointmentsController extends Controller
             'appointmentStatus' => 'required|string',
             'startTime'=>'required|date',
             'endTime'=>'required|date',
+            'aptCustomerId'=>'required|integer|exists:customers,id'
         ];
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
             'appointmentId'=>'required|integer|exists:appointments,id',
-            'appointmentCustomerId'=>'required,exists:customers,id'
             ]);
         }
 
@@ -58,16 +58,14 @@ class AppointmentsController extends Controller
 
     public function getAppointmentsAjax(){
 
-        //return Datatables::of(Appointment::with('customer')->select('appointments.*'))
+
         return Datatables::of(Appointment::with('customer','customer.company'))
             ->addColumn('action',
                 function ($appointment){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#view/'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
-                        <a href="#quick-view/" data-id="'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
-                        ;
+                        <a onClick="viewAppointment('.$appointment->id.')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
 
 
@@ -105,18 +103,16 @@ class AppointmentsController extends Controller
 
     }
 
-    public function getAppointmentsAjaxCurrentDate(){
+    public function getAppointmentsAjaxPending(){
 
 
-        return Datatables::of(Appointment::with('customer','customer.company')->whereDate('created_at', DB::raw('CURDATE()')))
+        return Datatables::of(Appointment::with('customer','customer.company')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
             ->addColumn('action',
                 function ($appointment){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#view/'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
-                        <a href="#quick-view/" data-id="'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
-                        ;
+                       <a onClick="viewAppointment(\'.$appointment->id.\')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
 
 
@@ -203,8 +199,6 @@ class AppointmentsController extends Controller
     }
 
    public function updateAppointment(Request $request){
-
-
 
        $this->validator($request->appointment, true)->validate();
 

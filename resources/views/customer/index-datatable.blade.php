@@ -26,11 +26,7 @@
                     <section class="module module-headings">
                         <div class="module-inner">
                             <div class="module-heading">
-                                <h3 class="module-title">Customers</h3>
-                                <ul class="actions list-inline">
-                                    <li><a class="collapse-module" data-toggle="collapse" href="#content-1" aria-expanded="false" aria-controls="content-1"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                    <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                </ul>
+                                {{--<h3 class="module-title">Customers</h3>--}}
 
                             </div>
 
