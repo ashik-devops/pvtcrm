@@ -76,3 +76,12 @@ $factory->define(App\Appointment::class, function(Faker\Generator $faker) {
         'end_time'=>$end,
     ];
 });
+
+
+$factory->define(App\Sales_team::class, function(Faker\Generator $faker) {
+
+    return [
+        'name'=>$faker->name,
+        'note'=>$faker->text(200),
+    ];
+});

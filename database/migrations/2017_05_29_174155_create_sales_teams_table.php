@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesTeamTable extends Migration
+class CreateSalesTeamsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateSalesTeamTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_team', function (Blueprint $table){
+        Schema::create('sales_teams', function (Blueprint $table){
             $table->increments('id');
             $table->string('name');
             $table->text('note');
@@ -29,6 +29,6 @@ class CreateSalesTeamTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales_team');
+        Schema::dropIfExists('sales_teams');
     }
 }

@@ -21,5 +21,6 @@ class DatabaseSeeder extends Seeder
          $this->call(TasksTableSeeder::class);
 
         $this->call(AppointmentsTableSeeder::class);
+        $this->call(SalesTeamTableSeeder::class);
     }
 }
