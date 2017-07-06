@@ -88,6 +88,21 @@ class UsersController extends Controller
         ],200);
     }
 
+    public function listAllTeamMembers(Request $request){
+        $users = new User();
+        $users->role->policies()->whereIn('scope',['*', 'team'])->whereNotIn('action','*');
+        if(!empty($request->q)){
+
+            $users = $users->where('name', 'like', "%$request->q%");
+
+        }
+
+        return response()->json([
+            'items' => $users->select(['id', 'name'])->get(),
+            'total_count'=>$users->count()
+        ],200);
+    }
+
     public function createUser(Request $request){
         $user = new User();
         $user->name = $request->user['userName'];
