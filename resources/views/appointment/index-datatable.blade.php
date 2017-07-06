@@ -18,11 +18,11 @@
     <div id="content-wrapper" class="content-wrapper view">
         <div class="container-fluid">
             <h2 class="view-title">Appointments</h2>
-            @can('create', \App\Task::class)
+
                 <div class="actions">
                     <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
                 </div>
-            @endcan
+
 
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -130,7 +130,7 @@
                 ]
             });
 
-            jQuery("#aptCustomerId").select2({
+            var customer_select =  jQuery("#aptCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
