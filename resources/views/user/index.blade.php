@@ -8,7 +8,7 @@
     <div id="content-wrapper" class="content-wrapper view members-view">
         <div class="container-fluid">
             <div class="projects-heading">
-                {{--<h2 class="view-title">Members</h2>--}}
+                <h2 class="view-title">Members</h2>
                 @can('create', \App\User::class)
                     <div class="actions">
                         <button class="btn btn-success" data-toggle="modal" data-target="#modal-new-member"><i class="fa fa-plus"></i> New User</button>
