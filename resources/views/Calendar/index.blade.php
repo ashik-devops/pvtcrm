@@ -70,7 +70,7 @@
          editable: !0,
          eventLimit: !0,
          eventSources: [
-         "{{route('ajax-get-events')}}",
+         "{{--route('ajax-get-events')--}}",
          ],
          eventClick: function(event) {
 
@@ -99,14 +99,13 @@
                 right: 'month,agendaWeek,agendaDay'
             },
 
-            events: "{{route('ajax-get-events')}}",
+            eventSources: ["{{route('ajax-get-events')}}"],
 
             selectable: true,
             selectHelper: true,
 
             eventClick: function(event) {
 
-                console.log(event);
                 jQuery("#aptCustomerId").select2({
                     placeholder: "Select a Customer",
                     allowClear:true,
