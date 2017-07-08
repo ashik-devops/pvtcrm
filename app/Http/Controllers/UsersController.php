@@ -88,6 +88,8 @@ class UsersController extends Controller
         ],200);
     }
 
+
+
     public function createUser(Request $request){
         $user = new User();
         $user->name = $request->user['userName'];

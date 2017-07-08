@@ -45,4 +45,8 @@ class User extends Authenticatable
     public function isSuperAdmin(){
         return $this->role->name === 'Super Admin' && $this->role->id==1 && !is_null($this->role->policies()->where(['action'=>'*', 'scope'=>'*'])->first());
     }
+
+    public function salesTeams(){
+        return $this->belongsToMany('App\Sales_team');
+    }
 }

@@ -149,6 +149,7 @@
                         };
                     },
                     processResults : function (data){
+
                         return {
                             results: data.customers
                         }
