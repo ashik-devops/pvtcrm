@@ -13,6 +13,7 @@ class CreateSalesTeamsTable extends Migration
      */
     public function up()
     {
+
         Schema::create('sales_teams', function (Blueprint $table){
             $table->increments('id');
             $table->string('name');
