@@ -13,7 +13,7 @@ class CreateSalesTeamsUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_teams_users', function (Schema $table){
+        Schema::create('sales_teams_users', function (Blueprint $table){
             $table->increments('id');
             $table->integer('user_id')->unsigned()->unique();
             $table->integer('team_id')->unsigned();

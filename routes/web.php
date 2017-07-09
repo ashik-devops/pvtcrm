@@ -21,7 +21,7 @@ Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-e
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update')->middleware('can:update,user');
 Route::get('/ajax/users/list', 'UsersController@listAll')->name('list-users')->middleware('can:index,App\User');;
 
-Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
+Route::get('/customers', 'CustomersController@index')->name('customer-index');//->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
 Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer')->middleware('can:create,App\Customer');
 Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
@@ -55,8 +55,13 @@ Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
 
 
-
-
+Route::get('/sales-teams', 'SalesteamController@index')->name('sales-team-index');
+Route::get('/sales-teams-options', 'UsersController@listAll')->name('get-sales-team-options');
+Route::post('/sales-team/create', 'SalesteamController@createSalesTeam')->name('create.sales.team');
+Route::get('/sales-team/edit', 'SalesteamController@editSalesTeam')->name('edit.sales.team.data');
+Route::post('/sales-team/update', 'SalesteamController@updateSalesTeam')->name('update.sales.team.data');
+Route::post('/sales-team/delete', 'SalesteamController@deleteSalesTeam')->name('delete.sales.team');
+Route::get('/ajax/sales-team/data', 'SalesteamController@getSalesTeamAjax')->name('sales-team-data');
 
 Route::get('/companies', 'CompanyController@index')->name('company-index');
 Route::post('/companies/create', 'CompanyController@createCompany')->name('create.company');//->middleware('can:list,App\Customer');
