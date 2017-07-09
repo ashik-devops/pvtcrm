@@ -54,7 +54,13 @@ Route::get('/appointment/edit', 'AppointmentsController@editAppointment')->name(
 Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->name('update.appointment');
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
 
-
+Route::get('/sales-teams', 'SalesteamController@index')->name('sales-team-index');
+Route::get('/sales-teams-options', 'UsersController@listAll')->name('get-sales-team-options');
+Route::post('/sales-team/create', 'SalesteamController@createSalesTeam')->name('create.sales.team');
+Route::get('/sales-team/edit', 'SalesteamController@editSalesTeam')->name('edit.sales.team.data');
+Route::post('/sales-team/update', 'SalesteamController@updateSalesTeam')->name('update.sales.team.data');
+Route::post('/sales-team/delete', 'SalesteamController@deleteSalesTeam')->name('delete.sales.team');
+Route::get('/ajax/sales-team/data', 'SalesteamController@getSalesTeamAjax')->name('sales-team-data');
 
 
 
