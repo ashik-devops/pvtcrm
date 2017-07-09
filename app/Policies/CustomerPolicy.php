@@ -24,7 +24,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return !is_null($user->role->policies()->whereIn('scope', ['*', 'customer'])
                     ->whereIn('action',['*','list'])->first()->id);
     }
 
@@ -40,7 +40,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
         return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return $user->id === $customer->user->id || !is_null($user->role->olicies()->whereIn('scope', ['*', 'customer'])
                     ->whereIn('action',['*','view'])->first()->id);
 
     }
@@ -56,7 +56,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return  !is_null($user->role->policies()->whereIn('scope', ['*', 'customer'])
                     ->whereIn('action',['*','create'])->first()->id);
     }
 
@@ -72,7 +72,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return $user->id === $customer->user->id || !is_null($user->role->policies()->whereIn('scope', ['*', 'customer'])
                     ->whereIn('action',['*','edit'])->first()->id);
     }
 
@@ -88,7 +88,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return $user->id === $customer->user->id || !is_null($user->role->policies()->whereIn('scope', ['*', 'customer'])
                     ->whereIn('action',['*','delete'])->first()->id);
     }
 }

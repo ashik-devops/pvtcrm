@@ -28,7 +28,7 @@ Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.custom
 Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
 Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
 Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
-Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options');//->middleware('can:index,App\Customer');
+Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
 
 
 
