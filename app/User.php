@@ -40,13 +40,13 @@ class User extends Authenticatable
     }
 
     public function isAdmin(){
-        return $this->role->name === 'Administrator' && !is_null($this->role->policies()->where(['action'=>'*', 'scope'=>'*'])->first());
+        return !is_null($this->role->policies()->where('action','*')->where('scope','*')->first());
     }
     public function isSuperAdmin(){
-        return $this->role->name === 'Super Admin' && $this->role->id==1 && !is_null($this->role->policies()->where(['action'=>'*', 'scope'=>'*'])->first());
+        return $this->role->id==1 && !is_null($this->role->policies()->where('action','*')->where('scope','*')->first());
     }
 
     public function salesTeams(){
-        return $this->belongsToMany('App\Sales_team');
+        return $this->belongsToMany('App\Sales_team', 'sales_teams_users');
     }
 }

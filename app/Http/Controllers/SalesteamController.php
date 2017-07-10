@@ -28,12 +28,9 @@ class SalesteamController extends Controller
                 })
             ->addColumn('user',
                 function ($salesTeam){
-
-                    $sales_team = DB::table('sales_teams_users')
-                                    ->where('team_id','=',$salesTeam->id)
-                                    ->first();
-                    $user = User::findOrFail($sales_team->user_id);
-                    return $user->name;
+                   if(!is_null($manager= $salesTeam->manager()))
+                       return $manager->name;
+                   return '';
                 })
              ->addColumn('description',
                 function ($salesTeam){
