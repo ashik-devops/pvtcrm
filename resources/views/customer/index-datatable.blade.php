@@ -47,9 +47,11 @@
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Name</th>
-                                                <th>User</th>
+                                                <th>Company</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
+                                                <th>Priority</th>
+                                                <th>Assigned To</th>
                                                 <th>Actions</th>
                                                 <th>First Name</th>
                                                 <th>Last Name</th>
@@ -109,9 +111,11 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'name', name: 'name', searchable: false},
-                    { data: 'user', name: 'user', searchable: false},
+                    { data: 'company', name: 'company', searchable: true},
                     { data: 'email', name: 'email' },
                     { data: 'phone', name: 'phone_no' },
+                    { data: 'priority', name: 'priority' },
+                    { data: 'user', name: 'user', searchable: true},
                     { data: 'action', name: 'action', orderable: false, searchable: false},
                     { data: 'first_name', name: 'first_name', searchable: true, visible:false},
                     { data: 'last_name', name: 'last_name', searchable: true, visible:false},

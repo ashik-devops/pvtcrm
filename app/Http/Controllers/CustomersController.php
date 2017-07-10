@@ -72,6 +72,10 @@ class CustomersController extends Controller
                 function ($customer){
                     return '<a href="#view/'.$customer->id.'" >'.implode(', ', [$customer->last_name, $customer->first_name] ).' </a>';
                 })
+            ->addColumn('company',
+                function ($customer){
+                    return '<a href="'.route('view-company', $customer->company->id).'" >'.implode(', ', [$customer->company->name] ).' </a>';
+                })
             ->addColumn('user',
                 function ($customer){
                     $user_profile = User_profile::findOrFail($customer->user->id);
@@ -86,7 +90,7 @@ class CustomersController extends Controller
                     return '<a href="tel:'.$customer->phone_no.'" >'.$customer->phone_no.' </a>';
                 })
             ->removeColumn('phone_no')
-            ->rawColumns(['name','user','email', 'phone', 'action'])
+            ->rawColumns(['name','user','email', 'phone', 'company', 'action'])
             ->make(true);
     }
 
