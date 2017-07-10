@@ -62,6 +62,12 @@ Route::post('/sales-team/update', 'SalesteamController@updateSalesTeam')->name('
 Route::post('/sales-team/delete', 'SalesteamController@deleteSalesTeam')->name('delete.sales.team');
 Route::get('/ajax/sales-team/data', 'SalesteamController@getSalesTeamAjax')->name('sales-team-data');
 
+Route::get('/tag-names', 'TagsController@index')->name('tag-index');
+Route::post('/tag/create', 'TagsController@createTag')->name('create.tag');
+Route::get('/tag/edit', 'TagsController@editTag')->name('edit.tag');
+Route::post('/tag/update', 'TagsController@updateTag')->name('update.tag');
+Route::post('/tag/delete', 'TagsController@deleteTag')->name('delete.tag');
+Route::get('/ajax/tag/data', 'TagsController@getTagsAjax')->name('tag-data');
 
 
 Route::get('/companies', 'CompanyController@index')->name('company-index');

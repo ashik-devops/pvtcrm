@@ -20,7 +20,7 @@
             <h2 class="view-title">Tags</h2>
 
             <div class="actions">
-                <button id="new-task-btn" class="btn btn-success" data-toggle="modal" data-target="#task-modal"><i class="fa fa-plus"></i> New Tag</button>
+                <button id="new-task-btn" class="btn btn-success" data-toggle="modal" data-target="#tag-modal"><i class="fa fa-plus"></i> New Tag</button>
             </div>
 
             <div id="masonry" class="row">
@@ -95,14 +95,13 @@
             taskPriority : 'taskPriority',
         };
 
-        var task_date=moment();
+
             var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
                 select: true,
                 processing: true,
                 serverSide: true,
                 paging:true,
-                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
                 ajax: '{!! route('tag-data') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
@@ -154,20 +153,21 @@
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
             var tag = {
-                tagId : $('#tagId').val(),
+                tagId : $('#tag_id').val(),
                 tagName : $('#tagName').val(),
                 tagCustomerId : $('#tagCustomerId').val(),
 
 
             };
+
             var data = {
                 _token : _token,
-                task: tag
+                tag: tag
             };
 
-            if(tag.tagId === ''){
+            if(tag.tagId === '') {
                 //tag creating.....
-
+                console.log(tag);
                 var request = jQuery.ajax({
                     url: "{{ route('create.tag') }}",
                     data: data,
@@ -175,37 +175,39 @@
                     dataType: "json"
                 });
                 request.done(function (response) {
-                    if(response.result == 'Saved'){
+                    if (response.result == 'Saved') {
                         reset_form($('#tagForm')[0]);
                         $('#tag-modal').modal('hide');
-                        //get_all_task_data();
+                        get_all_tag_data();
                         $.notify(response.message, "success");
                     }
-                    else{
+                    else {
                         jQuery.notify(response.message, "error");
                     }
                 });
-                request.error(function(xhr){
+                request.error(function (xhr) {
                     handle_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
-            } else{
-                //task editing.....
+            }else{
+
+                console.log(tag);
+                //tag updating.....
 
                 var request = jQuery.ajax({
-                    url: "{{ route('update.task') }}",
+                    url: "{{ route('update.tag') }}",
                     data: data,
                     method: "POST",
                     dataType: "json"
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        reset_form($('#taskForm')[0]);
-                        $('#task_id').val('');
-                        $('#task-modal').modal('hide');
-                        get_all_task_data();
+                        reset_form($('#tagForm')[0]);
+                        $('#tag_id').val('');
+                        $('#tag-modal').modal('hide');
+                        get_all_tag_data();
                         jQuery.notify(response.message, "success");
                     }
                     else{
@@ -218,56 +220,30 @@
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
-
-            }
-        });
-        function handle_error(xhr) {
-
-            if(xhr.status==422){
-                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
-                    showParselyError(key, data[0]);
-                });
             }
 
-        }
-        function showParselyError(field, msg){
-            var el = jQuery("#"+inputMap[field]).parsley();
-            el.removeError('fieldError');
-            el.addError('fieldError', {message: msg, updateClass: true});
-        }
-
-        jQuery('.modal').on('shown.bs.modal', function () {
-
-
-            $('#taskDueDate').datetimepicker({date : task_date});
-
-
         });
-        function editTask(id){
-            $('#task_modal_button').val('Update Task');
-            $('#modal-new-task-label').text('Edit Task');
 
-            $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
-                console.log(data.task);
+        function editTag(id){
+
+             $('#tag_modal_button').val('Update Tag');
+            $('#modal-new-tag-label').text('Edit Tag');
+
+            $.get("{{ route('edit.tag') }}", { id: id} ,function(data){
+                console.log(data.tag);
                 if(data){
-                    $('#task_id').val(data.task.id);
-                    $('#taskCustomerId').val(data.task.customer_id);
-                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
-                    $('#taskTitle').val(data.task.title);
-                    $('#taskDescription').val(data.task.description);
-                    task_date = moment(data.task.due_date);
-                    $('#taskPriority').val(data.task.priority);
-                    $('#taskStatus').val(data.task.status);
-                    updateDates();
-                }
+                    $('#tag_id').val(data.tag.id);
+                    $('#tagCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.company.name+"</option>");
+                    $('#tagName').val(data.tag.tagname);
 
+                }
             });
 
-            $('#task-modal').modal('show');
+            $('#tag-modal').modal('show');
         }
 
 
-        function deleteTask(id){
+        function deleteTag(id){
             var _token = $('input[name="_token"]').val();
             var data = {
                 _token : _token,
@@ -290,11 +266,11 @@
                         //deletion process is going on....
 
 
-                        $.post("{{ route('delete.task') }}", data, function(result){
+                        $.post("{{ route('delete.tag') }}", data, function(result){
 
                             if(result.result == 'Success'){
-                                swal("Deleted!", "Company has been deleted.", "success");
-                                get_all_task_data();
+                                swal("Deleted!", "Tag has been deleted.", "success");
+                                get_all_tag_data();
                                 $.notify('Task deleted successfully', "danger");
                             }
                             else{
@@ -303,102 +279,32 @@
 
                         });
                     } else {
-                        swal("Cancelled", "Company is safe :)", "error");
+                        swal("Cancelled", "Tag is safe :)", "error");
                     }
                 });
         }
 
 
-        function cancelTask(id) {
-            var _token = $('input[name="_token"]').val();
-            var data = {
-                _token : _token,
-                id: id
-            };
-            swal({
-                    title: "Are you sure?",
-                    text: "This Information will be cancelled!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, cancel it!",
-                    cancelButtonText: "No, Do not cancel !",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
-
-                        //deletion process is going on....
 
 
-                        $.post("{{ route('cancel.task') }}", data, function(result){
+        function handle_error(xhr) {
 
-                            if(result.result == 'Success'){
-                                swal("Cancelled!", "Task has been cancelled.", "success");
-                                get_all_task_data();
-                                $.notify('Task Cancelled successfully', "danger");
-                            }
-                            else{
-                                swal("Failed", "Failed to cancel the task", "error");
-                            }
-
-                            if(result.cancel_message != ''){
-                                swal("Already Cancelled!", "You do not need to cancel it.", "success");
-                                //get_all_task_data();
-                                //$.notify('Task Cancelled successfully', "danger");
-                            }
-
-                        });
-                    } else {
-                        swal("Cancelled", "Task is safe :)", "error");
-                    }
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
                 });
+            }
+
+        }
+        function showParselyError(field, msg){
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
         }
 
-        function get_all_task_data(){
+        function get_all_tag_data(){
             datatable.ajax.reload(null, false);
         }
 
-        function viewTask(id){
-
-            $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
-                //console.log(data.task);
-                if(data){
-                    $('#task_id').val(data.task.id);
-                    $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name);
-
-                    $('#viewTaskTitle').html(data.task.title);
-                    $('#taskDescription').html(data.task.description);
-                    $('#viewTaskDeadline').html(data.task.due_date);
-
-                    //task_date = moment(data.task.due_date);
-                    $('#viewTaskPriority').html(data.task.priority);
-                    $('#viewTaskStatus').html(data.task.status);
-                    //updateDates();
-                    //var id = data.task.id;
-                    //console.log(id);
-
-                }
-
-            });
-
-            $('#task-modal-view').modal('show');
-            $('#taskIdForView').val(id);
-
-
-
-
-        }
-
-        function editTaskWithClosingView(){
-            var id = $('#taskIdForView').val();
-
-            $('#task-modal-view').modal('hide');
-
-
-            editTask(id);
-
-        }
     </script>
 @endsection
