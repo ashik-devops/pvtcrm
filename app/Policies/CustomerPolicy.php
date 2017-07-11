@@ -2,6 +2,7 @@
 
 namespace App\Policies;
 
+use App\Traits\AdminPolicies;
 use App\User;
 use App\Customer;
 use App\Policy;
@@ -9,7 +10,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerPolicy
 {
-    use HandlesAuthorization;
+    use HandlesAuthorization, AdminPolicies;
 
     /**
      * Determine whether the user can list all customers.
@@ -21,8 +22,12 @@ class CustomerPolicy
     public function index(User $user)
     {
 
-        return !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','list'])->first()->id);
+        if($this->checkAdmin($user)){
+            return true;
+        }
+
+        return !is_null($user->role->policies()->where('scope', 'customer')
+                    ->whereIn('action',['*','list'])->first());
     }
 
     /**
@@ -34,8 +39,11 @@ class CustomerPolicy
      */
     public function view(User $user, Customer $customer)
     {
-        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','view'])->first()->id);
+        if($this->checkAdmin($user)){
+        return true;
+        }
+        return $user->id === $customer->user->id || !is_null($user->role->olicies()->where('scope', 'customer')
+                ->whereIn('action',['*','list'])->first());
 
     }
 
@@ -47,8 +55,11 @@ class CustomerPolicy
      */
     public function create(User $user)
     {
-        return  !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','create'])->first()->id);
+        if($this->checkAdmin($user)){
+            return true;
+        }
+        return  !is_null($user->role->policies()->where('scope', 'customer')
+            ->whereIn('action',['*','create'])->first());
     }
 
     /**
@@ -60,8 +71,11 @@ class CustomerPolicy
      */
     public function update(User $user, Customer $customer)
     {
-        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','edit'])->first()->id);
+        if($this->checkAdmin($user)){
+            return true;
+        }
+        return $user->id === $customer->user->id || !is_null($user->role->policies()->where('scope', 'customer')
+                ->whereIn('action',['*','edit'])->first());
     }
 
     /**
@@ -73,7 +87,10 @@ class CustomerPolicy
      */
     public function delete(User $user, Customer $customer)
     {
-        return $user->id === $customer->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
-                    ->whereIn('action',['*','delete'])->first()->id);
+        if($this->checkAdmin($user)){
+            return true;
+        }
+        return $user->id === $customer->user->id || !is_null($user->role->policies()->where('scope', 'customer')
+                ->whereIn('action',['*','delete'])->first());
     }
 }

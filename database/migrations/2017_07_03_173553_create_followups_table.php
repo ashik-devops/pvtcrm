@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersPoliciesTable extends Migration
+class CreateFollowupsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,11 @@ class CreateUsersPoliciesTable extends Migration
      */
     public function up()
     {
-        Schema::create('users_policies', function (Blueprint $table){
+        Schema::create('followups', function (Blueprint $table){
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->integer('policy_id')->unsigned();
+            $table->integer('journal_id')->unsigned();
+            $table->integer('journalable_id')->unsigned();
+            $table->string('journalable_type');
             $table->timestamps();
         });
     }
@@ -28,6 +29,6 @@ class CreateUsersPoliciesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users_policies');
+        Schema::dropIfExists('followups');
     }
 }

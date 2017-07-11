@@ -32,8 +32,6 @@ class UsersTableSeeder extends Seeder
         $user_profile->zip = "1229";
         $user_profile->save();
 
-        $user->policies()->attach(\App\Policy::where('scope', '*')->where('action', '*')->first()->id);
-
         $user= new User();
         $user->name = "Alex Branden";
         $user->email='alex@scraperite.com';
@@ -53,7 +51,6 @@ class UsersTableSeeder extends Seeder
         $user_profile->country="USA";
         $user_profile->zip = "104125";
         $user_profile->save();
-        $user->policies()->attach(\App\Policy::where('scope', 'user')->where('action', '*')->first()->id);
 
         $user= new User();
         $user->name = "Dean";
@@ -74,8 +71,6 @@ class UsersTableSeeder extends Seeder
         $user_profile->country="USA";
         $user_profile->zip = "104125";
         $user_profile->save();
-        $user->policies()->attach(\App\Policy::where('scope', 'user')->where('action', 'view')->first()->id);
-        $user->policies()->attach(\App\Policy::where('scope', 'user')->where('action', 'edit')->first()->id);
 
         $user= new User();
         $user->name = "Paul Kasabian";

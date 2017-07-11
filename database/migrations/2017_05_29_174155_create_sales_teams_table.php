@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateJournalsTable extends Migration
+class CreateSalesTeamsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,11 @@ class CreateJournalsTable extends Migration
      */
     public function up()
     {
-        Schema::create('journals', function (Blueprint $table){
+
+        Schema::create('sales_teams', function (Blueprint $table){
             $table->increments('id');
-            $table->string('title');
-            $table->string('description');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
-            $table->enum('status', ['Due', 'Done', 'Cancelled']);
-            $table->enum('priority', ['Critical', 'High', 'Medium', 'Low']);
+            $table->string('name');
+            $table->text('note');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -33,6 +30,6 @@ class CreateJournalsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('journals');
+        Schema::dropIfExists('sales_teams');
     }
 }

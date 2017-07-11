@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Policies\UserPolicy;
 use App\Role;
+use App\User_profile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\User;
+use DB;
 class UsersController extends Controller
 {
     public function __construct()
@@ -48,12 +50,72 @@ class UsersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $this->authorize('index', User::class);
         $users = User::paginate(10);
         $roles=Role::all(['id','name']);
         return view('user.index')->with([
             'users' => $users,
             'roles' => $roles
         ]);
+    }
+
+    public function listAll(Request $request){
+        $users = new User();
+        if(!empty($request->q)){
+
+            $users = $users->where('name', 'like', "%$request->q%");
+
+        }
+
+        return response()->json([
+            'items' => $users->select(['id', 'name'])->get(),
+            'total_count'=>$users->count()
+        ],200);
+    }
+
+    public function listAllTeamManagers(Request $request){
+        $users = new User();
+        $users->role->policies()->whereIn('scope',['*', 'team'])->where('action','*');
+        if(!empty($request->q)){
+
+            $users = $users->where('name', 'like', "%$request->q%");
+
+        }
+
+        return response()->json([
+            'items' => $users->select(['id', 'name'])->get(),
+            'total_count'=>$users->count()
+        ],200);
+    }
+
+
+
+    public function createUser(Request $request){
+        $user = new User();
+        $user->name = $request->user['userName'];
+        $user->email = $request->user['userEmail'];
+        $user->password = $request->user['userPassword'];
+        $user->status = $request->user['userStatus'];
+        $user->role_id = $request->user['userRole'];
+
+        $user_profile = new User_profile();
+        $user_profile->profile_pic = null;
+        $user_profile->initial = $request->user['userInitial'];
+        $user_profile->primary_phone_no = $request->user['userPrimaryPhone'];
+        $user_profile->secondary_phone_no = $request->user['userSecondaryPhone'];
+        $user_profile->address_line_1 = $request->user['userStreetAddress_1'];
+        $user_profile->address_line_2 = $request->user['userStreetAddress_2'];
+        $user_profile->city = $request->user['userCity'];
+        $user_profile->state = $request->user['userState'];
+        $user_profile->country = $request->user['userCountry'];
+        $user_profile->zip = $request->user['userZip'];
+
+
+        DB::beginTransaction();
+        $user->save();
+        $user->profile()->save($user_profile);
+        DB::commit();
+        return response()->json(['result' => "Saved", 'message' => 'User is Saved.'], 200);
     }
     /**
      * Shows edit form for requested user.
@@ -63,6 +125,7 @@ class UsersController extends Controller
      */
 
     public function edit(User $user){
+        $this->authorize('update', $user);
         return view('user.view-profile')->with([
             'user' => $user,
             'roles'=>Role::all()
@@ -79,6 +142,7 @@ class UsersController extends Controller
      */
 
     public function update(User $user, Request $request){
+        $this->authorize('update', $user);
         $this->validator($request->all(), $user)->validate();
 
 

@@ -26,21 +26,26 @@ class TasksController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data, $isUpdateRequest=false)
     {
-        return Validator::make($data, [
-            'first_name' => 'required|string|max:32',
-            'last_name' => 'required|string|max:32',
-            'email' => 'required|string|email|max:255|unique',
-            'title'=>'required|string|max:32',
-            'primary_phone_no'=>'required|string|max:32|unique',
-            'street_address_1'=>'required|string',
-            'street_address_2'=>'string|nullable',
-            'city'=>'required|string|max:32',
-            'state'=>'required|string|max:32',
-            'country'=>'required|string|max:32',
-            'zip'=>'required|string|max:8',
-        ]);
+
+
+        $rules=[
+            'taskTitle' => 'required|string',
+            'taskDescription' => 'required|string',
+            'taskStatus' => 'required|string',
+            'taskDueDate'=>'required|date',
+            'taskPriority'=>'required|string',
+            'taskCustomerId'=>'required|integer|exists:customers,id'
+        ];
+
+        if($isUpdateRequest){
+            $rules=array_merge($rules,[
+                'taskId'=>'required|integer|exists:appointments,id',
+            ]);
+        }
+
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -58,10 +63,8 @@ class TasksController extends Controller
                 function ($task){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#view/'.$task->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
-                        <a href="#quick-view/" data-id="'.$task->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
-                        ;
+                        <a  class="btn btn-xs btn-danger"  onClick="cancelTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Cancel</a>
+                        <a  class="btn btn-xs btn-primary"   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
 
             ->addColumn('customer',
@@ -91,7 +94,49 @@ class TasksController extends Controller
             ->make(true);
     }
 
+    public function getTasksAjaxDue(){
+
+
+
+        return Datatables::of(Task::with('customer','customer.company')->where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
+
+            ->addColumn('action',
+                function ($task){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a href="viewtask('.$task->id.')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+
+                })
+            ->addColumn('first_name',
+                function ($task){
+
+                    $string = '';
+                    $string .= '<a href="#">'.$task->customer["last_name"].', '. $task->customer['first_name'].'</a>';
+                    if($task->customer['company']['name']){
+                        $string .= '@ <a href="#">'.$task->customer['company']['name'].'</a>';
+                    }
+                    if($task->customer["last_name"] == null && $task->customer["first_name"] == null && $task->customer['company']['name'] == null){
+                        $string = '';
+                    }
+
+                    return $string;
+
+                })
+            ->addColumn('description',
+                function ($task){
+                    return  substr($task->description,0,70) . ' ....';
+                })
+            ->addColumn('due_date',
+                function ($task){
+                    return  Carbon::createFromTimeStamp(strtotime($task->due_date))->toFormattedDateString();
+                })
+            ->rawColumns(['title','first_name','description','status', 'priority', 'due_date','action' ])
+            ->make(true);
+    }
+
     public function createTask( Request $request){
+        $this->validator($request->task)->validate();
         $task = new Task();
         $task->title = $request->task['taskTitle'];
         $task->customer_id = $request->task['taskCustomerId'];
@@ -115,38 +160,35 @@ class TasksController extends Controller
     }
 
     public function editTask(Request $request){
-        $task = Task::with('customer', 'customer.company')->findOrFail($request->id);
+
+
+        $task = Task::with('customer')->findOrFail($request->id);
 
 
         return response()->json([
             'task' => $task,
-        ], 201);
+        ], 200);
     }
 
     public function updateTask(Request $request){
+        $this->validator($request->task, true)->validate();
         $task = Task::findOrFail($request->task['taskId']);
+        $task->customer_id = $request->task['taskCustomerId'];
+        $task->title = $request->task['taskTitle'];
+        $task->description = $request->task['taskDescription'];
+        $task->due_date = Carbon::parse($request->task['taskDueDate']);
+        $task->priority= $request->task['taskPriority'];
+        $task->status= $request->task['taskStatus'];
 
+        DB::beginTransaction();
 
+        $task->save();
+        DB::commit();
 
-
-            $task->customer_id = $request->task['taskCustomerId'];
-            $task->title = $request->task['taskTitle'];
-            $task->description = $request->task['taskDescription'];
-            $task->due_date = Carbon::parse($request->task['taskDueDate']);
-            $task->priority= $request->task['taskPriority'];
-            $task->status= $request->task['taskStatus'];
-
-
-
-            DB::beginTransaction();
-
-            $task->save();
-            DB::commit();
-
-            return response()->json([
-                'result'=>'Saved',
-                'message'=>'Task has been updated successfully.'
-            ]);
+        return response()->json([
+            'result'=>'Saved',
+            'message'=>'Task has been updated successfully.'
+        ]);
 
 
     }
@@ -161,6 +203,34 @@ class TasksController extends Controller
             return response()->json([
                 'result'=>'Success',
                 'message'=>'Task has been successfully deleted.'
+            ]);
+        }
+
+        return response()->json([
+            'result'=>'Error',
+            'message'=>'Task not found.'
+        ]);
+
+    }
+
+    public function cancelTask(Request $request){
+        $task = Task::findOrFail($request->id);
+
+        if(!is_null($task)){
+
+            if($task->status == 'Cancelled'){
+                $cancel_message = 'Already Cancelled';
+            }else{
+                $cancel_message = '';
+                $task->status = 'Cancelled';
+                $task->save();
+            }
+
+
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Task has been cancelled.',
+                'cancel_message' => $cancel_message
             ]);
         }
 

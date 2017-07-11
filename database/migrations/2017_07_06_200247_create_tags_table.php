@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSalesTeamTable extends Migration
+class CreateTagsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,9 @@ class CreateSalesTeamTable extends Migration
      */
     public function up()
     {
-        Schema::create('sales_team', function (Blueprint $table){
+        Schema::create('Tags', function (Blueprint $table){
             $table->increments('id');
-            $table->integer('user_id')->unsigned();
-            $table->string('name');
+            $table->string('tagname');
             $table->softDeletes();
             $table->timestamps();
         });
@@ -29,6 +28,6 @@ class CreateSalesTeamTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sales_team');
+        Schema::dropIfExists('Tags');
     }
 }

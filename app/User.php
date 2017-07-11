@@ -35,11 +35,18 @@ class User extends Authenticatable
         return $this->belongsTo('App\Role');
     }
 
-    public function policies(){
-        return $this->belongsToMany('App\Policy', 'users_policies', 'user_id', 'policy_id');
-    }
-
     public function customers(){
         return $this->hasMany('App\Customer');
+    }
+
+    public function isAdmin(){
+        return !is_null($this->role->policies()->where('action','*')->where('scope','*')->first());
+    }
+    public function isSuperAdmin(){
+        return $this->role->id==1 && !is_null($this->role->policies()->where('action','*')->where('scope','*')->first());
+    }
+
+    public function salesTeams(){
+        return $this->belongsToMany('App\Sales_team', 'sales_teams_users');
     }
 }

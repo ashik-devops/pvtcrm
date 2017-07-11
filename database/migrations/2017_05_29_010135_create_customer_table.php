@@ -22,6 +22,7 @@ class CreateCustomerTable extends Migration
             $table->string('phone_no', 32)->unique();
             $table->integer('user_id')->unsigned()->nullable();
             $table->integer('customer_company_id')->unsigned()->nullable();
+            $table->enum('priority', ['Critical', 'High', 'Medium', 'Low'])->default('Low');
             $table->softDeletes();
             $table->timestamps();
         });

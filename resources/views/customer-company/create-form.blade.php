@@ -52,8 +52,8 @@
                 <input  id="streetAddress_1" type="text" placeholder="Steet Address" class="form-control" data-parsley-trigger="change focusout" value="{{ old('street_address_1') }}" name="street_address_1" maxlength="128" required data-parsley-required-message="Please enter Address">
                 @if ($errors->has('street_address_1'))
                     <span class="help-block">
-                                        <strong>{{ $errors->first('street_address_1') }}</strong>
-                                    </span>
+                        <strong>{{ $errors->first('street_address_1') }}</strong>
+                    </span>
                 @endif
             </div>
             <div style="margin-bottom: 5px;">
@@ -71,7 +71,7 @@
             <label for="city" class="sr-only">City</label>
 
 
-            <input id="city_id" type="text" class="form-control" placeholder="City" value="{{ old('city') }}" name="city" maxlength="32" required data-parsley-trigger="change focusout" required data-parsley-required-message="You must enter city required data-parsley-required-message = "" >
+            <input id="city_id" type="text" class="form-control" placeholder="City" value="{{ old('city') }}" name="city" maxlength="32" required data-parsley-trigger="change focusout" required data-parsley-required-message="You must enter city " >
             @if ($errors->has('city'))
                 <span class="help-block">
                                         <strong>{{ $errors->first('city') }}</strong>

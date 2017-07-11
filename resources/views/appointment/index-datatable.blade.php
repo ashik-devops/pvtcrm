@@ -18,19 +18,18 @@
     <div id="content-wrapper" class="content-wrapper view">
         <div class="container-fluid">
             <h2 class="view-title">Appointments</h2>
-            <div class="actions">
-                <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
-            </div>
+
+                <div class="actions">
+                    <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
+                </div>
+
+
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module module-headings">
                         <div class="module-inner">
                             <div class="module-heading">
-                                <h3 class="module-title">Appointment</h3>
-                                <ul class="actions list-inline">
-                                    <li><a class="collapse-module" data-toggle="collapse" href="#content-1" aria-expanded="false" aria-controls="content-1"><span aria-hidden="true" class="icon arrow_carrot-up"></span></a></li>
-                                    <li><a class="close-module" href="#"><span aria-hidden="true" class="icon icon_close"></span></a></li>
-                                </ul>
+                                {{--<h3 class="module-title">Appointment</h3>--}}
 
                             </div>
 
@@ -90,11 +89,20 @@
     <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
         var min_date = moment();
         var max_date = moment();
 
-
+        var inputMap={
+            appointmentId : 'appointment_id',
+            aptCustomerId : 'aptCustomerId',
+            appointmentTitle : 'appointmentTitle',
+            appointmentDescription : 'appointmentDescription',
+            appointmentStatus : 'appointmentStatus',
+            startTime : 'startTime',
+            endTime : 'endTime'
+        };
 
 
             var datatable = jQuery('#customers-table').DataTable({
@@ -102,6 +110,8 @@
                 select: true,
                 processing: true,
                 serverSide: true,
+                paging:true,
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
                 ajax: '{!! route('appointment-data') !!}',
                 columns: [
                     {data: 'id', name: 'id'},
@@ -116,7 +126,11 @@
                 ]
             });
 
-            jQuery("#aptCustomerId").select2({
+
+            var customer_select =  jQuery("#aptCustomerId").select2({
+
+
+
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -154,9 +168,11 @@
 
         $("#startTime").on("dp.change", function (e) {
             min_date=e.date;
+            updateDates();
         });
         $("#endTime").on("dp.change", function (e) {
             max_date=e.date;
+            updateDates();
         });
 
 
@@ -171,19 +187,20 @@
         //creating appointment
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
+
         $('#appointmentForm').on('submit',function(e){
             e.preventDefault();
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
 
             var appointment = {
-                appointmentId : $('#appointment_id').val(),
-                aptCustomerId : $('#aptCustomerId').val(),
-                appointmentTitle : $('#appointmentTitle').val(),
-                appointmentDescription : $('#appointmentDescription').val(),
-                appointmentStatus : $('#appointmentStatus').val(),
-                startTime : $('#startTime').val(),
-                endTime : $('#endTime').val()
+                appointmentId : $('#'+inputMap.appointmentId).val(),
+                aptCustomerId : parseInt($('#'+inputMap.aptCustomerId).val()),
+                appointmentTitle : $('#'+inputMap.appointmentTitle).val(),
+                appointmentDescription : $('#'+inputMap.appointmentDescription).val(),
+                appointmentStatus : $('#'+inputMap.appointmentStatus).val(),
+                startTime : $('#'+inputMap.startTime).val(),
+                endTime : $('#'+inputMap.endTime).val()
             };
 
            //console.log(appointment);
@@ -203,7 +220,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#appointmentForm')[0].reset();
+                        reset_form($('#appointmentForm')[0]);
                         $('#appointment-modal').modal('hide');
                         get_all_appointment_data();
                         $.notify(response.message, "success");
@@ -211,14 +228,17 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
-
-                request.fail(function (jqXHT, textStatus) {
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
+                    request.fail(function (jqXHT, textStatus) {
+                    console.log(jqXHT);
                     $.notify(textStatus, "error");
                 });
             }else{
                 //console.log(appointment);
-                //appointment editing.....
+                //appointment updating.....
 
                 var request = jQuery.ajax({
                     url: "{{ route('update.appointment') }}",
@@ -228,7 +248,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#appointmentForm')[0].reset();
+                        reset_form($('#appointmentForm')[0]);
                         $('#appointment_id').val('');
                         $('#appointment-modal').modal('hide');
                         get_all_appointment_data();
@@ -238,13 +258,43 @@
                         jQuery.notify(response.message, "error");
                     }
                 })
+                request.error(function(xhr){
+                    jQuery.map(jQuery.parseJSON(xhr.responseText),function (data, key){
+                        handle_error(xhr);
+                    });
 
+
+
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
             }
 
         });
+        function handle_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
+                });
+            }
+
+        }
+
+        function reset_form(form_el) {
+            form_el.reset();
+            min_date = moment();
+            max_date = moment();
+            $('#'+inputMap.appointmentId).val('');
+            customer_select.val('').trigger('change');
+
+        }
+        function showParselyError(field, msg){
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
 
         function editAppointment(id){
 

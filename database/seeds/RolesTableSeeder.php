@@ -13,23 +13,32 @@ class RolesTableSeeder extends Seeder
     {
         $role = new Role();
         $role->id=1;
-        $role->name="Super Admin";
+        $role->name="Super Administrator";
         $role->save();
+        $role->policies()->attach(\App\Policy::where('scope', '*')->where('action', '*')->first()->id);
 
         $role = new Role();
         $role->id=2;
-        $role->name="Admin";
+        $role->name="Administrator";
         $role->save();
+        $role->policies()->attach(\App\Policy::where('scope', '*')->where('action', '*')->first()->id);
 
         $role = new Role();
         $role->id=3;
         $role->name="Sales Manager";
         $role->save();
+        $role->policies()->attach(\App\Policy::where('scope', 'team')->where('action', '*')->first()->id);
+        $role->policies()->attach(\App\Policy::where('scope', 'task')->where('action', '*')->first()->id);
+        $role->policies()->attach(\App\Policy::where('scope', 'customer')->where('action', '*')->first()->id);
+        $role->policies()->attach(\App\Policy::where('scope', 'appointment')->where('action', '*')->first()->id);
 
         $role = new Role();
         $role->id=4;
         $role->name="Sales Representative";
         $role->save();
 
+        $role->policies()->attach(\App\Policy::where('scope', 'task')->where('action', '*')->first()->id);
+        $role->policies()->attach(\App\Policy::where('scope', 'customer')->where('action', '*')->first()->id);
+        $role->policies()->attach(\App\Policy::where('scope', 'appointment')->where('action', '*')->first()->id);
     }
 }

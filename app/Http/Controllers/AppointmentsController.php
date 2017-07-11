@@ -27,21 +27,24 @@ class AppointmentsController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data, $isUpdateRequest)
     {
-        return Validator::make($data, [
-            'first_name' => 'required|string|max:32',
-            'last_name' => 'required|string|max:32',
-            'email' => 'required|string|email|max:255|unique',
-            'title'=>'required|string|max:32',
-            'primary_phone_no'=>'required|string|max:32|unique',
-            'street_address_1'=>'required|string',
-            'street_address_2'=>'string|nullable',
-            'city'=>'required|string|max:32',
-            'state'=>'required|string|max:32',
-            'country'=>'required|string|max:32',
-            'zip'=>'required|string|max:8',
-        ]);
+        $rules=[
+            'appointmentTitle' => 'required|string',
+            'appointmentDescription' => 'required|string',
+            'appointmentStatus' => 'required|string',
+            'startTime'=>'required|date',
+            'endTime'=>'required|date',
+            'aptCustomerId'=>'required|integer|exists:customers,id'
+        ];
+
+        if($isUpdateRequest){
+            $rules=array_merge($rules,[
+            'appointmentId'=>'required|integer|exists:appointments,id',
+            ]);
+        }
+
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -55,16 +58,61 @@ class AppointmentsController extends Controller
 
     public function getAppointmentsAjax(){
 
-        //return Datatables::of(Appointment::with('customer')->select('appointments.*'))
+
         return Datatables::of(Appointment::with('customer','customer.company'))
             ->addColumn('action',
                 function ($appointment){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#view/'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
-                        <a href="#quick-view/" data-id="'.$appointment->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
-                        ;
+                        <a onClick="viewAppointment('.$appointment->id.')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                })
+
+
+            ->addColumn('first_name',
+                function ($appointment){
+
+                    $string = '';
+                    $string .= '<a href="#">'.$appointment->customer["last_name"].', '. $appointment->customer['first_name'].'</a>';
+                    if($appointment->customer['company']['name']){
+                        $string .= '@ <a href="#">'.$appointment->customer['company']['name'].'</a>';
+                    }
+                    if($appointment->customer["last_name"] == null && $appointment->customer["first_name"] == null && $appointment->customer['company']['name'] == null){
+                        $string = '';
+                    }
+
+                    return $string;
+            })
+            ->addColumn('description',
+                function ($appointment){
+                    return  substr($appointment->description,0,70) . ' ....';
+                })
+            ->addColumn('start_time',
+                function ($appointment){
+                    return  Carbon::createFromTimeStamp(strtotime($appointment->start_time))->toFormattedDateString();
+
+                })
+            ->addColumn('end_time',
+                function ($appointment){
+                    return  Carbon::createFromTimeStamp(strtotime($appointment->end_time))->toFormattedDateString();
+
+                })
+
+            ->rawColumns(['id','title', 'first_name', 'description', 'start_time' ,'end_time',  'action'])
+            ->make(true);
+
+    }
+
+    public function getAppointmentsAjaxPending(){
+
+
+        return Datatables::of(Appointment::with('customer','customer.company')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
+            ->addColumn('action',
+                function ($appointment){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                       <a onClick="viewAppointment(\'.$appointment->id.\')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
 
 
@@ -141,6 +189,7 @@ class AppointmentsController extends Controller
     }
 
     public function editAppointment(Request $request){
+
         $appointment = Appointment::with('customer', 'customer.company')->findOrFail($request->id);
 
 
@@ -149,7 +198,10 @@ class AppointmentsController extends Controller
         ], 201);
     }
 
-    public function updateAppointment(Request $request){
+   public function updateAppointment(Request $request){
+
+       $this->validator($request->appointment, true)->validate();
+
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
@@ -175,6 +227,8 @@ class AppointmentsController extends Controller
         }
         return response()->json($result, 200);
     }
+
+
 
     public function deleteAppointment(Request $request){
         $appointment = Appointment::findOrFail($request->id);
