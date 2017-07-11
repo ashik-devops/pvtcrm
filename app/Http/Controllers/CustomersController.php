@@ -56,6 +56,10 @@ class CustomersController extends Controller
         return view('customer.index-datatable');
     }
 
+    public function view(Customer $customer){
+        return view('customer.view', $customer);
+    }
+
     public function getCustomersAjax(){
 
         return Datatables::of(Customer::with('user'))

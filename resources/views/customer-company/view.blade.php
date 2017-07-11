@@ -159,44 +159,35 @@
                                                 <h3 class="panel-title">Address Book</h3>
                                             </div>
                                             <div class="panel-body">
-                                                <div class="panel-group panel-group-theme-1" id="accordion-2" role="tablist" aria-multiselectable="true">
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading panel-heading-theme-1" role="tab" id="headingOne-2">
-                                                            <h4 class="panel-title"><a class="active collapsed" data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2" aria-expanded="false" aria-controls="collapseOne-2"><i class="fa fa-plus-square"></i> Collapsible Group Item #1</a></h4>
-                                                        </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="address-list" style="width: 100%">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Address</th>
+                                                            <th>Type</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        @foreach($company->addresses as $address)
+                                                            <p>{{$address->street_address_1}}</p>
+                                                            @if(strlen($address->street_address_2)>0)
+                                                                <p>{{$address->street_address_2}}</p>
+                                                            @endif
+                                                            <p>{{$address->city}} {{$address->state}} {{$address->zip}}</p>
+                                                            <p>{{$address->country}}</p>
+                                                            @if(strlen($address->email) > 0)
+                                                                <p>{{$address->email}}</p>
+                                                            @endif
+                                                            @if(strlen($address->phone_no) > 0)
+                                                                <p>{{$address->phone_no}}</p>
+                                                            @endif
 
-                                                        <div id="collapseOne-2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne-2" aria-expanded="false" style="height: 0px;">
-                                                            <div class="panel-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading panel-heading-theme-1" role="tab" id="headingTwo-2">
-                                                            <h4 class="panel-title"><a class="" data-toggle="collapse" data-parent="#accordion-2" href="#collapseTwo-2" aria-expanded="true" aria-controls="collapseTwo-2"><i class="fa fa-minus-square"></i> Collapsible Group Item #2</a></h4>
-                                                        </div>
-
-                                                        <div id="collapseTwo-2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo-2" aria-expanded="true" style="">
-                                                            <div class="panel-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading panel-heading-theme-1" role="tab" id="headingThree-2">
-                                                            <h4 class="panel-title"><a class="collapsed" data-toggle="collapse" data-parent="#accordion-2" href="#collapseThree-2" aria-expanded="false" aria-controls="collapseThree-2"><i class="fa fa-plus-square"></i> Collapsible Group Item #3</a></h4>
-                                                        </div>
-
-                                                        <div id="collapseThree-2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree-2" aria-expanded="false">
-                                                            <div class="panel-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                        @endforeach
+                                                        </tbody>
+                                                    </table>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>

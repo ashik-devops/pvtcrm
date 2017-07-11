@@ -21,7 +21,8 @@ class Customer_company extends Model
 
     public function tasks(){
         return $this->hasManyThrough('App\Task', 'App\Customer');
-    }public function appointments(){
+    }
+    public function appointments(){
         return $this->hasManyThrough('App\Appointment', 'App\Customer');
     }
 }
