@@ -48,11 +48,12 @@ Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->
 
 
 
-Route::get('/companies', 'CompanyController@index')->name('company-index')->middleware('can:index,App\Customer');
+Route::get('/companies', 'CompanyController@index')->name('company-index');//->middleware('can:index,App\Customer');
 Route::post('/companies/create', 'CompanyController@createCompany')->name('create.company');//->middleware('can:list,App\Customer');
 Route::get('/companies/view/{company}', 'CompanyController@viewCompany')->name('view-company');//->middleware('can:list,App\Customer');
 Route::get('/companies/edit/', 'CompanyController@editCompany')->name('edit.modal.data');//->middleware('can:list,App\Customer');
 Route::post('/companies/update', 'CompanyController@updateCompany')->name('update.company');//->middleware('can:list,App\Customer');
+
 Route::post('/companies/delete', 'CompanyController@deleteCompany')->name('delete.company');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/data', 'CompanyController@getCompaniesAjax')->name('company-data');//->middleware('can:list,App\Customer');
 Route::get('/ajax/companies/tasks/{company}', 'CompanyController@getCompanyTasksAjax')->name('company-tasks-list');//->middleware('can:list,App\Customer');

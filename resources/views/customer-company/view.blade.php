@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('customer-company.create-form')
 @include('appointment.create-form')
 @include('task.create-form')
 @section('after-head-style')
@@ -54,6 +55,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Company Info</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCompany('{{$company->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Company</button>
                                             </div>
                                             <div class="panel-body">
                                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus pharetra faucibus. Cras leo dui, tempor vitae lacus sit amet, lacinia porta eros. Aliquam et mauris vitae arcu sollicitudin vehicula quis ac nisl. Pellentesque sapien sapien, pharetra nec metus vel, tincidunt pretium elit.
@@ -245,6 +247,23 @@
 @endsection
 
 @section('modal')
+    <!-- Modal for Editing company -->
+    <div class="modal" id="modal-new-company" tabindex="-1" role="dialog" aria-labelledby="modal-new-company">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <div id="new_edit_company">
+                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New Company</h4>
+                    </div>
+
+                </div>
+                <div class="modal-body">
+                    @yield('customer-create-from')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
     <!-- Modal for creating customer -->
     <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
         <div class="modal-dialog" role="document">
@@ -680,6 +699,94 @@
                 ]
             });
         }
+
+
+        var param_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        function editCompany(){
+            var id = param_id;
+            $('#new_edit_company .modal-title').html('Edit Company');
+
+            $.get("{{ route('edit.modal.data') }}", { id: id} ,function(data){
+                if(data){
+                    $('#modal_button').val('Update Company');
+                    $('#company_id').val(data.company.id);
+                    $('#companyName').val(data.company.name);
+                    $('#companyEmail').val(data.company.email);
+                    $('#companyPhone').val(data.company.phone_no);
+                    $('#companyWebsite').val(data.company.website);
+
+                    if(data.company_address.length > 0){
+                        $('#address_id').val(data.company_address[0].id);
+                        $('#streetAddress_1').val(data.company_address[0].street_address_1);
+                        $('#streetAddress_2').val(data.company_address[0].street_address_2);
+                        $('#city_id').val(data.company_address[0].city);
+                        $('#state_id').val(data.company_address[0].state);
+                        $('#country_id').val(data.company_address[0].country);
+                        $('#zip_id').val(data.company_address[0].zip);
+                    }
+                }
+            });
+            $('#modal-new-company').modal('show');
+        }
+
+        //This update code for updating company from company single view page....
+
+
+
+
+
+            $('#companyForm').on('submit',function(e) {
+                e.preventDefault();
+                var _token = $('input[name="_token"]').val();
+                var company = {
+                    companyId : $('#company_id').val(),
+                    addressId : $('#address_id').val(),
+                    companyName : $('#companyName').val(),
+                    companyEmail : $('#companyEmail').val(),
+                    companyPhone : $('#companyPhone').val(),
+                    companyWebsite : $('#companyWebsite').val(),
+                    streetAddress_1 : $('#streetAddress_1').val(),
+                    streetAddress_2 : $('#streetAddress_2').val(),
+                    city : $('#city_id').val(),
+                    state : $('#state_id').val(),
+                    country : $('#country_id').val(),
+                    zip : $('#zip_id').val()
+                };
+
+                var data = {
+                    _token : _token,
+                    company: company
+                };
+
+                if(company.companyId != ''){
+                    var request = jQuery.ajax({
+                        url: "{{ route('update.company') }}",
+                        data: data,
+                        method: "POST",
+                        dataType: "json"
+                    });
+                    request.done(function (response) {
+
+                        if(response.result == 'Saved'){
+                            $('#companyForm')[0].reset();
+                            $('#company_id').val('');
+                            $('#modal-new-company').modal('hide');
+                            $.notify(response.message, "success");
+                        }
+                        else{
+                            jQuery.notify(response.message, "error");
+                        }
+                    })
+
+                    request.fail(function (jqXHT, textStatus) {
+                        $.notify(textStatus, "error");
+                    });
+                }
+
+            });
+
+
+
 
 
 

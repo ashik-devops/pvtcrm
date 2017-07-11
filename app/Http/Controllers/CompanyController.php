@@ -189,6 +189,7 @@ class CompanyController extends Controller
 
     public function updateCompany( Request $request){
 
+
         $customer_company = Customer_company::findOrFail($request->company['companyId']);
         $address = Address::findOrFail($request->company['addressId']);
 
@@ -225,6 +226,8 @@ class CompanyController extends Controller
         ]);
 
     }
+
+
 
     public function deleteCompany(Request $request){
         $customer_company = Customer_company::findOrFail($request->id);
