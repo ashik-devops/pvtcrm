@@ -152,6 +152,7 @@ class CustomersController extends Controller
     public function getCustomer(Request $request){
 
         $customer = Customer::findOrFail($request->id);
+        $this->authorize('view',$customer);
         $user = User::findOrFail($customer->user_id);
 
 
@@ -177,6 +178,7 @@ class CustomersController extends Controller
 
     public function updateCustomer(Request $request){
         $customer = Customer::findOrFail($request->customer['customerId']);
+        $this->authorize('update',$customer);
         $address = Address::findOrFail($request->company['addressId']);
         $customer_company = Customer_company::findOrFail($request->company['companyId']);
         if(is_null($customer_company)){
@@ -225,6 +227,7 @@ class CustomersController extends Controller
 
     public function deleteCustomer(Request $request){
         $customer= Customer::findOrFail($request->id);
+        $this->authorize('delete',$customer);
         if(!is_null($customer)){
             $customer->delete();
             return response()->json([

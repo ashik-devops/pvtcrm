@@ -24,10 +24,10 @@ Route::get('/ajax/users/list', 'UsersController@listAll')->name('list-users')->m
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
 Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer')->middleware('can:create,App\Customer');
-Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data')->middleware('can:view,App\Customer');
-Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data')->middleware('can:update,App\Customer');
-Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data')->middleware('can:delete,App\Customer');
-Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data')->middleware('can:delete,App\Customer');
+Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
+Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
+Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
+Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
 Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
 
 
