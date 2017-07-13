@@ -271,6 +271,22 @@ class CustomersController extends Controller
         ]);
     }
 
+    public function getCustomerCompanyWise(Request $request){
+         if($request->companyId){
+             return response()->json([
+                 'customers' =>Customer::where('customer_company_id',$request->companyId)->get()->map(
+                     function($customer){
+                         $name=implode(', ', [$customer->last_name, $customer->first_name]);
+
+
+                         return ['id'=>$customer->id,'text'=>$name];
+                     })
+             ]);
+         }
+
+
+    }
+
 
 
 }

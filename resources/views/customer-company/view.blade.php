@@ -113,6 +113,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Tasks</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>  Create Task</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -556,6 +557,43 @@
             });
         }
 
+        /*========Start Task Module in Company Single view =========*/
+        var company_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        function createTask(){
+            var customer_select= jQuery("#taskCustomerId").select2({
+                placeholder: "Select a Customer",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('get-customer-company-wise')}}",
+                    dataType: 'json',
+                    delay: 250,
+
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            companyId: company_id,
+                        };
+                    },
+                    processResults : function (data){
+
+                        return {
+                            results: data.customers
+                        }
+                    },
+
+                    cache: true
+                }
+            });
+
+            jQuery('.modal').on('shown.bs.modal', function () {
+                $('#taskDueDateTimePicker').datetimepicker();
+
+            });
+
+            $('#task-modal').modal('show');
+        }
+
+
 
 
         //updating task
@@ -580,8 +618,35 @@
                 task: task
             };
 
-            if(task.taskId !== null){
+
+            if(task.taskId === ''){
                 //task editing.....
+                var request = jQuery.ajax({
+                    url: "{{ route('create.task') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_form($('#taskForm')[0]);
+                        $('#task-modal').modal('hide');
+                        get_all_task_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+
+            }else{
 
                 var request = jQuery.ajax({
                     url: "{{ route('update.task') }}",
@@ -605,15 +670,23 @@
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
-
             }
         });
+
+        function reset_form(form_el) {
+            form_el.reset();
+            $('#task_id').val('');
+
+
+        }
+
 
         function editTask(id){
             $('#task_modal_button').val('Update Task');
             $('#modal-new-task-label').text('Edit Task');
 
             $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                console.log(data);
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);
@@ -622,9 +695,10 @@
                     $('#taskDescription').val(data.task.description);
                     //jQuery('#taskDueDate').datetimepicker('update', new Date(data.task.due_date));
                     jQuery('#taskDueDate').datetimepicker({date: new Date(data.task.due_date)});
+                    //task_date = moment(data.task.due_date);
                     $('#taskPriority').val(data.task.priority);
                     $('#taskStatus').val(data.task.status);
-
+                   // updateDates();
                 }
 
             });
@@ -695,6 +769,7 @@
             });
         }
 
+        /*========End Task Module in Company Single view =========*/
 
         var param_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         function editCompany(){
