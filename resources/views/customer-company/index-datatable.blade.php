@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @include('customer-company.create-form')
-
+@include('task.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -84,7 +84,19 @@
             </div>
         </div>
     </div><!--/modal-->
-
+    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('task-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
 
 
 
