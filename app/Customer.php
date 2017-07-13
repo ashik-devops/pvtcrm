@@ -4,15 +4,17 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Activitylog\Traits\DetectsChanges;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Customer extends Model
 {
-    use SoftDeletes, LogsActivity;
+    use SoftDeletes, LogsActivity, CausesActivity, DetectsChanges;
     public  $with = ['company'];
     protected $dates = ['deleted_at'];
     protected static $logAttributes = ['first_name', 'last_name', 'title', 'email', 'phone_no', 'user', 'company', 'priority'];
-
+    protected static $logOnlyDirty = true;
     public function user(){
         return $this->belongsTo('App\User');
     }
