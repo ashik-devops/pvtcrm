@@ -3,22 +3,25 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\App;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
-class Appointment extends Model
+class Journal extends Model
 {
     use SoftDeletes, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
 
-    public  $with = ['customer'];
-    protected $dates = ['deleted_at'];
-    protected $fillable = ['title','customer_id','description','status','start_time','end_time'];
+    public function realted_obj(): MorphTo {
+        return $this->morphTo();
+    }
 
     public function customer(){
-        return $this->belongsTo('App\Customer');
+        $this->belongsTo(Customer::class);
     }
+
 }

@@ -10,7 +10,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Customer extends Model
 {
-    use SoftDeletes, LogsActivity, CausesActivity, DetectsChanges;
+    use SoftDeletes, CausesActivity, LogsActivity{
+        LogsActivity::activity insteadof CausesActivity;
+        CausesActivity::activity as log;
+    }
     public  $with = ['company'];
     protected $dates = ['deleted_at'];
     protected static $logAttributes = ['first_name', 'last_name', 'title', 'email', 'phone_no', 'user', 'company', 'priority'];

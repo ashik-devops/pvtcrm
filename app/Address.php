@@ -4,10 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Spatie\Activitylog\Traits\CausesActivity;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 class Address extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, CausesActivity, LogsActivity{
+        LogsActivity::activity insteadof CausesActivity;
+        CausesActivity::activity as log;
+    }
     public function customer(){
         return $this->belongsToMany('App\Customer', 'customer_addresses', 'address_id', 'customer_id');
     }
