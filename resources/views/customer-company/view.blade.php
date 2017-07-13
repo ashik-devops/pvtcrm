@@ -359,7 +359,7 @@
 
 
 
-        jQuery("#aptCustomerId").select2({
+      /*  jQuery("#aptCustomerId").select2({
             placeholder: "Select a Customer",
             allowClear:true,
             ajax: {
@@ -372,7 +372,7 @@
                     };
                 },
                 processResults : function (data){
-                    //console.log(data);
+
                     return {
                         results: data.customers
                     }
@@ -380,7 +380,34 @@
 
                 cache: true
             }
-        });
+        }); */
+
+        function get_customer(company_id){
+            var customer_select= jQuery("#taskCustomerId").select2({
+                placeholder: "Select a Customer",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('get-customer-company-wise')}}",
+                    dataType: 'json',
+                    delay: 250,
+
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            companyId: company_id,
+                        };
+                    },
+                    processResults : function (data){
+
+                        return {
+                            results: data.customers
+                        }
+                    },
+
+                    cache: true
+                }
+            });
+        }
 
         jQuery('.modal').on('shown.bs.modal', function () {
 
@@ -411,7 +438,8 @@
             $('#endTime').data("DateTimePicker").minDate(min_date);
         }
 
-        //creating appointment
+        /*========Start Appointment Module in Company Single view =========*/
+        var company_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
         $('#appointmentForm').on('submit',function(e){
@@ -535,9 +563,6 @@
 
 
         function get_all_appointment_data(){
-
-
-            //datatable.ajax.reload(null, false);
             $("#appointments-list").dataTable().fnDestroy();
             jQuery('#appointments-list').DataTable({
 //               responsive: false,
@@ -556,34 +581,12 @@
                 ]
             });
         }
+        /*========End Appointment Module in Company Single view =========*/
 
         /*========Start Task Module in Company Single view =========*/
         var company_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         function createTask(){
-            var customer_select= jQuery("#taskCustomerId").select2({
-                placeholder: "Select a Customer",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('get-customer-company-wise')}}",
-                    dataType: 'json',
-                    delay: 250,
-
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            companyId: company_id,
-                        };
-                    },
-                    processResults : function (data){
-
-                        return {
-                            results: data.customers
-                        }
-                    },
-
-                    cache: true
-                }
-            });
+            get_customer(company_id);
 
             jQuery('.modal').on('shown.bs.modal', function () {
                 $('#taskDueDateTimePicker').datetimepicker();
