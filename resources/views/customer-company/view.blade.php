@@ -137,6 +137,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Appointments</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createAppointment()" ><i class="fa fa-plus"></i>  Create Appointment</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -359,31 +360,8 @@
 
 
 
-      /*  jQuery("#aptCustomerId").select2({
-            placeholder: "Select a Customer",
-            allowClear:true,
-            ajax: {
-                url: "{{route('get-customer-options')}}",
-                dataType: 'json',
-                delay: 250,
-                data: function (params) {
-                    return {
-                        q: params.term, // search term
-                    };
-                },
-                processResults : function (data){
-
-                    return {
-                        results: data.customers
-                    }
-                },
-
-                cache: true
-            }
-        }); */
-
         function get_customer(company_id){
-            var customer_select= jQuery("#taskCustomerId").select2({
+            var customer_select= jQuery("#aptCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -408,6 +386,8 @@
                 }
             });
         }
+
+
 
         jQuery('.modal').on('shown.bs.modal', function () {
 
@@ -439,7 +419,12 @@
         }
 
         /*========Start Appointment Module in Company Single view =========*/
+
         var company_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+        function createAppointment(){
+            get_customer(company_id);
+            $('#appointment-modal').modal('show');
+        }
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
         $('#appointmentForm').on('submit',function(e){
@@ -463,9 +448,34 @@
                 appointment: appointment
             };
 
-            if(appointment.appointmentId !== null){
-
-
+            if(appointment.appointmentId === ''){
+                console.log('creating');
+                var request = jQuery.ajax({
+                    url: "{{ route('create.appointment') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_form($('#appointmentForm')[0]);
+                        $('#appointment-modal').modal('hide');
+                        get_all_appointment_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    console.log(jqXHT);
+                    $.notify(textStatus, "error");
+                });
+            }else{
+                console.log('updating');
                 var request = jQuery.ajax({
                     url: "{{ route('update.appointment') }}",
                     data: data,
@@ -586,7 +596,30 @@
         /*========Start Task Module in Company Single view =========*/
         var company_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         function createTask(){
-            get_customer(company_id);
+            var customer_select= jQuery("#taskCustomerId").select2({
+                placeholder: "Select a Customer",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('get-customer-company-wise')}}",
+                    dataType: 'json',
+                    delay: 250,
+
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            companyId: company_id,
+                        };
+                    },
+                    processResults : function (data){
+
+                        return {
+                            results: data.customers
+                        }
+                    },
+
+                    cache: true
+                }
+            });
 
             jQuery('.modal').on('shown.bs.modal', function () {
                 $('#taskDueDateTimePicker').datetimepicker();
