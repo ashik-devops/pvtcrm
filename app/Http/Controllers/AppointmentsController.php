@@ -59,7 +59,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjax(){
 
 
-        return Datatables::of(Appointment::with('customer','customer.company'))
+        return Datatables::of(Appointment::with('customer','customer.company')->select('Appointments.*'))
             ->addColumn('action',
                 function ($appointment){
                     return
@@ -69,7 +69,7 @@ class AppointmentsController extends Controller
                 })
 
 
-            ->addColumn('first_name',
+            ->addColumn('customer_name',
                 function ($appointment){
 
                     $string = '';
@@ -98,7 +98,7 @@ class AppointmentsController extends Controller
 
                 })
 
-            ->rawColumns(['id','title', 'first_name', 'description', 'start_time' ,'end_time',  'action'])
+            ->rawColumns(['id','title', 'customer_name', 'description', 'start_time' ,'end_time',  'action'])
             ->make(true);
 
     }

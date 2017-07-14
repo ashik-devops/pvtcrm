@@ -116,7 +116,7 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
-                    {data: 'first_name', name: 'first_name'},
+                    {data: 'customer_name', name: 'customer_name'},
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
