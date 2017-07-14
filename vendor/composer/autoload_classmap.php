@@ -75,6 +75,7 @@ return array(
     'CreateUserProfilesTable' => $baseDir . '/database/migrations/2017_05_16_203912_create_user_profiles_table.php',
     'CreateUsersTable' => $baseDir . '/database/migrations/2014_10_12_000000_create_users_table.php',
     'CreateViewAppointmentIndex' => $baseDir . '/database/migrations/2017_07_14_004244_create_view_appointment_index.php',
+    'CreateViewTasksIndex' => $baseDir . '/database/migrations/2017_07_14_010909_create_view_tasks_index.php',
     'Cron\\AbstractField' => $vendorDir . '/mtdowling/cron-expression/src/Cron/AbstractField.php',
     'Cron\\CronExpression' => $vendorDir . '/mtdowling/cron-expression/src/Cron/CronExpression.php',
     'Cron\\DayOfMonthField' => $vendorDir . '/mtdowling/cron-expression/src/Cron/DayOfMonthField.php',

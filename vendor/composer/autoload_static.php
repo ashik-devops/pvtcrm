@@ -380,6 +380,7 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'CreateUserProfilesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_16_203912_create_user_profiles_table.php',
         'CreateUsersTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_000000_create_users_table.php',
         'CreateViewAppointmentIndex' => __DIR__ . '/../..' . '/database/migrations/2017_07_14_004244_create_view_appointment_index.php',
+        'CreateViewTasksIndex' => __DIR__ . '/../..' . '/database/migrations/2017_07_14_010909_create_view_tasks_index.php',
         'Cron\\AbstractField' => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron/AbstractField.php',
         'Cron\\CronExpression' => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron/CronExpression.php',
         'Cron\\DayOfMonthField' => __DIR__ . '/..' . '/mtdowling/cron-expression/src/Cron/DayOfMonthField.php',
