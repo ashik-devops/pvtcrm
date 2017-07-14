@@ -75,9 +75,9 @@ class AppointmentsController extends Controller
                     $string = '';
                     $string .= '<a href="#">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
                     if($appointment->company_name){
-                        $string .= '@ <a href="#">'.$appointment->company_name.'</a>';
+                        $string .= '@ <a href="'.route("view-company", $appointment->company_id).'">'.$appointment->company_name.'</a>';
                     }
-                    if($appointment->customer["last_name"] == null && $appointment->customer["first_name"] == null && $appointment->customer['company']['name'] == null){
+                    if($appointment->customer_last_name == null && $appointment->customer_first_name == null && $appointment->comapny_name == null){
                         $string = '';
                     }
 
@@ -98,7 +98,7 @@ class AppointmentsController extends Controller
 
                 })
 
-            ->rawColumns(['id','title', 'customer_name', 'description', 'start_time' ,'end_time',  'action'])
+            ->rawColumns(['customer_name', 'description',  'action'])
             ->make(true);
 
     }
