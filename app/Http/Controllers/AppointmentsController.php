@@ -59,7 +59,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjax(){
 
 
-        return Datatables::of(Appointment::with('customer','customer.company')->select('Appointments.*'))
+        return Datatables::of(DB::table('appointments_index'))
             ->addColumn('action',
                 function ($appointment){
                     return
@@ -73,9 +73,9 @@ class AppointmentsController extends Controller
                 function ($appointment){
 
                     $string = '';
-                    $string .= '<a href="#">'.$appointment->customer["last_name"].', '. $appointment->customer['first_name'].'</a>';
-                    if($appointment->customer['company']['name']){
-                        $string .= '@ <a href="#">'.$appointment->customer['company']['name'].'</a>';
+                    $string .= '<a href="#">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
+                    if($appointment->company_name){
+                        $string .= '@ <a href="#">'.$appointment->company_name.'</a>';
                     }
                     if($appointment->customer["last_name"] == null && $appointment->customer["first_name"] == null && $appointment->customer['company']['name'] == null){
                         $string = '';
