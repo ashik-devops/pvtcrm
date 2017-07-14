@@ -76,6 +76,7 @@
                                                                     <th>Description</th>
                                                                     <th>Start Time</th>
                                                                     <th>End Time</th>
+                                                                    <th>Status</th>
                                                                     <th>Action</th>
                                                                 </tr>
                                                                 </thead>
@@ -718,6 +719,7 @@
                 {data: 'description', name: 'description'},
                 {data: 'start_time', name: 'start_time'},
                 {data: 'end_time', name: 'end_time'},
+                {data: 'status', name: 'status'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
 
 
