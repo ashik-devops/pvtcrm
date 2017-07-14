@@ -106,7 +106,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjaxPending(){
 
 
-        return Datatables::of(Appointment::with('customer','customer.company')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
+        return Datatables::of(DB::table('appointments_index')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
             ->addColumn('action',
                 function ($appointment){
                     return
@@ -116,20 +116,20 @@ class AppointmentsController extends Controller
                 })
 
 
-            ->addColumn('first_name',
+            ->addColumn('customer_name',
                 function ($appointment){
 
                     $string = '';
-                    $string .= '<a href="#">'.$appointment->customer["last_name"].', '. $appointment->customer['first_name'].'</a>';
-                    if($appointment->customer['company']['name']){
-                        $string .= '@ <a href="#">'.$appointment->customer['company']['name'].'</a>';
+                    $string .= '<a href="#">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
+                    if($appointment->company_name){
+                        $string .= '@ <a href="'.route("view-company", $appointment->company_id).'">'.$appointment->company_name.'</a>';
                     }
-                    if($appointment->customer["last_name"] == null && $appointment->customer["first_name"] == null && $appointment->customer['company']['name'] == null){
+                    if($appointment->customer_last_name == null && $appointment->customer_first_name == null && $appointment->comapny_name == null){
                         $string = '';
                     }
 
                     return $string;
-            })
+                })
             ->addColumn('description',
                 function ($appointment){
                     return  substr($appointment->description,0,70) . ' ....';
@@ -145,7 +145,7 @@ class AppointmentsController extends Controller
 
                 })
 
-            ->rawColumns(['id','title', 'first_name', 'description', 'start_time' ,'end_time',  'action'])
+            ->rawColumns(['id','title', 'customer_name', 'description', 'start_time' ,'end_time',  'action'])
             ->make(true);
 
     }
