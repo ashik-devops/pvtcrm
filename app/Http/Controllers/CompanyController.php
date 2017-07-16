@@ -109,7 +109,7 @@ class CompanyController extends Controller
      */
 
     public function getCompanyAppointmentsAjax(Customer_company $company){
-        return Datatables::of($company->appointments()->get(['appointments.id', 'appointments.description', 'appointments.title', 'appointments.start_time', 'appointments.end_time']))
+        return Datatables::of(DB::table('appointments_index')->where('company_id', $company->id))
             ->addColumn('action',
                 function ($appointment){
                     return
@@ -117,6 +117,10 @@ class CompanyController extends Controller
                         <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                          <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-eye-open"></i> View</a>';
                 })
+            ->addColumn('customer_name', function ($appointment){
+                return '<a href="#">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
+            })
+            ->rawColumns(['customer_name', 'action'])
             ->make(true);
     }
 

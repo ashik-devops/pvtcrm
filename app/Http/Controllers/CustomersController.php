@@ -56,8 +56,10 @@ class CustomersController extends Controller
         return view('customer.index-datatable');
     }
 
-    public function view(Customer $customer){
-        return view('customer.view', $customer);
+    public function viewCustomer(Customer $customer){
+        return view('customer.view')->with([
+            'customer'=>$customer
+        ]);
     }
 
     public function getCustomersAjax(){
@@ -68,9 +70,7 @@ class CustomersController extends Controller
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editCustomer('.$customer->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="deleteCustomer('.$customer->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#view/'.$customer->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
-                        <a href="#quick-view/" data-id="'.$customer->id.'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> Quick View</a>'
-                        ;
+                        <a href="'.route('view-customer',[$customer->id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('name',
                 function ($customer){
@@ -289,6 +289,51 @@ class CustomersController extends Controller
 
 
     }
+
+    /**
+     * Sends json data to datatable of all tasks of company falls under current user scope.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function getCustomerTasksAjax(Customer $customer){
+        return Datatables::of(DB::table('tasks_index')->where('customer_id', $customer->id))
+            ->addColumn('customer_name', function ($task){
+                return '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
+            })
+            ->addColumn('action',
+                function ($task){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                })
+            ->rawColumns(['customer_name', 'action'])
+            ->make(true);
+    }
+    /**
+     * Sends json data to datatable of all tasks of company falls under current user scope.
+     *
+     * @return \Illuminate\Http\Response
+     */
+
+    public function getCustomerAppointmentsAjax(Customer $customer){
+        return Datatables::of(DB::table('appointments_index')->where('customer_id', $customer->id))
+            ->addColumn('action',
+                function ($appointment){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                         <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-eye-open"></i> View</a>';
+                })
+            ->addColumn('customer_name', function ($appointment){
+                return '<a href="#">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
+            })
+            ->rawColumns(['customer_name', 'action'])
+            ->make(true);
+    }
+
+
 
 
 

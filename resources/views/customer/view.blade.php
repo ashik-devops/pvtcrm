@@ -13,7 +13,7 @@
 @section('content')
     <div id="content-wrapper" class="content-wrapper view view-account">
         <div class="container-fluid">
-            <h2 class="view-title">{{$company->name}}</h2>
+            <h2 class="view-title">{{$customer->name}}</h2>
             <div class="row">
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module">
@@ -22,17 +22,16 @@
                                 <div class="user-info">
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
-                                        <li class="name"><h3>{{$company->name}}</h3>
+                                        <li class="name"><h3>{{$customer->name}}</h3>
                                             <label class="label label-info"></label></li>
                                         <li>
                                             <address>
-                                                <p>{{implode(', ', [$company->addresses->first()->city, $company->addresses->first()->state, $company->addresses->first()->country, $company->addresses->first()->zip])}}</p>
+                                                <p>{{implode(', ', [$customer->addresses->first()->city, $customer->addresses->first()->state, $customer->addresses->first()->country, $customer->addresses->first()->zip])}}</p>
                                             </address>
 
                                         </li>
-                                        <li class="email"><a href="mailto:{{$company->email}}">{{$company->email}}</a></li>
-                                        <li class="phone"><a href="tel:{{$company->phone_no}}">{{$company->phone_no}}</a></li>
-                                        <li class="website"><a href="{{$company->website}}">{{$company->website}}</a></li>
+                                        <li class="email"><a href="mailto:{{$customer->email}}">{{$customer->email}}</a></li>
+                                        <li class="phone"><a href="tel:{{$customer->phone_no}}">{{$customer->phone_no}}</a></li>
                                     </ul>
                                 </div>
 
@@ -43,8 +42,7 @@
                                         <li><a href="#tasks" role="presentation" aria-controls="tasks" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-note2 icon"></span> Tasks</a></li>
                                         <li><a href="#appointments" role="presentation" aria-controls="appointments" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-date icon"></span> Appointments</a></li>
                                         <li><a href="#addresses" role="presentation" aria-controls="addresses" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-paper-plane icon"></span> Addresses</a></li>
-                                        <li><a href="#employees" role="presentation" aria-controls="employees" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-users icon"></span>Contacts</a></li>
-                                    </ul>
+                                        </ul>
                                 </nav>
 
                             </div>
@@ -55,7 +53,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Company Info</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCompany('{{$company->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Company</button>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer('{{$customer->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Company</button>
                                             </div>
                                             <div class="panel-body">
                                                 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus pharetra faucibus. Cras leo dui, tempor vitae lacus sit amet, lacinia porta eros. Aliquam et mauris vitae arcu sollicitudin vehicula quis ac nisl. Pellentesque sapien sapien, pharetra nec metus vel, tincidunt pretium elit.
@@ -125,7 +123,6 @@
                                                             <th>Status</th>
                                                             <th>Due Date</th>
                                                             <th>Priority</th>
-                                                            <th>Employee</th>
                                                             <th>Actions</th>
                                                         </tr>
                                                         </thead>
@@ -150,7 +147,6 @@
                                                             <th>Description</th>
                                                             <th>Start Time</th>
                                                             <th>End Time</th>
-                                                            <th>Employee</th>
                                                             <th>Action</th>
                                                         </tr>
                                                         </thead>
@@ -176,60 +172,28 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        @foreach($company->addresses as $address)
-                                                            <p>{{$address->street_address_1}}</p>
-                                                            @if(strlen($address->street_address_2)>0)
-                                                                <p>{{$address->street_address_2}}</p>
-                                                            @endif
-                                                            <p>{{$address->city}} {{$address->state}} {{$address->zip}}</p>
-                                                            <p>{{$address->country}}</p>
-                                                            @if(strlen($address->email) > 0)
-                                                                <p>{{$address->email}}</p>
-                                                            @endif
-                                                            @if(strlen($address->phone_no) > 0)
-                                                                <p>{{$address->phone_no}}</p>
-                                                            @endif
+                                                        {{--@foreach($customer->addresses as $address)--}}
+                                                            {{--<p>{{$address->street_address_1}}</p>--}}
+                                                            {{--@if(strlen($address->street_address_2)>0)--}}
+                                                                {{--<p>{{$address->street_address_2}}</p>--}}
+                                                            {{--@endif--}}
+                                                            {{--<p>{{$address->city}} {{$address->state}} {{$address->zip}}</p>--}}
+                                                            {{--<p>{{$address->country}}</p>--}}
+                                                            {{--@if(strlen($address->email) > 0)--}}
+                                                                {{--<p>{{$address->email}}</p>--}}
+                                                            {{--@endif--}}
+                                                            {{--@if(strlen($address->phone_no) > 0)--}}
+                                                                {{--<p>{{$address->phone_no}}</p>--}}
+                                                            {{--@endif--}}
 
-                                                        @endforeach
+                                                        {{--@endforeach--}}
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="employees" role="tabpanel" class="tab-pane">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title">Contact Persons</h3>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Name</th>
-                                                            <th>Role</th>
-                                                            <th>Location</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($company->employees as $employee)
-                                                            <tr>
-                                                                <td>{{implode(', ', array_filter([$employee->last_name, $employee->first_name]))}}</td>
-                                                                <td>{{$employee->title}}</td>
-                                                                <td>{{implode(', ', array_filter([$employee->addresses->first()->city, $employee->addresses->first()->state, $employee->addresses->first()->country, $employee->addresses->first()->zip]))}}</td>
-                                                                <td><a href="#" class="btn btn-success">View</a></td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
 
-
-                                    </div>
                                 </div>
 
                             </div>
@@ -320,14 +284,13 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('company-tasks-list', [$company->id]) !!}',
+                ajax: '{!! route('customer-tasks-list', [$customer->id]) !!}',
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
                     { data: 'status', name: 'status' },
                     { data: 'due_date', name: 'due_date' },
                     { data: 'priority', name: 'priority' },
-                    { data: 'customer_name', name: 'customer_name' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -341,14 +304,13 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('company-appointments-list', [$company->id]) !!}',
+                ajax: '{!! route('customer-appointments-list', [$customer->id]) !!}',
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
-                    { data: 'customer_name', name: 'customer_name' },
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -454,7 +416,7 @@
             endTime : 'endTime'
         };
 
-        var company_id = "{{$company->id}}";
+        var customer_id = "{{$customer->id}}";
 
 
         function createAppointment(){

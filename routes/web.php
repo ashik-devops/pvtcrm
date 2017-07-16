@@ -30,7 +30,9 @@ Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('del
 Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
 Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
 Route::get('/get-customer-company-wise', 'CustomersController@getCustomerCompanyWise')->name('get-customer-company-wise');//->middleware('can:index,App\Customer');
-
+Route::get('/ajax/customer/tasks/{customer}', 'CustomersController@getCustomerTasksAjax')->name('customer-tasks-list');//->middleware('can:list,App\Customer');
+Route::get('/ajax/customer/appointments/{customer}', 'CustomersController@getCustomerAppointmentsAjax')->name('customer-appointments-list');//->middleware('can:list,App\Customer');
+Route::get('/customer/view/{customer}', 'CustomersController@viewCustomer')->name('view-customer');//->middleware('can:list,App\Customer');
 
 
 Route::get('/tasks', 'TasksController@index')->name('task-index');//->middleware('can:index,App\Task');
