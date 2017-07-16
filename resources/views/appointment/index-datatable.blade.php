@@ -20,7 +20,7 @@
             <h2 class="view-title">Appointments</h2>
 
                 <div class="actions">
-                    <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
+                    <button id="new-apt-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
                 </div>
 
 
@@ -176,6 +176,11 @@
             updateDates();
         });
 
+        jQuery('#new-apt-btn').click(function () {
+            if($('#'+inputMap.appointmentId).val() != '' || $('#'+inputMap.aptCustomerId).val() != ''){
+                reset_form($("#appointmentForm")[0]);
+            }
+        });
 
         function updateDates(){
                 $('#startTime').data("DateTimePicker").date(min_date);

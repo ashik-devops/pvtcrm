@@ -88,7 +88,10 @@ class CompanyController extends Controller
      */
 
     public function getCompanyTasksAjax(Customer_company $company){
-        return Datatables::of($company->tasks()->get(['tasks.id', 'tasks.title', 'tasks.status', 'tasks.priority', 'tasks.due_date']))
+        return Datatables::of(DB::table('tasks_index')->where('company_id', $company->id))
+            ->addColumn('customer_name', function ($task){
+                return '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
+            })
             ->addColumn('action',
                 function ($task){
                     return
@@ -96,6 +99,7 @@ class CompanyController extends Controller
                         <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                         <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
+            ->rawColumns(['customer_name', 'action'])
             ->make(true);
     }
     /**

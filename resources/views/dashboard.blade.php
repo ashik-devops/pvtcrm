@@ -839,10 +839,10 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
+                });
                 request.error(function(xhr){
                     jQuery.map(jQuery.parseJSON(xhr.responseText),function (data, key){
-                        handle_appointment_error(xhr);
+                        handle_error(xhr);
                     });
 
 
@@ -855,7 +855,15 @@
 
 
         });
+        function handle_error(xhr) {
 
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
+                });
+            }
+
+        }
         function reset_appointment_form(form_el) {
             form_el.reset();
             min_date = moment();
@@ -1036,7 +1044,7 @@
                     }
                 });
                 request.error(function(xhr){
-                    handle_task_error(xhr);
+                    handle_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -1063,7 +1071,7 @@
                     }
                 })
                 request.error(function(xhr){
-                    handle_task_error(xhr);
+                    handle_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -1071,15 +1079,7 @@
 
             }
         });
-        function handle_task_error(xhr) {
 
-            if(xhr.status==422){
-                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
-                    showTaskParselyError(key, data[0]);
-                });
-            }
-
-        }
         function showTaskParselyError(field, msg){
             var el = jQuery("#"+taskInputMap[field]).parsley();
             el.removeError('fieldError');

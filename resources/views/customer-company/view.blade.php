@@ -113,7 +113,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Tasks</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>  Create Task</button>
+                                                <button id="new-task-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>  Create Task</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -125,6 +125,7 @@
                                                             <th>Status</th>
                                                             <th>Due Date</th>
                                                             <th>Priority</th>
+                                                            <th>Employee</th>
                                                             <th>Actions</th>
                                                         </tr>
                                                         </thead>
@@ -137,7 +138,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Appointments</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createAppointment()" ><i class="fa fa-plus"></i>  Create Appointment</button>
+                                                <button id="new-apt-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createAppointment()" ><i class="fa fa-plus"></i>  Create Appointment</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -149,6 +150,7 @@
                                                             <th>Description</th>
                                                             <th>Start Time</th>
                                                             <th>End Time</th>
+                                                            <th>Employee</th>
                                                             <th>Action</th>
                                                         </tr>
                                                         </thead>
@@ -310,8 +312,8 @@
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
 
     <script type="text/javascript">
-        jQuery('document').ready(function() {
-            jQuery('#tasks-list').DataTable({
+        task_date=moment();
+            var task_datatable = jQuery('#tasks-list').DataTable({
 //                responsive: false,
                 select: true,
                 processing: true,
@@ -325,10 +327,13 @@
                     { data: 'status', name: 'status' },
                     { data: 'due_date', name: 'due_date' },
                     { data: 'priority', name: 'priority' },
+                    { data: 'customer_name', name: 'customer_name' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
             });
+
+
             jQuery('#appointments-list').DataTable({
 //               responsive: false,
                 select: true,
@@ -348,13 +353,7 @@
                 ]
             });
 
-        });
 
-
-
-    </script>
-
-    <script type="text/javascript">
         var min_date = moment();
         var max_date = moment();
 
@@ -387,6 +386,27 @@
             });
         }
 
+        jQuery('.modal').on('shown.bs.modal', function () {
+
+
+            $('#startTime').datetimepicker({});
+            $('#endTime').datetimepicker({ useCurrent: false});
+
+            updateAppointmentDates();
+
+            $('#taskDueDateTimePicker').datetimepicker();
+            updateTaskDate();
+        });
+
+        $("#startTime").on("dp.change", function (e) {
+            min_date=e.date;
+            updateAppointmentDates();
+        });
+        $("#endTime").on("dp.change", function (e) {
+            max_date=e.date;
+            updateAppointmentDates();
+        });
+
 
 
         jQuery('.modal').on('shown.bs.modal', function () {
@@ -395,12 +415,12 @@
             $('#startTime').datetimepicker({});
             $('#endTime').datetimepicker({ useCurrent: false});
 
+            updateAppointmentDates();
 
-
-            updateDates();
-
-
+            $('#taskDueDateTimePicker').datetimepicker();
+            updateTaskDate();
         });
+
 
         $("#startTime").on("dp.change", function (e) {
             min_date=e.date;
@@ -409,8 +429,7 @@
             max_date=e.date;
         });
 
-
-        function updateDates(){
+        function updateAppointmentDates(){
             $('#startTime').data("DateTimePicker").date(min_date);
             $('#startTime').data("DateTimePicker").minDate(moment());
 //                $('#startTime').data("DateTimePicker").maxDate(max_date);
@@ -418,9 +437,25 @@
             $('#endTime').data("DateTimePicker").minDate(min_date);
         }
 
-        /*========Start Appointment Module in Company Single view =========*/
+        function updateTaskDate(){
+            $('#taskDueDateTimePicker').data("DateTimePicker").date(task_date);
+        }
 
-        var company_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+
+        /*========Start Appointment Module in Company Single view =========*/
+        var aptinputMap={
+            appointmentId : 'appointment_id',
+            aptCustomerId : 'aptCustomerId',
+            appointmentTitle : 'appointmentTitle',
+            appointmentDescription : 'appointmentDescription',
+            appointmentStatus : 'appointmentStatus',
+            startTime : 'startTime',
+            endTime : 'endTime'
+        };
+
+        var company_id = "{{$company->id}}";
+
+
         function createAppointment(){
             get_customer(company_id);
             $('#appointment-modal').modal('show');
@@ -433,23 +468,23 @@
             //console.log('hello');
 
             var appointment = {
-                appointmentId : $('#appointment_id').val(),
-                aptCustomerId : $('#aptCustomerId').val(),
-                appointmentTitle : $('#appointmentTitle').val(),
-                appointmentDescription : $('#appointmentDescription').val(),
-                appointmentStatus : $('#appointmentStatus').val(),
-                startTime : $('#startTime').val(),
-                endTime : $('#endTime').val()
+                appointmentId : $('#'+aptinputMap.appointmentId).val(),
+                aptCustomerId : $('#'+aptinputMap.aptCustomerId).val(),
+                appointmentTitle : $('#'+aptinputMap.appointmentTitle).val(),
+                appointmentDescription : $('#'+aptinputMap.appointmentDescription).val(),
+                appointmentStatus : $('#'+aptinputMap.appointmentStatus).val(),
+                startTime : $('#'+aptinputMap.startTime).val(),
+                endTime : $('#'+aptinputMap.endTime).val()
             };
 
-            //console.log(appointment);
+
             var data = {
                 _token : _token,
                 appointment: appointment
             };
 
             if(appointment.appointmentId === ''){
-                console.log('creating');
+                //console.log('creating');
                 var request = jQuery.ajax({
                     url: "{{ route('create.appointment') }}",
                     data: data,
@@ -458,7 +493,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        reset_form($('#appointmentForm')[0]);
+                        reset_appointment_form($('#appointmentForm')[0]);
                         $('#appointment-modal').modal('hide');
                         get_all_appointment_data();
                         $.notify(response.message, "success");
@@ -471,11 +506,10 @@
                     handle_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
-                    console.log(jqXHT);
+                    //console.log(jqXHT);
                     $.notify(textStatus, "error");
                 });
             }else{
-                console.log('updating');
                 var request = jQuery.ajax({
                     url: "{{ route('update.appointment') }}",
                     data: data,
@@ -484,7 +518,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#appointmentForm')[0].reset();
+                        reset_appointment_form($('#appointmentForm')[0]);
                         $('#appointment_id').val('');
                         $('#appointment-modal').modal('hide');
                         get_all_appointment_data();
@@ -494,14 +528,37 @@
                         jQuery.notify(response.message, "error");
                     }
                 })
-
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
             }
 
         });
+        jQuery('#new-apt-btn').click(function () {
+            if($('#'+aptinputMap.appointmentId).val() != '' || $('#'+aptinputMap.aptCustomerId).val() != ''){
+                reset_appointment_form($("#appointmentForm")[0]);
+            }
+        });
 
+        jQuery('#new-task-btn').click(function () {
+            //console.log($('#'+taskInputMap.taskId).val() != '');
+            if($('#'+taskInputMap.taskId).val() != ''){
+                reset_task_form($("#taskForm")[0]);
+            }
+        });
+
+        function reset_appointment_form(form_el) {
+            form_el.reset();
+            min_date = moment();
+            max_date = moment();
+            $('#'+aptinputMap.appointmentId).val('');
+            $('#'+aptinputMap.aptCustomerId).val('').trigger('change');
+
+
+        }
         function editAppointment(id){
 
             $('#appointment_modal_button').val('Update Appointment');
@@ -520,7 +577,7 @@
                     min_date = moment(data.appointment.start_time);
                     max_date = moment(data.appointment.end_time);
 
-                    updateDates();
+                    updateAppointmentDates();
 
                 }
 
@@ -573,28 +630,34 @@
 
 
         function get_all_appointment_data(){
-            $("#appointments-list").dataTable().fnDestroy();
-            jQuery('#appointments-list').DataTable({
-//               responsive: false,
-                select: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('company-appointments-list', [$company->id]) !!}',
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'title', name: 'title'},
-                    {data: 'description', name: 'description'},
-                    {data: 'start_time', name: 'start_time'},
-                    {data: 'end_time', name: 'end_time'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
 
-                ]
-            });
+            appointment_datatable.ajax.reload(null, false);
         }
+
+        function showAptParselyError(field, msg){
+            var el = jQuery("#"+aptinputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
+
+
         /*========End Appointment Module in Company Single view =========*/
 
         /*========Start Task Module in Company Single view =========*/
-        var company_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
+
+        var taskInputMap={
+            taskId : 'task_id',
+            taskCustomerId : 'taskCustomerId',
+            taskTitle : 'taskTitle',
+            taskDescription : 'taskDescription',
+            taskDueDate : 'taskDueDate',
+            taskStatus : 'taskStatus',
+            taskPriority : 'taskPriority',
+        };
+
+
+
+
         function createTask(){
             var customer_select= jQuery("#taskCustomerId").select2({
                 placeholder: "Select a Customer",
@@ -621,11 +684,6 @@
                 }
             });
 
-            jQuery('.modal').on('shown.bs.modal', function () {
-                $('#taskDueDateTimePicker').datetimepicker();
-
-            });
-
             $('#task-modal').modal('show');
         }
 
@@ -640,13 +698,13 @@
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
             var task = {
-                taskId : $('#task_id').val(),
-                taskCustomerId : $('#taskCustomerId').val(),
-                taskTitle : $('#taskTitle').val(),
-                taskDescription : $('#taskDescription').val(),
-                taskDueDate : $('#taskDueDate').val(),
-                taskStatus : $('#taskStatus').val(),
-                taskPriority : $('#taskPriority').val(),
+                taskId : $('#'+taskInputMap.taskId).val(),
+                taskCustomerId : $('#'+taskInputMap.taskCustomerId).val(),
+                taskTitle : $('#'+taskInputMap.taskTitle).val(),
+                taskDescription : $('#'+taskInputMap.taskDescription).val(),
+                taskDueDate : $('#'+taskInputMap.taskDueDate).val(),
+                taskStatus : $('#'+taskInputMap.taskStatus).val(),
+                taskPriority : $('#'+taskInputMap.taskPriority).val(),
 
             };
             var data = {
@@ -665,7 +723,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        reset_form($('#taskForm')[0]);
+                        reset_task_form($('#taskForm')[0]);
                         $('#task-modal').modal('hide');
                         get_all_task_data();
                         $.notify(response.message, "success");
@@ -692,7 +750,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        $('#taskForm')[0].reset();
+                        reset_task_form($('#taskForm')[0]);
                         $('#task_id').val('');
                         $('#task-modal').modal('hide');
                         get_all_task_data();
@@ -702,17 +760,18 @@
                         jQuery.notify(response.message, "error");
                     }
                 })
-
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
             }
         });
 
-        function reset_form(form_el) {
+        function reset_task_form(form_el) {
             form_el.reset();
             $('#task_id').val('');
-
 
         }
 
@@ -722,19 +781,17 @@
             $('#modal-new-task-label').text('Edit Task');
 
             $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
-                console.log(data);
+                //console.log(data);
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);
                     $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
-                    //jQuery('#taskDueDate').datetimepicker('update', new Date(data.task.due_date));
-                    jQuery('#taskDueDate').datetimepicker({date: new Date(data.task.due_date)});
-                    //task_date = moment(data.task.due_date);
+                    task_date = moment(data.task.due_date);
                     $('#taskPriority').val(data.task.priority);
                     $('#taskStatus').val(data.task.status);
-                   // updateDates();
+                    updateTaskDate();
                 }
 
             });
@@ -769,42 +826,40 @@
                         $.post("{{ route('delete.task') }}", data, function(result){
 
                             if(result.result == 'Success'){
-                                swal("Deleted!", "Company has been deleted.", "success");
+                                swal("Deleted!", "Task has been deleted.", "success");
                                 get_all_task_data();
                                 $.notify('Task deleted successfully', "danger");
                             }
                             else{
-                                swal("Failed", "Failed to delete the company", "error");
+                                swal("Failed", "Failed to delete the task", "error");
                             }
 
                         });
                     } else {
-                        swal("Cancelled", "Company is safe :)", "error");
+                        swal("Cancelled", "Task is safe :)", "error");
                     }
                 });
         }
 
         function get_all_task_data(){
-
-            $("#tasks-list").dataTable().fnDestroy();
-            var datatable = jQuery('#tasks-list').DataTable({
-//                responsive: false,
-                select: true,
-                processing: true,
-                serverSide: true,
-                ajax: '{!! route('company-tasks-list', [$company->id]) !!}',
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'title', name: 'title'},
-                    { data: 'status', name: 'status' },
-                    { data: 'due_date', name: 'due_date' },
-                    { data: 'priority', name: 'priority' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
-
-                ]
-            });
+            task_datatable.ajax.reload(null, false);
         }
 
+        function handle_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showTaskParselyError(key, data[0]);
+                });
+            }
+
+        }
+
+        function showTaskParselyError(field, msg){
+            var el = jQuery("#"+taskInputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
         /*========End Task Module in Company Single view =========*/
 
         var param_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
