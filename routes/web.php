@@ -13,6 +13,7 @@
 
 //Route::group(['middleware'=>'web'])
 Route::get('/', 'HomeController@dashboard')->name('dashboard');
+
 Auth::routes();
 
 Route::get('/users', 'UsersController@index')->name('users-index')->middleware('can:index,App\User');
@@ -92,3 +93,9 @@ Route::post('/companies/bulk/delete', 'CompanyController@bulkDeleteCompany')->na
 
 Route::get('/calendar', 'CalendarController@index')->name('calendar');
 Route::get('/ajax/calendar/events', 'CalendarController@getAjaxEvents')->name('ajax-get-events');
+
+
+Route::get('/ajax/journals/data', 'JournalController@getJournalsAjax')->name('journal-data');
+Route::post('/create-journal', 'JournalController@createJournal')->name('create.journal');
+Route::get('/journals/edit/', 'JournalController@editJournal')->name('edit.journal.data');
+Route::post('/journals/update', 'JournalController@updateJournal')->name('update.journal');

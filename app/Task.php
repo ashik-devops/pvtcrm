@@ -19,4 +19,8 @@ class Task extends Model
     public function customer(){
         return $this->belongsTo('App\Customer');
     }
+
+    public function journals(){
+        return $this->morphMany('App\Journal','related_obj');
+    }
 }

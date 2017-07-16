@@ -18,7 +18,7 @@ class CreateJournalsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->integer('customer_id')->unsigned();
-            $table->integer('related_obj')->unsigned()->nullable();
+            $table->integer('related_obj_id')->unsigned()->nullable();
             $table->string('related_obj_type')->nullable();
             $table->dateTime('log_date');
             $table->softDeletes();

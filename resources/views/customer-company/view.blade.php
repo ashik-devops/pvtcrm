@@ -1,5 +1,6 @@
 @extends('layouts.app')
 @include('customer-company.create-form')
+@include('customer-company.create-form-journal')
 @include('appointment.create-form')
 @include('task.create-form')
 @section('after-head-style')
@@ -66,9 +67,10 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Journal Entries</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createJournal()" ><i class="fa fa-plus"></i>  Create Journal</button>
                                             </div>
                                             <div class="panel-body">
-                                                <div class="panel-group panel-group-theme-1" id="accordion-2" role="tablist" aria-multiselectable="true">
+                                                <!--<div class="panel-group panel-group-theme-1" id="accordion-2" role="tablist" aria-multiselectable="true">
                                                     <div class="panel panel-default">
                                                         <div class="panel-heading panel-heading-theme-1" role="tab" id="headingOne-2">
                                                             <h4 class="panel-title"><a class="active collapsed" data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2" aria-expanded="false" aria-controls="collapseOne-2"><i class="fa fa-plus-square"></i> Collapsible Group Item #1</a></h4>
@@ -104,9 +106,23 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>-->
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="journals-list" style="width: 100%">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Title</th>
+                                                            <th>Description</th>
+                                                            <th>Follow Up</th>
+                                                            <th>Log Date</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                    </table>
                                                 </div>
-
                                             </div>
+
                                         </div>
                                     </div>
                                     <div id="tasks" role="tabpanel" class="tab-pane">
@@ -286,7 +302,19 @@
     </div><!--/modal-->
 @endsection
 
-
+<div class="modal customerModal" id="journal-modal" role="dialog" aria-labelledby="journal-modal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="modal-new-journal-label">Add New Journal</h4>
+            </div>
+            <div class="modal-body">
+                @yield('journal-create-form')
+            </div>
+        </div>
+    </div>
+</div><!--/modal-->
 
 
 @section('after-footer-script')
@@ -343,6 +371,24 @@
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ]
+            });
+            jQuery('#journals-list').DataTable({
+//               responsive: false,
+                select: true,
+                processing: true,
+                serverSide: true,
+                paging:true,
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+                ajax: '{!! route('journal-data') !!}',
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'title', name: 'title'},
+                    {data: 'description', name: 'description'},
+                    {data: 'related_obj_type', name: 'related_obj_type'},
+                    {data: 'log_date', name: 'log_date'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -806,6 +852,302 @@
         }
 
         /*========End Task Module in Company Single view =========*/
+        /*========Start Journal Module in Company Single view =========*/
+
+        $('#typeItem').hide();
+        $('#followUpTask').hide();
+        $('#followUpAppointment').hide();
+
+        function createJournal(){
+
+            if($("#followUpCheck").prop('checked') === false) {
+                $('#task_id').val(''),
+                    $('#taskTitle').val(''),
+                    $('#taskDescription').val(''),
+                    $('#taskDueDate').val(''),
+                    $('#taskStatus').val(''),
+                    $('#taskPriority').val('')
+            }
+            var customer_select= jQuery("#journalCustomerId").select2({
+                placeholder: "Select a Customer",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('get-customer-company-wise')}}",
+                    dataType: 'json',
+                    delay: 250,
+
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            companyId: company_id,
+                        };
+                    },
+                    processResults : function (data){
+
+                        return {
+                            results: data.customers
+                        }
+                    },
+
+                    cache: true
+                }
+            });
+            jQuery('.modal').on('shown.bs.modal', function () {
+                $('#logDateTimePicker').datetimepicker();
+
+            });
+            $('#journal-modal').modal('show');
+        }
+
+        function followUpTest(){
+            if($("#followUpCheck").prop('checked') == true) {
+                $('#typeItem').show();
+
+            }else{
+                $('#typeItem').hide();
+                $('#followUpTask').hide();
+                $('#followUpAppointment').hide();
+            }
+        }
+
+        $("input[name=followUpType]:radio").click(function () {
+            if ($('input[name=followUpType]:checked').val() === "task") {
+                $("#taskTitle").attr('required', '');
+                $("#taskDescription").attr('required', '');
+                $("#taskDueDate").attr('required', '');
+
+
+
+                $('#taskDueDateTimePicker').datetimepicker();
+                $('#followUpTask').show();
+                $('#followUpAppointment').hide();
+
+
+
+
+
+            } else if ($('input[name=followUpType]:checked').val() === "appointment") {
+                $('#followUpTask').hide();
+                $('#followUpAppointment').show();
+
+            }
+        });
+
+
+
+        $('#journalForm').on('submit',function(e) {
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+
+            var journal = {
+                journalId : $('#journal_id').val(),
+                journalCustomerId : $('#journalCustomerId').val(),
+                journalTitle : $('#journalTitle').val(),
+                journalDescription : $('#journalDescription').val(),
+                journalLogDate : $('#journalLogDate').val(),
+
+            };
+            var task = {
+                taskId : $('#task_id').val(),
+                taskTitle : $('#taskTitle').val(),
+                taskDescription : $('#taskDescription').val(),
+                taskDueDate : $('#taskDueDate').val(),
+                taskStatus : $('#taskStatus').val(),
+                taskPriority : $('#taskPriority').val(),
+
+            };
+            var appointment = {
+                appointmentId : $('#appointment_id').val(),
+                appointmentTitle : $('#appointmentTitle').val(),
+                appointmentDescription : $('#appointmentDescription').val(),
+                appointmentStatus : $('#appointmentStatus').val(),
+                startTime : $('#startTime').val(),
+                endTime : $('#endTime').val()
+
+            };
+
+            var data = {
+                _token : _token,
+                journal: journal,
+                task: task,
+                appointment: appointment
+            };
+
+            console.log(appointment);
+
+            if($("#followUpCheck").prop('checked') === false){
+                $('#task_id').val(''),
+                $('#taskTitle').val(''),
+                $('#taskDescription').val(''),
+                $('#taskDueDate').val(''),
+                $('#taskStatus').val(''),
+                $('#taskPriority').val(''),
+                $('#appointmentId').val(),
+                $('#appointmentTitle').val(),
+                $('#appointmentDescription').val(),
+                $('#appointmentStatus').val(),
+                $('#startTime').val(),
+                $('#endTime').val()
+                document.querySelector('#taskTitle').required = false;
+                document.querySelector('#taskDescription').required = false;
+                document.querySelector('#taskDueDate').required = false;
+                document.querySelector('#taskStatus').required = false;
+                document.querySelector('#taskPriority').required = false;
+
+                document.querySelector('#appointmentTitle').required = false;
+                document.querySelector('#appointmentDescription').required = false;
+                document.querySelector('#appointmentStatus').required = false;
+                document.querySelector('#startTime').required = false;
+                document.querySelector('#endTime').required = false;
+
+
+
+            }
+           /* if ($('input[name=followUpType]:checked').val() == "task"){
+                $('#edit-submitted-first-name').removeAttr('required');​​​​​
+            }*/
+
+            if(journal.journalId === ''){
+                var request = jQuery.ajax({
+                    url: "{{ route('create.journal') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+
+                    if(response.result == 'Saved'){
+                        $('#journalForm')[0].reset();
+                        $('#journal_id').val('');
+                        $('#journal-modal').modal('hide');
+                        get_all_journal_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                })
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+            }else{
+               //journal updating
+
+                console.log(appointment);
+                var request = jQuery.ajax({
+                    url: "{{ route('update.journal') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_form($('#taskForm')[0]);
+                        $('#journal_id').val('');
+                        $('#journal-modal').modal('hide');
+                        get_all_journal_data();
+                        jQuery.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                })
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            }
+
+        });
+
+
+
+        function editJournal(id){
+
+            $('#journal_modal_button').val('Update Journal');
+            $('#modal-new-journal-label').text('Edit Journal');
+
+            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
+                console.log(data);
+
+                if(data){
+                    $('#journal_id').val(data.journal.id);
+                    $('#journalCustomerId').val(data.journal.customer_id);
+                    $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.company.name+"</option>");
+                    $('#journalTitle').val(data.journal.title);
+                    $('#journalDescription').val(data.journal.description);
+
+                    jQuery('#journalLogDate').datetimepicker({date: new Date(data.journal.log_date)});
+
+                    if(data.task != null){
+                        $('#task_id').val(data.task.id);
+                        $('#taskTitle').val(data.task.title);
+                        $('#taskDescription').val(data.task.description);
+                        jQuery('#taskDueDate').datetimepicker({date: new Date(data.task.due_date)});
+                        $('#taskPriority').val(data.task.priority);
+                        $('#taskStatus').val(data.task.status);
+
+                        $('#followUpCheckboxId').hide();
+                        $('#typeId').show();
+                        $('#typeItem').hide();
+                        $('#followUpAppointment').hide();
+                        $('#followUpTask').show();
+
+                    }
+
+                    if(data.appointment != null){
+                        jQuery('#appointment_id').val(data.appointment.id);
+                        jQuery('#appointmentTitle').val(data.appointment.title);
+                        jQuery('#appointmentDescription').val(data.appointment.description);
+                        jQuery('#appointmentStatus').val(data.appointment.status);
+                        min_date = moment(data.appointment.start_time);
+                        max_date = moment(data.appointment.end_time);
+
+                        updateDates();
+
+                        $('#followUpCheckboxId').hide();
+                        $('#typeId').show();
+                        $('#typeItem').hide();
+                        $('#followUpTask').hide();
+                        $('#followUpAppointment').show();
+                    }
+
+                    if(data.task == '' && data.appointment == ''){
+                        console.log('kisu nai');
+                    }
+
+                }
+
+            });
+            $('#journal-modal').modal('show');
+        }
+
+        function get_all_journal_data(){
+            $("#journals-list").dataTable().fnDestroy();
+            jQuery('#journals-list').DataTable({
+//               responsive: false,
+                select: true,
+                processing: true,
+                serverSide: true,
+                paging:true,
+                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+                ajax: '{!! route('journal-data') !!}',
+                columns: [
+                    {data: 'id', name: 'id'},
+                    {data: 'title', name: 'title'},
+                    {data: 'description', name: 'description'},
+                    {data: 'related_obj_type', name: 'related_obj_type'},
+                    {data: 'log_date', name: 'log_date'},
+                    {data: 'action', name: 'action', orderable: false, searchable: false},
+
+                ]
+            });
+        }
+        /*========End Journal Module in Company Single view =========*/
 
         var param_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
         function editCompany(){
