@@ -686,7 +686,7 @@
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'title', name: 'title'},
-                {data: 'first_name', name: 'first_name'},
+                {data: 'customer_name', name: 'customer_name'},
                 { data: 'description', name: 'description'},
                 { data: 'status', name: 'status'},
                 { data: 'priority', name: 'priority'},

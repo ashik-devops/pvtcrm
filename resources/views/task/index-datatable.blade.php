@@ -125,7 +125,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-                    { data: 'customer', name: 'customer'},
+                    { data: 'customer_name', name: 'customer_name'},
                     { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
                     { data: 'status', name: 'status'},
