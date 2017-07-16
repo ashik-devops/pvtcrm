@@ -32,7 +32,7 @@
                                         </li>
                                         <li class="email"><a href="mailto:{{$company->email}}">{{$company->email}}</a></li>
                                         <li class="phone"><a href="tel:{{$company->phone_no}}">{{$company->phone_no}}</a></li>
-                                        <li class="website"><a href="{{$company->website}}">{{$company->website}}</a></li>
+                                        <li class="website"><a target="_blank" href="{{$company->website}}">{{$company->website}}</a></li>
                                     </ul>
                                 </div>
 
@@ -58,7 +58,27 @@
                                                 <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCompany('{{$company->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Company</button>
                                             </div>
                                             <div class="panel-body">
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus pharetra faucibus. Cras leo dui, tempor vitae lacus sit amet, lacinia porta eros. Aliquam et mauris vitae arcu sollicitudin vehicula quis ac nisl. Pellentesque sapien sapien, pharetra nec metus vel, tincidunt pretium elit.
+                                                <div class="col-md-6 col-lg6 col-sm-12 table-responsive">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <td>Company Name</td>
+                                                            <td>{{$company->name}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Company Phone</td>
+                                                            <td><a href="tel:{{$company->phone_no}}">{{$company->phone_no}}</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Company Email</td>
+                                                            <td><a href="mailto:{{$company->email}}">{{$company->email}}</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Company Website</td>
+                                                            <td><a target="_blank" href="{{$company->website}}">{{$company->website}}</a></td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="col-md-6 col-lg6 col-sm-12"></div>
                                             </div>
                                         </div>
                                     </div>
