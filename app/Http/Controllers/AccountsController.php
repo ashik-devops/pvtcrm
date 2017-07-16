@@ -60,12 +60,12 @@ class AccountsController extends Controller
         $accounts = new Account();
         if(!empty($request->q)){
 
-            $accounts = $accounts->where('name', 'like', "%$request->q%");
+            $accounts = $accounts->where('name', 'like', "%$request->q%")->orWhere('account_no', 'like', "%$request->q%");
 
         }
 
         return response()->json([
-            'items' => $accounts->select(['id', 'name'])->get(),
+            'items' => $accounts->select(['id', DB::raw('CONCAT(name, " #", account_no) as name')])->get(),
             'total_count'=>$accounts->count()
         ],200);
     }

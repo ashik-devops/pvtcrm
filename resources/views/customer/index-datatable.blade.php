@@ -99,66 +99,91 @@
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script type="text/javascript">
 
-            var datatable = jQuery('#customers-table').DataTable({
+        var inputMap = {
+            customerId : 'customerId',
+            userId : 'userId',
+            firstName : 'firstName',
+            lastName : 'lastName',
+            customerTitle : 'customerTitle',
+            customerEmail : 'customerEmail',
+            customerPhone : 'customerPhone',
+            customerPriority : 'customerPriority',
+
+            accountId : 'accountId',
+            accountNo : 'accountNo',
+            addressId : 'addressId',
+            accountName : 'accountName',
+            accountEmail : 'customerEmail',
+            accountPhone : 'customerPhone',
+            accountWebsite : 'accountWebsite',
+            streetAddress_1 : 'streetAddress_1',
+            streetAddress_2 : 'streetAddress_2',
+            city : 'city_id',
+            state : 'state_id',
+            country : 'country_id',
+            zip : 'zip_id',
+        };
+
+        var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
-                dom: 'Bfrtip',
-                select: true,
-                processing: true,
-                serverSide: true,
-                paging:true,
-                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('customers-data') !!}',
-                columns: [
-                    { data: 'id', name: 'id', searchable: false, visible:false },
-                    { data: 'account_no', name: 'account_no', searchable: true},
-                    { data: 'name', name: 'name', searchable: false},
-                    { data: 'account_name', name: 'account_name', searchable: true},
-                    { data: 'email', name: 'email' },
-                    { data: 'phone_no', name: 'phone_no' },
-                    { data: 'priority', name: 'priority' },
-                    { data: 'user_name', name: 'user_name', searchable: true},
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
+            dom: 'Bfrtip',
+            select: true,
+            processing: true,
+            serverSide: true,
+            paging:true,
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+            ajax: '{!! route('customers-data') !!}',
+            columns: [
+                { data: 'id', name: 'id', searchable: false, visible:false },
+                { data: 'account_no', name: 'account_no', searchable: true},
+                { data: 'name', name: 'name', searchable: false},
+                { data: 'account_name', name: 'account_name', searchable: true},
+                { data: 'email', name: 'email' },
+                { data: 'phone_no', name: 'phone_no' },
+                { data: 'priority', name: 'priority' },
+                { data: 'user_name', name: 'user_name', searchable: true},
+                { data: 'action', name: 'action', orderable: false, searchable: false},
 
-                ],
-                buttons: [
-                    {
-                        text: 'Reload',
-                        action: function ( e, dt, node, config ) {
-                            dt.ajax.reload(null, false);
-                        }
-                    },
-                    {
-                        text: 'Select Visible',
-                        action: function () {
-                            datatable.rows().select();
-                        }
-                    },
-                    {
-                        text: 'Select none',
-                        action: function () {
-                            datatable.rows().deselect();
-                        }
+            ],
+            buttons: [
+                {
+                    text: 'Reload',
+                    action: function ( e, dt, node, config ) {
+                        dt.ajax.reload(null, false);
                     }
-                ]
-            });
-
-            //bulk action
-
-            var bulk_action=jQuery("#bulk_action").select2();
-
-            bulk_action.on('select2:select', function (e) {
-                var action = e.params.data.id;
-                if(action != ''){
-                    var selected_rows = datatable.rows( { selected: true }).data();
-
-                    switch (action){
-                        case "Delete": deleteRows(selected_rows);
-                                    break;
+                },
+                {
+                    text: 'Select Visible',
+                    action: function () {
+                        datatable.rows().select();
+                    }
+                },
+                {
+                    text: 'Select none',
+                    action: function () {
+                        datatable.rows().deselect();
                     }
                 }
+            ]
+        });
+
+        //bulk action
+
+        var bulk_action=jQuery("#bulk_action").select2();
+
+        bulk_action.on('select2:select', function (e) {
+            var action = e.params.data.id;
+            if(action != ''){
+                var selected_rows = datatable.rows( { selected: true }).data();
+
+                switch (action){
+                    case "Delete": deleteRows(selected_rows);
+                        break;
+                }
+            }
 
 
-            });
+        });
 
 
 
@@ -167,190 +192,208 @@
         //creating customer, editing customer and deleting customer
 
 
-            jQuery("#new-customer-btn").click(function (){
-                jQuery("#customerForm")[0].reset();
-                jQuery(".customerModal .modal-title").html('Add New Customer');
-                jQuery("#accountId").html('');
-            });
-            var account_select=jQuery("#accountId").select2({
-                placeholder: "Select a Account",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('list-accounts')}}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                        };
-                    },
-                    processResults : function (data){
-                        if(data.total_count < 1){
-                            return {results: [{
-                                id: -1,
-                                text: "Create New"
-                            }]};
+        jQuery("#new-customer-btn").click(function (){
+            reset_form(jQuery("#customerForm")[0]);
+            jQuery(".customerModal .modal-title").html('Add New Customer');
+            jQuery("#accountId").html('');
+        });
+        var account_select=jQuery("#accountId").select2({
+            placeholder: "Select a Account",
+            allowClear:true,
+            ajax: {
+                url: "{{route('list-accounts')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+                    if(data.total_count < 1){
+                        return {results: [{
+                            id: -1,
+                            text: "Create New"
+                        }]};
 
-                        }
+                    }
 
-                        return {
-                            results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
-                        }
-                    },
+                    return {
+                        results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                    }
+                },
 
-                    cache: true
-                }
-            });
-            account_select.on("select2:select", function (e) {
-                var selction = e.params.data;
+                cache: true
+            }
+        });
+        account_select.on("select2:select", function (e) {
+            var selction = e.params.data;
 
-                if(selction.id === -1){
-                    //creating customer with account
-                    $('#AccountDataAtCustomerForm').show();
-                    $("#AccountDataAtCustomerForm input").val('');
+            if(selction.id === -1){
+                //creating customer with account
+                $('#AccountDataAtCustomerForm').show();
+                $("#AccountDataAtCustomerForm input").val('');
 
-                }
-                else if(selction.id > 1){
-                    $('#AccountDataAtCustomerForm').hide();
-                    //now a selection is made select the account
-                }
+            }
+            else if(selction.id > 1){
+                $('#AccountDataAtCustomerForm').hide();
+                //now a selection is made populate data of selected account
+
+            }
 
 
 //
-            });
+        });
 
-            var priority= jQuery("#customerPriority").select2({});
+        var priority= jQuery("#customerPriority").select2({});
 
-            var user_select=jQuery("#userId").select2({
-                placeholder: "Assign User",
-                ajax: {
-                    url: "{{route('list-users')}}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                        };
-                    },
-                    processResults : function (data){
+        var user_select=jQuery("#userId").select2({
+            placeholder: "Assign User",
+            ajax: {
+                url: "{{route('list-users')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
 
-                       return {
-                           results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
-                       }
-                    },
-                    cache: true
-                }
-            });
-
-
-            $('#hiddenForEditCustomer').show();
-            $('#AccountDataAtCustomerForm').hide();
+                    return {
+                        results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                    }
+                },
+                cache: true
+            }
+        });
 
 
-            $('#customerForm').on('submit',function(e){
-                e.preventDefault();
-                var _token = $('input[name="_token"]').val();
-
-                var customer = {
-                    customerId : $('#customerId').val(),
-                    userId : $('#userId').val(),
-                    firstName : $('#firstName').val(),
-                    lastName : $('#lastName').val(),
-                    customerTitle : $('#customerTitle').val(),
-                    customerEmail : $('#customerEmail').val(),
-                    customerPhone : $('#customerPhone').val(),
-                    customerPriority : $('#customerPriority').val(),
-                };
-
-                var account = {
-                    accountId : $('#accountId').val(),
-                    addressId : $('#addressId').val(),
-                    accountName : $('#accountName').val(),
-                    accountEmail : $('#customerEmail').val(),
-                    accountPhone : $('#customerPhone').val(),
-                    accountWebsite : $('#accountWebsite').val(),
-                    streetAddress_1 : $('#streetAddress_1').val(),
-                    streetAddress_2 : $('#streetAddress_2').val(),
-                    city : $('#city_id').val(),
-                    state : $('#state_id').val(),
-                    country : $('#country_id').val(),
-                    zip : $('#zip_id').val()
-                };
+        $('#hiddenForEditCustomer').show();
+        $('#AccountDataAtCustomerForm').hide();
 
 
-                var data = {
-                    _token : _token,
-                    account: account,
-                    customer:customer
-                };
+        $('#customerForm').on('submit',function(e){
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+
+            var customer = {
+                customerId : $('#'+inputMap.customerId).val(),
+                userId : $('#'+inputMap.userId).val(),
+                firstName : $('#'+inputMap.firstName).val(),
+                lastName : $('#'+inputMap.lastName).val(),
+                customerTitle : $('#'+inputMap.customerTitle).val(),
+                customerEmail : $('#'+inputMap.customerEmail).val(),
+                customerPhone : $('#'+inputMap.customerPhone).val(),
+                customerPriority : $('#'+inputMap.customerPriority).val(),
+            };
+
+            var account = {
+                accountId : $('#'+inputMap.accountId).val(),
+                accountNo : $('#'+inputMap.accountNo).val(),
+                addressId : $('#'+inputMap.addressId).val(),
+                accountName : $('#'+inputMap.accountName).val(),
+                accountEmail : $('#'+inputMap.customerEmail).val(),
+                accountPhone : $('#'+inputMap.customerPhone).val(),
+                accountWebsite : $('#'+inputMap.accountWebsite).val(),
+                streetAddress_1 : $('#'+inputMap.streetAddress_1).val(),
+                streetAddress_2 : $('#'+inputMap.streetAddress_2).val(),
+                city : $('#'+inputMap.city).val(),
+                state : $('#'+inputMap.state).val(),
+                country : $('#'+inputMap.country).val(),
+                zip : $('#'+inputMap.zip).val()
+            };
+
+
+            var data = {
+                _token : _token,
+                account: account,
+                customer:customer
+            };
 
 
 
-                if(customer.customerId < 1){
-                    //customer creating.....
+            if(customer.customerId < 1){
+                //customer creating.....
 
 
-                    var request = jQuery.ajax({
-                        url: "{{ route('create.customer') }}",
-                        data: data,
-                        method: "POST",
-                        dataType: "json"
-                    });
-                    request.done(function (response) {
+                var request = jQuery.ajax({
+                    url: "{{ route('create.customer') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
 
-                        if(response.result){
-                            if(response.result == 'Saved') {
-                                $('#customerForm')[0].reset();
-                                jQuery("#accountId").html("");
-                                $('#modal-new-member').modal('hide');
-                                get_all_customer_data();
-                                $.notify(response.message, "success");
-
-                            }
-                            else{
-                                jQuery.notify(response.message, "error");
-
-                            }
-                        }
-
-                    })
-
-                    request.fail(function (jqXHT, textStatus) {
-                        $.notify(textStatus, "error");
-
-                    });
-
-                }else{
-                    //updating customer.....
-
-                    var request = jQuery.ajax({
-                        url: "{{ route('update.customer.data') }}",
-                        data: data,
-                        method: "POST",
-                        dataType: "json"
-                    });
-                    request.done(function (response) {
-                        if(response.result == 'Saved'){
-                            $('#customerForm')[0].reset();
+                    if(response.result){
+                        if(response.result == 'Saved') {
+                            reset_form($('#customerForm')[0]);
                             jQuery("#accountId").html("");
-                            $('#customerId').val('');
                             $('#modal-new-member').modal('hide');
                             get_all_customer_data();
                             $.notify(response.message, "success");
+
                         }
                         else{
                             jQuery.notify(response.message, "error");
+
                         }
-                    })
+                    }
 
-                    request.fail(function (jqXHT, textStatus) {
-                        $.notify(textStatus, "error");
-                    });
-                }
-            });
+                })
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+
+                });
+
+            }else{
+                //updating customer.....
+
+                var request = jQuery.ajax({
+                    url: "{{ route('update.customer.data') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_form($('#customerForm')[0]);
+                        jQuery("#accountId").html("");
+                        $('#customerId').val('');
+                        $('#modal-new-member').modal('hide');
+                        get_all_customer_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                })
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            }
+        });
 
 
+        function handle_error(xhr) {
+            if(xhr.status==422){
+                showParselyError();
+            }
+        }
+        function showParselyError(field, msg){
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
 
+        function reset_form(el) {
+            el.reset();
+            jQuery("#"+inputMap.addressId).val('');
+            jQuery("#"+inputMap.customerId).val('');
+            jQuery("#"+inputMap.accountId).val('0');
+        }
         // For editing Customer
 
 
@@ -398,20 +441,20 @@
 
 
 
-                   /* $('#account_id').val(data.account.id);
-                    $('#accountName').val(data.account.name);
-                    $('#accountEmail').val(data.account.email);
-                    $('#accountPhone').val(data.account.phone_no);
-                    $('#accountWebsite').val(data.account.website);
+                    /* $('#account_id').val(data.account.id);
+                     $('#accountName').val(data.account.name);
+                     $('#accountEmail').val(data.account.email);
+                     $('#accountPhone').val(data.account.phone_no);
+                     $('#accountWebsite').val(data.account.website);
 
-                    if(data.account_address.length > 0){
-                        $('#streetAddress_1').val(data.account_address[0].street_address_1);
-                        $('#streetAddress_2').val(data.account_address[0].street_address_2);
-                        $('#city_id').val(data.account_address[0].city);
-                        $('#state_id').val(data.account_address[0].state);
-                        $('#country_id').val(data.account_address[0].country);
-                        $('#zip_id').val(data.account_address[0].zip);
-                    } */
+                     if(data.account_address.length > 0){
+                     $('#streetAddress_1').val(data.account_address[0].street_address_1);
+                     $('#streetAddress_2').val(data.account_address[0].street_address_2);
+                     $('#city_id').val(data.account_address[0].city);
+                     $('#state_id').val(data.account_address[0].state);
+                     $('#country_id').val(data.account_address[0].country);
+                     $('#zip_id').val(data.account_address[0].zip);
+                     } */
                 }
             });
 

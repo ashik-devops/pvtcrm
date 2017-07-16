@@ -67,19 +67,23 @@
 
     </div>
     <div class="form-group">
-        <label class="sr-only">Do You Want to Create Company</label>
-        <select name="companyId" class="form-control" id="companyId" style="width: 100%"></select>
+        <label class="sr-only">Choose Account</label>
+        <select name="accountId" class="form-control" id="accountId" style="width: 100%"></select>
 
     </div>
 
-    <div id="CompanyDataAtCustomerForm">
+    <div id="AccountDataAtCustomerForm">
         <div class="form-group">
-            <label class="sr-only">Company Name</label>
-            <input id="companyName" type="text" name="company-name" class="form-control" placeholder="Company Name">
+            <label class="sr-only">Account No</label>
+            <input id="accountNo" type="text" name="account-no" class="form-control" placeholder="Account No">
         </div>
         <div class="form-group">
-            <label class="sr-only">Company Website</label>
-            <input  id="companyWebsite"  type="url" name="company-website" class="form-control" placeholder="Company Website">
+            <label class="sr-only">Account Name</label>
+            <input id="accountName" type="text" name="account-name" class="form-control" placeholder="Account Name">
+        </div>
+        <div class="form-group">
+            <label class="sr-only">Account Website</label>
+            <input  id="accountWebsite"  type="url" name="account-website" class="form-control" placeholder="Account Website">
 
         </div>
     </div>
@@ -119,7 +123,7 @@
             <input id="zip_id" type="text" class="form-control" placeholder="Zip" name="zip" >
         </div>
 
-    <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+    <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Account</button>-->
     <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Customer">
 
     </div>
