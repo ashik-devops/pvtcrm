@@ -1,44 +1,53 @@
 @section('customer-create-from')
-    <form method="post" class="ajax-from"  data-parsley-validate id="companyForm">
+    <form method="post" class="ajax-from"  data-parsley-validate id="accountForm">
 
         {{ csrf_field() }}
-        <input type="hidden" id="company_id" name="companyId">
+        <input type="hidden" id="account_id" name="accountId">
         <input type="hidden" id="address_id" name="addressId">
-        <div class="form-group {{ $errors->has('company-name') ? ' has-error' : '' }}" id="company-name">
-            <label class="sr-only">Company Name</label>
-            <input id="companyName" type="text" name="company-name" class="form-control" placeholder="Comapny Name" data-parsley-trigger="change focusout" data-parsley-required-message="Company Name is required" required value="{{old('company-name')}}">
-            @if ($errors->has('company-name'))
+        <div class="form-group {{ $errors->has('account-no') ? ' has-error' : '' }}" id="account-no">
+            <label class="sr-only">Account No</label>
+            <input id="accountNo" type="text" name="account-no" class="form-control" placeholder="Account No" data-parsley-trigger="change focusout" data-parsley-required-message="Account No is required" required value="{{old('account-no')}}">
+            @if ($errors->has('account-name'))
                 <span class="help-block">
-                                        <strong>{{ $errors->first('company-name') }}</strong>
+                                        <strong>{{ $errors->first('account-no') }}</strong>
                                     </span>
             @endif
         </div>
-        <div class="form-group {{ $errors->has('company-email') ? ' has-error' : '' }}" id="company-email">
-            <label class="sr-only">Company Name</label>
-            <input  id="companyEmail"  type="email" name="company-email" class="form-control" placeholder="Comapny Email" data-parsley-trigger="change focusout" data-parsley-required-message="Company Email is required" required value="{{old('company-email')}}">
-            @if ($errors->has('company-email'))
+        <div class="form-group {{ $errors->has('account-name') ? ' has-error' : '' }}" id="account-name">
+            <label class="sr-only">Account Name</label>
+            <input id="accountName" type="text" name="account-name" class="form-control" placeholder="Account/Company Name" data-parsley-trigger="change focusout" data-parsley-required-message="Account Name is required" required value="{{old('account-name')}}">
+            @if ($errors->has('account-name'))
                 <span class="help-block">
-                                        <strong>{{ $errors->first('company-email') }}</strong>
+                                        <strong>{{ $errors->first('account-name') }}</strong>
+                                    </span>
+            @endif
+        </div>
+        <div class="form-group {{ $errors->has('account-email') ? ' has-error' : '' }}" id="account-email">
+            <label class="sr-only">Account Name</label>
+            <input  id="accountEmail"  type="email" name="account-email" class="form-control" placeholder="Email" data-parsley-trigger="change focusout" data-parsley-required-message="Account Email is required" required value="{{old('account-email')}}">
+            @if ($errors->has('account-email'))
+                <span class="help-block">
+                                        <strong>{{ $errors->first('account-email') }}</strong>
                                     </span>
             @endif
         </div>
 
-        <div class="form-group {{ $errors->has('company-phone') ? ' has-error' : '' }}" id="company-phone">
-            <label class="sr-only">Company Phone</label>
-            <input  id="companyPhone"  type="text" name="company-phone" class="form-control" placeholder="Comapny Phone" data-parsley-trigger="change focusout" data-parsley-required-message="Company Phone is required" required value="{{old('company-phone')}}">
-            @if ($errors->has('company-phone'))
+        <div class="form-group {{ $errors->has('account-phone') ? ' has-error' : '' }}" id="account-phone">
+            <label class="sr-only">Account Phone</label>
+            <input  id="accountPhone"  type="text" name="account-phone" class="form-control" placeholder="Phone" data-parsley-trigger="change focusout" data-parsley-required-message="Account Phone is required" required value="{{old('account-phone')}}">
+            @if ($errors->has('account-phone'))
                 <span class="help-block">
-                                        <strong>{{ $errors->first('company-phone') }}</strong>
+                                        <strong>{{ $errors->first('account-phone') }}</strong>
                                     </span>
             @endif
         </div>
 
-        <div class="form-group {{ $errors->has('company-website') ? ' has-error' : '' }}" id="company-website">
-            <label class="sr-only">Company Website</label>
-            <input  id="companyWebsite"  type="url" name="company-website" class="form-control" placeholder="Comapny Website" value="{{old('company-website')}}">
-            @if ($errors->has('company-website'))
+        <div class="form-group {{ $errors->has('account-website') ? ' has-error' : '' }}" id="account-website">
+            <label class="sr-only">Account Website</label>
+            <input  id="accountWebsite"  type="url" name="account-website" class="form-control" placeholder="Website" value="{{old('account-website')}}">
+            @if ($errors->has('account-website'))
                 <span class="help-block">
-                                        <strong>{{ $errors->first('company-website') }}</strong>
+                                        <strong>{{ $errors->first('account-website') }}</strong>
                                     </span>
             @endif
         </div>
@@ -116,8 +125,8 @@
             @endif
         </div>
 
-        <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
-        <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Company">
+        <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Account</button>-->
+        <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Account">
 
     </form>
 @endsection

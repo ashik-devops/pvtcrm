@@ -41,7 +41,7 @@ class TasksController extends Controller
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'taskId'=>'required|integer|exists:appointments,id',
+                'taskId'=>'required|integer|exists:tasks,id',
             ]);
         }
 
