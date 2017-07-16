@@ -4,6 +4,28 @@
         {{ csrf_field() }}
         <input type="hidden" id="customerId">
         <input type="hidden" id="addressId">
+    <div class="form-group">
+        <label class="sr-only">Choose Account</label>
+        <select name="accountId" class="form-control" id="accountId" style="width: 100%"></select>
+
+    </div>
+    <div id="AccountDataAtCustomerForm">
+        <div class="form-group">
+            <label class="sr-only">Account No</label>
+            <input id="accountNo" type="text" name="account-no" class="form-control" placeholder="Account No">
+        </div>
+        <div class="form-group">
+            <label class="sr-only">Account Name</label>
+            <input id="accountName" type="text" name="account-name" class="form-control" placeholder="Account Name">
+        </div>
+        <div class="form-group">
+            <label class="sr-only">Account Website</label>
+            <input  id="accountWebsite"  type="url" name="account-website" class="form-control" placeholder="Account Website">
+
+        </div>
+    </div>
+
+
         <div class="form-group {{ $errors->has('first-name') ? ' has-error' : '' }}" id="first-name">
             <label class="sr-only">First Name</label>
             <input id="firstName" type="text" name="first-name" class="form-control" placeholder="First Name" data-parsley-trigger="change focusout" data-parsley-required-message="First Name is required"  value="{{old('first-name')}}">
@@ -66,27 +88,9 @@
         <select name="userId" class="form-control" id="userId" style="width: 100%"></select>
 
     </div>
-    <div class="form-group">
-        <label class="sr-only">Choose Account</label>
-        <select name="accountId" class="form-control" id="accountId" style="width: 100%"></select>
 
-    </div>
 
-    <div id="AccountDataAtCustomerForm">
-        <div class="form-group">
-            <label class="sr-only">Account No</label>
-            <input id="accountNo" type="text" name="account-no" class="form-control" placeholder="Account No">
-        </div>
-        <div class="form-group">
-            <label class="sr-only">Account Name</label>
-            <input id="accountName" type="text" name="account-name" class="form-control" placeholder="Account Name">
-        </div>
-        <div class="form-group">
-            <label class="sr-only">Account Website</label>
-            <input  id="accountWebsite"  type="url" name="account-website" class="form-control" placeholder="Account Website">
 
-        </div>
-    </div>
         <div class="form-group ">
             <label for="street_address" class="sr-only">Street Address</label>
 

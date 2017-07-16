@@ -227,15 +227,15 @@
             }
         });
         account_select.on("select2:select", function (e) {
-            var selction = e.params.data;
-
-            if(selction.id === -1){
+            var selection = e.params.data;
+            console.log(selection);
+            if(selection.id < 1){
                 //creating customer with account
                 $('#AccountDataAtCustomerForm').show();
                 $("#AccountDataAtCustomerForm input").val('');
 
             }
-            else if(selction.id > 1){
+            else if(selection.id > 1){
                 $('#AccountDataAtCustomerForm').hide();
                 //now a selection is made populate data of selected account
 
@@ -244,7 +244,6 @@
 
 //
         });
-
         var priority= jQuery("#customerPriority").select2({});
 
         var user_select=jQuery("#userId").select2({
