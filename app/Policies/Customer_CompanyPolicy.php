@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Customer_company;
+use App\Account;
 use App\Traits\AdminPolicies;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
@@ -34,7 +34,7 @@ class Customer_CompanyPolicy
      * @param  \App\Customer  $company
      * @return mixed
      */
-    public function view(User $user, Customer_company $company)
+    public function view(User $user, Account $company)
     {
         if($this->checkAdmin($user)){
             return true;
@@ -66,7 +66,7 @@ class Customer_CompanyPolicy
      * @param  \App\Customer  $company
      * @return mixed
      */
-    public function update(User $user, Customer_company $company)
+    public function update(User $user, Account $company)
     {
         if($this->checkAdmin($user)){
             return true;
@@ -82,7 +82,7 @@ class Customer_CompanyPolicy
      * @param  \App\Customer  $company
      * @return mixed
      */
-    public function delete(User $user, Customer_company $company)
+    public function delete(User $user, Account $company)
     {
         if($this->checkAdmin($user)){
             return true;

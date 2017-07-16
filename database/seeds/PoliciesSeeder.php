@@ -28,6 +28,9 @@ class PoliciesSeeder extends Seeder
             ],
             'appointment'=>[
                 'create','view','list','edit','delete','*'
+            ],
+            'account'=>[
+                'create','view','list','edit','delete','*'
             ]
 
         ];

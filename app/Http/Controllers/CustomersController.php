@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Address;
 use App\Customer;
 
-use App\Customer_company;
+use App\Account;
 use App\User;
 use App\User_profile;
 use Illuminate\Http\Request;
@@ -122,10 +122,10 @@ class CustomersController extends Controller
             $address->email = $request->company['companyEmail'];
 
             $customer->addresses()->attach($address);
-            $customer_company = Customer_company::findOrFail($request->company['companyId']);
+            $customer_company = Account::findOrFail($request->company['companyId']);
             if (is_null($customer_company)) {
 
-                $customer_company = new Customer_company();
+                $customer_company = new Account();
                 $customer_company->name = $request->company['companyName'];
                 $customer_company->website = $request->company['companyWebsite'];
                 $customer_company->phone_no = $request->company['companyPhone'];
@@ -157,7 +157,7 @@ class CustomersController extends Controller
 
 
         if($customer->customer_company_id){
-            $company = Customer_company::findOrFail($customer->customer_company_id);
+            $company = Account::findOrFail($customer->customer_company_id);
             $address = $customer->addresses;
 
             return response()->json([
@@ -180,9 +180,9 @@ class CustomersController extends Controller
         $customer = Customer::findOrFail($request->customer['customerId']);
         $this->authorize('update',$customer);
         $address = Address::findOrFail($request->company['addressId']);
-        $customer_company = Customer_company::findOrFail($request->company['companyId']);
+        $customer_company = Account::findOrFail($request->company['companyId']);
         if(is_null($customer_company)){
-            $customer_company = new Customer_company();
+            $customer_company = new Account();
 
             $customer_company->name = $request->company['companyName'];
             $customer_company->website = $request->company['companyWebsite'];

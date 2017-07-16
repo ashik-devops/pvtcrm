@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Address;
-use App\Customer_company;
+use App\Account;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -35,7 +35,7 @@ class CompanyController extends Controller
     }
 
     public function listAll(Request $request){
-        $companies = new Customer_company();
+        $companies = new Account();
         if(!empty($request->q)){
 
             $companies = $companies->where('name', 'like', "%$request->q%");
@@ -59,7 +59,7 @@ class CompanyController extends Controller
      */
 
     public function getCompaniesAjax(){
-        return Datatables::of(Customer_company::select('id', 'name', 'email', 'phone_no', 'website'))
+        return Datatables::of(Account::select('id', 'name', 'email', 'phone_no', 'website'))
             ->addColumn('action',
                 function ($company){
                     return
@@ -87,7 +87,7 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getCompanyTasksAjax(Customer_company $company){
+    public function getCompanyTasksAjax(Account $company){
         return Datatables::of(DB::table('tasks_index')->where('company_id', $company->id))
             ->addColumn('customer_name', function ($task){
                 return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
@@ -108,7 +108,7 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getCompanyAppointmentsAjax(Customer_company $company){
+    public function getCompanyAppointmentsAjax(Account $company){
         return Datatables::of(DB::table('appointments_index')->where('company_id', $company->id))
             ->addColumn('action',
                 function ($appointment){
@@ -126,11 +126,11 @@ class CompanyController extends Controller
 
 
 
-    public function getCompanyQuickDetails(Customer_company $company){
+    public function getCompanyQuickDetails(Account $company){
         return $company->toJson();
     }
 
-    public function viewCompany(Customer_company $company){
+    public function viewCompany(Account $company){
        return view('customer-company.view')->with([
           'company'=>$company
        ]);
@@ -141,7 +141,7 @@ class CompanyController extends Controller
 
 
 
-        $customer_company = new Customer_company();
+        $customer_company = new Account();
         $customer_company->name = $request->company['companyName'];
         $customer_company->website = $request->company['companyWebsite'];
         $customer_company->phone_no = $request->company['companyPhone'];
@@ -173,7 +173,7 @@ class CompanyController extends Controller
 
 
     public function editCompany(Request $request){
-        $company = Customer_company::findOrFail($request->id);
+        $company = Account::findOrFail($request->id);
         $company_address = $company->addresses;
 
         return response()->json([
@@ -186,7 +186,7 @@ class CompanyController extends Controller
     public function updateCompany( Request $request){
 
 
-        $customer_company = Customer_company::findOrFail($request->company['companyId']);
+        $customer_company = Account::findOrFail($request->company['companyId']);
         $address = Address::findOrFail($request->company['addressId']);
 
         if(!is_null($customer_company) && !is_null($address)){
@@ -226,7 +226,7 @@ class CompanyController extends Controller
 
 
     public function deleteCompany(Request $request){
-        $customer_company = Customer_company::findOrFail($request->id);
+        $customer_company = Account::findOrFail($request->id);
 
         if(!is_null($customer_company)){
 
@@ -247,7 +247,7 @@ class CompanyController extends Controller
     }
 
     public function bulkDeleteCompany(Request $request){
-        if(Customer_company::whereIn('id', explode(',', $request->ids))->delete()){
+        if(Account::whereIn('id', explode(',', $request->ids))->delete()){
             return response()->json([
                 'result'=>'Success',
                 'message'=>'Company has been successfully deleted.'
