@@ -43,7 +43,7 @@ $factory->define(App\Address::class, function (Faker\Generator $faker) {
 
 $factory->define(App\Account::class, function(Faker\Generator $faker) {
     return [
-        'account_no'=>mb_convert_case($faker->unique(false, 10)->text(8), MB_CASE_UPPER),
+        'account_no'=>mb_convert_case($faker->unique(false, 10)->buildingNumber(), MB_CASE_UPPER),
         'name'=>$faker->name,
         'website'=>$faker->unique()->url,
         'phone_no'=>$faker->unique()->phoneNumber,

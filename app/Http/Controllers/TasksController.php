@@ -6,9 +6,6 @@ use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
-use App\Customer;
-
-
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Datatables;
@@ -72,10 +69,10 @@ class TasksController extends Controller
 
                     $string = '';
                     $string .= '<a href="'.route('view-customer', [$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
-                    if($task->company_name){
-                        $string .= ' @ <a href="'.route("view-company", $task->company_id).'">'.$task->company_name.'</a>';
+                    if($task->account_name){
+                        $string .= ' @ <a href="'.route("view-account", $task->account_id).'">'.$task->account_name.'</a>';
                     }
-                    if($task->customer_last_name == null && $task->customer_first_name == null && $task->comapny_name == null){
+                    if($task->customer_last_name == null && $task->customer_first_name == null && $task->account_name == null){
                         $string = '';
                     }
 
@@ -112,8 +109,8 @@ class TasksController extends Controller
 
                     $string = '';
                     $string .= '<a href="'.route('view-customer', [$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
-                    if($task->company_name){
-                        $string .= ' @ <a href="'.route("view-company", [$task->company_id]).'">'.$task->company_name.'</a>';
+                    if($task->account_name){
+                        $string .= ' @ <a href="'.route("view-account", [$task->account_id]).'">'.$task->account_name.'</a>';
                     }
                     if($task->customer_last_name == null && $task->customer_first_name == null && $task->comapny_name == null){
                         $string = '';

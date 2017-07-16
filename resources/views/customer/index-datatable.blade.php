@@ -46,15 +46,15 @@
                                             <thead>
                                             <tr>
                                                 <th>Id</th>
+                                                <th>Account #</th>
                                                 <th>Name</th>
-                                                <th>Company</th>
+                                                <th>Account Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>Priority</th>
                                                 <th>Assigned To</th>
                                                 <th>Actions</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
+
                                             </tr>
                                             </thead>
                                         </table>
@@ -109,16 +109,16 @@
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
                 ajax: '{!! route('customers-data') !!}',
                 columns: [
-                    { data: 'id', name: 'id' },
+                    { data: 'id', name: 'id', searchable: false, visible:false },
+                    { data: 'account_no', name: 'account_no', searchable: true},
                     { data: 'name', name: 'name', searchable: false},
-                    { data: 'company', name: 'company', searchable: true},
+                    { data: 'account_name', name: 'account_name', searchable: true},
                     { data: 'email', name: 'email' },
-                    { data: 'phone', name: 'phone_no' },
+                    { data: 'phone_no', name: 'phone_no' },
                     { data: 'priority', name: 'priority' },
-                    { data: 'user', name: 'user', searchable: true},
+                    { data: 'user_name', name: 'user_name', searchable: true},
                     { data: 'action', name: 'action', orderable: false, searchable: false},
-                    { data: 'first_name', name: 'first_name', searchable: true, visible:false},
-                    { data: 'last_name', name: 'last_name', searchable: true, visible:false},
+
                 ],
                 buttons: [
                     {
@@ -170,13 +170,13 @@
             jQuery("#new-customer-btn").click(function (){
                 jQuery("#customerForm")[0].reset();
                 jQuery(".customerModal .modal-title").html('Add New Customer');
-                jQuery("#companyId").html('');
+                jQuery("#accountId").html('');
             });
-            var company_select=jQuery("#companyId").select2({
-                placeholder: "Select a Company",
+            var account_select=jQuery("#accountId").select2({
+                placeholder: "Select a Account",
                 allowClear:true,
                 ajax: {
-                    url: "{{route('list-companies')}}",
+                    url: "{{route('list-accounts')}}",
                     dataType: 'json',
                     delay: 250,
                     data: function (params) {
@@ -201,18 +201,18 @@
                     cache: true
                 }
             });
-            company_select.on("select2:select", function (e) {
+            account_select.on("select2:select", function (e) {
                 var selction = e.params.data;
 
                 if(selction.id === -1){
-                    //creating customer with company
-                    $('#CompanyDataAtCustomerForm').show();
-                    $("#CompanyDataAtCustomerForm input").val('');
+                    //creating customer with account
+                    $('#AccountDataAtCustomerForm').show();
+                    $("#AccountDataAtCustomerForm input").val('');
 
                 }
                 else if(selction.id > 1){
-                    $('#CompanyDataAtCustomerForm').hide();
-                    //now a selection is made select the company
+                    $('#AccountDataAtCustomerForm').hide();
+                    //now a selection is made select the account
                 }
 
 
@@ -244,7 +244,7 @@
 
 
             $('#hiddenForEditCustomer').show();
-            $('#CompanyDataAtCustomerForm').hide();
+            $('#AccountDataAtCustomerForm').hide();
 
 
             $('#customerForm').on('submit',function(e){
@@ -262,13 +262,13 @@
                     customerPriority : $('#customerPriority').val(),
                 };
 
-                var company = {
-                    companyId : $('#companyId').val(),
+                var account = {
+                    accountId : $('#accountId').val(),
                     addressId : $('#addressId').val(),
-                    companyName : $('#companyName').val(),
-                    companyEmail : $('#customerEmail').val(),
-                    companyPhone : $('#customerPhone').val(),
-                    companyWebsite : $('#companyWebsite').val(),
+                    accountName : $('#accountName').val(),
+                    accountEmail : $('#customerEmail').val(),
+                    accountPhone : $('#customerPhone').val(),
+                    accountWebsite : $('#accountWebsite').val(),
                     streetAddress_1 : $('#streetAddress_1').val(),
                     streetAddress_2 : $('#streetAddress_2').val(),
                     city : $('#city_id').val(),
@@ -280,7 +280,7 @@
 
                 var data = {
                     _token : _token,
-                    company: company,
+                    account: account,
                     customer:customer
                 };
 
@@ -301,7 +301,7 @@
                         if(response.result){
                             if(response.result == 'Saved') {
                                 $('#customerForm')[0].reset();
-                                jQuery("#companyId").html("");
+                                jQuery("#accountId").html("");
                                 $('#modal-new-member').modal('hide');
                                 get_all_customer_data();
                                 $.notify(response.message, "success");
@@ -332,7 +332,7 @@
                     request.done(function (response) {
                         if(response.result == 'Saved'){
                             $('#customerForm')[0].reset();
-                            jQuery("#companyId").html("");
+                            jQuery("#accountId").html("");
                             $('#customerId').val('');
                             $('#modal-new-member').modal('hide');
                             get_all_customer_data();
@@ -373,12 +373,12 @@
                     $('#customerPriority').val(data.customer.priority);
                     jQuery("#userId").html("<option selected value='"+data.user.id+"'>"+data.user.name+"</option>")
 
-                    if(data.company){
-                        jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")
-                        $('#companyName').val(data.company.name);
-                        $('#companyEmail').val(data.company.email);
-                        $('#companyPhone').val(data.company.phone_no);
-                        $('#companyWebsite').val(data.company.website);
+                    if(data.account){
+                        jQuery("#accountId").html("<option selected value='"+data.account.id+"'>"+data.account.name+"</option>")
+                        $('#accountName').val(data.account.name);
+                        $('#accountEmail').val(data.account.email);
+                        $('#accountPhone').val(data.account.phone_no);
+                        $('#accountWebsite').val(data.account.website);
 
                         if(data.address[0]){
                             $('#addressId').val(data.address[0].id);
@@ -391,26 +391,26 @@
 
                         }
                         $('#hiddenForEditCustomer').hide();
-                        $('#CompanyDataAtCustomerForm').hide();
+                        $('#AccountDataAtCustomerForm').hide();
                     }
 
 
 
 
 
-                   /* $('#company_id').val(data.company.id);
-                    $('#companyName').val(data.company.name);
-                    $('#companyEmail').val(data.company.email);
-                    $('#companyPhone').val(data.company.phone_no);
-                    $('#companyWebsite').val(data.company.website);
+                   /* $('#account_id').val(data.account.id);
+                    $('#accountName').val(data.account.name);
+                    $('#accountEmail').val(data.account.email);
+                    $('#accountPhone').val(data.account.phone_no);
+                    $('#accountWebsite').val(data.account.website);
 
-                    if(data.company_address.length > 0){
-                        $('#streetAddress_1').val(data.company_address[0].street_address_1);
-                        $('#streetAddress_2').val(data.company_address[0].street_address_2);
-                        $('#city_id').val(data.company_address[0].city);
-                        $('#state_id').val(data.company_address[0].state);
-                        $('#country_id').val(data.company_address[0].country);
-                        $('#zip_id').val(data.company_address[0].zip);
+                    if(data.account_address.length > 0){
+                        $('#streetAddress_1').val(data.account_address[0].street_address_1);
+                        $('#streetAddress_2').val(data.account_address[0].street_address_2);
+                        $('#city_id').val(data.account_address[0].city);
+                        $('#state_id').val(data.account_address[0].state);
+                        $('#country_id').val(data.account_address[0].country);
+                        $('#zip_id').val(data.account_address[0].zip);
                     } */
                 }
             });
@@ -490,7 +490,7 @@
                         $.post("{{ route('bulk.delete.customer.data') }}", data, function(result){
 
                             if(result.result == 'Success'){
-                                swal("Deleted!", "Company has been deleted.", "success");
+                                swal("Deleted!", "Account has been deleted.", "success");
                                 get_all_customer_data();
                                 $.notify(result, "danger");
                             }

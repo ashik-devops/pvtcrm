@@ -64,7 +64,7 @@ class CustomersController extends Controller
 
     public function getCustomersAjax(){
 
-        return Datatables::of(Customer::with('user'))
+        return Datatables::of(DB::table('customers_index'))
             ->addColumn('action',
                 function ($customer){
                     return
@@ -74,27 +74,29 @@ class CustomersController extends Controller
                 })
             ->addColumn('name',
                 function ($customer){
-                    return '<a href="'.route('view-customer',[$customer->id]).'" >'.implode(', ', [$customer->last_name, $customer->first_name] ).' </a>';
+                    return '<a href="'.route('view-customer',[$customer->id]).'" >'.$customer->name.' </a>';
                 })
-            ->addColumn('company',
+            ->addColumn('account_no',
                 function ($customer){
-                    return '<a href="'.route('view-company', $customer->company->id).'" >'.implode(', ', [$customer->company->name] ).' </a>';
+                    return '<a href="'.route('view-account', $customer->account_id).'" >'.implode(', ', [$customer->account_no] ).' </a>';
                 })
-            ->addColumn('user',
+            ->addColumn('account_name',
                 function ($customer){
-                    $user_profile = User_profile::findOrFail($customer->user->id);
-                    return '<a href="#view/'.$customer->user->id.'" >'.$user_profile->initial .' </a>';
+                    return '<a href="'.route('view-account', $customer->account_id).'" >'.implode(', ', [$customer->account_name] ).' </a>';
+                })
+            ->addColumn('user_name',
+                function ($customer){
+                    return '<a href="#view/'.$customer->user_id.'" >'.$customer->user_name .' </a>';
                 })
             ->addColumn('email',
                 function ($customer){
                     return '<a href="mailto:'.$customer->email.'" >'.$customer->email.' </a>';
                 })
-            ->addColumn('phone',
+            ->addColumn('phone_no',
                 function ($customer){
                     return '<a href="tel:'.$customer->phone_no.'" >'.$customer->phone_no.' </a>';
                 })
-            ->removeColumn('phone_no')
-            ->rawColumns(['name','user','email', 'phone', 'company', 'action'])
+            ->rawColumns(['name','account_no', 'user_name', 'email', 'phone_no', 'account_name', 'action'])
             ->make(true);
     }
 
@@ -112,35 +114,35 @@ class CustomersController extends Controller
 
 
             $address = new Address();
-            $address->street_address_1 = $request->company['streetAddress_1'];
-            $address->street_address_2 = $request->company['streetAddress_2'];
-            $address->city = $request->company['city'];
-            $address->state = $request->company['state'];
-            $address->country = $request->company['country'];
-            $address->zip = $request->company['zip'];
-            $address->phone_no = $request->company['companyPhone'];
-            $address->email = $request->company['companyEmail'];
+            $address->street_address_1 = $request->account['streetAddress_1'];
+            $address->street_address_2 = $request->account['streetAddress_2'];
+            $address->city = $request->account['city'];
+            $address->state = $request->account['state'];
+            $address->country = $request->account['country'];
+            $address->zip = $request->account['zip'];
+            $address->phone_no = $request->account['accountPhone'];
+            $address->email = $request->account['accountEmail'];
 
             $customer->addresses()->attach($address);
-            $customer_company = Account::findOrFail($request->company['companyId']);
-            if (is_null($customer_company)) {
+            $account = Account::findOrFail($request->account['accountId']);
+            if (is_null($account)) {
 
-                $customer_company = new Account();
-                $customer_company->name = $request->company['companyName'];
-                $customer_company->website = $request->company['companyWebsite'];
-                $customer_company->phone_no = $request->company['companyPhone'];
-                $customer_company->email = $request->company['companyEmail'];
+                $account = new Account();
+                $account->name = $request->account['accountName'];
+                $account->website = $request->account['accountWebsite'];
+                $account->phone_no = $request->account['accountPhone'];
+                $account->email = $request->account['accountEmail'];
 
             } else {
-                $customer_company = $customer_company->first();
+                $account = $account->first();
             }
             DB::beginTransaction();
             $customer->save();
             $address->save();
-            $customer_company->save();
-            $customer_company->addresses()->save($address, ['type' => 'BILLING']);
+            $account->save();
+            $account->addresses()->save($address, ['type' => 'BILLING']);
             $customer->addresses()->save($address, ['type' => 'CONTACT']);
-            $customer_company->employees()->save($customer);
+            $account->employees()->save($customer);
             DB::commit();
             return response()->json(['result' => "Saved", 'message' => 'Customer is Saved.'], 200);
 
@@ -156,14 +158,14 @@ class CustomersController extends Controller
         $user = User::findOrFail($customer->user_id);
 
 
-        if($customer->customer_company_id){
-            $company = Account::findOrFail($customer->customer_company_id);
+        if($customer->account_id){
+            $account = Account::findOrFail($customer->account_id);
             $address = $customer->addresses;
 
             return response()->json([
                 'customer' => $customer,
                 'user' => $user,
-                'company' => $company,
+                'account' => $account,
                 'address' => $address,
             ], 201);
         }
@@ -179,15 +181,15 @@ class CustomersController extends Controller
     public function updateCustomer(Request $request){
         $customer = Customer::findOrFail($request->customer['customerId']);
         $this->authorize('update',$customer);
-        $address = Address::findOrFail($request->company['addressId']);
-        $customer_company = Account::findOrFail($request->company['companyId']);
-        if(is_null($customer_company)){
-            $customer_company = new Account();
+        $address = Address::findOrFail($request->account['addressId']);
+        $account = Account::findOrFail($request->account['accountId']);
+        if(is_null($account)){
+            $account = new Account();
 
-            $customer_company->name = $request->company['companyName'];
-            $customer_company->website = $request->company['companyWebsite'];
-            $customer_company->phone_no = $request->company['companyPhone'];
-            $customer_company->email = $request->company['companyEmail'];
+            $account->name = $request->account['accountName'];
+            $account->website = $request->account['accountWebsite'];
+            $account->phone_no = $request->account['accountPhone'];
+            $account->email = $request->account['accountEmail'];
 
         }
 
@@ -200,14 +202,14 @@ class CustomersController extends Controller
             $customer->priority = $request->customer['customerPriority'];
             $customer->user_id = $request->customer['userId'];;
 
-            $address->street_address_1 = $request->company['streetAddress_1'];
-            $address->street_address_2 = $request->company['streetAddress_2'];
-            $address->city = $request->company['city'];
-            $address->state = $request->company['state'];
-            $address->country = $request->company['country'];
-            $address->zip = $request->company['zip'];
-            $address->phone_no = $request->company['companyPhone'];
-            $address->email = $request->company['companyEmail'];
+            $address->street_address_1 = $request->account['streetAddress_1'];
+            $address->street_address_2 = $request->account['streetAddress_2'];
+            $address->city = $request->account['city'];
+            $address->state = $request->account['state'];
+            $address->country = $request->account['country'];
+            $address->zip = $request->account['zip'];
+            $address->phone_no = $request->account['accountPhone'];
+            $address->email = $request->account['accountEmail'];
 
         }
         else{
@@ -218,8 +220,8 @@ class CustomersController extends Controller
         DB::beginTransaction();
         $customer->save();
         $address->save();
-        $customer_company->save();
-        $customer_company->employees()->save($customer);
+        $account->save();
+        $account->employees()->save($customer);
         DB::commit();
 
         return response()->json(['result'=>"Saved", 'message'=>'Customer is Updated.'], 200);
@@ -265,8 +267,8 @@ class CustomersController extends Controller
             'customers' =>Customer::all()->map(
                 function($customer){
                 $name=implode(', ', [$customer->last_name, $customer->first_name]);
-                if($customer->has('company')){
-                    $name.='@'.$customer->company->name;
+                if($customer->has('account')){
+                    $name.='@'.$customer->account->name;
                 }
 
                 return ['id'=>$customer->id,'text'=>$name];
@@ -274,10 +276,10 @@ class CustomersController extends Controller
         ]);
     }
 
-    public function getCustomerCompanyWise(Request $request){
-         if($request->companyId){
+    public function getCustomerAccountWise(Request $request){
+         if($request->accountId){
              return response()->json([
-                 'customers' =>Customer::where('customer_company_id',$request->companyId)->get()->map(
+                 'customers' =>Customer::where('account_id',$request->accountId)->get()->map(
                      function($customer){
                          $name=implode(', ', [$customer->last_name, $customer->first_name]);
 
@@ -291,7 +293,7 @@ class CustomersController extends Controller
     }
 
     /**
-     * Sends json data to datatable of all tasks of company falls under current user scope.
+     * Sends json data to datatable of all tasks of account falls under current user scope.
      *
      * @return \Illuminate\Http\Response
      */
@@ -312,7 +314,7 @@ class CustomersController extends Controller
             ->make(true);
     }
     /**
-     * Sends json data to datatable of all tasks of company falls under current user scope.
+     * Sends json data to datatable of all tasks of account falls under current user scope.
      *
      * @return \Illuminate\Http\Response
      */
