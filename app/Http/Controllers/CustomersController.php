@@ -74,7 +74,7 @@ class CustomersController extends Controller
                 })
             ->addColumn('name',
                 function ($customer){
-                    return '<a href="#view/'.$customer->id.'" >'.implode(', ', [$customer->last_name, $customer->first_name] ).' </a>';
+                    return '<a href="'.route('view-customer',[$customer->id]).'" >'.implode(', ', [$customer->last_name, $customer->first_name] ).' </a>';
                 })
             ->addColumn('company',
                 function ($customer){

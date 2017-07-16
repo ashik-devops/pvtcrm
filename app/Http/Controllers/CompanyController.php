@@ -90,7 +90,7 @@ class CompanyController extends Controller
     public function getCompanyTasksAjax(Customer_company $company){
         return Datatables::of(DB::table('tasks_index')->where('company_id', $company->id))
             ->addColumn('customer_name', function ($task){
-                return '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
+                return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
             })
             ->addColumn('action',
                 function ($task){

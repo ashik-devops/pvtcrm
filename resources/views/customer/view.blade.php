@@ -52,11 +52,39 @@
                                     <div id="info" role="tabpanel" class="tab-pane active">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <h3 class="panel-title">Company Info</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer('{{$customer->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Company</button>
+                                                <h3 class="panel-title">Customer Info</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer('{{$customer->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Customer</button>
                                             </div>
                                             <div class="panel-body">
-                                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin luctus pharetra faucibus. Cras leo dui, tempor vitae lacus sit amet, lacinia porta eros. Aliquam et mauris vitae arcu sollicitudin vehicula quis ac nisl. Pellentesque sapien sapien, pharetra nec metus vel, tincidunt pretium elit.
+                                                <div class="col-md-6 col-lg6 col-sm-12 table-responsive">
+                                                    <table class="table">
+                                                        <tr>
+                                                            <td>Name </td>
+                                                            <td>{{implode(', ', array_filter([$customer->last_name,$customer->first_name]))}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Company Name </td>
+                                                            <td><a href="{{route('view-company', [$customer->company->id])}}">{{$customer->company->name}}</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Title</td>
+                                                            <td>{{$customer->title}}</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Email</td>
+                                                            <td><a href="mailto:{{$customer->email}}">{{$customer->email}}</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Phone No</td>
+                                                            <td><a href="tel:{{$customer->phone_no}}">{{$customer->phone_no}}</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Assigned User </td>
+                                                            <td>{{$customer->user->name}}</td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="col-md-6 col-lg6 col-sm-12"></div>
                                             </div>
                                         </div>
                                     </div>

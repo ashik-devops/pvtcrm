@@ -216,10 +216,10 @@
                                                         <tbody>
                                                         @foreach($company->employees as $employee)
                                                             <tr>
-                                                                <td>{{implode(', ', array_filter([$employee->last_name, $employee->first_name]))}}</td>
+                                                                <td><a href="{{route('view-customer', [$employee->id])}}">{{implode(', ', array_filter([$employee->last_name, $employee->first_name]))}}</a></td>
                                                                 <td>{{$employee->title}}</td>
                                                                 <td>{{implode(', ', array_filter([$employee->addresses->first()->city, $employee->addresses->first()->state, $employee->addresses->first()->country, $employee->addresses->first()->zip]))}}</td>
-                                                                <td><a href="#" class="btn btn-success">View</a></td>
+                                                                <td><a href="{{route('view-customer', [$employee->id])}}" class="btn btn-success">View</a></td>
                                                             </tr>
                                                         @endforeach
                                                         </tbody>

@@ -71,9 +71,9 @@ class TasksController extends Controller
                 function ($task){
 
                     $string = '';
-                    $string .= '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
+                    $string .= '<a href="'.route('view-customer', [$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
                     if($task->company_name){
-                        $string .= '@ <a href="'.route("view-company", $task->company_id).'">'.$task->company_name.'</a>';
+                        $string .= ' @ <a href="'.route("view-company", $task->company_id).'">'.$task->company_name.'</a>';
                     }
                     if($task->customer_last_name == null && $task->customer_first_name == null && $task->comapny_name == null){
                         $string = '';
@@ -111,9 +111,9 @@ class TasksController extends Controller
                 function ($task){
 
                     $string = '';
-                    $string .= '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
+                    $string .= '<a href="'.route('view-customer', [$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
                     if($task->company_name){
-                        $string .= '@ <a href="'.route("view-company", $task->company_id).'">'.$task->company_name.'</a>';
+                        $string .= ' @ <a href="'.route("view-company", [$task->company_id]).'">'.$task->company_name.'</a>';
                     }
                     if($task->customer_last_name == null && $task->customer_first_name == null && $task->comapny_name == null){
                         $string = '';
