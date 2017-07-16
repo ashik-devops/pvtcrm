@@ -27,7 +27,7 @@ class AppointmentsController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data, $isUpdateRequest)
+    protected function validator(array $data, $isUpdateRequest=false)
     {
         $rules=[
             'appointmentTitle' => 'required|string',
@@ -152,6 +152,7 @@ class AppointmentsController extends Controller
 
 
     public function createAppointment(Request $request){
+        $this->validator($request->appointment)->validate();
 
         $result=[
             'result'=>'Error',
