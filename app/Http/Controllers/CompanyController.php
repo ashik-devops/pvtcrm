@@ -118,7 +118,7 @@ class CompanyController extends Controller
                          <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-eye-open"></i> View</a>';
                 })
             ->addColumn('customer_name', function ($appointment){
-                return '<a href="#">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
+                return '<a href="'.route('view-customer',[$appointment->customer_id]).'">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
             })
             ->rawColumns(['customer_name', 'action'])
             ->make(true);

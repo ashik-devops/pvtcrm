@@ -22,8 +22,8 @@
                                 <div class="user-info">
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
-                                        <li class="name"><h3>{{$customer->name}}</h3>
-                                            <label class="label label-info"></label></li>
+                                        <li class="name"><h3>{{implode(', ', array_filter([$customer->last_name, $customer->first_name]))}}</h3>
+                                            <a href="{{route('view-company', [$customer->company->id])}}"><label class="label label-info">{{implode(', ', array_filter([$customer->title, $customer->company->name]))}}</label></a></li>
                                         <li>
                                             <address>
                                                 <p>{{implode(', ', [$customer->addresses->first()->city, $customer->addresses->first()->state, $customer->addresses->first()->country, $customer->addresses->first()->zip])}}</p>
@@ -302,6 +302,8 @@
     <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
 
     <script type="text/javascript">
         task_date=moment();
