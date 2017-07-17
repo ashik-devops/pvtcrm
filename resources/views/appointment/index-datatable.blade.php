@@ -315,7 +315,7 @@
                     jQuery('#appointmentDescription').val(data.appointment.description);
                     jQuery('#appointmentStatus').val(data.appointment.status);
                     $('#aptCustomerId').val(data.appointment.customer_id);
-                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
+                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.account.name+"</option>");
 
                     min_date = moment(data.appointment.start_time);
                     max_date = moment(data.appointment.end_time);

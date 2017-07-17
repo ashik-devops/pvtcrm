@@ -74,10 +74,10 @@ class AppointmentsController extends Controller
 
                     $string = '';
                     $string .= '<a href="'.route('view-customer', [$appointment->customer_id]).'">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
-                    if($appointment->company_name){
-                        $string .= ' @ <a href="'.route("view-company", $appointment->company_id).'">'.$appointment->customer_name.'</a>';
+                    if($appointment->account_name){
+                        $string .= ' @ <a href="'.route("view-account", $appointment->account_id).'">'.$appointment->account_name.'</a>';
                     }
-                    if($appointment->customer_last_name == null && $appointment->customer_first_name == null && $appointment->customer_name == null){
+                    if($appointment->customer_last_name == null && $appointment->customer_first_name == null && $appointment->account_name == null){
                         $string = '';
                     }
 
@@ -121,10 +121,10 @@ class AppointmentsController extends Controller
 
                     $string = '';
                     $string .= '<a href="'.route('view-customer', [$appointment->customer_id]).'">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
-                    if($appointment->company_name){
-                        $string .= ' @ <a href="'.route("view-company", $appointment->company_id).'">'.$appointment->company_name.'</a>';
+                    if($appointment->account_name){
+                        $string .= ' @ <a href="'.route("view-account", $appointment->account_id).'">'.$appointment->account_name.'</a>';
                     }
-                    if($appointment->customer_last_name == null && $appointment->customer_first_name == null && $appointment->comapny_name == null){
+                    if($appointment->customer_last_name == null && $appointment->customer_first_name == null && $appointment->account_name == null){
                         $string = '';
                     }
 
@@ -191,7 +191,7 @@ class AppointmentsController extends Controller
 
     public function editAppointment(Request $request){
 
-        $appointment = Appointment::with('customer', 'customer.company')->findOrFail($request->id);
+        $appointment = Appointment::with('customer', 'customer.account')->findOrFail($request->id);
 
 
         return response()->json([
