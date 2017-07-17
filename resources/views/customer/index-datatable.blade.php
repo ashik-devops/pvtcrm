@@ -97,6 +97,7 @@
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
 
         var inputMap = {
@@ -196,6 +197,7 @@
             reset_form(jQuery("#customerForm")[0]);
             jQuery(".customerModal .modal-title").html('Add New Customer');
             jQuery("#accountId").html('');
+            jQuery("#modal_button").val("Create");
         });
         var account_select=jQuery("#accountId").select2({
             placeholder: "Select a Account",
@@ -312,12 +314,12 @@
 
 
 
-            if(customer.customerId < 1){
+            if(customer.customerId == ""){
                 //customer creating.....
 
 
                 var request = jQuery.ajax({
-                    url: "{{ route('create.customer') }}",
+                    url: "{{ route('create.customer')}}",
                     data: data,
                     method: "POST",
                     dataType: "json"
@@ -339,7 +341,10 @@
                         }
                     }
 
-                })
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
 
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -367,8 +372,10 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
-
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
@@ -378,7 +385,9 @@
 
         function handle_error(xhr) {
             if(xhr.status==422){
-                showParselyError();
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
+                });
             }
         }
         function showParselyError(field, msg){
@@ -398,7 +407,7 @@
 
         function editCustomer(id){
 
-
+            jQuery("#modal_button").val("Update");
             $.get("{{ route('get.customer.data') }}", { id: id} ,function(data){
 
                 jQuery(".customerModal .modal-title").html('Edit Customer');

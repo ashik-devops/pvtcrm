@@ -128,7 +128,7 @@
         </div>
 
     <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Account</button>-->
-    <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Add Customer">
+    <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Create">
 
     </div>
 

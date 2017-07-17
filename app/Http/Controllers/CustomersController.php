@@ -29,21 +29,41 @@ class CustomersController extends Controller
      * @param  array  $data
      * @return \Illuminate\Contracts\Validation\Validator
      */
-    protected function validator(array $data)
+    protected function validator(array $data, $isUpdate=false)
     {
-        return Validator::make($data, [
-            'first_name' => 'required|string|max:32',
-            'last_name' => 'required|string|max:32',
-            'email' => 'required|string|email|max:255|unique',
-            'title'=>'required|string|max:32',
-            'primary_phone_no'=>'required|string|max:32|unique',
-            'street_address_1'=>'required|string',
-            'street_address_2'=>'string|nullable',
-            'city'=>'required|string|max:32',
-            'state'=>'required|string|max:32',
-            'country'=>'required|string|max:32',
-            'zip'=>'required|string|max:8',
-        ]);
+        $rules=[
+            'customer.firstName' => 'required|string|max:32',
+            'customer.lastName' => 'required|string|max:32',
+            'customer.customerTitle'=>'required|string|max:32',
+            'customer.customerPhone'=>'required|string|max:32|unique:customers,phone_no,'.$data['customer']['customerId'],
+            'customer.customerEmail' => 'required|string|email|max:255|unique:customers,email,'.$data['customer']['customerId'],
+            'customer.customerPriority'=>'required|string|max:32',
+            'customer.userId'=>'required|integer|exists:users,id',
+            'account.streetAddress_1'=>'required|string',
+            'account.streetAddress_2'=>'required|string',
+            'account.city'=>'string|nullable',
+            'account.state'=>'required|string|max:32',
+            'account.country'=>'required|string|max:32',
+            'account.zip'=>'required|string|max:26',
+        ];
+
+        if($isUpdate) {
+            $rules['customer.customerId']='required|integer|exists:customers,id';
+        }
+
+        if($data['account']['accountId'] > 0){
+            $rules=array_merge($rules, [
+                'account.accountId' => 'required|integer|exists:accounts,id',
+                'account.addressId' => 'required|integer|exists:addresses,id',
+            ]);
+        }
+
+        else{
+            $rules=array_merge($rules, [
+                'account.accountNo' => 'required|unique:accounts,account_no,'.$data['account']['accountId'],
+            ]);
+        }
+        return Validator::make($data, $rules);
     }
 
 
@@ -102,6 +122,8 @@ class CustomersController extends Controller
 
 
     public function createCustomer( Request $request){
+            $this->validator(['customer'=>$request->customer, 'account'=>$request->account])->validate();
+
 
             $customer = new Customer();
             $customer->first_name = $request->customer['firstName'];
@@ -124,17 +146,16 @@ class CustomersController extends Controller
             $address->email = $request->account['accountEmail'];
 
             $customer->addresses()->attach($address);
-            $account = Account::findOrFail($request->account['accountId']);
+            $account = Account::find($request->account['accountId']);
             if (is_null($account)) {
 
                 $account = new Account();
+                $account->account_no = $request->account['accountNo'];
                 $account->name = $request->account['accountName'];
                 $account->website = $request->account['accountWebsite'];
                 $account->phone_no = $request->account['accountPhone'];
                 $account->email = $request->account['accountEmail'];
 
-            } else {
-                $account = $account->first();
             }
             DB::beginTransaction();
             $customer->save();
@@ -179,6 +200,8 @@ class CustomersController extends Controller
     }
 
     public function updateCustomer(Request $request){
+        $this->validator(['customer'=>$request->customer, 'account'=>$request->account], true)->validate();
+
         $customer = Customer::findOrFail($request->customer['customerId']);
         $this->authorize('update',$customer);
         $address = Address::findOrFail($request->account['addressId']);

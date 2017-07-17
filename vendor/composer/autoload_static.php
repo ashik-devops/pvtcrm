@@ -364,7 +364,7 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'CreateAccountsTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_202814_create_accounts_table.php',
         'CreateActivityLogTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_12_194322_create_activity_log_table.php',
         'CreateAddressesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_010751_create_addresses_table.php',
-        'CreateAppointmentIndexView' => __DIR__ . '/../..' . '/database/migrations/2017_07_14_004244_create_appointment_index_view.php',
+        'CreateAppointmentsIndexView' => __DIR__ . '/../..' . '/database/migrations/2017_07_14_004244_create_appointments_index_view.php',
         'CreateAppointmentsTable' => __DIR__ . '/../..' . '/database/migrations/2017_06_05_090711_create_appointments_table.php',
         'CreateCustomerAddressesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_30_161109_create_customer_addresses_table.php',
         'CreateCustomerTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_010135_create_customer_table.php',

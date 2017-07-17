@@ -23,13 +23,13 @@ Route::get('/ajax/users/list', 'UsersController@listAll')->name('list-users')->m
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
-Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer')->middleware('can:create,App\Customer');
-Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
-Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
-Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
-Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
-Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
-Route::get('/get-customer-account-wise', 'CustomersController@getCustomerAccountWise')->name('get-customer-account-wise');//->middleware('can:index,App\Customer');
+Route::post('/ajax/customer/create', 'CustomersController@createCustomer')->name('create.customer')->middleware('can:create,App\Customer');
+Route::get('/ajax//customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
+Route::post('/ajax/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
+Route::post('/ajax/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
+Route::post('/ajax/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
+Route::get('/ajax/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
+Route::get('/ajax/get-customer-account-wise', 'CustomersController@getCustomerAccountWise')->name('get-customer-account-wise');//->middleware('can:index,App\Customer');
 Route::get('/ajax/customer/tasks/{customer}', 'CustomersController@getCustomerTasksAjax')->name('customer-tasks-list');//->middleware('can:list,App\Customer');
 Route::get('/ajax/customer/appointments/{customer}', 'CustomersController@getCustomerAppointmentsAjax')->name('customer-appointments-list');//->middleware('can:list,App\Customer');
 Route::get('/customer/view/{customer}', 'CustomersController@viewCustomer')->name('view-customer');//->middleware('can:list,App\Customer');
