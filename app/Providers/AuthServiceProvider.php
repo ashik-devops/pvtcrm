@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use App\Appointment;
 use App\Customer;
-use App\Customer_company;
+use App\Account;
 use App\Policies\AppointmentPolicy;
 use App\Policies\Customer_CompanyPolicy;
 use App\Policies\CustomerPolicy;
@@ -28,7 +28,7 @@ class AuthServiceProvider extends ServiceProvider
         Customer::class => CustomerPolicy::class,
         Task::class=>TaskPolicy::class,
         Appointment::class=>AppointmentPolicy::class,
-        Customer_company::class=>Customer_CompanyPolicy::class
+        Account::class=>Customer_CompanyPolicy::class
     ];
 
     /**

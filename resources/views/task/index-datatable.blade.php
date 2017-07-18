@@ -102,6 +102,7 @@
     <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
         var inputMap={
             taskId : 'task_id',
@@ -125,7 +126,7 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-                    { data: 'customer', name: 'customer'},
+                    { data: 'customer_name', name: 'customer_name'},
                     { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
                     { data: 'status', name: 'status'},
@@ -293,7 +294,7 @@
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);
-                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
+                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name+"</option>");
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
                     task_date = moment(data.task.due_date);
@@ -334,17 +335,17 @@
                         $.post("{{ route('delete.task') }}", data, function(result){
 
                             if(result.result == 'Success'){
-                                swal("Deleted!", "Company has been deleted.", "success");
+                                swal("Deleted!", "Task has been deleted.", "success");
                                 get_all_task_data();
                                 $.notify('Task deleted successfully', "danger");
                             }
                             else{
-                                swal("Failed", "Failed to delete the company", "error");
+                                swal("Failed", "Failed to delete the account", "error");
                             }
 
                         });
                     } else {
-                        swal("Cancelled", "Company is safe :)", "error");
+                        swal("Cancelled", "Account is safe :)", "error");
                     }
                 });
         }
@@ -407,7 +408,7 @@
                 //console.log(data.task);
                 if(data){
                     $('#task_id').val(data.task.id);
-                    $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name);
+                    $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
 
                     $('#viewTaskTitle').html(data.task.title);
                     $('#taskDescription').html(data.task.description);

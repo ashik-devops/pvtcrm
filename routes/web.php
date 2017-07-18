@@ -24,14 +24,16 @@ Route::get('/ajax/users/list', 'UsersController@listAll')->name('list-users')->m
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
-Route::post('/customer/create', 'CustomersController@createCustomer')->name('create.customer')->middleware('can:create,App\Customer');
-Route::get('/customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
-Route::post('/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
-Route::post('/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
-Route::post('/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
-Route::get('/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
-Route::get('/get-customer-company-wise', 'CustomersController@getCustomerCompanyWise')->name('get-customer-company-wise');//->middleware('can:index,App\Customer');
-
+Route::post('/ajax/customer/create', 'CustomersController@createCustomer')->name('create.customer')->middleware('can:create,App\Customer');
+Route::get('/ajax//customer/get', 'CustomersController@getCustomer')->name('get.customer.data');
+Route::post('/ajax/customer/update', 'CustomersController@updateCustomer')->name('update.customer.data');
+Route::post('/ajax/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
+Route::post('/ajax/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
+Route::get('/ajax/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
+Route::get('/ajax/get-customer-account-wise', 'CustomersController@getCustomerAccountWise')->name('get-customer-account-wise');//->middleware('can:index,App\Customer');
+Route::get('/ajax/customer/tasks/{customer}', 'CustomersController@getCustomerTasksAjax')->name('customer-tasks-list');//->middleware('can:list,App\Customer');
+Route::get('/ajax/customer/appointments/{customer}', 'CustomersController@getCustomerAppointmentsAjax')->name('customer-appointments-list');//->middleware('can:list,App\Customer');
+Route::get('/customer/view/{customer}', 'CustomersController@viewCustomer')->name('view-customer');//->middleware('can:list,App\Customer');
 
 
 Route::get('/tasks', 'TasksController@index')->name('task-index');//->middleware('can:index,App\Task');
@@ -56,13 +58,13 @@ Route::get('/appointment/edit', 'AppointmentsController@editAppointment')->name(
 Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->name('update.appointment');
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
 
-Route::get('/sales-teams', 'SalesteamController@index')->name('sales-team-index');
+Route::get('/sales-teams', 'SalesteamsController@index')->name('sales-team-index');
 Route::get('/sales-teams-options', 'UsersController@listAll')->name('get-sales-team-options');
-Route::post('/sales-team/create', 'SalesteamController@createSalesTeam')->name('create.sales.team');
-Route::get('/sales-team/edit', 'SalesteamController@editSalesTeam')->name('edit.sales.team.data');
-Route::post('/sales-team/update', 'SalesteamController@updateSalesTeam')->name('update.sales.team.data');
-Route::post('/sales-team/delete', 'SalesteamController@deleteSalesTeam')->name('delete.sales.team');
-Route::get('/ajax/sales-team/data', 'SalesteamController@getSalesTeamAjax')->name('sales-team-data');
+Route::post('/sales-team/create', 'SalesteamsController@createSalesTeam')->name('create.sales.team');
+Route::get('/sales-team/edit', 'SalesteamsController@editSalesTeam')->name('edit.sales.team.data');
+Route::post('/sales-team/update', 'SalesteamsController@updateSalesTeam')->name('update.sales.team.data');
+Route::post('/sales-team/delete', 'SalesteamsController@deleteSalesTeam')->name('delete.sales.team');
+Route::get('/ajax/sales-team/data', 'SalesteamsController@getSalesTeamAjax')->name('sales-team-data');
 
 Route::get('/tag-names', 'TagsController@index')->name('tag-index');
 Route::post('/tag/create', 'TagsController@createTag')->name('create.tag');
@@ -74,21 +76,21 @@ Route::get('/ajax/tag/data', 'TagsController@getTagsAjax')->name('tag-data');
 
 
 
-Route::get('/companies', 'CompanyController@index')->name('company-index');//->middleware('can:index,App\Customer');
+Route::get('/accounts', 'AccountsController@index')->name('account-index');//->middleware('can:index,App\Customer');
 
-Route::post('/companies/create', 'CompanyController@createCompany')->name('create.company');//->middleware('can:list,App\Customer');
-Route::get('/companies/view/{company}', 'CompanyController@viewCompany')->name('view-company');//->middleware('can:list,App\Customer');
-Route::get('/companies/edit/', 'CompanyController@editCompany')->name('edit.modal.data');//->middleware('can:list,App\Customer');
-Route::post('/companies/update', 'CompanyController@updateCompany')->name('update.company');//->middleware('can:list,App\Customer');
+Route::post('/accounts/create', 'AccountsController@createAccount')->name('create.account');//->middleware('can:list,App\Customer');
+Route::get('/accounts/view/{account}', 'AccountsController@viewAccount')->name('view-account');//->middleware('can:list,App\Customer');
+Route::get('/accounts/edit/', 'AccountsController@editAccount')->name('edit.modal.data');//->middleware('can:list,App\Customer');
+Route::post('/accounts/update', 'AccountsController@updateAccount')->name('update.account');//->middleware('can:list,App\Customer');
 
-Route::post('/companies/delete', 'CompanyController@deleteCompany')->name('delete.company');//->middleware('can:list,App\Customer');
-Route::get('/ajax/companies/data', 'CompanyController@getCompaniesAjax')->name('company-data');//->middleware('can:list,App\Customer');
-Route::get('/ajax/companies/tasks/{company}', 'CompanyController@getCompanyTasksAjax')->name('company-tasks-list');//->middleware('can:list,App\Customer');
-Route::get('/ajax/companies/appointments/{company}', 'CompanyController@getCompanyAppointmentsAjax')->name('company-appointments-list');//->middleware('can:list,App\Customer');
-Route::get('/ajax/company/data/{company}', 'CompanyController@getCompanyAjax')->name('get-company');
-Route::post('/ajax/companies/create', 'CompanyController@create')->name('create-company');//->middleware('can:list,App\Customer');
-Route::get('/ajax/companies/list', 'CompanyController@listAll')->name('list-companies');
-Route::post('/companies/bulk/delete', 'CompanyController@bulkDeleteCompany')->name('bulk.delete.company.data');
+Route::post('/accounts/delete', 'AccountsController@deleteAccount')->name('delete.account');//->middleware('can:list,App\Customer');
+Route::get('/ajax/accounts/data', 'AccountsController@getAccountsAjax')->name('account-data');//->middleware('can:list,App\Customer');
+Route::get('/ajax/accounts/tasks/{account}', 'AccountsController@getAccountTasksAjax')->name('account-tasks-list');//->middleware('can:list,App\Customer');
+Route::get('/ajax/accounts/appointments/{account}', 'AccountsController@getAccountAppointmentsAjax')->name('account-appointments-list');//->middleware('can:list,App\Customer');
+Route::get('/ajax/account/data/{account}', 'AccountsController@getAccountAjax')->name('get-account');
+Route::post('/ajax/accounts/create', 'AccountsController@create')->name('create-account');//->middleware('can:list,App\Customer');
+Route::get('/ajax/accounts/list', 'AccountsController@listAll')->name('list-accounts');
+Route::post('/accounts/bulk/delete', 'AccountsController@bulkDeleteAccount')->name('bulk.delete.account.data');
 
 
 Route::get('/calendar', 'CalendarController@index')->name('calendar');

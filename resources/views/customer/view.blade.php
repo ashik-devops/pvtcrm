@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('account.create-form')
+@include('customer.create-form')
 @include('appointment.create-form')
 @include('task.create-form')
 @section('after-head-style')
@@ -13,7 +13,7 @@
 @section('content')
     <div id="content-wrapper" class="content-wrapper view view-account">
         <div class="container-fluid">
-            <h2 class="view-title">{{$account->name}} #{{$account->account_no}}</h2>
+            <h2 class="view-title">{{$customer->name}}</h2>
             <div class="row">
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module">
@@ -22,18 +22,16 @@
                                 <div class="user-info">
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
-                                        <li class="name"><h3>{{$account->name}}</h3>
-                                        <li class="name"><h5>Account No #{{$account->account_no}}</h5>
-                                            <label class="label label-info"></label></li>
+                                        <li class="name"><h3>{{implode(', ', array_filter([$customer->last_name, $customer->first_name]))}}</h3>
+                                            <a href="{{route('view-account', [$customer->account->id])}}"><label class="label label-info">{{implode(', ', array_filter([$customer->title, $customer->account->name]))}}</label></a></li>
                                         <li>
                                             <address>
-                                                <p>{{implode(', ', [$account->addresses->first()->city, $account->addresses->first()->state, $account->addresses->first()->country, $account->addresses->first()->zip])}}</p>
+                                                <p>{{implode(', ', [$customer->addresses->first()->city, $customer->addresses->first()->state, $customer->addresses->first()->country, $customer->addresses->first()->zip])}}</p>
                                             </address>
 
                                         </li>
-                                        <li class="email"><a href="mailto:{{$account->email}}">{{$account->email}}</a></li>
-                                        <li class="phone"><a href="tel:{{$account->phone_no}}">{{$account->phone_no}}</a></li>
-                                        <li class="website"><a target="_blank" href="{{$account->website}}">{{$account->website}}</a></li>
+                                        <li class="email"><a href="mailto:{{$customer->email}}">{{$customer->email}}</a></li>
+                                        <li class="phone"><a href="tel:{{$customer->phone_no}}">{{$customer->phone_no}}</a></li>
                                     </ul>
                                 </div>
 
@@ -44,8 +42,7 @@
                                         <li><a href="#tasks" role="presentation" aria-controls="tasks" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-note2 icon"></span> Tasks</a></li>
                                         <li><a href="#appointments" role="presentation" aria-controls="appointments" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-date icon"></span> Appointments</a></li>
                                         <li><a href="#addresses" role="presentation" aria-controls="addresses" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-paper-plane icon"></span> Addresses</a></li>
-                                        <li><a href="#employees" role="presentation" aria-controls="employees" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-users icon"></span>Contacts</a></li>
-                                    </ul>
+                                        </ul>
                                 </nav>
 
                             </div>
@@ -55,27 +52,35 @@
                                     <div id="info" role="tabpanel" class="tab-pane active">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <h3 class="panel-title">Account Info</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editAccount('{{$account->id}}')" data-target="#modal-new-account"><i class="glyphicon glyphicon-edit"></i>  Edit Account</button>
+                                                <h3 class="panel-title">Customer Info</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer()" data-target="#modal-new-account"><i class="glyphicon glyphicon-edit"></i>  Edit Customer</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="col-md-6 col-lg6 col-sm-12 table-responsive">
                                                     <table class="table">
                                                         <tr>
-                                                            <td>Account Name</td>
-                                                            <td>{{$account->name}}</td>
+                                                            <td>Name </td>
+                                                            <td>{{implode(', ', array_filter([$customer->last_name,$customer->first_name]))}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Account Phone</td>
-                                                            <td><a href="tel:{{$account->phone_no}}">{{$account->phone_no}}</a></td>
+                                                            <td>Company Name </td>
+                                                            <td><a href="{{route('view-account', [$customer->account->id])}}">{{$customer->account->name}}</a></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Account Email</td>
-                                                            <td><a href="mailto:{{$account->email}}">{{$account->email}}</a></td>
+                                                            <td>Title</td>
+                                                            <td>{{$customer->title}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Account Website</td>
-                                                            <td><a target="_blank" href="{{$account->website}}">{{$account->website}}</a></td>
+                                                            <td>Email</td>
+                                                            <td><a href="mailto:{{$customer->email}}">{{$customer->email}}</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Phone No</td>
+                                                            <td><a href="tel:{{$customer->phone_no}}">{{$customer->phone_no}}</a></td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Assigned User </td>
+                                                            <td>{{$customer->user->name}}</td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -170,7 +175,6 @@
                                                             <th>Description</th>
                                                             <th>Start Time</th>
                                                             <th>End Time</th>
-                                                            <th>Employee</th>
                                                             <th>Action</th>
                                                         </tr>
                                                         </thead>
@@ -196,60 +200,28 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        @foreach($account->addresses as $address)
-                                                            <p>{{$address->street_address_1}}</p>
-                                                            @if(strlen($address->street_address_2)>0)
-                                                                <p>{{$address->street_address_2}}</p>
-                                                            @endif
-                                                            <p>{{$address->city}} {{$address->state}} {{$address->zip}}</p>
-                                                            <p>{{$address->country}}</p>
-                                                            @if(strlen($address->email) > 0)
-                                                                <p>{{$address->email}}</p>
-                                                            @endif
-                                                            @if(strlen($address->phone_no) > 0)
-                                                                <p>{{$address->phone_no}}</p>
-                                                            @endif
+                                                        {{--@foreach($customer->addresses as $address)--}}
+                                                            {{--<p>{{$address->street_address_1}}</p>--}}
+                                                            {{--@if(strlen($address->street_address_2)>0)--}}
+                                                                {{--<p>{{$address->street_address_2}}</p>--}}
+                                                            {{--@endif--}}
+                                                            {{--<p>{{$address->city}} {{$address->state}} {{$address->zip}}</p>--}}
+                                                            {{--<p>{{$address->country}}</p>--}}
+                                                            {{--@if(strlen($address->email) > 0)--}}
+                                                                {{--<p>{{$address->email}}</p>--}}
+                                                            {{--@endif--}}
+                                                            {{--@if(strlen($address->phone_no) > 0)--}}
+                                                                {{--<p>{{$address->phone_no}}</p>--}}
+                                                            {{--@endif--}}
 
-                                                        @endforeach
+                                                        {{--@endforeach--}}
                                                         </tbody>
                                                     </table>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="employees" role="tabpanel" class="tab-pane">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title">Contact Persons</h3>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>Name</th>
-                                                            <th>Role</th>
-                                                            <th>Location</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($account->employees as $employee)
-                                                            <tr>
-                                                                <td><a href="{{route('view-customer', [$employee->id])}}">{{implode(', ', array_filter([$employee->last_name, $employee->first_name]))}}</a></td>
-                                                                <td>{{$employee->title}}</td>
-                                                                <td>{{implode(', ', array_filter([$employee->addresses->first()->city, $employee->addresses->first()->state, $employee->addresses->first()->country, $employee->addresses->first()->zip]))}}</td>
-                                                                <td><a href="{{route('view-customer', [$employee->id])}}" class="btn btn-success">View</a></td>
-                                                            </tr>
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
 
-
-                                    </div>
                                 </div>
 
                             </div>
@@ -263,18 +235,18 @@
 
 @section('modal')
     <!-- Modal for Editing account -->
-    <div class="modal" id="modal-new-account" tabindex="-1" role="dialog" aria-labelledby="modal-new-account">
+    <div class="modal" id="new-customer" tabindex="-1" role="dialog" aria-labelledby="modal-new-customer">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <div id="new_edit_account">
-                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New Account</h4>
+                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Edit Customer</h4>
                     </div>
 
                 </div>
                 <div class="modal-body">
-                    @yield('customer-create-from')
+                    @yield('customer-create-form')
                 </div>
             </div>
         </div>
@@ -293,7 +265,7 @@
             </div>
         </div>
     </div><!--/modal-->
-    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
+    <div class="modal taskModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -332,6 +304,7 @@
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 
+
     <script type="text/javascript">
         task_date=moment();
             var task_datatable = jQuery('#tasks-list').DataTable({
@@ -341,14 +314,13 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('account-tasks-list', [$account->id]) !!}',
+                ajax: '{!! route('customer-tasks-list', [$customer->id]) !!}',
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
                     { data: 'status', name: 'status' },
                     { data: 'due_date', name: 'due_date' },
                     { data: 'priority', name: 'priority' },
-                    { data: 'customer_name', name: 'customer_name' },
                     { data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -362,14 +334,13 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('account-appointments-list', [$account->id]) !!}',
+                ajax: '{!! route('customer-appointments-list', [$customer->id]) !!}',
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
-                    { data: 'customer_name', name: 'customer_name' },
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -407,8 +378,6 @@
                 }
             });
         }
-
-
 
         jQuery('.modal').on('shown.bs.modal', function () {
 
@@ -466,7 +435,7 @@
         }
 
 
-        /*========Start Appointment Module in Account Single view =========*/
+        /*========Start Appointment Module in Company Single view =========*/
         var aptinputMap={
             appointmentId : 'appointment_id',
             aptCustomerId : 'aptCustomerId',
@@ -477,7 +446,7 @@
             endTime : 'endTime'
         };
 
-        var account_id = "{{$account->id}}";
+        var customer_id = "{{$customer->id}}";
 
 
         function createAppointment(){
@@ -527,7 +496,7 @@
                     }
                 });
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_apt_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     //console.log(jqXHT);
@@ -553,7 +522,7 @@
                     }
                 })
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_apt_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -659,15 +628,17 @@
         }
 
         function showAptParselyError(field, msg){
+
             var el = jQuery("#"+aptinputMap[field]).parsley();
+            console.log(el);
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
         }
 
 
-        /*========End Appointment Module in Account Single view =========*/
+        /*========End Appointment Module in Company Single view =========*/
 
-        /*========Start Task Module in Account Single view =========*/
+        /*========Start Task Module in Company Single view =========*/
 
         var taskInputMap={
             taskId : 'task_id',
@@ -757,7 +728,7 @@
                     }
                 });
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_task_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -785,7 +756,7 @@
                     }
                 })
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_task_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -796,7 +767,6 @@
         function reset_task_form(form_el) {
             form_el.reset();
             $('#task_id').val('');
-
 
         }
 
@@ -870,7 +840,7 @@
             task_datatable.ajax.reload(null, false);
         }
 
-        function handle_error(xhr) {
+        function handle_task_error(xhr) {
 
             if(xhr.status==422){
                 jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
@@ -879,399 +849,249 @@
             }
 
         }
+        function handle_apt_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showAptParselyError(key, data[0]);
+                });
+            }
+
+        }
 
         function showTaskParselyError(field, msg){
+            console.log(field);
             var el = jQuery("#"+taskInputMap[field]).parsley();
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
         }
-        /*========End Task Module in Account Single view =========*/
+
+
+
+
         /*========End Task Module in Company Single view =========*/
-        /*========Start Journal Module in Company Single view =========*/
 
-        $('#typeItem').hide();
-        $('#followUpTask').hide();
-        $('#followUpAppointment').hide();
+        var custInputMap = {
+            customerId : 'customerId',
+            userId : 'userId',
+            firstName : 'firstName',
+            lastName : 'lastName',
+            customerTitle : 'customerTitle',
+            customerEmail : 'customerEmail',
+            customerPhone : 'customerPhone',
+            customerPriority : 'customerPriority',
 
-        function createJournal(){
+            accountId : 'accountId',
+            accountNo : 'accountNo',
+            addressId : 'addressId',
+            accountName : 'accountName',
+            accountEmail : 'customerEmail',
+            accountPhone : 'customerPhone',
+            accountWebsite : 'accountWebsite',
+            streetAddress_1 : 'streetAddress_1',
+            streetAddress_2 : 'streetAddress_2',
+            city : 'city_id',
+            state : 'state_id',
+            country : 'country_id',
+            zip : 'zip_id',
+        };
 
-            if($("#followUpCheck").prop('checked') === false) {
-                $('#task_id').val(''),
-                    $('#taskTitle').val(''),
-                    $('#taskDescription').val(''),
-                    $('#taskDueDate').val(''),
-                    $('#taskStatus').val(''),
-                    $('#taskPriority').val('')
-            }
-            var customer_select= jQuery("#journalCustomerId").select2({
-                placeholder: "Select a Customer",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('get-customer-company-wise')}}",
-                    dataType: 'json',
-                    delay: 250,
+        function editCustomer(){
 
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            companyId: company_id,
-                        };
-                    },
-                    processResults : function (data){
+            jQuery("#modal_button").val("Update");
+            $.get("{{ route('get.customer.data') }}", { id: '{{$customer->id}}' } ,function(data){
 
-                        return {
-                            results: data.customers
+                jQuery(".customerModal .modal-title").html('Edit Customer');
+
+                if(data){
+
+                    $('#modal_button').val('Update Customer');
+                    $('#customerId').val(data.customer.id);
+                    $('#firstName').val(data.customer.first_name);
+                    $('#lastName').val(data.customer.last_name);
+                    $('#customerTitle').val(data.customer.title);
+                    $('#customerEmail').val(data.customer.email);
+                    $('#customerPhone').val(data.customer.phone_no);
+                    $('#customerPriority').val(data.customer.priority);
+                    jQuery("#userId").html("<option selected value='"+data.user.id+"'>"+data.user.name+"</option>")
+
+                    if(data.account){
+                        jQuery("#accountId").html("<option selected value='"+data.account.id+"'>"+data.account.name+"</option>")
+                        $('#accountName').val(data.account.name);
+                        $('#accountEmail').val(data.account.email);
+                        $('#accountPhone').val(data.account.phone_no);
+                        $('#accountWebsite').val(data.account.website);
+
+                        if(data.address[0]){
+                            $('#addressId').val(data.address[0].id);
+                            $('#streetAddress_1').val(data.address[0].street_address_1);
+                            $('#streetAddress_2').val(data.address[0].street_address_2);
+                            $('#city_id').val(data.address[0].city);
+                            $('#state_id').val(data.address[0].state);
+                            $('#country_id').val(data.address[0].country);
+                            $('#zip_id').val(data.address[0].zip);
+
                         }
-                    },
+                        $('#hiddenForEditCustomer').hide();
+                        $('#AccountDataAtCustomerForm').hide();
+                    }
 
-                    cache: true
+
                 }
             });
-            jQuery('.modal').on('shown.bs.modal', function () {
-                $('#logDateTimePicker').datetimepicker();
 
-            });
-            $('#journal-modal').modal('show');
+
+            $('#new-customer').modal('show');
+
         }
-
-        function followUpTest(){
-            if($("#followUpCheck").prop('checked') == true) {
-                $('#typeItem').show();
-
-            }else{
-                $('#typeItem').hide();
-                $('#followUpTask').hide();
-                $('#followUpAppointment').hide();
-            }
-        }
-
-        $("input[name=followUpType]:radio").click(function () {
-            if ($('input[name=followUpType]:checked').val() === "task") {
-                $("#taskTitle").attr('required', '');
-                $("#taskDescription").attr('required', '');
-                $("#taskDueDate").attr('required', '');
-
-
-
-                $('#taskDueDateTimePicker').datetimepicker();
-                $('#followUpTask').show();
-                $('#followUpAppointment').hide();
-
-
-
-
-
-            } else if ($('input[name=followUpType]:checked').val() === "appointment") {
-                $('#followUpTask').hide();
-                $('#followUpAppointment').show();
-
-            }
-        });
-
-
-
-        $('#journalForm').on('submit',function(e) {
-            e.preventDefault();
-            var _token = $('input[name="_token"]').val();
-
-            var journal = {
-                journalId : $('#journal_id').val(),
-                journalCustomerId : $('#journalCustomerId').val(),
-                journalTitle : $('#journalTitle').val(),
-                journalDescription : $('#journalDescription').val(),
-                journalLogDate : $('#journalLogDate').val(),
-
-            };
-            var task = {
-                taskId : $('#task_id').val(),
-                taskTitle : $('#taskTitle').val(),
-                taskDescription : $('#taskDescription').val(),
-                taskDueDate : $('#taskDueDate').val(),
-                taskStatus : $('#taskStatus').val(),
-                taskPriority : $('#taskPriority').val(),
-
-            };
-            var appointment = {
-                appointmentId : $('#appointment_id').val(),
-                appointmentTitle : $('#appointmentTitle').val(),
-                appointmentDescription : $('#appointmentDescription').val(),
-                appointmentStatus : $('#appointmentStatus').val(),
-                startTime : $('#startTime').val(),
-                endTime : $('#endTime').val()
-
-            };
-
-            var data = {
-                _token : _token,
-                journal: journal,
-                task: task,
-                appointment: appointment
-            };
-
-            console.log(appointment);
-
-            if($("#followUpCheck").prop('checked') === false){
-                $('#task_id').val(''),
-                $('#taskTitle').val(''),
-                $('#taskDescription').val(''),
-                $('#taskDueDate').val(''),
-                $('#taskStatus').val(''),
-                $('#taskPriority').val(''),
-                $('#appointmentId').val(),
-                $('#appointmentTitle').val(),
-                $('#appointmentDescription').val(),
-                $('#appointmentStatus').val(),
-                $('#startTime').val(),
-                $('#endTime').val()
-                document.querySelector('#taskTitle').required = false;
-                document.querySelector('#taskDescription').required = false;
-                document.querySelector('#taskDueDate').required = false;
-                document.querySelector('#taskStatus').required = false;
-                document.querySelector('#taskPriority').required = false;
-
-                document.querySelector('#appointmentTitle').required = false;
-                document.querySelector('#appointmentDescription').required = false;
-                document.querySelector('#appointmentStatus').required = false;
-                document.querySelector('#startTime').required = false;
-                document.querySelector('#endTime').required = false;
-
-
-
-            }
-           /* if ($('input[name=followUpType]:checked').val() == "task"){
-                $('#edit-submitted-first-name').removeAttr('required');​​​​​
-            }*/
-
-            if(journal.journalId === ''){
-                var request = jQuery.ajax({
-                    url: "{{ route('create.journal') }}",
-                    data: data,
-                    method: "POST",
-                    dataType: "json"
-                });
-                request.done(function (response) {
-
-                    if(response.result == 'Saved'){
-                        $('#journalForm')[0].reset();
-                        $('#journal_id').val('');
-                        $('#journal-modal').modal('hide');
-                        get_all_journal_data();
-                        $.notify(response.message, "success");
-                    }
-                    else{
-                        jQuery.notify(response.message, "error");
-                    }
-                })
-
-                request.fail(function (jqXHT, textStatus) {
-                    $.notify(textStatus, "error");
-                });
-
-            }else{
-               //journal updating
-
-                console.log(appointment);
-                var request = jQuery.ajax({
-                    url: "{{ route('update.journal') }}",
-                    data: data,
-                    method: "POST",
-                    dataType: "json"
-                });
-                request.done(function (response) {
-                    if(response.result == 'Saved'){
-                        reset_form($('#taskForm')[0]);
-                        $('#journal_id').val('');
-                        $('#journal-modal').modal('hide');
-                        get_all_journal_data();
-                        jQuery.notify(response.message, "success");
-                    }
-                    else{
-                        jQuery.notify(response.message, "error");
-                    }
-                })
-                request.error(function(xhr){
-                    handle_error(xhr);
-                });
-                request.fail(function (jqXHT, textStatus) {
-                    $.notify(textStatus, "error");
-                });
-            }
-
-        });
-
-
-
-        function editJournal(id){
-
-            $('#journal_modal_button').val('Update Journal');
-            $('#modal-new-journal-label').text('Edit Journal');
-
-            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
-                console.log(data);
-
-                if(data){
-                    $('#journal_id').val(data.journal.id);
-                    $('#journalCustomerId').val(data.journal.customer_id);
-                    $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.company.name+"</option>");
-                    $('#journalTitle').val(data.journal.title);
-                    $('#journalDescription').val(data.journal.description);
-
-                    jQuery('#journalLogDate').datetimepicker({date: new Date(data.journal.log_date)});
-
-                    if(data.task != null){
-                        $('#task_id').val(data.task.id);
-                        $('#taskTitle').val(data.task.title);
-                        $('#taskDescription').val(data.task.description);
-                        jQuery('#taskDueDate').datetimepicker({date: new Date(data.task.due_date)});
-                        $('#taskPriority').val(data.task.priority);
-                        $('#taskStatus').val(data.task.status);
-
-                        $('#followUpCheckboxId').hide();
-                        $('#typeId').show();
-                        $('#typeItem').hide();
-                        $('#followUpAppointment').hide();
-                        $('#followUpTask').show();
-
-                    }
-
-                    if(data.appointment != null){
-                        jQuery('#appointment_id').val(data.appointment.id);
-                        jQuery('#appointmentTitle').val(data.appointment.title);
-                        jQuery('#appointmentDescription').val(data.appointment.description);
-                        jQuery('#appointmentStatus').val(data.appointment.status);
-                        min_date = moment(data.appointment.start_time);
-                        max_date = moment(data.appointment.end_time);
-
-                        updateDates();
-
-                        $('#followUpCheckboxId').hide();
-                        $('#typeId').show();
-                        $('#typeItem').hide();
-                        $('#followUpTask').hide();
-                        $('#followUpAppointment').show();
-                    }
-
-                    if(data.task == '' && data.appointment == ''){
-                        console.log('kisu nai');
-                    }
-
-                }
-
-            });
-            $('#journal-modal').modal('show');
-        }
-
-        function get_all_journal_data(){
-            $("#journals-list").dataTable().fnDestroy();
-            jQuery('#journals-list').DataTable({
-//               responsive: false,
-                select: true,
-                processing: true,
-                serverSide: true,
-                paging:true,
-                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('journal-data') !!}',
-                columns: [
-                    {data: 'id', name: 'id'},
-                    {data: 'title', name: 'title'},
-                    {data: 'description', name: 'description'},
-                    {data: 'related_obj_type', name: 'related_obj_type'},
-                    {data: 'log_date', name: 'log_date'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
-
-                ]
-            });
-        }
-        /*========End Journal Module in Company Single view =========*/
-
-        var param_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-        function editAccount(){
-            var id = param_id;
-            $('#new_edit_account .modal-title').html('Edit Account');
-
-            $.get("{{ route('edit.modal.data') }}", { id: id} ,function(data){
-                if(data){
-                    $('#modal_button').val('Update Account');
-                    $('#account_id').val(data.account.id);
-                    $('#accountName').val(data.account.name);
-                    $('#accountEmail').val(data.account.email);
-                    $('#accountPhone').val(data.account.phone_no);
-                    $('#accountWebsite').val(data.account.website);
-
-                    if(data.account_address.length > 0){
-                        $('#address_id').val(data.account_address[0].id);
-                        $('#streetAddress_1').val(data.account_address[0].street_address_1);
-                        $('#streetAddress_2').val(data.account_address[0].street_address_2);
-                        $('#city_id').val(data.account_address[0].city);
-                        $('#state_id').val(data.account_address[0].state);
-                        $('#country_id').val(data.account_address[0].country);
-                        $('#zip_id').val(data.account_address[0].zip);
-                    }
-                }
-            });
-            $('#modal-new-account').modal('show');
-        }
-
         //This update code for updating account from account single view page....
 
 
 
 
 
-            $('#accountForm').on('submit',function(e) {
-                e.preventDefault();
-                var _token = $('input[name="_token"]').val();
-                var account = {
-                    accountId : $('#account_id').val(),
-                    addressId : $('#address_id').val(),
-                    accountName : $('#accountName').val(),
-                    accountEmail : $('#accountEmail').val(),
-                    accountPhone : $('#accountPhone').val(),
-                    accountWebsite : $('#accountWebsite').val(),
-                    streetAddress_1 : $('#streetAddress_1').val(),
-                    streetAddress_2 : $('#streetAddress_2').val(),
-                    city : $('#city_id').val(),
-                    state : $('#state_id').val(),
-                    country : $('#country_id').val(),
-                    zip : $('#zip_id').val()
-                };
+        $('#customerForm').on('submit',function(e){
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
 
-                var data = {
-                    _token : _token,
-                    account: account
-                };
+            var customer = {
+                customerId : '{{$customer->id}}',
+                userId : $('#'+custInputMap.userId).val(),
+                firstName : $('#'+custInputMap.firstName).val(),
+                lastName : $('#'+custInputMap.lastName).val(),
+                customerTitle : $('#'+custInputMap.customerTitle).val(),
+                customerEmail : $('#'+custInputMap.customerEmail).val(),
+                customerPhone : $('#'+custInputMap.customerPhone).val(),
+                customerPriority : $('#'+custInputMap.customerPriority).val(),
+            };
 
-                if(account.accountId != ''){
-                    var request = jQuery.ajax({
-                        url: "{{ route('update.account') }}",
-                        data: data,
-                        method: "POST",
-                        dataType: "json"
-                    });
-                    request.done(function (response) {
+            var account = {
+                accountId : $('#'+custInputMap.accountId).val(),
+                accountNo : $('#'+custInputMap.accountNo).val(),
+                addressId : $('#'+custInputMap.addressId).val(),
+                accountName : $('#'+custInputMap.accountName).val(),
+                accountEmail : $('#'+custInputMap.customerEmail).val(),
+                accountPhone : $('#'+custInputMap.customerPhone).val(),
+                accountWebsite : $('#'+custInputMap.accountWebsite).val(),
+                streetAddress_1 : $('#'+custInputMap.streetAddress_1).val(),
+                streetAddress_2 : $('#'+custInputMap.streetAddress_2).val(),
+                city : $('#'+custInputMap.city).val(),
+                state : $('#'+custInputMap.state).val(),
+                country : $('#'+custInputMap.country).val(),
+                zip : $('#'+custInputMap.zip).val()
+            };
 
-                        if(response.result == 'Saved'){
-                            $('#accountForm')[0].reset();
-                            $('#account_id').val('');
-                            $('#modal-new-account').modal('hide');
-                            $.notify(response.message, "success");
-                        }
-                        else{
-                            jQuery.notify(response.message, "error");
-                        }
-                    })
 
-                    request.fail(function (jqXHT, textStatus) {
-                        $.notify(textStatus, "error");
-                    });
-                }
-
-            });
+            var data = {
+                _token : _token,
+                account: account,
+                customer:customer
+            };
 
 
 
 
+                //updating customer.....
 
+                var request = jQuery.ajax({
+                    url: "{{ route('update.customer.data') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_cust_form($('#customerForm')[0]);
+                        jQuery("#accountId").html("");
+                        $('#customerId').val('');
+                        $('#modal-new-member').modal('hide');
+                        get_all_customer_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.error(function(xhr){
+                    handle_customer_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+        });
+
+
+        var account_select=jQuery("#accountId").select2({
+            placeholder: "Select a Account",
+            allowClear:true,
+            ajax: {
+                url: "{{route('list-accounts')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+                    if(data.total_count < 1){
+                        return {results: [{
+                            id: -1,
+                            text: "Create New"
+                        }]};
+
+                    }
+
+                    return {
+                        results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                    }
+                },
+
+                cache: true
+            }
+        });
+        account_select.on("select2:select", function (e) {
+            var selection = e.params.data;
+            console.log(selection);
+            if(selection.id < 1){
+                //creating customer with account
+                $('#AccountDataAtCustomerForm').show();
+                $("#AccountDataAtCustomerForm input").val('');
+
+            }
+            else if(selection.id > 1){
+                $('#AccountDataAtCustomerForm').hide();
+                //now a selection is made populate data of selected account
+
+            }
+
+
+//
+        });
+
+        function handle_customer_error(xhr) {
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showCustParselyError(key, data[0]);
+                });
+            }
+        }
+        function showCustParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.')[1];
+            }
+            var el = jQuery("#"+custInputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
+
+        function reset_cust_form(el) {
+            el.reset();
+            jQuery("#"+custInputMap.addressId).val('');
+            jQuery("#"+custInputMap.customerId).val('');
+            jQuery("#"+custInputMap.accountId).val('0');
+        }
 
     </script>
 

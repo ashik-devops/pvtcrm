@@ -27,9 +27,9 @@
                 </a>
             </li>
             <li {{ Request::is('companies') ? ' class="active"' : null }}>
-                <a href="{{route('company-index')}}">
+                <a href="{{route('account-index')}}">
                     <span aria-hidden="true" class="icon icon_building_alt"></span>
-                    <span class="nav-label">Companies</span>
+                    <span class="nav-label">Accounts</span>
                 </a>
             </li>
             <li {{ Request::is('customers') ? ' class="active"' : null }}>

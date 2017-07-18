@@ -14,16 +14,16 @@ class Customer extends Model
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
-    public  $with = ['company'];
+    public  $with = ['account'];
     protected $dates = ['deleted_at'];
-    protected static $logAttributes = ['first_name', 'last_name', 'title', 'email', 'phone_no', 'user', 'company', 'priority'];
+    protected static $logAttributes = ['first_name', 'last_name', 'title', 'email', 'phone_no', 'user', 'account', 'priority'];
     protected static $logOnlyDirty = true;
     public function user(){
         return $this->belongsTo('App\User');
     }
 
-    public function company(){
-        return $this->belongsTo('App\Customer_company', 'customer_company_id');
+    public function account(){
+        return $this->belongsTo('App\Account');
     }
 
     public function addresses(){

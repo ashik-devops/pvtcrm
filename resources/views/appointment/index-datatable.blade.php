@@ -20,7 +20,7 @@
             <h2 class="view-title">Appointments</h2>
 
                 <div class="actions">
-                    <button id="new-customer-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
+                    <button id="new-apt-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
                 </div>
 
 
@@ -176,6 +176,11 @@
             updateDates();
         });
 
+        jQuery('#new-apt-btn').click(function () {
+            if($('#'+inputMap.appointmentId).val() != '' || $('#'+inputMap.aptCustomerId).val() != ''){
+                reset_form($("#appointmentForm")[0]);
+            }
+        });
 
         function updateDates(){
                 $('#startTime').data("DateTimePicker").date(min_date);
@@ -310,7 +315,7 @@
                     jQuery('#appointmentDescription').val(data.appointment.description);
                     jQuery('#appointmentStatus').val(data.appointment.status);
                     $('#aptCustomerId').val(data.appointment.customer_id);
-                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
+                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.account.name+"</option>");
 
                     min_date = moment(data.appointment.start_time);
                     max_date = moment(data.appointment.end_time);

@@ -46,15 +46,15 @@
                                             <thead>
                                             <tr>
                                                 <th>Id</th>
+                                                <th>Account #</th>
                                                 <th>Name</th>
-                                                <th>Company</th>
+                                                <th>Account Name</th>
                                                 <th>Email</th>
                                                 <th>Phone</th>
                                                 <th>Priority</th>
                                                 <th>Assigned To</th>
                                                 <th>Actions</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
+
                                             </tr>
                                             </thead>
                                         </table>
@@ -97,68 +97,94 @@
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
 
-            var datatable = jQuery('#customers-table').DataTable({
+        var inputMap = {
+            customerId : 'customerId',
+            userId : 'userId',
+            firstName : 'firstName',
+            lastName : 'lastName',
+            customerTitle : 'customerTitle',
+            customerEmail : 'customerEmail',
+            customerPhone : 'customerPhone',
+            customerPriority : 'customerPriority',
+
+            accountId : 'accountId',
+            accountNo : 'accountNo',
+            addressId : 'addressId',
+            accountName : 'accountName',
+            accountEmail : 'customerEmail',
+            accountPhone : 'customerPhone',
+            accountWebsite : 'accountWebsite',
+            streetAddress_1 : 'streetAddress_1',
+            streetAddress_2 : 'streetAddress_2',
+            city : 'city_id',
+            state : 'state_id',
+            country : 'country_id',
+            zip : 'zip_id',
+        };
+
+        var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
-                dom: 'Bfrtip',
-                select: true,
-                processing: true,
-                serverSide: true,
-                paging:true,
-                lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('customers-data') !!}',
-                columns: [
-                    { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name', searchable: false},
-                    { data: 'company', name: 'company', searchable: true},
-                    { data: 'email', name: 'email' },
-                    { data: 'phone', name: 'phone_no' },
-                    { data: 'priority', name: 'priority' },
-                    { data: 'user', name: 'user', searchable: true},
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
-                    { data: 'first_name', name: 'first_name', searchable: true, visible:false},
-                    { data: 'last_name', name: 'last_name', searchable: true, visible:false},
-                ],
-                buttons: [
-                    {
-                        text: 'Reload',
-                        action: function ( e, dt, node, config ) {
-                            dt.ajax.reload(null, false);
-                        }
-                    },
-                    {
-                        text: 'Select Visible',
-                        action: function () {
-                            datatable.rows().select();
-                        }
-                    },
-                    {
-                        text: 'Select none',
-                        action: function () {
-                            datatable.rows().deselect();
-                        }
+            dom: 'Bfrtip',
+            select: true,
+            processing: true,
+            serverSide: true,
+            paging:true,
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+            ajax: '{!! route('customers-data') !!}',
+            columns: [
+                { data: 'id', name: 'id', searchable: false, visible:false },
+                { data: 'account_no', name: 'account_no', searchable: true},
+                { data: 'name', name: 'name', searchable: false},
+                { data: 'account_name', name: 'account_name', searchable: true},
+                { data: 'email', name: 'email' },
+                { data: 'phone_no', name: 'phone_no' },
+                { data: 'priority', name: 'priority' },
+                { data: 'user_name', name: 'user_name', searchable: true},
+                { data: 'action', name: 'action', orderable: false, searchable: false},
+
+            ],
+            buttons: [
+                {
+                    text: 'Reload',
+                    action: function ( e, dt, node, config ) {
+                        dt.ajax.reload(null, false);
                     }
-                ]
-            });
-
-            //bulk action
-
-            var bulk_action=jQuery("#bulk_action").select2();
-
-            bulk_action.on('select2:select', function (e) {
-                var action = e.params.data.id;
-                if(action != ''){
-                    var selected_rows = datatable.rows( { selected: true }).data();
-
-                    switch (action){
-                        case "Delete": deleteRows(selected_rows);
-                                    break;
+                },
+                {
+                    text: 'Select Visible',
+                    action: function () {
+                        datatable.rows().select();
+                    }
+                },
+                {
+                    text: 'Select none',
+                    action: function () {
+                        datatable.rows().deselect();
                     }
                 }
+            ]
+        });
+
+        //bulk action
+
+        var bulk_action=jQuery("#bulk_action").select2();
+
+        bulk_action.on('select2:select', function (e) {
+            var action = e.params.data.id;
+            if(action != ''){
+                var selected_rows = datatable.rows( { selected: true }).data();
+
+                switch (action){
+                    case "Delete": deleteRows(selected_rows);
+                        break;
+                }
+            }
 
 
-            });
+        });
 
 
 
@@ -167,196 +193,224 @@
         //creating customer, editing customer and deleting customer
 
 
-            jQuery("#new-customer-btn").click(function (){
-                jQuery("#customerForm")[0].reset();
-                jQuery(".customerModal .modal-title").html('Add New Customer');
-                jQuery("#companyId").html('');
-            });
-            var company_select=jQuery("#companyId").select2({
-                placeholder: "Select a Company",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('list-companies')}}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                        };
-                    },
-                    processResults : function (data){
-                        if(data.total_count < 1){
-                            return {results: [{
-                                id: -1,
-                                text: "Create New"
-                            }]};
+        jQuery("#new-customer-btn").click(function (){
+            reset_form(jQuery("#customerForm")[0]);
+            jQuery(".customerModal .modal-title").html('Add New Customer');
+            jQuery("#accountId").html('');
+            jQuery("#modal_button").val("Create");
+        });
+        var account_select=jQuery("#accountId").select2({
+            placeholder: "Select a Account",
+            allowClear:true,
+            ajax: {
+                url: "{{route('list-accounts')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+                    if(data.total_count < 1){
+                        return {results: [{
+                            id: -1,
+                            text: "Create New"
+                        }]};
 
-                        }
+                    }
 
-                        return {
-                            results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
-                        }
-                    },
+                    return {
+                        results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                    }
+                },
 
-                    cache: true
-                }
-            });
-            company_select.on("select2:select", function (e) {
-                var selction = e.params.data;
+                cache: true
+            }
+        });
+        account_select.on("select2:select", function (e) {
+            var selection = e.params.data;
+            console.log(selection);
+            if(selection.id < 1){
+                //creating customer with account
+                $('#AccountDataAtCustomerForm').show();
+                $("#AccountDataAtCustomerForm input").val('');
 
-                if(selction.id === -1){
-                    //creating customer with company
-                    $('#CompanyDataAtCustomerForm').show();
-                    $("#CompanyDataAtCustomerForm input").val('');
+            }
+            else if(selection.id > 1){
+                $('#AccountDataAtCustomerForm').hide();
+                //now a selection is made populate data of selected account
 
-                }
-                else if(selction.id > 1){
-                    $('#CompanyDataAtCustomerForm').hide();
-                    //now a selection is made select the company
-                }
+            }
 
 
 //
-            });
+        });
+        var priority= jQuery("#customerPriority").select2({});
 
-            var priority= jQuery("#customerPriority").select2({});
+        var user_select=jQuery("#userId").select2({
+            placeholder: "Assign User",
+            ajax: {
+                url: "{{route('list-users')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
 
-            var user_select=jQuery("#userId").select2({
-                placeholder: "Assign User",
-                ajax: {
-                    url: "{{route('list-users')}}",
-                    dataType: 'json',
-                    delay: 250,
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                        };
-                    },
-                    processResults : function (data){
-
-                       return {
-                           results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
-                       }
-                    },
-                    cache: true
-                }
-            });
-
-
-            $('#hiddenForEditCustomer').show();
-            $('#CompanyDataAtCustomerForm').hide();
+                    return {
+                        results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                    }
+                },
+                cache: true
+            }
+        });
 
 
-            $('#customerForm').on('submit',function(e){
-                e.preventDefault();
-                var _token = $('input[name="_token"]').val();
-
-                var customer = {
-                    customerId : $('#customerId').val(),
-                    userId : $('#userId').val(),
-                    firstName : $('#firstName').val(),
-                    lastName : $('#lastName').val(),
-                    customerTitle : $('#customerTitle').val(),
-                    customerEmail : $('#customerEmail').val(),
-                    customerPhone : $('#customerPhone').val(),
-                    customerPriority : $('#customerPriority').val(),
-                };
-
-                var company = {
-                    companyId : $('#companyId').val(),
-                    addressId : $('#addressId').val(),
-                    companyName : $('#companyName').val(),
-                    companyEmail : $('#customerEmail').val(),
-                    companyPhone : $('#customerPhone').val(),
-                    companyWebsite : $('#companyWebsite').val(),
-                    streetAddress_1 : $('#streetAddress_1').val(),
-                    streetAddress_2 : $('#streetAddress_2').val(),
-                    city : $('#city_id').val(),
-                    state : $('#state_id').val(),
-                    country : $('#country_id').val(),
-                    zip : $('#zip_id').val()
-                };
+        $('#hiddenForEditCustomer').show();
+        $('#AccountDataAtCustomerForm').hide();
 
 
-                var data = {
-                    _token : _token,
-                    company: company,
-                    customer:customer
-                };
+        $('#customerForm').on('submit',function(e){
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+
+            var customer = {
+                customerId : $('#'+inputMap.customerId).val(),
+                userId : $('#'+inputMap.userId).val(),
+                firstName : $('#'+inputMap.firstName).val(),
+                lastName : $('#'+inputMap.lastName).val(),
+                customerTitle : $('#'+inputMap.customerTitle).val(),
+                customerEmail : $('#'+inputMap.customerEmail).val(),
+                customerPhone : $('#'+inputMap.customerPhone).val(),
+                customerPriority : $('#'+inputMap.customerPriority).val(),
+            };
+
+            var account = {
+                accountId : $('#'+inputMap.accountId).val(),
+                accountNo : $('#'+inputMap.accountNo).val(),
+                addressId : $('#'+inputMap.addressId).val(),
+                accountName : $('#'+inputMap.accountName).val(),
+                accountEmail : $('#'+inputMap.customerEmail).val(),
+                accountPhone : $('#'+inputMap.customerPhone).val(),
+                accountWebsite : $('#'+inputMap.accountWebsite).val(),
+                streetAddress_1 : $('#'+inputMap.streetAddress_1).val(),
+                streetAddress_2 : $('#'+inputMap.streetAddress_2).val(),
+                city : $('#'+inputMap.city).val(),
+                state : $('#'+inputMap.state).val(),
+                country : $('#'+inputMap.country).val(),
+                zip : $('#'+inputMap.zip).val()
+            };
+
+
+            var data = {
+                _token : _token,
+                account: account,
+                customer:customer
+            };
 
 
 
-                if(customer.customerId < 1){
-                    //customer creating.....
+            if(customer.customerId == ""){
+                //customer creating.....
 
 
-                    var request = jQuery.ajax({
-                        url: "{{ route('create.customer') }}",
-                        data: data,
-                        method: "POST",
-                        dataType: "json"
-                    });
-                    request.done(function (response) {
+                var request = jQuery.ajax({
+                    url: "{{ route('create.customer')}}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
 
-                        if(response.result){
-                            if(response.result == 'Saved') {
-                                $('#customerForm')[0].reset();
-                                jQuery("#companyId").html("");
-                                $('#modal-new-member').modal('hide');
-                                get_all_customer_data();
-                                $.notify(response.message, "success");
-
-                            }
-                            else{
-                                jQuery.notify(response.message, "error");
-
-                            }
-                        }
-
-                    })
-
-                    request.fail(function (jqXHT, textStatus) {
-                        $.notify(textStatus, "error");
-
-                    });
-
-                }else{
-                    //updating customer.....
-
-                    var request = jQuery.ajax({
-                        url: "{{ route('update.customer.data') }}",
-                        data: data,
-                        method: "POST",
-                        dataType: "json"
-                    });
-                    request.done(function (response) {
-                        if(response.result == 'Saved'){
-                            $('#customerForm')[0].reset();
-                            jQuery("#companyId").html("");
-                            $('#customerId').val('');
+                    if(response.result){
+                        if(response.result == 'Saved') {
+                            reset_form($('#customerForm')[0]);
+                            jQuery("#accountId").html("");
                             $('#modal-new-member').modal('hide');
                             get_all_customer_data();
                             $.notify(response.message, "success");
+
                         }
                         else{
                             jQuery.notify(response.message, "error");
+
                         }
-                    })
+                    }
 
-                    request.fail(function (jqXHT, textStatus) {
-                        $.notify(textStatus, "error");
-                    });
-                }
-            });
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+
+                });
+
+            }else{
+                //updating customer.....
+
+                var request = jQuery.ajax({
+                    url: "{{ route('update.customer.data') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_form($('#customerForm')[0]);
+                        jQuery("#accountId").html("");
+                        $('#customerId').val('');
+                        $('#modal-new-member').modal('hide');
+                        get_all_customer_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            }
+        });
 
 
+        function handle_error(xhr) {
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
+                });
+            }
+        }
+        function showParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.')[1];
+            }
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
 
+        function reset_form(el) {
+            el.reset();
+            jQuery("#"+inputMap.addressId).val('');
+            jQuery("#"+inputMap.customerId).val('');
+            jQuery("#"+inputMap.accountId).val('0');
+        }
         // For editing Customer
 
 
         function editCustomer(id){
 
-
+            jQuery("#modal_button").val("Update");
             $.get("{{ route('get.customer.data') }}", { id: id} ,function(data){
 
                 jQuery(".customerModal .modal-title").html('Edit Customer');
@@ -373,12 +427,12 @@
                     $('#customerPriority').val(data.customer.priority);
                     jQuery("#userId").html("<option selected value='"+data.user.id+"'>"+data.user.name+"</option>")
 
-                    if(data.company){
-                        jQuery("#companyId").html("<option selected value='"+data.company.id+"'>"+data.company.name+"</option>")
-                        $('#companyName').val(data.company.name);
-                        $('#companyEmail').val(data.company.email);
-                        $('#companyPhone').val(data.company.phone_no);
-                        $('#companyWebsite').val(data.company.website);
+                    if(data.account){
+                        jQuery("#accountId").html("<option selected value='"+data.account.id+"'>"+data.account.name+"</option>")
+                        $('#accountName').val(data.account.name);
+                        $('#accountEmail').val(data.account.email);
+                        $('#accountPhone').val(data.account.phone_no);
+                        $('#accountWebsite').val(data.account.website);
 
                         if(data.address[0]){
                             $('#addressId').val(data.address[0].id);
@@ -391,27 +445,27 @@
 
                         }
                         $('#hiddenForEditCustomer').hide();
-                        $('#CompanyDataAtCustomerForm').hide();
+                        $('#AccountDataAtCustomerForm').hide();
                     }
 
 
 
 
 
-                   /* $('#company_id').val(data.company.id);
-                    $('#companyName').val(data.company.name);
-                    $('#companyEmail').val(data.company.email);
-                    $('#companyPhone').val(data.company.phone_no);
-                    $('#companyWebsite').val(data.company.website);
+                    /* $('#account_id').val(data.account.id);
+                     $('#accountName').val(data.account.name);
+                     $('#accountEmail').val(data.account.email);
+                     $('#accountPhone').val(data.account.phone_no);
+                     $('#accountWebsite').val(data.account.website);
 
-                    if(data.company_address.length > 0){
-                        $('#streetAddress_1').val(data.company_address[0].street_address_1);
-                        $('#streetAddress_2').val(data.company_address[0].street_address_2);
-                        $('#city_id').val(data.company_address[0].city);
-                        $('#state_id').val(data.company_address[0].state);
-                        $('#country_id').val(data.company_address[0].country);
-                        $('#zip_id').val(data.company_address[0].zip);
-                    } */
+                     if(data.account_address.length > 0){
+                     $('#streetAddress_1').val(data.account_address[0].street_address_1);
+                     $('#streetAddress_2').val(data.account_address[0].street_address_2);
+                     $('#city_id').val(data.account_address[0].city);
+                     $('#state_id').val(data.account_address[0].state);
+                     $('#country_id').val(data.account_address[0].country);
+                     $('#zip_id').val(data.account_address[0].zip);
+                     } */
                 }
             });
 
@@ -490,7 +544,7 @@
                         $.post("{{ route('bulk.delete.customer.data') }}", data, function(result){
 
                             if(result.result == 'Success'){
-                                swal("Deleted!", "Company has been deleted.", "success");
+                                swal("Deleted!", "Account has been deleted.", "success");
                                 get_all_customer_data();
                                 $.notify(result, "danger");
                             }

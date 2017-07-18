@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCustomersCompanyAddressesTable extends Migration
+class CreateAccountAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateCustomersCompanyAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('customers_company_addresses', function (Blueprint $table){
+        Schema::create('account_addresses', function (Blueprint $table){
             $table->increments('id');
             $table->integer('address_id')->unsigned();
-            $table->integer('customer_company_id')->unsigned();
+            $table->integer('account_id')->unsigned();
             $table->enum('type', ['CONTACT','BILLING', 'SHIPPING']);
             $table->timestamps();
         });
@@ -29,6 +29,6 @@ class CreateCustomersCompanyAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('customers_company_addresses');
+        Schema::dropIfExists('account_addresses');
     }
 }

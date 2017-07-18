@@ -24,7 +24,7 @@ $factory->define(App\Customer::class, function (Faker\Generator $faker) {
         'phone_no'=>$faker->unique()->phoneNumber,
         'user_id'=>rand(2,4),
         'priority'=>$priority[rand(0,3)],
-        'customer_company_id'=>rand(1,50)
+        'account_id'=>rand(1,50)
     ];
 });
 
@@ -41,8 +41,9 @@ $factory->define(App\Address::class, function (Faker\Generator $faker) {
     ];
 });
 
-$factory->define(App\Customer_company::class, function(Faker\Generator $faker) {
+$factory->define(App\Account::class, function(Faker\Generator $faker) {
     return [
+        'account_no'=>mb_convert_case($faker->unique(false, 10)->buildingNumber(), MB_CASE_UPPER),
         'name'=>$faker->name,
         'website'=>$faker->unique()->url,
         'phone_no'=>$faker->unique()->phoneNumber,

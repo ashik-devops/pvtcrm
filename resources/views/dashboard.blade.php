@@ -672,7 +672,7 @@
 
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
-{{--    <script src="{{asset('storage/assets/js/dashboard-projects.js')}}"></script>--}}
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 
     <script>
         task_date=moment();
@@ -686,7 +686,7 @@
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'title', name: 'title'},
-                {data: 'first_name', name: 'first_name'},
+                {data: 'customer_name', name: 'customer_name'},
                 { data: 'description', name: 'description'},
                 { data: 'status', name: 'status'},
                 { data: 'priority', name: 'priority'},
@@ -839,13 +839,11 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
+                });
                 request.error(function(xhr){
                     jQuery.map(jQuery.parseJSON(xhr.responseText),function (data, key){
-                        handle_appointment_error(xhr);
+                        handle_apt_error(xhr)
                     });
-
-
 
                 });
                 request.fail(function (jqXHT, textStatus) {
@@ -855,7 +853,30 @@
 
 
         });
+        function showAptParselyError(field, msg){
+            var el = jQuery("#"+aptinputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
 
+        function handle_tasks_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showTaskParselyError(key, data[0]);
+                });
+            }
+
+        }
+        function handle_apt_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showAptParselyError(key, data[0]);
+                });
+            }
+
+        }
         function reset_appointment_form(form_el) {
             form_el.reset();
             min_date = moment();
@@ -878,7 +899,7 @@
             $('#modal-new-appointment-label').text('Edit Appointment');
 
             $.get("{{ route('edit.appointment') }}", { id: id} ,function(data){
-                console.log(data.appointment);
+//                console.log(data.appointment);
                 if(data){
                     jQuery('#appointment_id').val(data.appointment.id);
                     jQuery('#appointmentTitle').val(data.appointment.title);
@@ -1015,35 +1036,6 @@
                 task: task
             };
 
-            if(task.taskId === ''){
-                //task creating.....
-
-                var request = jQuery.ajax({
-                    url: "{{ route('create.task') }}",
-                    data: data,
-                    method: "POST",
-                    dataType: "json"
-                });
-                request.done(function (response) {
-                    if(response.result == 'Saved'){
-                        reset_task_form($('#taskForm')[0]);
-                        $('#task-modal').modal('hide');
-                        get_all_task_data();
-                        $.notify(response.message, "success");
-                    }
-                    else{
-                        jQuery.notify(response.message, "error");
-                    }
-                });
-                request.error(function(xhr){
-                    handle_task_error(xhr);
-                });
-                request.fail(function (jqXHT, textStatus) {
-                    $.notify(textStatus, "error");
-                });
-            } else{
-                //task editing.....
-
                 var request = jQuery.ajax({
                     url: "{{ route('update.task') }}",
                     data: data,
@@ -1063,23 +1055,15 @@
                     }
                 })
                 request.error(function(xhr){
-                    handle_task_error(xhr);
+                    handle_tasks_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
 
-            }
+
         });
-        function handle_task_error(xhr) {
 
-            if(xhr.status==422){
-                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
-                    showTaskParselyError(key, data[0]);
-                });
-            }
-
-        }
         function showTaskParselyError(field, msg){
             var el = jQuery("#"+taskInputMap[field]).parsley();
             el.removeError('fieldError');
@@ -1091,7 +1075,7 @@
             $('#modal-new-task-label').text('Edit Task');
 
             $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
-                console.log(data.task);
+//                console.log(data.task);
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);
