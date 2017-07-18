@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('account.create-form')
+@include('customer.create-form')
 @include('appointment.create-form')
 @include('task.create-form')
 @section('after-head-style')
@@ -23,7 +23,7 @@
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
                                         <li class="name"><h3>{{implode(', ', array_filter([$customer->last_name, $customer->first_name]))}}</h3>
-                                            <a href="{{route('view-company', [$customer->company->id])}}"><label class="label label-info">{{implode(', ', array_filter([$customer->title, $customer->company->name]))}}</label></a></li>
+                                            <a href="{{route('view-account', [$customer->account->id])}}"><label class="label label-info">{{implode(', ', array_filter([$customer->title, $customer->account->name]))}}</label></a></li>
                                         <li>
                                             <address>
                                                 <p>{{implode(', ', [$customer->addresses->first()->city, $customer->addresses->first()->state, $customer->addresses->first()->country, $customer->addresses->first()->zip])}}</p>
@@ -53,7 +53,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Customer Info</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer('{{$customer->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Customer</button>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer()" data-target="#modal-new-account"><i class="glyphicon glyphicon-edit"></i>  Edit Customer</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="col-md-6 col-lg6 col-sm-12 table-responsive">
@@ -64,7 +64,7 @@
                                                         </tr>
                                                         <tr>
                                                             <td>Company Name </td>
-                                                            <td><a href="{{route('view-company', [$customer->company->id])}}">{{$customer->company->name}}</a></td>
+                                                            <td><a href="{{route('view-account', [$customer->account->id])}}">{{$customer->account->name}}</a></td>
                                                         </tr>
                                                         <tr>
                                                             <td>Title</td>
@@ -234,19 +234,19 @@
 @endsection
 
 @section('modal')
-    <!-- Modal for Editing company -->
-    <div class="modal" id="modal-new-company" tabindex="-1" role="dialog" aria-labelledby="modal-new-company">
+    <!-- Modal for Editing account -->
+    <div class="modal" id="new-customer" tabindex="-1" role="dialog" aria-labelledby="modal-new-customer">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div id="new_edit_company">
-                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New Company</h4>
+                    <div id="new_edit_account">
+                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Edit Customer</h4>
                     </div>
 
                 </div>
                 <div class="modal-body">
-                    @yield('customer-create-from')
+                    @yield('customer-create-form')
                 </div>
             </div>
         </div>
@@ -265,7 +265,7 @@
             </div>
         </div>
     </div><!--/modal-->
-    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
+    <div class="modal taskModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -352,19 +352,19 @@
 
 
 
-        function get_customer(company_id){
+        function get_customer(account_id){
             var customer_select= jQuery("#aptCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
-                    url: "{{route('get-customer-company-wise')}}",
+                    url: "{{route('get-customer-account-wise')}}",
                     dataType: 'json',
                     delay: 250,
 
                     data: function (params) {
                         return {
                             q: params.term, // search term
-                            companyId: company_id,
+                            accountId: account_id,
                         };
                     },
                     processResults : function (data){
@@ -450,7 +450,7 @@
 
 
         function createAppointment(){
-            get_customer(company_id);
+            get_customer(account_id);
             $('#appointment-modal').modal('show');
         }
         $('#appointment_modal_button').val('Add Appointment');
@@ -496,7 +496,7 @@
                     }
                 });
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_apt_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     //console.log(jqXHT);
@@ -522,7 +522,7 @@
                     }
                 })
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_apt_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -565,7 +565,7 @@
                     jQuery('#appointmentDescription').val(data.appointment.description);
                     jQuery('#appointmentStatus').val(data.appointment.status);
                     $('#aptCustomerId').val(data.appointment.customer_id);
-                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
+                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.account.name+"</option>");
 
                     min_date = moment(data.appointment.start_time);
                     max_date = moment(data.appointment.end_time);
@@ -628,7 +628,9 @@
         }
 
         function showAptParselyError(field, msg){
+
             var el = jQuery("#"+aptinputMap[field]).parsley();
+            console.log(el);
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
         }
@@ -656,14 +658,14 @@
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
-                    url: "{{route('get-customer-company-wise')}}",
+                    url: "{{route('get-customer-account-wise')}}",
                     dataType: 'json',
                     delay: 250,
 
                     data: function (params) {
                         return {
                             q: params.term, // search term
-                            companyId: company_id,
+                            accountId: account_id,
                         };
                     },
                     processResults : function (data){
@@ -726,7 +728,7 @@
                     }
                 });
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_task_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -754,7 +756,7 @@
                     }
                 })
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_task_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -778,7 +780,7 @@
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);
-                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
+                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name+"</option>");
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
                     task_date = moment(data.task.due_date);
@@ -838,7 +840,7 @@
             task_datatable.ajax.reload(null, false);
         }
 
-        function handle_error(xhr) {
+        function handle_task_error(xhr) {
 
             if(xhr.status==422){
                 jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
@@ -847,102 +849,249 @@
             }
 
         }
+        function handle_apt_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showAptParselyError(key, data[0]);
+                });
+            }
+
+        }
 
         function showTaskParselyError(field, msg){
+            console.log(field);
             var el = jQuery("#"+taskInputMap[field]).parsley();
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
         }
+
+
+
+
         /*========End Task Module in Company Single view =========*/
 
-        var param_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-        function editCompany(){
-            var id = param_id;
-            $('#new_edit_company .modal-title').html('Edit Company');
+        var custInputMap = {
+            customerId : 'customerId',
+            userId : 'userId',
+            firstName : 'firstName',
+            lastName : 'lastName',
+            customerTitle : 'customerTitle',
+            customerEmail : 'customerEmail',
+            customerPhone : 'customerPhone',
+            customerPriority : 'customerPriority',
 
-            $.get("{{ route('edit.modal.data') }}", { id: id} ,function(data){
+            accountId : 'accountId',
+            accountNo : 'accountNo',
+            addressId : 'addressId',
+            accountName : 'accountName',
+            accountEmail : 'customerEmail',
+            accountPhone : 'customerPhone',
+            accountWebsite : 'accountWebsite',
+            streetAddress_1 : 'streetAddress_1',
+            streetAddress_2 : 'streetAddress_2',
+            city : 'city_id',
+            state : 'state_id',
+            country : 'country_id',
+            zip : 'zip_id',
+        };
+
+        function editCustomer(){
+
+            jQuery("#modal_button").val("Update");
+            $.get("{{ route('get.customer.data') }}", { id: '{{$customer->id}}' } ,function(data){
+
+                jQuery(".customerModal .modal-title").html('Edit Customer');
+
                 if(data){
-                    $('#modal_button').val('Update Company');
-                    $('#company_id').val(data.company.id);
-                    $('#companyName').val(data.company.name);
-                    $('#companyEmail').val(data.company.email);
-                    $('#companyPhone').val(data.company.phone_no);
-                    $('#companyWebsite').val(data.company.website);
 
-                    if(data.company_address.length > 0){
-                        $('#address_id').val(data.company_address[0].id);
-                        $('#streetAddress_1').val(data.company_address[0].street_address_1);
-                        $('#streetAddress_2').val(data.company_address[0].street_address_2);
-                        $('#city_id').val(data.company_address[0].city);
-                        $('#state_id').val(data.company_address[0].state);
-                        $('#country_id').val(data.company_address[0].country);
-                        $('#zip_id').val(data.company_address[0].zip);
+                    $('#modal_button').val('Update Customer');
+                    $('#customerId').val(data.customer.id);
+                    $('#firstName').val(data.customer.first_name);
+                    $('#lastName').val(data.customer.last_name);
+                    $('#customerTitle').val(data.customer.title);
+                    $('#customerEmail').val(data.customer.email);
+                    $('#customerPhone').val(data.customer.phone_no);
+                    $('#customerPriority').val(data.customer.priority);
+                    jQuery("#userId").html("<option selected value='"+data.user.id+"'>"+data.user.name+"</option>")
+
+                    if(data.account){
+                        jQuery("#accountId").html("<option selected value='"+data.account.id+"'>"+data.account.name+"</option>")
+                        $('#accountName').val(data.account.name);
+                        $('#accountEmail').val(data.account.email);
+                        $('#accountPhone').val(data.account.phone_no);
+                        $('#accountWebsite').val(data.account.website);
+
+                        if(data.address[0]){
+                            $('#addressId').val(data.address[0].id);
+                            $('#streetAddress_1').val(data.address[0].street_address_1);
+                            $('#streetAddress_2').val(data.address[0].street_address_2);
+                            $('#city_id').val(data.address[0].city);
+                            $('#state_id').val(data.address[0].state);
+                            $('#country_id').val(data.address[0].country);
+                            $('#zip_id').val(data.address[0].zip);
+
+                        }
+                        $('#hiddenForEditCustomer').hide();
+                        $('#AccountDataAtCustomerForm').hide();
                     }
+
+
                 }
             });
-            $('#modal-new-company').modal('show');
+
+
+            $('#new-customer').modal('show');
+
+        }
+        //This update code for updating account from account single view page....
+
+
+
+
+
+        $('#customerForm').on('submit',function(e){
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+
+            var customer = {
+                customerId : '{{$customer->id}}',
+                userId : $('#'+custInputMap.userId).val(),
+                firstName : $('#'+custInputMap.firstName).val(),
+                lastName : $('#'+custInputMap.lastName).val(),
+                customerTitle : $('#'+custInputMap.customerTitle).val(),
+                customerEmail : $('#'+custInputMap.customerEmail).val(),
+                customerPhone : $('#'+custInputMap.customerPhone).val(),
+                customerPriority : $('#'+custInputMap.customerPriority).val(),
+            };
+
+            var account = {
+                accountId : $('#'+custInputMap.accountId).val(),
+                accountNo : $('#'+custInputMap.accountNo).val(),
+                addressId : $('#'+custInputMap.addressId).val(),
+                accountName : $('#'+custInputMap.accountName).val(),
+                accountEmail : $('#'+custInputMap.customerEmail).val(),
+                accountPhone : $('#'+custInputMap.customerPhone).val(),
+                accountWebsite : $('#'+custInputMap.accountWebsite).val(),
+                streetAddress_1 : $('#'+custInputMap.streetAddress_1).val(),
+                streetAddress_2 : $('#'+custInputMap.streetAddress_2).val(),
+                city : $('#'+custInputMap.city).val(),
+                state : $('#'+custInputMap.state).val(),
+                country : $('#'+custInputMap.country).val(),
+                zip : $('#'+custInputMap.zip).val()
+            };
+
+
+            var data = {
+                _token : _token,
+                account: account,
+                customer:customer
+            };
+
+
+
+
+                //updating customer.....
+
+                var request = jQuery.ajax({
+                    url: "{{ route('update.customer.data') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_cust_form($('#customerForm')[0]);
+                        jQuery("#accountId").html("");
+                        $('#customerId').val('');
+                        $('#modal-new-member').modal('hide');
+                        get_all_customer_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.error(function(xhr){
+                    handle_customer_error(xhr);
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+        });
+
+
+        var account_select=jQuery("#accountId").select2({
+            placeholder: "Select a Account",
+            allowClear:true,
+            ajax: {
+                url: "{{route('list-accounts')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+                    if(data.total_count < 1){
+                        return {results: [{
+                            id: -1,
+                            text: "Create New"
+                        }]};
+
+                    }
+
+                    return {
+                        results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                    }
+                },
+
+                cache: true
+            }
+        });
+        account_select.on("select2:select", function (e) {
+            var selection = e.params.data;
+            console.log(selection);
+            if(selection.id < 1){
+                //creating customer with account
+                $('#AccountDataAtCustomerForm').show();
+                $("#AccountDataAtCustomerForm input").val('');
+
+            }
+            else if(selection.id > 1){
+                $('#AccountDataAtCustomerForm').hide();
+                //now a selection is made populate data of selected account
+
+            }
+
+
+//
+        });
+
+        function handle_customer_error(xhr) {
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showCustParselyError(key, data[0]);
+                });
+            }
+        }
+        function showCustParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.')[1];
+            }
+            var el = jQuery("#"+custInputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
         }
 
-        //This update code for updating company from company single view page....
-
-
-
-
-
-            $('#companyForm').on('submit',function(e) {
-                e.preventDefault();
-                var _token = $('input[name="_token"]').val();
-                var company = {
-                    companyId : $('#company_id').val(),
-                    addressId : $('#address_id').val(),
-                    companyName : $('#companyName').val(),
-                    companyEmail : $('#companyEmail').val(),
-                    companyPhone : $('#companyPhone').val(),
-                    companyWebsite : $('#companyWebsite').val(),
-                    streetAddress_1 : $('#streetAddress_1').val(),
-                    streetAddress_2 : $('#streetAddress_2').val(),
-                    city : $('#city_id').val(),
-                    state : $('#state_id').val(),
-                    country : $('#country_id').val(),
-                    zip : $('#zip_id').val()
-                };
-
-                var data = {
-                    _token : _token,
-                    company: company
-                };
-
-                if(company.companyId != ''){
-                    var request = jQuery.ajax({
-                        url: "{{ route('update.company') }}",
-                        data: data,
-                        method: "POST",
-                        dataType: "json"
-                    });
-                    request.done(function (response) {
-
-                        if(response.result == 'Saved'){
-                            $('#companyForm')[0].reset();
-                            $('#company_id').val('');
-                            $('#modal-new-company').modal('hide');
-                            $.notify(response.message, "success");
-                        }
-                        else{
-                            jQuery.notify(response.message, "error");
-                        }
-                    })
-
-                    request.fail(function (jqXHT, textStatus) {
-                        $.notify(textStatus, "error");
-                    });
-                }
-
-            });
-
-
-
-
-
+        function reset_cust_form(el) {
+            el.reset();
+            jQuery("#"+custInputMap.addressId).val('');
+            jQuery("#"+custInputMap.customerId).val('');
+            jQuery("#"+custInputMap.accountId).val('0');
+        }
 
     </script>
 
