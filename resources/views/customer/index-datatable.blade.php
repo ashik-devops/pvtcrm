@@ -391,6 +391,9 @@
             }
         }
         function showParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.')[1];
+            }
             var el = jQuery("#"+inputMap[field]).parsley();
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
