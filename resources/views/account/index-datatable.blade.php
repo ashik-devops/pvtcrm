@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@include('customer-company.create-form')
+@include('account.create-form')
 
 @include('task.create-form')
 @section('after-head-style')
