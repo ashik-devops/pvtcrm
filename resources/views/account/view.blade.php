@@ -13,7 +13,7 @@
 @section('content')
     <div id="content-wrapper" class="content-wrapper view view-account">
         <div class="container-fluid">
-            <h2 class="view-title">{{$company->name}}</h2>
+            <h2 class="view-title">{{$account->name}} #{{$account->account_no}}</h2>
             <div class="row">
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module">
@@ -22,17 +22,18 @@
                                 <div class="user-info">
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
-                                        <li class="name"><h3>{{$company->name}}</h3>
+                                        <li class="name"><h3>{{$account->name}}</h3>
+                                        <li class="name"><h5>Account No #{{$account->account_no}}</h5>
                                             <label class="label label-info"></label></li>
                                         <li>
                                             <address>
-                                                <p>{{implode(', ', [$company->addresses->first()->city, $company->addresses->first()->state, $company->addresses->first()->country, $company->addresses->first()->zip])}}</p>
+                                                <p>{{implode(', ', [$account->addresses->first()->city, $account->addresses->first()->state, $account->addresses->first()->country, $account->addresses->first()->zip])}}</p>
                                             </address>
 
                                         </li>
-                                        <li class="email"><a href="mailto:{{$company->email}}">{{$company->email}}</a></li>
-                                        <li class="phone"><a href="tel:{{$company->phone_no}}">{{$company->phone_no}}</a></li>
-                                        <li class="website"><a target="_blank" href="{{$company->website}}">{{$company->website}}</a></li>
+                                        <li class="email"><a href="mailto:{{$account->email}}">{{$account->email}}</a></li>
+                                        <li class="phone"><a href="tel:{{$account->phone_no}}">{{$account->phone_no}}</a></li>
+                                        <li class="website"><a target="_blank" href="{{$account->website}}">{{$account->website}}</a></li>
                                     </ul>
                                 </div>
 
@@ -54,27 +55,27 @@
                                     <div id="info" role="tabpanel" class="tab-pane active">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
-                                                <h3 class="panel-title">Company Info</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCompany('{{$company->id}}')" data-target="#modal-new-company"><i class="glyphicon glyphicon-edit"></i>  Edit Company</button>
+                                                <h3 class="panel-title">Account Info</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editAccount('{{$account->id}}')" data-target="#modal-new-account"><i class="glyphicon glyphicon-edit"></i>  Edit Account</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="col-md-6 col-lg6 col-sm-12 table-responsive">
                                                     <table class="table">
                                                         <tr>
-                                                            <td>Company Name</td>
-                                                            <td>{{$company->name}}</td>
+                                                            <td>Account Name</td>
+                                                            <td>{{$account->name}}</td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Company Phone</td>
-                                                            <td><a href="tel:{{$company->phone_no}}">{{$company->phone_no}}</a></td>
+                                                            <td>Account Phone</td>
+                                                            <td><a href="tel:{{$account->phone_no}}">{{$account->phone_no}}</a></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Company Email</td>
-                                                            <td><a href="mailto:{{$company->email}}">{{$company->email}}</a></td>
+                                                            <td>Account Email</td>
+                                                            <td><a href="mailto:{{$account->email}}">{{$account->email}}</a></td>
                                                         </tr>
                                                         <tr>
-                                                            <td>Company Website</td>
-                                                            <td><a target="_blank" href="{{$company->website}}">{{$company->website}}</a></td>
+                                                            <td>Account Website</td>
+                                                            <td><a target="_blank" href="{{$account->website}}">{{$account->website}}</a></td>
                                                         </tr>
                                                     </table>
                                                 </div>
@@ -196,7 +197,7 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        @foreach($company->addresses as $address)
+                                                        @foreach($account->addresses as $address)
                                                             <p>{{$address->street_address_1}}</p>
                                                             @if(strlen($address->street_address_2)>0)
                                                                 <p>{{$address->street_address_2}}</p>
@@ -234,7 +235,7 @@
                                                         </tr>
                                                         </thead>
                                                         <tbody>
-                                                        @foreach($company->employees as $employee)
+                                                        @foreach($account->employees as $employee)
                                                             <tr>
                                                                 <td><a href="{{route('view-customer', [$employee->id])}}">{{implode(', ', array_filter([$employee->last_name, $employee->first_name]))}}</a></td>
                                                                 <td>{{$employee->title}}</td>
@@ -262,14 +263,14 @@
 @endsection
 
 @section('modal')
-    <!-- Modal for Editing company -->
-    <div class="modal" id="modal-new-company" tabindex="-1" role="dialog" aria-labelledby="modal-new-company">
+    <!-- Modal for Editing account -->
+    <div class="modal" id="modal-new-account" tabindex="-1" role="dialog" aria-labelledby="modal-new-account">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div id="new_edit_company">
-                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New Company</h4>
+                    <div id="new_edit_account">
+                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New Account</h4>
                     </div>
 
                 </div>
@@ -341,7 +342,7 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('company-tasks-list', [$company->id]) !!}',
+                ajax: '{!! route('account-tasks-list', [$account->id]) !!}',
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
@@ -362,7 +363,7 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('company-appointments-list', [$company->id]) !!}',
+                ajax: '{!! route('account-appointments-list', [$account->id]) !!}',
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
@@ -381,19 +382,19 @@
 
 
 
-        function get_customer(company_id){
+        function get_customer(account_id){
             var customer_select= jQuery("#aptCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
-                    url: "{{route('get-customer-company-wise')}}",
+                    url: "{{route('get-customer-account-wise')}}",
                     dataType: 'json',
                     delay: 250,
 
                     data: function (params) {
                         return {
                             q: params.term, // search term
-                            companyId: company_id,
+                            accountId: account_id,
                         };
                     },
                     processResults : function (data){
@@ -464,7 +465,7 @@
         }
 
 
-        /*========Start Appointment Module in Company Single view =========*/
+        /*========Start Appointment Module in Account Single view =========*/
         var aptinputMap={
             appointmentId : 'appointment_id',
             aptCustomerId : 'aptCustomerId',
@@ -475,11 +476,11 @@
             endTime : 'endTime'
         };
 
-        var company_id = "{{$company->id}}";
+        var account_id = "{{$account->id}}";
 
 
         function createAppointment(){
-            get_customer(company_id);
+            get_customer(account_id);
             $('#appointment-modal').modal('show');
         }
         $('#appointment_modal_button').val('Add Appointment');
@@ -594,7 +595,7 @@
                     jQuery('#appointmentDescription').val(data.appointment.description);
                     jQuery('#appointmentStatus').val(data.appointment.status);
                     $('#aptCustomerId').val(data.appointment.customer_id);
-                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.company.name+"</option>");
+                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.account.name+"</option>");
 
                     min_date = moment(data.appointment.start_time);
                     max_date = moment(data.appointment.end_time);
@@ -663,9 +664,9 @@
         }
 
 
-        /*========End Appointment Module in Company Single view =========*/
+        /*========End Appointment Module in Account Single view =========*/
 
-        /*========Start Task Module in Company Single view =========*/
+        /*========Start Task Module in Account Single view =========*/
 
         var taskInputMap={
             taskId : 'task_id',
@@ -685,14 +686,14 @@
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
-                    url: "{{route('get-customer-company-wise')}}",
+                    url: "{{route('get-customer-account-wise')}}",
                     dataType: 'json',
                     delay: 250,
 
                     data: function (params) {
                         return {
                             q: params.term, // search term
-                            companyId: company_id,
+                            accountId: account_id,
                         };
                     },
                     processResults : function (data){
@@ -807,7 +808,7 @@
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#taskCustomerId').val(data.task.customer_id);
-                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.company.name+"</option>");
+                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name+"</option>");
                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
                     task_date = moment(data.task.due_date);
@@ -882,52 +883,52 @@
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
         }
-        /*========End Task Module in Company Single view =========*/
+        /*========End Task Module in Account Single view =========*/
 
         var param_id = window.location.href.substring(window.location.href.lastIndexOf('/') + 1);
-        function editCompany(){
+        function editAccount(){
             var id = param_id;
-            $('#new_edit_company .modal-title').html('Edit Company');
+            $('#new_edit_account .modal-title').html('Edit Account');
 
             $.get("{{ route('edit.modal.data') }}", { id: id} ,function(data){
                 if(data){
-                    $('#modal_button').val('Update Company');
-                    $('#company_id').val(data.company.id);
-                    $('#companyName').val(data.company.name);
-                    $('#companyEmail').val(data.company.email);
-                    $('#companyPhone').val(data.company.phone_no);
-                    $('#companyWebsite').val(data.company.website);
+                    $('#modal_button').val('Update Account');
+                    $('#account_id').val(data.account.id);
+                    $('#accountName').val(data.account.name);
+                    $('#accountEmail').val(data.account.email);
+                    $('#accountPhone').val(data.account.phone_no);
+                    $('#accountWebsite').val(data.account.website);
 
-                    if(data.company_address.length > 0){
-                        $('#address_id').val(data.company_address[0].id);
-                        $('#streetAddress_1').val(data.company_address[0].street_address_1);
-                        $('#streetAddress_2').val(data.company_address[0].street_address_2);
-                        $('#city_id').val(data.company_address[0].city);
-                        $('#state_id').val(data.company_address[0].state);
-                        $('#country_id').val(data.company_address[0].country);
-                        $('#zip_id').val(data.company_address[0].zip);
+                    if(data.account_address.length > 0){
+                        $('#address_id').val(data.account_address[0].id);
+                        $('#streetAddress_1').val(data.account_address[0].street_address_1);
+                        $('#streetAddress_2').val(data.account_address[0].street_address_2);
+                        $('#city_id').val(data.account_address[0].city);
+                        $('#state_id').val(data.account_address[0].state);
+                        $('#country_id').val(data.account_address[0].country);
+                        $('#zip_id').val(data.account_address[0].zip);
                     }
                 }
             });
-            $('#modal-new-company').modal('show');
+            $('#modal-new-account').modal('show');
         }
 
-        //This update code for updating company from company single view page....
+        //This update code for updating account from account single view page....
 
 
 
 
 
-            $('#companyForm').on('submit',function(e) {
+            $('#accountForm').on('submit',function(e) {
                 e.preventDefault();
                 var _token = $('input[name="_token"]').val();
-                var company = {
-                    companyId : $('#company_id').val(),
+                var account = {
+                    accountId : $('#account_id').val(),
                     addressId : $('#address_id').val(),
-                    companyName : $('#companyName').val(),
-                    companyEmail : $('#companyEmail').val(),
-                    companyPhone : $('#companyPhone').val(),
-                    companyWebsite : $('#companyWebsite').val(),
+                    accountName : $('#accountName').val(),
+                    accountEmail : $('#accountEmail').val(),
+                    accountPhone : $('#accountPhone').val(),
+                    accountWebsite : $('#accountWebsite').val(),
                     streetAddress_1 : $('#streetAddress_1').val(),
                     streetAddress_2 : $('#streetAddress_2').val(),
                     city : $('#city_id').val(),
@@ -938,12 +939,12 @@
 
                 var data = {
                     _token : _token,
-                    company: company
+                    account: account
                 };
 
-                if(company.companyId != ''){
+                if(account.accountId != ''){
                     var request = jQuery.ajax({
-                        url: "{{ route('update.company') }}",
+                        url: "{{ route('update.account') }}",
                         data: data,
                         method: "POST",
                         dataType: "json"
@@ -951,9 +952,9 @@
                     request.done(function (response) {
 
                         if(response.result == 'Saved'){
-                            $('#companyForm')[0].reset();
-                            $('#company_id').val('');
-                            $('#modal-new-company').modal('hide');
+                            $('#accountForm')[0].reset();
+                            $('#account_id').val('');
+                            $('#modal-new-account').modal('hide');
                             $.notify(response.message, "success");
                         }
                         else{
