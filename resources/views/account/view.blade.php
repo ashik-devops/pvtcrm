@@ -329,6 +329,7 @@
 
     <script type="text/javascript">
         task_date=moment();
+        var journalDate=moment();
             var task_datatable = jQuery('#tasks-list').DataTable({
 //                responsive: false,
                 select: true,
@@ -415,6 +416,8 @@
 
             $('#taskDueDateTimePicker').datetimepicker();
             updateTaskDate();
+
+            $('#journalLogDate').datetimepicker();
         });
 
         $("#startTime").on("dp.change", function (e) {
@@ -438,6 +441,9 @@
 
             $('#taskDueDateTimePicker').datetimepicker();
             updateTaskDate();
+
+            $('#journalLogDate').datetimepicker();
+            updateJournalDates();
         });
 
 
@@ -884,8 +890,6 @@
         /*========End Task Module in Company Single view =========*/
         /*========Start Journal Module in Company Single view =========*/
 
-
-
         $('#typeItem').hide();
         $('#followUpTask').hide();
         $('#followUpAppointment').hide();
@@ -915,6 +919,7 @@
         function createJournal(){
             $('#modal-new-journal-label').text('Edit Journal');
             $('#FollowupSection').show();
+            journalDate=moment();
             reset_journal_form($('#journalForm')[0]);
 
             var customer_select= jQuery("#journalCustomerId").select2({
@@ -1007,7 +1012,6 @@
                 journalDescription : $('#'+journalInputMap.journalDescription).val(),
                 journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
             };
-
             if($('input[name=followUpType]:checked').val() === 'appointment'){
                 journal.followup = {
                     type : 'appointment',
@@ -1113,21 +1117,24 @@
             $('#modal-new-journal-label').text('Edit Journal');
             $('#FollowupSection').hide();
             $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
-                console.log(data);
-
                 if(data){
                     $('#journal_id').val(data.journal.id);
                     $('#journalCustomerId').val(data.journal.customer_id);
                     $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.account.name+"</option>");
                     $('#journalTitle').val(data.journal.title);
                     $('#journalDescription').val(data.journal.description);
-
+                    journalDate=moment(data.journal.log_date);
+                    updateJournalDates();
                 }
 
             });
             $('#journal-modal').modal('show');
         }
+        function updateJournalDates(){
+            jQuery("#journalLogDate").data("DateTimePicker").date(journalDate);
+            jQuery("#journalLogDate").data("DateTimePicker").minDate(moment());
 
+        }
         function get_all_journal_data(){
             journal_datatable.ajax.reload(null, false);
         }
