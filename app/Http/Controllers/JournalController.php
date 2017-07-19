@@ -10,10 +10,46 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use DB;
+use Illuminate\Support\Facades\Validator;
 use Yajra\Datatables\Facades\Datatables;
 
 class JournalController extends Controller
 {
+
+    protected function validator(array $data, $isUpdate=false){
+        $rules=[
+            'journalCustomerId'=>'required|integer|exists:customers,id',
+            'journalTitle'=>'required|string',
+            'journalDescription'=>'required|string',
+            'journalLogDate'=>'required|date',
+        ];
+
+        if($isUpdate){
+            $rules['journalId']='required|integer|exists:journals,id';
+        }
+
+        if(isset($data['followup']['type'])){
+            if($data['followup']['type']=='task'){
+                $rules=array_merge($rules,[
+                    'followup.followupTaskTitle'=>'required|string',
+                    'followup.followupTaskDescription'=>'required|string',
+                    'followup.followupTaskDueDate'=>'required|string',
+                    'followup.followupTaskPriority'=>'required|string',
+                ]);
+            }
+            else if($data['followup']['type']=='appointment'){
+                $rules=array_merge($rules,[
+                    'followup.followupAppointmentTitle'=>'required|string',
+                    'followup.followupAppointmentDescription'=>'required|string',
+                    'followup.followupAppointmentStartTime'=>'required|string',
+                    'followup.followupAppointmentEndTime'=>'required|string',
+                ]);
+            }
+        }
+
+        return Validator::make($data, $rules);
+    }
+
     public function getJournalsAjax(){
         return Datatables::of(Journal::select('id', 'title', 'description', 'related_obj_type', 'log_date'))
             ->addColumn('action',
@@ -39,56 +75,48 @@ class JournalController extends Controller
     }
 
     public function createJournal(Request $request){
+        $this->validator($request->journal)->validate();
         $journal = new Journal();
         $journal->customer_id = $request->journal['journalCustomerId'];
         $journal->title = $request->journal['journalTitle'];
         $journal->description = $request->journal['journalDescription'];
         $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
 
+        $followup=null;
 
+        if(isset($request->journal['followup']['type'])){
 
-        if($request->task['taskTitle']){
+            if($request->journal['followup']['type'] == 'task'){
+                $followup = new Task();
+                $followup->title = $request->journal['followup']['followupTaskTitle'];
+                $followup->customer_id = $request->journal['journalCustomerId'];
+                $followup->description = $request->journal['followup']['followupTaskDescription'];
+                $followup->due_date = Carbon::parse($request->journal['followup']['followupTaskDueDate']);
+                $followup->status = "Due";
+                $followup->priority = $request->journal['followup']['followupTaskPriority'];
+            }
 
-            $task = new Task();
-            $task->title = $request->task['taskTitle'];
-            $task->customer_id = $request->journal['journalCustomerId'];
-            $task->description = $request->task['taskDescription'];
-            $task->due_date = Carbon::parse($request->task['taskDueDate']);
-            $task->status = $request->task['taskStatus'];
-            $task->priority = $request->task['taskPriority'];
+            else if($request->journal['followup']['type'] == 'appointment'){
+                $followup = new Appointment();
+                $followup->title = $request->journal['followup']['followupAppointmentTitle'];
+                $followup->customer_id = $request->journal['journalCustomerId'];
+                $followup->description = $request->journal['followup']['followupAppointmentDescription'];
+                $followup->status = "Due";
+                $followup->start_time = Carbon::parse($request->journal['followup']['followupAppointmentStartTime']);
+                $followup->end_time = Carbon::parse($request->journal['followup']['followupAppointmentEndTime']);
+            }
 
-            DB::beginTransaction();
-            $task->save();
-            $task = Task::findOrFail($task->id);
-            $task->journals()->save($journal);
-            DB::commit();
-        }
-        if($request->appointment['appointmentTitle']){
-
-            $appointment = new Appointment();
-            $appointment->title = $request->appointment['appointmentTitle'];
-            $appointment->customer_id = $request->journal['journalCustomerId'];
-            $appointment->description = $request->appointment['appointmentDescription'];
-            $appointment->status = $request->appointment['appointmentStatus'];
-            $appointment->start_time = Carbon::parse($request->appointment['startTime']);
-            $appointment->end_time = Carbon::parse($request->appointment['endTime']);
-            DB::beginTransaction();
-            $appointment->save();
-            $appointment = Appointment::findOrFail($appointment->id);
-            $appointment->journals()->save($journal);
-            DB::commit();
-
-            /*DB::beginTransaction();
-            $appointment->save();
-            $appointment = Task::findOrFail($task->id);
-            $task->journals()->save($journal);
-            DB::commit(); */
-        }
         if(!$request->task['taskTitle'] && !$request->appointment['appointmentTitle']){
 
 
             DB::beginTransaction();
             $journal->save();
+
+            if($followup!=null){
+            $followup->save();
+            $followup->journals()->save($journal);
+            }
+        }
             DB::commit();
         }
 
@@ -96,7 +124,7 @@ class JournalController extends Controller
         return response()->json([
             'result'=>'Saved',
             'message'=>'Journal has been created successfully.'
-        ]);
+        ],200);
 
     }
 
@@ -138,62 +166,19 @@ class JournalController extends Controller
     }
 
     public function updateJournal(Request $request){
+        $this->validator($request->journal, true)->validate();
         $journal = Journal::findOrFail($request->journal['journalId']);
-
         $journal->customer_id = $request->journal['journalCustomerId'];
         $journal->title = $request->journal['journalTitle'];
         $journal->description = $request->journal['journalDescription'];
         $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
-        if($journal->related_obj_type == 'App\Task'){
-            $task = Task::findOrFail($journal->related_obj_id);
-            $task->customer_id = $request->journal['journalCustomerId'];
-            $task->title = $request->task['taskTitle'];
-            $task->description = $request->task['taskDescription'];
-            $task->due_date = Carbon::parse($request->task['taskDueDate']);
-            $task->priority= $request->task['taskPriority'];
-            $task->status= $request->task['taskStatus'];
 
-            DB::beginTransaction();
-            $task->save();
-            $task = Task::findOrFail($task->id);
-            $task->journals()->save($journal);
-            DB::commit();
-            return response()->json([
-                'result'=>'Saved',
-                'message'=>'Journal has been updated successfully.'
-            ]);
+        $journal->save();
 
-        }
-
-        if($journal->related_obj_type == 'App\Appointment'){
-            $appointment = Appointment::findOrFail($journal->related_obj_id);
-            $appointment->title = $request->appointment['appointmentTitle'];
-            $appointment->customer_id = $request->journal['journalCustomerId'];
-            $appointment->description = $request->appointment['appointmentDescription'];
-            $appointment->status = $request->appointment['appointmentStatus'];
-            $appointment->start_time = Carbon::parse($request->appointment['startTime']);
-            $appointment->end_time = Carbon::parse($request->appointment['endTime']);
-
-            DB::beginTransaction();
-            $appointment->save();
-            $appointment = Appointment::findOrFail($appointment->id);
-            $appointment->journals()->save($journal);
-            DB::commit();
-            return response()->json([
-                'result'=>'Saved',
-                'message'=>'Journal has been updated successfully.'
-            ]);
-        }
-        if(! $journal->related_obj_type ){
-            DB::beginTransaction();
-            $journal->save();
-
-            DB::commit();
-            return response()->json([
-                'result'=>'Saved',
-                'message'=>'Journal has been updated successfully.'
-            ]);
-        }
+        return response()->json([
+            'result'=>'Saved',
+            'message'=>'Journal has been updated successfully.'
+        ], 200);
 
 
 

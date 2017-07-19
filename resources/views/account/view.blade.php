@@ -2,12 +2,14 @@
 @include('account.create-form')
 @include('appointment.create-form')
 @include('task.create-form')
+@include('journal.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
 @endsection
 
 @section('content')
@@ -281,6 +283,20 @@
                 </div>
                 <div class="modal-body">
                     @yield('task-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+
+    <div class="modal customerModal" id="journal-modal" role="dialog" aria-labelledby="journal-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-journal-label">Add New Journal</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
                 </div>
             </div>
         </div>
@@ -868,6 +884,8 @@
         /*========End Task Module in Company Single view =========*/
         /*========Start Journal Module in Company Single view =========*/
 
+
+
         $('#typeItem').hide();
         $('#followUpTask').hide();
         $('#followUpAppointment').hide();
@@ -895,15 +913,10 @@
 
 
         function createJournal(){
+            $('#modal-new-journal-label').text('Edit Journal');
+            $('#FollowupSection').show();
+            reset_journal_form($('#journalForm')[0]);
 
-            if($("#followUpCheck").prop('checked') === false) {
-                $('#task_id').val(''),
-                    $('#taskTitle').val(''),
-                    $('#taskDescription').val(''),
-                    $('#taskDueDate').val(''),
-                    $('#taskStatus').val(''),
-                    $('#taskPriority').val('')
-            }
             var customer_select= jQuery("#journalCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
@@ -915,7 +928,7 @@
                     data: function (params) {
                         return {
                             q: params.term, // search term
-                            companyId: company_id,
+                            accountId: account_id,
                         };
                     },
                     processResults : function (data){
@@ -948,100 +961,78 @@
 
         $("input[name=followUpType]:radio").click(function () {
             if ($('input[name=followUpType]:checked').val() === "task") {
-                $("#taskTitle").attr('required', '');
-                $("#taskDescription").attr('required', '');
-                $("#taskDueDate").attr('required', '');
-
-
-
-                $('#taskDueDateTimePicker').datetimepicker();
+                reset_followup_appointment_form();
+                $("#followupTaskTitle").attr('required', '');
+                $("#followupTaskDescription").attr('required', '');
+                $("#followupTaskDueDate").attr('required', '');
+                $('#followupTaskDueDateTimePicker').datetimepicker();
                 $('#followUpTask').show();
                 $('#followUpAppointment').hide();
 
-
-
-
-
             } else if ($('input[name=followUpType]:checked').val() === "appointment") {
+                reset_followup_task_form();
                 $('#followUpTask').hide();
                 $('#followUpAppointment').show();
-
+                $('#followupAppointmentStartTimeContainer').datetimepicker();
+                $('#followupAppointmentEndTimeContainer').datetimepicker();
             }
         });
 
+        var journalInputMap={
+            journalId : 'journal_id',
+            journalCustomerId : 'journalCustomerId',
+            journalTitle : 'journalTitle',
+            journalDescription : 'journalDescription',
+            journalLogDate : 'journalLogDate',
 
+            followupTaskTitle : 'followupTaskTitle',
+            followupTaskDescription : 'followupTaskDescription',
+            followupTaskDueDate : 'followupTaskDueDate',
+            followupTaskPriority : 'followupTaskPriority',
+
+            followupAppointmentTitle : 'followupAppointmentTitle',
+            followupAppointmentDescription : 'followupAppointmentDescription',
+            followupAppointmentStartTime : 'followupAppointmentStartTime',
+            followupAppointmentEndTime : 'followupAppointmentEndTime'
+        };
 
         $('#journalForm').on('submit',function(e) {
             e.preventDefault();
             var _token = $('input[name="_token"]').val();
 
             var journal = {
-                journalId : $('#journal_id').val(),
-                journalCustomerId : $('#journalCustomerId').val(),
-                journalTitle : $('#journalTitle').val(),
-                journalDescription : $('#journalDescription').val(),
-                journalLogDate : $('#journalLogDate').val(),
-
+                journalId : $('#'+journalInputMap.journalId).val(),
+                journalCustomerId : $('#'+journalInputMap.journalCustomerId).val(),
+                journalTitle : $('#'+journalInputMap.journalTitle).val(),
+                journalDescription : $('#'+journalInputMap.journalDescription).val(),
+                journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
             };
-            var task = {
-                taskId : $('#task_id').val(),
-                taskTitle : $('#taskTitle').val(),
-                taskDescription : $('#taskDescription').val(),
-                taskDueDate : $('#taskDueDate').val(),
-                taskStatus : $('#taskStatus').val(),
-                taskPriority : $('#taskPriority').val(),
 
-            };
-            var appointment = {
-                appointmentId : $('#appointment_id').val(),
-                appointmentTitle : $('#appointmentTitle').val(),
-                appointmentDescription : $('#appointmentDescription').val(),
-                appointmentStatus : $('#appointmentStatus').val(),
-                startTime : $('#startTime').val(),
-                endTime : $('#endTime').val()
+            if($('input[name=followUpType]:checked').val() === 'appointment'){
+                journal.followup = {
+                    type : 'appointment',
+                    followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
+                    appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
+                    followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                    followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
+                };
+            }
 
-            };
+            else if($('input[name=followUpType]:checked').val() === 'task'){
+                journal.followup = {
+                    type : 'task',
+                    followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
+                    followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
+                    followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
+                    followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
+                };
+            }
 
             var data = {
                 _token : _token,
                 journal: journal,
-                task: task,
-                appointment: appointment
             };
 
-            console.log(appointment);
-
-            if($("#followUpCheck").prop('checked') === false){
-                $('#task_id').val(''),
-                $('#taskTitle').val(''),
-                $('#taskDescription').val(''),
-                $('#taskDueDate').val(''),
-                $('#taskStatus').val(''),
-                $('#taskPriority').val(''),
-                $('#appointmentId').val(),
-                $('#appointmentTitle').val(),
-                $('#appointmentDescription').val(),
-                $('#appointmentStatus').val(),
-                $('#startTime').val(),
-                $('#endTime').val()
-                document.querySelector('#taskTitle').required = false;
-                document.querySelector('#taskDescription').required = false;
-                document.querySelector('#taskDueDate').required = false;
-                document.querySelector('#taskStatus').required = false;
-                document.querySelector('#taskPriority').required = false;
-
-                document.querySelector('#appointmentTitle').required = false;
-                document.querySelector('#appointmentDescription').required = false;
-                document.querySelector('#appointmentStatus').required = false;
-                document.querySelector('#startTime').required = false;
-                document.querySelector('#endTime').required = false;
-
-
-
-            }
-           /* if ($('input[name=followUpType]:checked').val() == "task"){
-                $('#edit-submitted-first-name').removeAttr('required');​​​​​
-            }*/
 
             if(journal.journalId === ''){
                 var request = jQuery.ajax({
@@ -1053,8 +1044,7 @@
                 request.done(function (response) {
 
                     if(response.result == 'Saved'){
-                        $('#journalForm')[0].reset();
-                        $('#journal_id').val('');
+                        reset_journal_form($('#journalForm')[0]);
                         $('#journal-modal').modal('hide');
                         get_all_journal_data();
                         $.notify(response.message, "success");
@@ -1062,7 +1052,7 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
+                });
 
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -1071,7 +1061,6 @@
             }else{
                //journal updating
 
-                console.log(appointment);
                 var request = jQuery.ajax({
                     url: "{{ route('update.journal') }}",
                     data: data,
@@ -1080,8 +1069,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        reset_form($('#taskForm')[0]);
-                        $('#journal_id').val('');
+                        reset_journal_form($('#journalForm')[0]);
                         $('#journal-modal').modal('hide');
                         get_all_journal_data();
                         jQuery.notify(response.message, "success");
@@ -1089,10 +1077,8 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
-                request.error(function(xhr){
-                    handle_error(xhr);
                 });
+
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
@@ -1100,61 +1086,41 @@
 
         });
 
+        function reset_followup_task_form(){
+            $('#'+journalInputMap.followupTaskTitle).val('');
+                $('#'+journalInputMap.followupTaskDescription).val('');
+                $('#'+journalInputMap.followupTaskDueDate).val('');
+               $('#'+journalInputMap.followupTaskPriority).val('');
+        }
 
+        function reset_journal_form(el){
+            el.reset();
+            $('#'+journalInputMap.journalId).val('');
+            reset_followup_task_form();
+            reset_followup_appointment_form();
+        }
+
+        function reset_followup_appointment_form(){
+            $('#'+journalInputMap.followupAppointmentTitle).val('');
+               $('#f'+journalInputMap.followupAppointmentDescription).val('');
+              $('#'+journalInputMap.followupAppointmentStartTime).val('');
+               $('#'+journalInputMap.followupAppointmentEndTime).val('')
+        }
 
         function editJournal(id){
 
             $('#journal_modal_button').val('Update Journal');
             $('#modal-new-journal-label').text('Edit Journal');
-
+            $('#FollowupSection').hide();
             $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
                 console.log(data);
 
                 if(data){
                     $('#journal_id').val(data.journal.id);
                     $('#journalCustomerId').val(data.journal.customer_id);
-                    $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.company.name+"</option>");
+                    $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.account.name+"</option>");
                     $('#journalTitle').val(data.journal.title);
                     $('#journalDescription').val(data.journal.description);
-
-                    jQuery('#journalLogDate').datetimepicker({date: new Date(data.journal.log_date)});
-
-                    if(data.task != null){
-                        $('#task_id').val(data.task.id);
-                        $('#taskTitle').val(data.task.title);
-                        $('#taskDescription').val(data.task.description);
-                        jQuery('#taskDueDate').datetimepicker({date: new Date(data.task.due_date)});
-                        $('#taskPriority').val(data.task.priority);
-                        $('#taskStatus').val(data.task.status);
-
-                        $('#followUpCheckboxId').hide();
-                        $('#typeId').show();
-                        $('#typeItem').hide();
-                        $('#followUpAppointment').hide();
-                        $('#followUpTask').show();
-
-                    }
-
-                    if(data.appointment != null){
-                        jQuery('#appointment_id').val(data.appointment.id);
-                        jQuery('#appointmentTitle').val(data.appointment.title);
-                        jQuery('#appointmentDescription').val(data.appointment.description);
-                        jQuery('#appointmentStatus').val(data.appointment.status);
-                        min_date = moment(data.appointment.start_time);
-                        max_date = moment(data.appointment.end_time);
-
-                        updateDates();
-
-                        $('#followUpCheckboxId').hide();
-                        $('#typeId').show();
-                        $('#typeItem').hide();
-                        $('#followUpTask').hide();
-                        $('#followUpAppointment').show();
-                    }
-
-                    if(data.task == '' && data.appointment == ''){
-                        console.log('kisu nai');
-                    }
 
                 }
 
@@ -1175,6 +1141,7 @@
                 if(data){
                     $('#modal_button').val('Update Account');
                     $('#account_id').val(data.account.id);
+                    $('#accountNo').val(data.account.account_no);
                     $('#accountName').val(data.account.name);
                     $('#accountEmail').val(data.account.email);
                     $('#accountPhone').val(data.account.phone_no);
