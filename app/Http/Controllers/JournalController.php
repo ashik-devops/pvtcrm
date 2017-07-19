@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Account;
 use App\Appointment;
 use App\Customer;
 use App\Journal;
@@ -50,8 +51,30 @@ class JournalController extends Controller
         return Validator::make($data, $rules);
     }
 
-    public function getJournalsAjax(){
-        return Datatables::of(Journal::select('id', 'title', 'description', 'related_obj_type', 'log_date'))
+    public function getAccountJournalsAjax(Account $account){
+        return Datatables::of($account->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
+            ->addColumn('action',
+                function ($journal){
+                    return
+                        '<a  class="btn btn-xs btn-primary"  onClick="editJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                })
+            ->addColumn('related_obj_type',
+                function($journal){
+                    if($journal->related_obj_type == 'App\Task'){
+                        return 'Task';
+                    }elseif($journal->related_obj_type == 'App\Appointment'){
+                        return 'Appointment';
+                    }else{
+                        return '';
+                    }
+            })
+
+
+            ->rawColumns(['id', 'title', 'description', 'related_obj_type', 'log_date','action'])
+            ->make(true);
+    }public function getCustomerJournalsAjax(Customer $customer){
+        return Datatables::of($customer->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
             ->addColumn('action',
                 function ($journal){
                     return

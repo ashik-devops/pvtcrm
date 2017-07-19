@@ -30,4 +30,7 @@ class Account extends Model
     public function appointments(){
         return $this->hasManyThrough('App\Appointment', 'App\Customer');
     }
+    public function journals(){
+        return $this->hasManyThrough('App\Journal', 'App\Customer');
+    }
 }

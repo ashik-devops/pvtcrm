@@ -45,7 +45,7 @@
                                         <li role="presentation"><a href="#journals"   aria-controls="journals" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-bookmarks icon"></span> Journals</a></li>
                                         <li><a href="#tasks" role="presentation" aria-controls="tasks" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-note2 icon"></span> Tasks</a></li>
                                         <li><a href="#appointments" role="presentation" aria-controls="appointments" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-date icon"></span> Appointments</a></li>
-                                        <li><a href="#addresses" role="presentation" aria-controls="addresses" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-paper-plane icon"></span> Addresses</a></li>
+                                        {{--<li><a href="#addresses" role="presentation" aria-controls="addresses" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-paper-plane icon"></span> Addresses</a></li>--}}
                                         <li><a href="#employees" role="presentation" aria-controls="employees" aria-expanded="false" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-users icon"></span>Contacts</a></li>
                                     </ul>
                                 </nav>
@@ -160,44 +160,44 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div id="addresses" role="tabpanel" class="tab-pane">
-                                        <div class="panel panel-default">
-                                            <div class="panel-heading">
-                                                <h3 class="panel-title">Address Book</h3>
-                                            </div>
-                                            <div class="panel-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered" id="address-list" style="width: 100%">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Address</th>
-                                                            <th>Type</th>
-                                                            <th>Actions</th>
-                                                        </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        @foreach($account->addresses as $address)
-                                                            <p>{{$address->street_address_1}}</p>
-                                                            @if(strlen($address->street_address_2)>0)
-                                                                <p>{{$address->street_address_2}}</p>
-                                                            @endif
-                                                            <p>{{$address->city}} {{$address->state}} {{$address->zip}}</p>
-                                                            <p>{{$address->country}}</p>
-                                                            @if(strlen($address->email) > 0)
-                                                                <p>{{$address->email}}</p>
-                                                            @endif
-                                                            @if(strlen($address->phone_no) > 0)
-                                                                <p>{{$address->phone_no}}</p>
-                                                            @endif
+                                    {{--<div id="addresses" role="tabpanel" class="tab-pane">--}}
+                                        {{--<div class="panel panel-default">--}}
+                                            {{--<div class="panel-heading">--}}
+                                                {{--<h3 class="panel-title">Address Book</h3>--}}
+                                            {{--</div>--}}
+                                            {{--<div class="panel-body">--}}
+                                                {{--<div class="table-responsive">--}}
+                                                    {{--<table class="table table-bordered" id="address-list" style="width: 100%">--}}
+                                                        {{--<thead>--}}
+                                                        {{--<tr>--}}
+                                                            {{--<th>#</th>--}}
+                                                            {{--<th>Address</th>--}}
+                                                            {{--<th>Type</th>--}}
+                                                            {{--<th>Actions</th>--}}
+                                                        {{--</tr>--}}
+                                                        {{--</thead>--}}
+                                                        {{--<tbody>--}}
+                                                        {{--@foreach($account->addresses as $address)--}}
+                                                            {{--<p>{{$address->street_address_1}}</p>--}}
+                                                            {{--@if(strlen($address->street_address_2)>0)--}}
+                                                                {{--<p>{{$address->street_address_2}}</p>--}}
+                                                            {{--@endif--}}
+                                                            {{--<p>{{$address->city}} {{$address->state}} {{$address->zip}}</p>--}}
+                                                            {{--<p>{{$address->country}}</p>--}}
+                                                            {{--@if(strlen($address->email) > 0)--}}
+                                                                {{--<p>{{$address->email}}</p>--}}
+                                                            {{--@endif--}}
+                                                            {{--@if(strlen($address->phone_no) > 0)--}}
+                                                                {{--<p>{{$address->phone_no}}</p>--}}
+                                                            {{--@endif--}}
 
-                                                        @endforeach
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
+                                                        {{--@endforeach--}}
+                                                        {{--</tbody>--}}
+                                                    {{--</table>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
+                                        {{--</div>--}}
+                                    {{--</div>--}}
                                     <div id="employees" role="tabpanel" class="tab-pane">
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
@@ -328,7 +328,7 @@
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 
     <script type="text/javascript">
-        task_date=moment();
+        var task_date=moment();
         var journalDate=moment();
             var task_datatable = jQuery('#tasks-list').DataTable({
 //                responsive: false,
@@ -758,7 +758,7 @@
                     }
                 });
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_task_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -786,7 +786,7 @@
                     }
                 })
                 request.error(function(xhr){
-                    handle_error(xhr);
+                    handle_task_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -871,7 +871,7 @@
             task_datatable.ajax.reload(null, false);
         }
 
-        function handle_error(xhr) {
+        function handle_task_error(xhr) {
 
             if(xhr.status==422){
                 jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
@@ -881,11 +881,31 @@
 
         }
 
+        function handle_apt_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showAptParselyError(key, data[0]);
+                });
+            }
+
+        }
+
+
+
         function showTaskParselyError(field, msg){
             var el = jQuery("#"+taskInputMap[field]).parsley();
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
         }
+
+        function showAptParselyError(field, msg){
+            var el = jQuery("#"+aptinputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
+
+
         /*========End Task Module in Account Single view =========*/
         /*========End Task Module in Company Single view =========*/
         /*========Start Journal Module in Company Single view =========*/
@@ -901,7 +921,7 @@
             serverSide: true,
             paging:true,
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-            ajax: '{!! route('journal-data') !!}',
+            ajax: '{!! route('account-journal-data', $account->id) !!}',
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'log_date', name: 'log_date'},
@@ -1171,25 +1191,39 @@
         //This update code for updating account from account single view page....
 
 
-
+        var accountInputMap= {
+            accountNo : 'accountNo',
+            addressId : 'address_id',
+            accountName : 'accountName',
+            accountEmail : 'accountEmail',
+            accountPhone : 'accountPhone',
+            accountWebsite : 'accountWebsite',
+            streetAddress_1 : 'streetAddress_1',
+            streetAddress_2 : 'streetAddress_2',
+            city : 'city_id',
+            state : 'state_id',
+            country : 'country_id',
+            zip: 'zip_id'
+        };
 
 
             $('#accountForm').on('submit',function(e) {
                 e.preventDefault();
                 var _token = $('input[name="_token"]').val();
                 var account = {
-                    accountId : $('#account_id').val(),
-                    addressId : $('#address_id').val(),
-                    accountName : $('#accountName').val(),
-                    accountEmail : $('#accountEmail').val(),
-                    accountPhone : $('#accountPhone').val(),
-                    accountWebsite : $('#accountWebsite').val(),
-                    streetAddress_1 : $('#streetAddress_1').val(),
-                    streetAddress_2 : $('#streetAddress_2').val(),
-                    city : $('#city_id').val(),
-                    state : $('#state_id').val(),
-                    country : $('#country_id').val(),
-                    zip : $('#zip_id').val()
+                    accountId : '{{$account->id}}',
+                    accountNo : $('#'+accountInputMap.accountNo).val(),
+                    addressId : $('#'+accountInputMap.addressId).val(),
+                    accountName : $('#'+accountInputMap.accountName).val(),
+                    accountEmail : $('#'+accountInputMap.accountEmail).val(),
+                    accountPhone : $('#'+accountInputMap.accountPhone).val(),
+                    accountWebsite : $('#'+accountInputMap.accountWebsite).val(),
+                    streetAddress_1 : $('#'+accountInputMap.streetAddress_1).val(),
+                    streetAddress_2 : $('#'+accountInputMap.streetAddress_2).val(),
+                    city : $('#'+accountInputMap.city).val(),
+                    state : $('#'+accountInputMap.state).val(),
+                    country : $('#'+accountInputMap.country).val(),
+                    zip : $('#'+accountInputMap.zip).val()
                 };
 
                 var data = {
@@ -1197,7 +1231,8 @@
                     account: account
                 };
 
-                if(account.accountId != ''){
+                    //account editing.....
+
                     var request = jQuery.ajax({
                         url: "{{ route('update.account') }}",
                         data: data,
@@ -1205,29 +1240,65 @@
                         dataType: "json"
                     });
                     request.done(function (response) {
-
                         if(response.result == 'Saved'){
-                            $('#accountForm')[0].reset();
-                            $('#account_id').val('');
+                            reset_account_form($('#accountForm')[0]);
                             $('#modal-new-account').modal('hide');
                             $.notify(response.message, "success");
+                            setTimeout(function () {
+                                location.reload();
+                            }, 200);
                         }
                         else{
                             jQuery.notify(response.message, "error");
                         }
-                    })
+                    });
+
+                    request.error(function (xhr) {
+                       handle_account_error(xhr);
+                    });
 
                     request.fail(function (jqXHT, textStatus) {
                         $.notify(textStatus, "error");
                     });
-                }
 
             });
 
+        function handle_journal_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showJournalParselyError(key, data[0]);
+                });
+            }
+
+        }
+        function showJournalParselyError(field, msg){
+            var el = jQuery("#"+journalInputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
 
 
+        function handle_account_error(xhr) {
+
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showJournalParselyError(key, data[0]);
+                });
+            }
+
+        }
+        function showAccountParselyError(field, msg){
+            var el = jQuery("#"+accountInputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
 
 
+        function reset_account_form(el) {
+            el.reset();
+
+        }
 
     </script>
 

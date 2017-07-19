@@ -25,7 +25,7 @@ class AccountsController extends Controller
      * @return \Illuminate\Contracts\Validation\Validator
      */
 
-    protected function validator(Array $data, $isUpdate=false){
+    public function validator(Array $data, $isUpdate=false){
         $rules=[
             'accountNo'=>'string|required|max:16',
             'accountName'=>'string',

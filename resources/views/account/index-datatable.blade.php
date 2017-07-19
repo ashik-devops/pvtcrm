@@ -289,7 +289,7 @@
                 request.done(function (response) {
                     if(response.result == 'Saved'){
                         reset_form($('#accountForm')[0]);
-                        $('#account_id').val('');
+
                         $('#modal-new-account').modal('hide');
                         get_all_account_data();
                         $.notify(response.message, "success");
@@ -308,6 +308,7 @@
 
         function reset_form(el) {
             el.reset();
+            $('#account_id').val('');
         }
 
         function editAccount(id){

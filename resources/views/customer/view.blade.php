@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @include('customer.create-form')
 @include('appointment.create-form')
+@include('journal.create-form')
 @include('task.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
@@ -92,47 +93,25 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Journal Entries</h3>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createJournal()" ><i class="fa fa-plus"></i>  Create Journal</button>
                                             </div>
                                             <div class="panel-body">
-                                                <div class="panel-group panel-group-theme-1" id="accordion-2" role="tablist" aria-multiselectable="true">
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading panel-heading-theme-1" role="tab" id="headingOne-2">
-                                                            <h4 class="panel-title"><a class="active collapsed" data-toggle="collapse" data-parent="#accordion-2" href="#collapseOne-2" aria-expanded="false" aria-controls="collapseOne-2"><i class="fa fa-plus-square"></i> Collapsible Group Item #1</a></h4>
-                                                        </div>
-
-                                                        <div id="collapseOne-2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne-2" aria-expanded="false" style="height: 0px;">
-                                                            <div class="panel-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading panel-heading-theme-1" role="tab" id="headingTwo-2">
-                                                            <h4 class="panel-title"><a class="" data-toggle="collapse" data-parent="#accordion-2" href="#collapseTwo-2" aria-expanded="true" aria-controls="collapseTwo-2"><i class="fa fa-minus-square"></i> Collapsible Group Item #2</a></h4>
-                                                        </div>
-
-                                                        <div id="collapseTwo-2" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingTwo-2" aria-expanded="true" style="">
-                                                            <div class="panel-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="panel panel-default">
-                                                        <div class="panel-heading panel-heading-theme-1" role="tab" id="headingThree-2">
-                                                            <h4 class="panel-title"><a class="collapsed" data-toggle="collapse" data-parent="#accordion-2" href="#collapseThree-2" aria-expanded="false" aria-controls="collapseThree-2"><i class="fa fa-plus-square"></i> Collapsible Group Item #3</a></h4>
-                                                        </div>
-
-                                                        <div id="collapseThree-2" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree-2" aria-expanded="false">
-                                                            <div class="panel-body">
-                                                                Anim pariatur cliche reprehenderit, enim eiusmod high life accusamus terry richardson ad squid. 3 wolf moon officia aute, non cupidatat skateboard dolor brunch. Food truck quinoa nesciunt laborum eiusmod. Brunch 3 wolf moon tempor, sunt aliqua put a bird on it squid single-origin coffee nulla assumenda shoreditch et. Nihil anim keffiyeh helvetica, craft beer labore wes anderson cred nesciunt sapiente ea proident. Ad vegan excepteur butcher vice lomo. Leggings occaecat craft beer farm-to-table, raw denim aesthetic synth nesciunt you probably haven't heard of them accusamus labore sustainable VHS.
-                                                            </div>
-                                                        </div>
-                                                    </div>
+                                                <div class="table-responsive">
+                                                    <table class="table table-bordered" id="journals-list" style="width: 100%">
+                                                        <thead>
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th>Log Date</th>
+                                                            <th>Title</th>
+                                                            <th>Description</th>
+                                                            <th>Follow Up</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+                                                        </thead>
+                                                    </table>
                                                 </div>
-
                                             </div>
+
                                         </div>
                                     </div>
                                     <div id="tasks" role="tabpanel" class="tab-pane">
@@ -278,6 +257,20 @@
             </div>
         </div>
     </div><!--/modal-->
+
+    <div class="modal customerModal" id="journal-modal" role="dialog" aria-labelledby="journal-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-journal-label">Add New Journal</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
 @endsection
 
 
@@ -306,7 +299,8 @@
 
 
     <script type="text/javascript">
-        task_date=moment();
+        var task_date=moment();
+        var journalDate=moment();
             var task_datatable = jQuery('#tasks-list').DataTable({
 //                responsive: false,
                 select: true,
@@ -350,34 +344,6 @@
         var min_date = moment();
         var max_date = moment();
 
-
-
-        function get_customer(account_id){
-            var customer_select= jQuery("#aptCustomerId").select2({
-                placeholder: "Select a Customer",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('get-customer-account-wise')}}",
-                    dataType: 'json',
-                    delay: 250,
-
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            accountId: account_id,
-                        };
-                    },
-                    processResults : function (data){
-
-                        return {
-                            results: data.customers
-                        }
-                    },
-
-                    cache: true
-                }
-            });
-        }
 
         jQuery('.modal').on('shown.bs.modal', function () {
 
@@ -446,11 +412,9 @@
             endTime : 'endTime'
         };
 
-        var customer_id = "{{$customer->id}}";
 
 
         function createAppointment(){
-            get_customer(account_id);
             $('#appointment-modal').modal('show');
         }
         $('#appointment_modal_button').val('Add Appointment');
@@ -462,7 +426,7 @@
 
             var appointment = {
                 appointmentId : $('#'+aptinputMap.appointmentId).val(),
-                aptCustomerId : $('#'+aptinputMap.aptCustomerId).val(),
+                aptCustomerId : '{{$customer->id}}',
                 appointmentTitle : $('#'+aptinputMap.appointmentTitle).val(),
                 appointmentDescription : $('#'+aptinputMap.appointmentDescription).val(),
                 appointmentStatus : $('#'+aptinputMap.appointmentStatus).val(),
@@ -531,7 +495,7 @@
 
         });
         jQuery('#new-apt-btn').click(function () {
-            if($('#'+aptinputMap.appointmentId).val() != '' || $('#'+aptinputMap.aptCustomerId).val() != ''){
+            if($('#'+aptinputMap.appointmentId).val() != ''){
                 reset_appointment_form($("#appointmentForm")[0]);
             }
         });
@@ -548,9 +512,6 @@
             min_date = moment();
             max_date = moment();
             $('#'+aptinputMap.appointmentId).val('');
-            $('#'+aptinputMap.aptCustomerId).val('').trigger('change');
-
-
         }
         function editAppointment(id){
 
@@ -564,9 +525,6 @@
                     jQuery('#appointmentTitle').val(data.appointment.title);
                     jQuery('#appointmentDescription').val(data.appointment.description);
                     jQuery('#appointmentStatus').val(data.appointment.status);
-                    $('#aptCustomerId').val(data.appointment.customer_id);
-                    $('#aptCustomerId').html("<option selected value='"+data.appointment.customer.id+"'>"+data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.account.name+"</option>");
-
                     min_date = moment(data.appointment.start_time);
                     max_date = moment(data.appointment.end_time);
 
@@ -649,42 +607,6 @@
             taskStatus : 'taskStatus',
             taskPriority : 'taskPriority',
         };
-
-
-
-
-        function createTask(){
-            var customer_select= jQuery("#taskCustomerId").select2({
-                placeholder: "Select a Customer",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('get-customer-account-wise')}}",
-                    dataType: 'json',
-                    delay: 250,
-
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            accountId: account_id,
-                        };
-                    },
-                    processResults : function (data){
-
-                        return {
-                            results: data.customers
-                        }
-                    },
-
-                    cache: true
-                }
-            });
-
-            $('#task-modal').modal('show');
-        }
-
-
-
-
         //updating task
         $('#task_modal_button').val('Add Task');
         $('#modal-new-task-label').text('Add A Task');
@@ -694,7 +616,7 @@
             //console.log('hello');
             var task = {
                 taskId : $('#'+taskInputMap.taskId).val(),
-                taskCustomerId : $('#'+taskInputMap.taskCustomerId).val(),
+                taskCustomerId : "{{$customer->id}}",
                 taskTitle : $('#'+taskInputMap.taskTitle).val(),
                 taskDescription : $('#'+taskInputMap.taskDescription).val(),
                 taskDueDate : $('#'+taskInputMap.taskDueDate).val(),
@@ -779,9 +701,7 @@
                 //console.log(data);
                 if(data){
                     $('#task_id').val(data.task.id);
-                    $('#taskCustomerId').val(data.task.customer_id);
-                    $('#taskCustomerId').html("<option selected value='"+data.task.customer.id+"'>"+data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name+"</option>");
-                    $('#taskTitle').val(data.task.title);
+                     $('#taskTitle').val(data.task.title);
                     $('#taskDescription').val(data.task.description);
                     task_date = moment(data.task.due_date);
                     $('#taskPriority').val(data.task.priority);
@@ -906,7 +826,6 @@
                 if(data){
 
                     $('#modal_button').val('Update Customer');
-                    $('#customerId').val(data.customer.id);
                     $('#firstName').val(data.customer.first_name);
                     $('#lastName').val(data.customer.last_name);
                     $('#customerTitle').val(data.customer.title);
@@ -1003,10 +922,11 @@
                     if(response.result == 'Saved'){
                         reset_cust_form($('#customerForm')[0]);
                         jQuery("#accountId").html("");
-                        $('#customerId').val('');
                         $('#modal-new-member').modal('hide');
-                        get_all_customer_data();
                         $.notify(response.message, "success");
+                        setTimeout(function () {
+                            location.reload()
+                        }, 200)
                     }
                     else{
                         jQuery.notify(response.message, "error");
@@ -1089,10 +1009,242 @@
         function reset_cust_form(el) {
             el.reset();
             jQuery("#"+custInputMap.addressId).val('');
-            jQuery("#"+custInputMap.customerId).val('');
             jQuery("#"+custInputMap.accountId).val('0');
         }
 
+
+        /*========Start Journal Module in Company Single view =========*/
+
+        $('#typeItem').hide();
+        $('#followUpTask').hide();
+        $('#followUpAppointment').hide();
+
+        var journal_datatable = jQuery('#journals-list').DataTable({
+//               responsive: false,
+            select: true,
+            processing: true,
+            serverSide: true,
+            paging:true,
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+            ajax: '{!! route('customer-journal-data', $customer->id) !!}',
+            columns: [
+                {data: 'id', name: 'id'},
+                {data: 'log_date', name: 'log_date'},
+                {data: 'title', name: 'title'},
+                {data: 'description', name: 'description'},
+                {data: 'related_obj_type', name: 'related_obj_type'},
+                {data: 'action', name: 'action', orderable: false, searchable: false},
+
+            ]
+        });
+
+
+
+
+        function createJournal(){
+            $('#modal-new-journal-label').text('Edit Journal');
+            $('#FollowupSection').show();
+            journalDate=moment();
+            reset_journal_form($('#journalForm')[0]);
+
+
+            jQuery('.modal').on('shown.bs.modal', function () {
+                $('#logDateTimePicker').datetimepicker();
+
+            });
+            $('#journal-modal').modal('show');
+        }
+
+        function followUpTest(){
+            if($("#followUpCheck").prop('checked') == true) {
+                $('#typeItem').show();
+
+            }else{
+                $('#typeItem').hide();
+                $('#followUpTask').hide();
+                $('#followUpAppointment').hide();
+            }
+        }
+
+        $("input[name=followUpType]:radio").click(function () {
+            if ($('input[name=followUpType]:checked').val() === "task") {
+                reset_followup_appointment_form();
+                $("#followupTaskTitle").attr('required', '');
+                $("#followupTaskDescription").attr('required', '');
+                $("#followupTaskDueDate").attr('required', '');
+                $('#followupTaskDueDateTimePicker').datetimepicker();
+                $('#followUpTask').show();
+                $('#followUpAppointment').hide();
+
+            } else if ($('input[name=followUpType]:checked').val() === "appointment") {
+                reset_followup_task_form();
+                $('#followUpTask').hide();
+                $('#followUpAppointment').show();
+                $('#followupAppointmentStartTimeContainer').datetimepicker();
+                $('#followupAppointmentEndTimeContainer').datetimepicker();
+            }
+        });
+
+        var journalInputMap={
+            journalId : 'journal_id',
+            journalCustomerId : 'journalCustomerId',
+            journalTitle : 'journalTitle',
+            journalDescription : 'journalDescription',
+            journalLogDate : 'journalLogDate',
+
+            followupTaskTitle : 'followupTaskTitle',
+            followupTaskDescription : 'followupTaskDescription',
+            followupTaskDueDate : 'followupTaskDueDate',
+            followupTaskPriority : 'followupTaskPriority',
+
+            followupAppointmentTitle : 'followupAppointmentTitle',
+            followupAppointmentDescription : 'followupAppointmentDescription',
+            followupAppointmentStartTime : 'followupAppointmentStartTime',
+            followupAppointmentEndTime : 'followupAppointmentEndTime'
+        };
+
+        $('#journalForm').on('submit',function(e) {
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+
+            var journal = {
+                journalId : $('#'+journalInputMap.journalId).val(),
+                journalCustomerId : "{{$customer->id}}",
+                journalTitle : $('#'+journalInputMap.journalTitle).val(),
+                journalDescription : $('#'+journalInputMap.journalDescription).val(),
+                journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
+            };
+            if($('input[name=followUpType]:checked').val() === 'appointment'){
+                journal.followup = {
+                    type : 'appointment',
+                    followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
+                    appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
+                    followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                    followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
+                };
+            }
+
+            else if($('input[name=followUpType]:checked').val() === 'task'){
+                journal.followup = {
+                    type : 'task',
+                    followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
+                    followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
+                    followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
+                    followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
+                };
+            }
+
+            var data = {
+                _token : _token,
+                journal: journal,
+            };
+
+
+            if(journal.journalId === ''){
+                var request = jQuery.ajax({
+                    url: "{{ route('create.journal') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+
+                    if(response.result == 'Saved'){
+                        reset_journal_form($('#journalForm')[0]);
+                        $('#journal-modal').modal('hide');
+                        get_all_journal_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+            }else{
+                //journal updating
+
+                var request = jQuery.ajax({
+                    url: "{{ route('update.journal') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_journal_form($('#journalForm')[0]);
+                        $('#journal-modal').modal('hide');
+                        get_all_journal_data();
+                        jQuery.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            }
+
+        });
+
+        function reset_followup_task_form(){
+            $('#'+journalInputMap.followupTaskTitle).val('');
+            $('#'+journalInputMap.followupTaskDescription).val('');
+            $('#'+journalInputMap.followupTaskDueDate).val('');
+            $('#'+journalInputMap.followupTaskPriority).val('');
+        }
+
+        function reset_journal_form(el){
+            el.reset();
+            $('#'+journalInputMap.journalId).val('');
+            reset_followup_task_form();
+            reset_followup_appointment_form();
+        }
+
+        function reset_followup_appointment_form(){
+            $('#'+journalInputMap.followupAppointmentTitle).val('');
+            $('#f'+journalInputMap.followupAppointmentDescription).val('');
+            $('#'+journalInputMap.followupAppointmentStartTime).val('');
+            $('#'+journalInputMap.followupAppointmentEndTime).val('')
+        }
+
+        function editJournal(id){
+
+            $('#journal_modal_button').val('Update Journal');
+            $('#modal-new-journal-label').text('Edit Journal');
+            $('#FollowupSection').hide();
+            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
+                if(data){
+                    $('#journal_id').val(data.journal.id);
+                    $('#journalTitle').val(data.journal.title);
+                    $('#journalDescription').val(data.journal.description);
+                    journalDate=moment(data.journal.log_date);
+                    updateJournalDates();
+                }
+
+            });
+            $('#journal-modal').modal('show');
+        }
+        function updateJournalDates(){
+            jQuery("#journalLogDate").data("DateTimePicker").date(journalDate);
+            jQuery("#journalLogDate").data("DateTimePicker").minDate(moment());
+
+        }
+        function get_all_journal_data(){
+            journal_datatable.ajax.reload(null, false);
+        }
+        /*========End Journal Module in Company Single view =========*/
+
+        jQuery(document).ready(function (){
+            jQuery("#journalCustomerId").hide();
+            jQuery("#taskCustomerId").hide();
+            jQuery("#aptCustomerId").hide();
+        });
     </script>
 
 @endsection

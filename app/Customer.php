@@ -35,4 +35,7 @@ class Customer extends Model
     public function appointments(){
         return $this->hasMany('App\Appointment');
     }
+    public function journals(){
+        return $this->hasMany('App\Journal');
+    }
 }
