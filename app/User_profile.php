@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class User_profile extends Model
 {
 
-    public $obj_alias = 'User';
+    public $obj_alias = 'User Profile';
 
     public function user(){
         return $this->belongsTo('App\User');
@@ -18,5 +18,12 @@ class User_profile extends Model
         }
 
         return '#';
+    }
+
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return $this->user->name;
+        }
+        return "";
     }
 }

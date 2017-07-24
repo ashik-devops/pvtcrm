@@ -29,4 +29,9 @@ class Appointment extends Model
     public function getLink(): string {
         return '#';
     }
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return $this->title;
+        }
+    }
 }

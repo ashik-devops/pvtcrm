@@ -63,4 +63,12 @@ class User extends Authenticatable
 
         return '#';
     }
+
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return $this->user->name;
+        }
+
+        return "";
+    }
 }

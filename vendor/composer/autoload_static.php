@@ -319,6 +319,7 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'App\\Customer' => __DIR__ . '/../..' . '/app/Customer.php',
         'App\\Exceptions\\Handler' => __DIR__ . '/../..' . '/app/Exceptions/Handler.php',
         'App\\Http\\Controllers\\AccountsController' => __DIR__ . '/../..' . '/app/Http/Controllers/AccountsController.php',
+        'App\\Http\\Controllers\\ActivityController' => __DIR__ . '/../..' . '/app/Http/Controllers/ActivityController.php',
         'App\\Http\\Controllers\\AppointmentsController' => __DIR__ . '/../..' . '/app/Http/Controllers/AppointmentsController.php',
         'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
         'App\\Http\\Controllers\\Auth\\LoginController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/LoginController.php',

@@ -19,7 +19,7 @@ class ActivityController extends Controller
             $date =  new Carbon($activity->created_at);
             $log = new \stdClass();
             $log->happened = $date->diffForHumans();
-            $log->message = '<strong><a href="'.route('profile-edit', [$activity->causer->id]).'">'.$activity->causer->name. '</a><strong> has '.ucfirst($activity->description).' '.$activity->subject->obj_alias.': <a href="'.$activity->subject->getLink().'">'.$activity->subject->title.'</a>';
+            $log->message = '<strong><a href="'.route('profile-edit', [$activity->causer->id]).'">'.$activity->causer->name. '</a><strong> has '.ucfirst($activity->description).' '.$activity->subject->obj_alias.': <a href="'.$activity->subject->getLink().'">'.$activity->subject->getActivityTitle().'</a>';
             return $log;
         }), 200);
     }

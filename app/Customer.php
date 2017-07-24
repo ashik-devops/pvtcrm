@@ -48,5 +48,10 @@ class Customer extends Model
 
         return '#';
     }
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return implode(', ', array_filter([$this->last_name, $this->first_name]))."({$this->account->account_no})";
+        }
+    }
 
 }

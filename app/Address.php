@@ -9,10 +9,10 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class Address extends Model
 {
-    use SoftDeletes, CausesActivity, LogsActivity{
+    use SoftDeletes;/*, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
-    }
+    }*/
 
     public $obj_alias = 'Address';
 

@@ -29,5 +29,9 @@ class Task extends Model
 
         return '#';
     }
-
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return $this->title;
+        }
+    }
 }

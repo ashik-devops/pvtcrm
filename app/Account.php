@@ -43,4 +43,10 @@ class Account extends Model
 
         return '#';
     }
+
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return $this->account_name."(#{$this->account_no})";
+        }
+    }
 }

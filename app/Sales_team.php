@@ -31,4 +31,9 @@ class Sales_team extends Model
 
         return '#';
     }
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return $this->name;
+        }
+    }
 }

@@ -14,6 +14,7 @@ return array(
     'App\\Customer' => $baseDir . '/app/Customer.php',
     'App\\Exceptions\\Handler' => $baseDir . '/app/Exceptions/Handler.php',
     'App\\Http\\Controllers\\AccountsController' => $baseDir . '/app/Http/Controllers/AccountsController.php',
+    'App\\Http\\Controllers\\ActivityController' => $baseDir . '/app/Http/Controllers/ActivityController.php',
     'App\\Http\\Controllers\\AppointmentsController' => $baseDir . '/app/Http/Controllers/AppointmentsController.php',
     'App\\Http\\Controllers\\Auth\\ForgotPasswordController' => $baseDir . '/app/Http/Controllers/Auth/ForgotPasswordController.php',
     'App\\Http\\Controllers\\Auth\\LoginController' => $baseDir . '/app/Http/Controllers/Auth/LoginController.php',
