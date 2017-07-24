@@ -56,4 +56,11 @@ class User extends Authenticatable
     public function salesTeams(){
         return $this->belongsToMany('App\Sales_team', 'sales_teams_users');
     }
+    public function getLink(): string {
+        if($this->id > 0){
+            return route('profile-edit', $this->id);
+        }
+
+        return '#';
+    }
 }

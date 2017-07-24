@@ -35,4 +35,12 @@ class Account extends Model
     public function journals(){
         return $this->hasManyThrough('App\Journal', 'App\Customer');
     }
+
+    public function getLink(): string {
+        if($this->id > 0){
+            return route('view-account', $this->id);
+        }
+
+        return '#';
+    }
 }

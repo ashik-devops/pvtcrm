@@ -30,7 +30,7 @@ jQuery(document).ready(function () {
 
        function buildActivityItemhtml(item) {
             return '<div class="item"> <div class="symbol-holder"><button class="icon-container btn btn-warning btn-circle"><i class="icon fa fa-flag"></i></button></div>'+
-               '<div class="content-holder"><div class="subject-line"><strong>'+item.message+'</strong><div class="time-stamp">'+item.happened+'</div></div></div>';
+               '<div class="content-holder"><div class="subject-line">'+item.message+'<div class="time-stamp">'+item.happened+'</div></div></div>';
        }
 
 

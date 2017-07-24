@@ -25,4 +25,9 @@ class Task extends Model
     public function journals(){
         return $this->morphMany('App\Journal','related_obj');
     }
+    public function getLink(): string {
+
+        return '#';
+    }
+
 }

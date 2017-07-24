@@ -12,4 +12,7 @@ class Policy extends Model
     public function users(){
         return $this->belongsToMany('App\Role', 'roles_policies', 'policy_id', 'role_id');
     }
+    public function getLink(): string {
+        return '#';
+    }
 }

@@ -26,4 +26,9 @@ class Sales_team extends Model
                 return $user;
         }
     }
+
+    public function getLink(): string {
+
+        return '#';
+    }
 }

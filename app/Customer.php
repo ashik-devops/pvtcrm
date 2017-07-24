@@ -41,4 +41,12 @@ class Customer extends Model
     public function journals(){
         return $this->hasMany('App\Journal');
     }
+    public function getLink(): string {
+        if($this->id > 0){
+            return route('view-customer', $this->id);
+        }
+
+        return '#';
+    }
+
 }

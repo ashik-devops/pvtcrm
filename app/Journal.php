@@ -30,6 +30,9 @@ class Journal extends Model
         $this->belongsTo(Customer::class);
     }
 
+    public function getLink(): string {
 
+        return '#';
+    }
 
 }

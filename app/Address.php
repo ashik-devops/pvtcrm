@@ -22,4 +22,9 @@ class Address extends Model
     public function company(){
         return $this->belongsToMany('App\Customer', '`customers_company_addresses`', 'address_id', 'customer_company_id');
     }
+    public function getLink(): string {
+
+        return '#';
+    }
+
 }

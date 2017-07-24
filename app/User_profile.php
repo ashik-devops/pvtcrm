@@ -12,5 +12,11 @@ class User_profile extends Model
     public function user(){
         return $this->belongsTo('App\User');
     }
+    public function getLink(): string {
+        if($this->id > 0){
+            return route('profile-edit', $this->user->id);
+        }
 
+        return '#';
+    }
 }
