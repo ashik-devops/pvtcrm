@@ -9,6 +9,8 @@ class Role extends Model
 {
     use SoftDeletes;
 
+    public $obj_alias = 'Role';
+
     public function profile(){
         return $this->hasMany('App\User');
     }

@@ -102,3 +102,6 @@ Route::get('/ajax/customer/ajax/journals/data/{customer}', 'JournalController@ge
 Route::post('/create-journal', 'JournalController@createJournal')->name('create.journal');
 Route::get('/journals/edit/', 'JournalController@editJournal')->name('edit.journal.data');
 Route::post('/journals/update', 'JournalController@updateJournal')->name('update.journal');
+
+
+Route::get('/ajax/activities/recent/{count?}', 'ActivityController@recentActivities')->name('recent-activities');

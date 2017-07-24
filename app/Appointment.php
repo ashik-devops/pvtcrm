@@ -14,6 +14,8 @@ class Appointment extends Model
         CausesActivity::activity as log;
     }
 
+    public $obj_alias = 'Appointment';
+
     public  $with = ['customer'];
     protected $dates = ['deleted_at'];
     protected $fillable = ['title','customer_id','description','status','start_time','end_time'];

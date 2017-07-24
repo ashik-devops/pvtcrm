@@ -15,6 +15,8 @@ class User extends Authenticatable
     CausesActivity::activity as log;
 }
 
+    public $obj_alias = 'User';
+
     /**
      * The attributes that are mass assignable.
      *

@@ -14,6 +14,8 @@ class Account extends Model
         CausesActivity::activity as log;
     }
 
+    public $obj_alias = 'Account';
+
     protected $dates = ['deleted_at'];
 
     public function employees(){

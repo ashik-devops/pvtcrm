@@ -14,6 +14,8 @@ class Task extends Model
         CausesActivity::activity as log;
     }
 
+    public $obj_alias = 'Task';
+
     protected $dates = ['deleted_at'];
 
     public function customer(){

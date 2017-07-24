@@ -19,6 +19,9 @@ class Journal extends Model
         CausesActivity::activity as log;
     }
 
+
+    public $obj_alias = 'Journal';
+
     public function related_obj(): MorphTo {
         return $this->morphTo();
     }

@@ -50,7 +50,7 @@
             @yield('copyright')
         </footer>
         @yield('modal')
-        @yield('side-panel')
+        @yield('activity-panel')
 
         @yield('before-footer-script')
         <script src="{{asset('storage/assets/js/jquery.js')}}"></script>
@@ -65,6 +65,7 @@
         <script src="{{asset('storage/assets/js/tether-shepherd.js')}}"></script>
         <script src="{{asset('storage/assets/js/select2.full.min.js')}}"></script>
         <script src="{{asset('storage/assets/js/main.js')}}"></script>
+        <script src="{{asset('storage/assets/js/activity-panel.js')}}"></script>
         @yield('after-footer-script')
 
 

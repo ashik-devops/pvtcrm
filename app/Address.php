@@ -13,6 +13,9 @@ class Address extends Model
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
+
+    public $obj_alias = 'Address';
+
     public function customer(){
         return $this->belongsToMany('App\Customer', 'customer_addresses', 'address_id', 'customer_id');
     }

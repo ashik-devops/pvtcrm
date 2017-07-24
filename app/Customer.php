@@ -14,6 +14,9 @@ class Customer extends Model
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
+
+    public $obj_alias = 'Customer';
+
     public  $with = ['account'];
     protected $dates = ['deleted_at'];
     protected static $logAttributes = ['first_name', 'last_name', 'title', 'email', 'phone_no', 'user', 'account', 'priority'];

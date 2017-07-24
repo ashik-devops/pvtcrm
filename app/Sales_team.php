@@ -13,6 +13,9 @@ class Sales_team extends Model
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
+
+    public $obj_alias = 'Team';
+
     public function users(){
         return $this->belongsToMany('App\User', 'sales_teams_users');
     }
