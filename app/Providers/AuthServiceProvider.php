@@ -12,8 +12,10 @@ use App\Policies\TaskPolicy;
 use App\Policies\UserPolicy;
 use App\Task;
 use App\User;
+use Carbon\Carbon;
 use Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Laravel\Passport\Passport;
 
 
 class AuthServiceProvider extends ServiceProvider
@@ -39,6 +41,11 @@ class AuthServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->registerPolicies();
+        Passport::routes();
+        Passport::tokensExpireIn(Carbon::now()->addDays(15));
+        Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
+
+
         Gate::resource('user', UserPolicy::class, [
             'index'=>UserPolicy::class.'@index'
         ]);

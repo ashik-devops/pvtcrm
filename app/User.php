@@ -5,12 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable
 {
-    use Notifiable, SoftDeletes, CausesActivity, LogsActivity{
+    use HasApiTokens ,Notifiable, SoftDeletes, CausesActivity, LogsActivity{
     LogsActivity::activity insteadof CausesActivity;
     CausesActivity::activity as log;
 }
