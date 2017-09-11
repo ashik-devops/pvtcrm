@@ -12,7 +12,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Yajra\Datatables\Datatables;
+use Yajra\DataTables\DataTables;
 
 class AppointmentsController extends Controller
 {
@@ -59,7 +59,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjax(){
 
 
-        return Datatables::of(DB::table('appointments_index'))
+        return DataTables::of(DB::table('appointments_index'))
             ->addColumn('action',
                 function ($appointment){
                     return
@@ -106,7 +106,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjaxPending(){
 
 
-        return Datatables::of(DB::table('appointments_index')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
+        return DataTables::of(DB::table('appointments_index')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
             ->addColumn('action',
                 function ($appointment){
                     return

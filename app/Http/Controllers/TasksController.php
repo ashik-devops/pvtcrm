@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Yajra\Datatables\Datatables;
+use Yajra\DataTables\DataTables;
 
 class TasksController extends Controller
 {
@@ -55,7 +55,7 @@ class TasksController extends Controller
     }
 
     public function getTasksAjax(){
-        return Datatables::of(DB::table('tasks_index'))
+        return DataTables::of(DB::table('tasks_index'))
             ->addColumn('action',
                 function ($task){
                     return
@@ -94,7 +94,7 @@ class TasksController extends Controller
 
 
 
-        return Datatables::of(DB::table('tasks_index')->where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
+        return DataTables::of(DB::table('tasks_index')->where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
 
             ->addColumn('action',
                 function ($task){
