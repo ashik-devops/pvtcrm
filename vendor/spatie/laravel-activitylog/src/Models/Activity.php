@@ -19,7 +19,7 @@ class Activity extends Model
 
     public function subject(): MorphTo
     {
-        if (config('laravel-activitylog.subject_returns_soft_deleted_models')) {
+        if (config('activitylog.subject_returns_soft_deleted_models')) {
             return $this->morphTo()->withTrashed();
         }
 
@@ -43,7 +43,7 @@ class Activity extends Model
         return array_get($this->properties->toArray(), $propertyName);
     }
 
-    public function getChangesAttribute(): Collection
+    public function changes(): Collection
     {
         return collect(array_filter($this->properties->toArray(), function ($key) {
             return in_array($key, ['attributes', 'old']);
@@ -70,7 +70,7 @@ class Activity extends Model
     public function scopeCausedBy(Builder $query, Model $causer): Builder
     {
         return $query
-            ->where('causer_type', get_class($causer))
+            ->where('causer_type', $causer->getMorphClass())
             ->where('causer_id', $causer->getKey());
     }
 
@@ -85,7 +85,7 @@ class Activity extends Model
     public function scopeForSubject(Builder $query, Model $subject): Builder
     {
         return $query
-            ->where('subject_type', get_class($subject))
+            ->where('subject_type', $subject->getMorphClass())
             ->where('subject_id', $subject->getKey());
     }
 }

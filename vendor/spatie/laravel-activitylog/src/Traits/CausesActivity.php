@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 trait CausesActivity
 {
- public function activity(): MorphMany
+    public function activity(): MorphMany
     {
         return $this->morphMany(ActivitylogServiceProvider::determineActivityModel(), 'causer');
     }
@@ -17,5 +17,4 @@ trait CausesActivity
     {
         return $this->activity();
     }
-
 }
