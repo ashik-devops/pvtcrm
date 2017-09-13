@@ -112,7 +112,7 @@
     <script type="text/javascript">
         var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
-            dom: 'Bfrtip',
+            dom: '<\'row\'<\'col-sm-6\'l><\'col-sm-6\'f>>Brtip',
             select: true,
             processing: true,
             serverSide: true,

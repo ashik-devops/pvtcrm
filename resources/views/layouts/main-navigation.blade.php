@@ -8,6 +8,25 @@
                     <span class="nav-label">Dashboard</span>
                 </a>
             </li>
+
+            <li {{ Request::is('calendar') ? ' class="active"' : null }}>
+                <a href="{{route('calendar')}}">
+                    <span aria-hidden="true" class="fa fa-calendar"></span>
+                    <span class="nav-label">Calendar</span>
+                </a>
+            </li>
+            <li {{ Request::is('accounts') ? ' class="active"' : null }}>
+                <a href="{{route('account-index')}}">
+                    <span aria-hidden="true" class="icon icon_building_alt"></span>
+                    <span class="nav-label">Accounts</span>
+                </a>
+            </li>
+            <li {{ Request::is('customers') ? ' class="active"' : null }}>
+                <a href="{{route('customer-index')}}">
+                    <span aria-hidden="true" class="icon icon_group"></span>
+                    <span class="nav-label">Customers</span>
+                </a>
+            </li>
             <li {{ Request::is('task-index') ? ' class="active"' : null }}>
                 <a href="{{route('task-index')}}">
                     <span aria-hidden="true" class="fa fa-tasks"></span>
@@ -18,24 +37,6 @@
                 <a href="{{route('appointment-index')}}">
                     <span aria-hidden="true" class="fa fa-calendar-check-o"></span>
                     <span class="nav-label">Appointments</span>
-                </a>
-            </li>
-            <li {{ Request::is('calendar') ? ' class="active"' : null }}>
-                <a href="{{route('calendar')}}">
-                    <span aria-hidden="true" class="fa fa-calendar"></span>
-                    <span class="nav-label">Calendar</span>
-                </a>
-            </li>
-            <li {{ Request::is('companies') ? ' class="active"' : null }}>
-                <a href="{{route('account-index')}}">
-                    <span aria-hidden="true" class="icon icon_building_alt"></span>
-                    <span class="nav-label">Accounts</span>
-                </a>
-            </li>
-            <li {{ Request::is('customers') ? ' class="active"' : null }}>
-                <a href="{{route('customer-index')}}">
-                    <span aria-hidden="true" class="icon icon_group"></span>
-                    <span class="nav-label">Customers</span>
                 </a>
             </li>
             @can('index', \App\User::class)

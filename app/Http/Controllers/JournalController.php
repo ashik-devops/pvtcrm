@@ -51,7 +51,7 @@ class JournalController extends Controller
     }
 
     public function getAccountJournalsAjax(Account $account){
-        return DataTables::of($account->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
+        return DataTables::of($account->journals()->select('journals.id', 'journals.title', 'journals.description', 'journals.related_obj_type', 'journals.log_date'))
             ->addColumn('action',
                 function ($journal){
                     return
@@ -72,7 +72,9 @@ class JournalController extends Controller
 
             ->rawColumns(['id', 'title', 'description', 'related_obj_type', 'log_date','action'])
             ->make(true);
-    }public function getCustomerJournalsAjax(Customer $customer){
+    }
+
+    public function getCustomerJournalsAjax(Customer $customer){
         return DataTables::of($customer->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
             ->addColumn('action',
                 function ($journal){
