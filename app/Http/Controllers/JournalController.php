@@ -9,10 +9,9 @@ use App\Journal;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use DB;
 use Illuminate\Support\Facades\Validator;
-use Yajra\Datatables\Facades\Datatables;
+use Yajra\DataTables\DataTables;
 
 class JournalController extends Controller
 {
@@ -52,7 +51,7 @@ class JournalController extends Controller
     }
 
     public function getAccountJournalsAjax(Account $account){
-        return Datatables::of($account->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
+        return DataTables::of($account->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
             ->addColumn('action',
                 function ($journal){
                     return
@@ -74,7 +73,7 @@ class JournalController extends Controller
             ->rawColumns(['id', 'title', 'description', 'related_obj_type', 'log_date','action'])
             ->make(true);
     }public function getCustomerJournalsAjax(Customer $customer){
-        return Datatables::of($customer->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
+        return DataTables::of($customer->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
             ->addColumn('action',
                 function ($journal){
                     return

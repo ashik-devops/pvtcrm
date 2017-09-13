@@ -11,9 +11,8 @@ use App\User_profile;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-
-use Yajra\Datatables\Datatables;
 use Validator;
+use Yajra\DataTables\DataTables;
 
 class CustomersController extends Controller
 {
@@ -84,7 +83,7 @@ class CustomersController extends Controller
 
     public function getCustomersAjax(){
 
-        return Datatables::of(DB::table('customers_index'))
+        return DataTables::of(DB::table('customers_index'))
             ->addColumn('action',
                 function ($customer){
                     return
@@ -123,7 +122,6 @@ class CustomersController extends Controller
 
     public function createCustomer( Request $request){
             $this->validator(['customer'=>$request->customer, 'account'=>$request->account])->validate();
-
 
             $customer = new Customer();
             $customer->first_name = $request->customer['firstName'];
@@ -322,7 +320,7 @@ class CustomersController extends Controller
      */
 
     public function getCustomerTasksAjax(Customer $customer){
-        return Datatables::of(DB::table('tasks_index')->where('customer_id', $customer->id))
+        return DataTables::of(DB::table('tasks_index')->where('customer_id', $customer->id))
             ->addColumn('customer_name', function ($task){
                 return '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
             })
@@ -343,7 +341,7 @@ class CustomersController extends Controller
      */
 
     public function getCustomerAppointmentsAjax(Customer $customer){
-        return Datatables::of(DB::table('appointments_index')->where('customer_id', $customer->id))
+        return DataTables::of(DB::table('appointments_index')->where('customer_id', $customer->id))
             ->addColumn('action',
                 function ($appointment){
                     return

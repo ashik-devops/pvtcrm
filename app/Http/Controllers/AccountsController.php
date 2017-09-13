@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Types\Boolean;
-use Yajra\Datatables\Facades\Datatables;
+use Yajra\DataTables\DataTables;
 
 class AccountsController extends Controller
 {
@@ -81,7 +81,7 @@ class AccountsController extends Controller
      */
 
     public function getAccountsAjax(){
-        return Datatables::of(Account::select('id', 'account_no','name', 'email', 'phone_no', 'website'))
+        return DataTables::of(Account::select('id', 'account_no','name', 'email', 'phone_no', 'website'))
             ->addColumn('action',
                 function ($account){
                     return
@@ -110,7 +110,7 @@ class AccountsController extends Controller
      */
 
     public function getAccountTasksAjax(Account $account){
-        return Datatables::of(DB::table('tasks_index')->where('account_id', $account->id))
+        return DataTables::of(DB::table('tasks_index')->where('account_id', $account->id))
             ->addColumn('customer_name', function ($task){
                 return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
             })
@@ -131,7 +131,7 @@ class AccountsController extends Controller
      */
 
     public function getAccountAppointmentsAjax(Account $account){
-        return Datatables::of(DB::table('appointments_index')->where('account_id', $account->id))
+        return DataTables::of(DB::table('appointments_index')->where('account_id', $account->id))
             ->addColumn('action',
                 function ($appointment){
                     return
