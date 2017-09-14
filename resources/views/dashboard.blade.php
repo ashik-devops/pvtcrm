@@ -55,6 +55,9 @@
                                                                     <th>Status</th>
                                                                     <th>Priority</th>
                                                                     <th>Due Date</th>
+                                                                    <th></th>
+                                                                    <th></th>
+                                                                    <th></th>
                                                                     <th>Action</th>
 
                                                                 </tr>
@@ -691,6 +694,9 @@
                 { data: 'status', name: 'status'},
                 { data: 'priority', name: 'priority'},
                 { data: 'due_date', name: 'due_date' },
+                { data: 'account_name', name: 'account_name', visible: false },
+                { data: 'customer_first_name', name: 'customer_first_name', visible: false },
+                { data: 'customer_last_name', name: 'customer_last_name' , visible: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
 
 

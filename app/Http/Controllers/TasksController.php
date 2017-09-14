@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Index_tasks;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -55,7 +56,7 @@ class TasksController extends Controller
     }
 
     public function getTasksAjax(){
-        return DataTables::of(DB::table('tasks_index'))
+        return DataTables::of(Index_tasks::all())
             ->addColumn('action',
                 function ($task){
                     return
@@ -92,9 +93,7 @@ class TasksController extends Controller
 
     public function getTasksAjaxDue(){
 
-
-
-        return DataTables::of(DB::table('tasks_index')->where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
+        return DataTables::of(Index_tasks::where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
 
             ->addColumn('action',
                 function ($task){

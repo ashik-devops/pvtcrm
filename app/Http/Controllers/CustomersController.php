@@ -323,7 +323,7 @@ class CustomersController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function getCustomerTasksAjax(Customer $customer){
+    public function     getCustomerTasksAjax(Customer $customer){
         return DataTables::of(DB::table('tasks_index')->where('customer_id', $customer->id))
             ->addColumn('customer_name', function ($task){
                 return '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
