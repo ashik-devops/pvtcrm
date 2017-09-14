@@ -289,10 +289,10 @@ class CustomersController extends Controller
     public function getCustomerOptions(){
 
         return response()->json([
-            'customers' =>Customer::all()->map(
+            'customers' =>Customer::with(['account'])->get()->map(
                 function($customer){
                 $name=implode(', ', [$customer->last_name, $customer->first_name]);
-                if($customer->has('account')){
+                if(!is_null($customer->account)){
                     $name.='@'.$customer->account->name;
                 }
 
