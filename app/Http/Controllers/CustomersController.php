@@ -53,8 +53,11 @@ class CustomersController extends Controller
         if($data['account']['accountId'] > 0){
             $rules=array_merge($rules, [
                 'account.accountId' => 'required|integer|exists:accounts,id',
-                'account.addressId' => 'required|integer|exists:addresses,id',
             ]);
+
+            if($isUpdate){
+                $rules['account.addressId'] = 'required|integer|exists:addresses,id';
+            }
         }
 
         else{
@@ -143,7 +146,6 @@ class CustomersController extends Controller
             $address->phone_no = $request->account['accountPhone'];
             $address->email = $request->account['accountEmail'];
 
-            $customer->addresses()->attach($address);
             $account = Account::find($request->account['accountId']);
             if (is_null($account)) {
 
@@ -155,6 +157,7 @@ class CustomersController extends Controller
                 $account->email = $request->account['accountEmail'];
 
             }
+
             DB::beginTransaction();
             $customer->save();
             $address->save();
