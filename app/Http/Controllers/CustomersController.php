@@ -6,7 +6,9 @@ use App\Address;
 use App\Customer;
 
 use App\Account;
+use App\Index_appointment;
 use App\Index_customer;
+use App\Index_tasks;
 use App\User;
 use App\User_profile;
 use Illuminate\Http\Request;
@@ -324,7 +326,7 @@ class CustomersController extends Controller
      */
 
     public function     getCustomerTasksAjax(Customer $customer){
-        return DataTables::of(DB::table('tasks_index')->where('customer_id', $customer->id))
+        return DataTables::of(Index_tasks::where('customer_id', $customer->id))
             ->addColumn('customer_name', function ($task){
                 return '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
             })
@@ -345,7 +347,7 @@ class CustomersController extends Controller
      */
 
     public function getCustomerAppointmentsAjax(Customer $customer){
-        return DataTables::of(DB::table('appointments_index')->where('customer_id', $customer->id))
+        return DataTables::of(Index_appointment::where('customer_id', $customer->id))
             ->addColumn('action',
                 function ($appointment){
                     return

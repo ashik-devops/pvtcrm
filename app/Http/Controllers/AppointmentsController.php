@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Appointment;
 
 use App\Customer;
+use App\Index_appointment;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -59,7 +60,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjax(){
 
 
-        return DataTables::of(DB::table('appointments_index'))
+        return DataTables::of(Index_appointment::all())
             ->addColumn('action',
                 function ($appointment){
                     return
@@ -106,7 +107,7 @@ class AppointmentsController extends Controller
     public function getAppointmentsAjaxPending(){
 
 
-        return DataTables::of(DB::table('appointments_index')->where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
+        return DataTables::of(Index_appointment::where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
             ->addColumn('action',
                 function ($appointment){
                     return

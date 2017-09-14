@@ -123,8 +123,8 @@
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
                     {data: 'status', name: 'status'},
-                    { data: 'customer_first_name', name: 'customer_first_name', visible: false },
-                    { data: 'customer_last_name', name: 'customer_last_name' , visible: false},
+                    {data: 'customer_first_name', name: 'customer_first_name', visible: false },
+                    {data: 'customer_last_name', name: 'customer_last_name' , visible: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
 
