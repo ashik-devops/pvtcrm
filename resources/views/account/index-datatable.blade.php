@@ -340,8 +340,6 @@
         }
 
 
-
-
         function deleteAccount(id){
             var _token = $('input[name="_token"]').val();
             var data = {
@@ -386,9 +384,6 @@
         function get_all_account_data(){
             datatable.ajax.reload(null, false);
         }
-
-
-
 
     </script>
 @endsection
