@@ -6,6 +6,7 @@ use App\Address;
 use App\Customer;
 
 use App\Account;
+use App\Index_customer;
 use App\User;
 use App\User_profile;
 use Illuminate\Http\Request;
@@ -86,7 +87,7 @@ class CustomersController extends Controller
 
     public function getCustomersAjax(){
 
-        return DataTables::of(DB::table('customers_index'))
+        return DataTables::of(Index_customer::get())
             ->addColumn('action',
                 function ($customer){
                     return
