@@ -288,14 +288,19 @@ class CustomersController extends Controller
 
     }
 
-    public function getCustomerOptions(){
-
+    public function getCustomerOptions(Request $request){
+        $customer = new Index_customer;
+        if($request->q){
+            $customer = $customer->where('name', 'LIKE', '%'.$request->q.'%')
+            ->orWhere('account_name', 'LIKE', "%".$request->q."%")
+            ->orWhere('account_no', '=', $request->q);
+         }
         return response()->json([
-            'customers' =>Customer::with(['account'])->get()->map(
+            'customers' =>$customer->get()->map(
                 function($customer){
-                $name=implode(', ', [$customer->last_name, $customer->first_name]);
-                if(!is_null($customer->account)){
-                    $name.='@'.$customer->account->name;
+                $name=implode(', ', [$customer->name]);
+                if($customer->account_id > 0){
+                    $name.=' @ '.$customer->account_name;
                 }
 
                 return ['id'=>$customer->id,'text'=>$name];
