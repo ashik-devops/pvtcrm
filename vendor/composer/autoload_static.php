@@ -22,6 +22,7 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         '0b47d6d4a00ca9112ba3953b49e7c9a4' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/helper.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '46441ce319666e68ac0d753056faa9f4' => __DIR__ . '/..' . '/devmarketer/easynav/src/DevMarketer/EasyNav/functions.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -414,6 +415,10 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
             array (
                 0 => __DIR__ . '/..' . '/doctrine/lexer/lib',
             ),
+            'DevMarketer\\EasyNav' => 
+            array (
+                0 => __DIR__ . '/..' . '/devmarketer/easynav/src',
+            ),
         ),
     );
 
@@ -447,6 +452,9 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'App\\Http\\Middleware\\RedirectIfAuthenticated' => __DIR__ . '/../..' . '/app/Http/Middleware/RedirectIfAuthenticated.php',
         'App\\Http\\Middleware\\TrimStrings' => __DIR__ . '/../..' . '/app/Http/Middleware/TrimStrings.php',
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
+        'App\\Index_appointment' => __DIR__ . '/../..' . '/app/Index_appointment.php',
+        'App\\Index_customer' => __DIR__ . '/../..' . '/app/Index_customer.php',
+        'App\\Index_tasks' => __DIR__ . '/../..' . '/app/Index_tasks.php',
         'App\\Journal' => __DIR__ . '/../..' . '/app/Journal.php',
         'App\\Policies\\AppointmentPolicy' => __DIR__ . '/../..' . '/app/Policies/AppointmentPolicy.php',
         'App\\Policies\\CustomerPolicy' => __DIR__ . '/../..' . '/app/Policies/CustomerPolicy.php',
@@ -549,6 +557,9 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'Defuse\\Crypto\\KeyOrPassword' => __DIR__ . '/..' . '/defuse/php-encryption/src/KeyOrPassword.php',
         'Defuse\\Crypto\\KeyProtectedByPassword' => __DIR__ . '/..' . '/defuse/php-encryption/src/KeyProtectedByPassword.php',
         'Defuse\\Crypto\\RuntimeTests' => __DIR__ . '/..' . '/defuse/php-encryption/src/RuntimeTests.php',
+        'DevMarketer\\EasyNav\\EasyNav' => __DIR__ . '/..' . '/devmarketer/easynav/src/DevMarketer/EasyNav/EasyNav.php',
+        'DevMarketer\\EasyNav\\EasyNavFacade' => __DIR__ . '/..' . '/devmarketer/easynav/src/DevMarketer/EasyNav/EasyNavFacade.php',
+        'DevMarketer\\EasyNav\\EasyNavServiceProvider' => __DIR__ . '/..' . '/devmarketer/easynav/src/DevMarketer/EasyNav/EasyNavServiceProvider.php',
         'Doctrine\\Common\\Inflector\\Inflector' => __DIR__ . '/..' . '/doctrine/inflector/lib/Doctrine/Common/Inflector/Inflector.php',
         'Doctrine\\Common\\Lexer\\AbstractLexer' => __DIR__ . '/..' . '/doctrine/lexer/lib/Doctrine/Common/Lexer/AbstractLexer.php',
         'Doctrine\\Instantiator\\Exception\\ExceptionInterface' => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator/Exception/ExceptionInterface.php',
