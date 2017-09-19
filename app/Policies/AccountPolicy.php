@@ -7,7 +7,7 @@ use App\Traits\AdminPolicies;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
-class Customer_CompanyPolicy
+class AccountPolicy
 {
     use HandlesAuthorization, AdminPolicies;
 
@@ -23,7 +23,7 @@ class Customer_CompanyPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return !is_null($user->policies()->whereIn('scope', ['*', 'account'])
             ->whereIn('action',['*','list'])->first()->id);
     }
 
@@ -39,7 +39,7 @@ class Customer_CompanyPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'account'])
                 ->whereIn('action',['*','view'])->first()->id);
 
     }
@@ -55,7 +55,7 @@ class Customer_CompanyPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return  !is_null($user->policies()->whereIn('scope', ['*', 'account'])
             ->whereIn('action',['*','create'])->first()->id);
     }
 
@@ -71,7 +71,7 @@ class Customer_CompanyPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'account'])
                 ->whereIn('action',['*','edit'])->first()->id);
     }
 
@@ -87,7 +87,7 @@ class Customer_CompanyPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'customer'])
+        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'account'])
                 ->whereIn('action',['*','delete'])->first()->id);
     }
 }

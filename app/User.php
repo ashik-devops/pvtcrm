@@ -72,4 +72,8 @@ class User extends Authenticatable
 
         return "";
     }
+
+    public function getSubordinates(){
+        return [];
+    }
 }
