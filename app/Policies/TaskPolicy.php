@@ -23,8 +23,8 @@ class TaskPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->policies()->where('scope', 'customer')
-            ->where('action','list')->first());
+        return !is_null($user->policies()->whereIn('scope', ['customer','*'])
+            ->whereIn('action',['list','*'])->first());
     }
 
     /**
@@ -41,8 +41,9 @@ class TaskPolicy
             return true;
         }
 
-        return $user->id === $task->customer->user->id && !is_null($user->role->policies()->where('scope',  'appointment')
-                ->where('action','view')->first());
+        return $user->id === $task->customer->user->id && !is_null($user->role->policies()
+                ->whereIn('scope',  ['appointment','*'])
+                ->whereIn('action',['view','*'])->first());
 
     }
 
@@ -57,8 +58,8 @@ class TaskPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->role->policies()->where('scope',  'customer')
-            ->where('action','create')->first());
+        return  !is_null($user->role->policies()->whereIn('scope',  ['customer','*'])
+            ->whereIn('action',['create','*'])->first());
     }
 
     /**
@@ -73,8 +74,9 @@ class TaskPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $task->customer->user->id && !is_null($user->role->policies()->where('scope',  'customer')
-                ->where('action','edit')->first());
+        return $user->id === $task->customer->user->id && !is_null($user->role->policies()
+                ->whereIn('scope',  ['customer','*'])
+                ->whereIn('action',['edit','*'])->first());
     }
 
     /**
@@ -89,8 +91,9 @@ class TaskPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $task->customer->user->id && !is_null($user->role->policies()->where('scope',  'customer')
-                ->where('action','delete')->first()->id);
+        return $user->id === $task->customer->user->id && !is_null($user->role->policies()
+                ->whereIn('scope',  ['customer',*])
+                ->whereIn('action',['delete','*'])->first()->id);
     }
 
 
