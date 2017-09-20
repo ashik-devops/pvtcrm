@@ -4,29 +4,33 @@
         <input type="hidden" id="appointmentIdForView">
         <tr>
             <th>For</th>
-            <td id="viewAppointmentCustomer">Firoz Sabuz</td>
+            <td id="viewAppointmentCustomer"></td>
         </tr>
         <tr>
             <th>Title</th>
-            <td id="viewAppointmentTitle">somehting new</td>
+            <td id="viewAppointmentTitle"></td>
         </tr>
         <tr>
             <th>Status</th>
-            <td id="viewAppointmentStatus">Due</td>
+            <td id="viewAppointmentStatus"></td>
         </tr>
         <tr>
             <th>Start Time</th>
-            <td id="viewAppointmentStarttime">Low</td>
+            <td id="viewAppointmentStart_time"></td>
+        </tr>
+        <tr>
+            <th>End Time</th>
+            <td id="viewAppointmentEnd_time"></td>
         </tr>
         <tr>
             <th>Description</th>
-            <td id="viewAppointmentDescription">lorem ipsum</td>
+            <td id="viewAppointmentDescription"></td>
         </tr>
 
     </table>
 
-    <button class="btn btn-success" onClick="editTaskWithClosingView()">Edit Task</button>
-    <button class="btn btn-success" onClick="completeTaskWithClosingView()">Complete Task</button>
-    <button class="btn btn-success" onClick="editTaskWithClosingView()">Cancel Task</button>
+    <button class="btn btn-success" onClick="editAppointmentWithClosingView()">Edit Task</button>
+    <button class="btn btn-success" onClick="completeAppointmentWithClosingView()">Complete Task</button>
+    <button class="btn btn-success" onClick="editAppointmentWithClosingView()">Cancel Task</button>
 
 @endsection
