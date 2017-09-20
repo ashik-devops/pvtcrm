@@ -21,7 +21,7 @@
 
                 <div class="actions">
                     <button id="new-apt-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i> New Appointment</button>
-                </div>
+                </div>completeap
 
 
             <div id="masonry" class="row">
@@ -75,6 +75,19 @@
                 </div>
                 <div class="modal-body">
                     @yield('appointment-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="appointment-modal-view" role="dialog" aria-labelledby="appointment-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">appointment
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-appointment-label"> Appointment View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('appointment-view')
                 </div>
             </div>
         </div>
@@ -380,6 +393,14 @@
 
 
             datatable.ajax.reload(null, false);
+        }
+
+        function viewAppointment(id){
+
+
+
+
+
         }
 
 
