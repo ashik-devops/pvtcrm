@@ -32,7 +32,7 @@ class CustomerPolicy
 
     /**
      * Determine whether the user can view the customer.
-     *
+     *company->user->id
      * @param  \App\User  $user
      * @param  \App\Customer  $customer
      * @return mixed
@@ -42,7 +42,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
         return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->role->olicies()->where('scope', ['customer', '*'])
+        return $user->id === $customer->user->id || !is_null($user->role->olicies()->whereIn('scope', ['customer', '*'])
                 ->whereIn('action',['*','list'])->first());
 
     }
@@ -58,7 +58,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->role->policies()->where('scope', ['customer', '*'])
+        return  !is_null($user->role->policies()->whereIn('scope', ['customer', '*'])
             ->whereIn('action',['*','create'])->first());
     }
 
@@ -74,7 +74,8 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->role->policies()->where('scope', ['customer', '*'])
+        return $user->id === $customer->user->id || !is_null($user->role->policies()
+                ->whereIn('scope', ['customer', '*'])
                 ->whereIn('action',['*','edit'])->first());
     }
 
@@ -90,7 +91,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->role->policies()->where('scope', ['customer', '*'])
+        return $user->id === $customer->user->id || !is_null($user->role->policies()->whereIn('scope', ['customer', '*'])
                 ->whereIn('action',['*','delete'])->first());
     }
 }

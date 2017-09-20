@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Address;
 use App\Account;
+use App\Customer;
 use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\DB;
@@ -53,10 +54,12 @@ class AccountsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $this->authorize('index', Account::class);
         return view('account.index-datatable');
     }
 
     public function listAll(Request $request){
+        $this->authorize('index', $request);
         $accounts = new Account();
         if(!empty($request->q)){
 
@@ -71,6 +74,7 @@ class AccountsController extends Controller
     }
 
     public function create(Request $request){
+        $this->authorize('create', $request);
         $this->validator($request->all())->validate();
     }
 
@@ -81,6 +85,7 @@ class AccountsController extends Controller
      */
 
     public function getAccountsAjax(){
+        $this->authorize('index', Account::class);
         return DataTables::of(Account::select('id', 'account_no','name', 'email', 'phone_no', 'website'))
             ->addColumn('action',
                 function ($account){
@@ -110,6 +115,7 @@ class AccountsController extends Controller
      */
 
     public function getAccountTasksAjax(Account $account){
+        $this->authorize('create', $account);
         return DataTables::of(DB::table('tasks_index')->where('account_id', $account->id))
             ->addColumn('customer_name', function ($task){
                 return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
@@ -131,6 +137,7 @@ class AccountsController extends Controller
      */
 
     public function getAccountAppointmentsAjax(Account $account){
+        $this->authorize('index', $account);
         return DataTables::of(DB::table('appointments_index')->where('account_id', $account->id))
             ->addColumn('action',
                 function ($appointment){
@@ -149,10 +156,12 @@ class AccountsController extends Controller
 
 
     public function getAccountQuickDetails(Account $account){
+        $this->authorize('view', $account);
         return $account->toJson();
     }
 
     public function viewAccount(Account $account){
+        $this->authorize('view', $account);
        return view('account.view')->with([
           'account'=>$account
        ]);
@@ -160,7 +169,7 @@ class AccountsController extends Controller
 
 
     public function createAccount( Request $request){
-
+        $this->authorize('create', $request);
         $this->validator($request->account, false)->validate();
 
         $customer_account = new Account();
@@ -207,7 +216,7 @@ class AccountsController extends Controller
 
 
     public function updateAccount( Request $request){
-
+        $this->authorize('update', $request);
         $this->validator($request->account, true)->validate();
         $customer_account = Account::findOrFail($request->account['accountId']);
         $address = Address::findOrFail($request->account['addressId']);
@@ -251,7 +260,7 @@ class AccountsController extends Controller
 
     public function deleteAccount(Request $request){
         $customer_account = Account::findOrFail($request->id);
-
+        $this->authorize('delete', $request);
         if(!is_null($customer_account)){
 
             $customer_account->delete();
@@ -271,6 +280,7 @@ class AccountsController extends Controller
     }
 
     public function bulkDeleteAccount(Request $request){
+
         if(Account::whereIn('id', explode(',', $request->ids))->delete()){
             return response()->json([
                 'result'=>'Success',
@@ -282,6 +292,24 @@ class AccountsController extends Controller
             'result'=>'Error',
             'message'=>'Invalid Request.'
         ]);
+
+    }
+
+    public function getCustomerAccountWise(Request $request){
+        $this->authorize('view', $request);
+        $this->authorize('view', Account::find($request->accountId));
+        if($request->accountId){
+            return response()->json([
+                'customers' =>Customer::where('account_id',$request->accountId)->get()->map(
+                    function($customer){
+                        $name=implode(', ', [$customer->last_name, $customer->first_name]);
+
+
+                        return ['id'=>$customer->id,'text'=>$name];
+                    })
+            ]);
+        }
+
 
     }
 }
