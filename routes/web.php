@@ -98,7 +98,7 @@ Route::get('/ajax/calendar/events', 'CalendarController@getAjaxEvents')->name('a
 
 
 Route::get('/ajax/account/journals/data/{account}', 'JournalController@getAccountJournalsAjax')->name('account-journal-data');
-Route::get('/ajax/customer/ajax/journals/data/{customer}', 'JournalController@getCustomerJournalsAjax')->name('customer-journal-data');
+Route::get('/ajax/customer/journals/data/{customer}', 'JournalController@getCustomerJournalsAjax')->name('customer-journal-data');
 Route::post('/create-journal', 'JournalController@createJournal')->name('create.journal');
 Route::get('/journals/edit/', 'JournalController@editJournal')->name('edit.journal.data');
 Route::post('/journals/update', 'JournalController@updateJournal')->name('update.journal');

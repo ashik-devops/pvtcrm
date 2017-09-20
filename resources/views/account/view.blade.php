@@ -925,7 +925,7 @@
                 {data: 'log_date', name: 'log_date'},
                 {data: 'title', name: 'title'},
                 {data: 'description', name: 'description'},
-                {data: 'related_obj_type', name: 'related_obj_type'},
+                {data: 'followup', name: 'followup', orderable: false, searchable: false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
 
             ]
