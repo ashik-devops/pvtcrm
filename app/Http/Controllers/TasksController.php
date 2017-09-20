@@ -300,11 +300,12 @@ class TasksController extends Controller
         ],200);
     }
     public function cancelTask(Request $request){
-        $task= Task::findOrFail($request->journal['originId']);
+
         $rules=[
             'journalTitle'=>'required|string',
             'journalDescription'=>'required|string',
             'journalLogDate'=>'required|date',
+            'originId'=>'required|integer|exists:tasks,id'
         ];
 
         if(isset($request->journal['followup']['type'])) {
@@ -326,11 +327,12 @@ class TasksController extends Controller
                 }
             }
         }
-        $journal = $this->validate($request->journal, $rules);
+        $task= Task::findOrFail($request->journal['originId']);
+        $task->status = 'Cancelled';
+        Validator::make($request->journal, $rules)->validate();
 
         $journal = new Journal();
         $journal->customer_id = $task->customer->id;
-
         $journal->title = $request->journal['journalTitle'];
         $journal->description = $request->journal['journalDescription'];
         $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
@@ -343,7 +345,7 @@ class TasksController extends Controller
                 $followup = new Task();
                 $followup->title
                     = $request->journal['followup']['followupTaskTitle'];
-                $followup->customer_id = $request->journal['journalCustomerId'];
+                $followup->customer_id = $task->customer->id;
                 $followup->description
                     = $request->journal['followup']['followupTaskDescription'];
                 $followup->due_date
@@ -357,7 +359,7 @@ class TasksController extends Controller
                     $followup->title
                         = $request->journal['followup']['followupAppointmentTitle'];
                     $followup->customer_id
-                        = $request->journal['journalCustomerId'];
+                        = $task->customer->id;
                     $followup->description
                         = $request->journal['followup']['followupAppointmentDescription'];
                     $followup->status = "Due";
@@ -371,15 +373,15 @@ class TasksController extends Controller
 
                 DB::beginTransaction();
                 $journal->save();
-
+                $task->save();
+                if(!is_null($task->journal)){
+                    $journal->prev_journal()->save($task->journal);
+                    $task->journal->next_journal()->save($journal);
+                }
                 if(!is_null($followup)){
                     $followup->save();
-                    $followup->journals()->save($journal);
-                    if(!is_null($task->journal)){
-                        $journal->origin_obj->attach($task->journal);
-                    }
+                    $followup->journal()->save($journal);
                 }
-                $task->save();
             DB::commit();
 
         return response()->json([
@@ -387,5 +389,6 @@ class TasksController extends Controller
             'message'=>'Task Cancelled.'
         ],200);
     }
+
 
 }
