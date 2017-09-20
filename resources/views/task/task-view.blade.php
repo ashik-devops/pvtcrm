@@ -28,8 +28,8 @@
         </tr>
     </table>
 
-    <button class="btn btn-success" onClick="editTaskWithClosingView()">Edit Task</button>
-    <button class="btn btn-success" onClick="completeTaskWithClosingView()">Complete Task</button>
-    <button class="btn btn-success" onClick="editTaskWithClosingView()">Cancel Task</button>
+    <button class="btn btn-success" id="edit-task-button" onClick="editTaskWithClosingView()">Edit Task</button>
+    <button class="btn btn-success" id="complete-task-button" onClick="completeTaskWithClosingView()">Complete Task</button>
+    <button class="btn btn-success" id="cancel-task-button"onClick="cancelTaskWithClosingView()">Cancel Task</button>
 
 @endsection
