@@ -29,7 +29,7 @@ class RolesTableSeeder extends Seeder
         $role->save();
         $role->policies()->attach(\App\Policy::where('scope', 'team')->where('action', '*')->first()->id);
         $role->policies()->attach(\App\Policy::where('scope', 'task')->where('action', '*')->first()->id);
-        $role->policies()->attach(\App\Policy::where('scope', 'customer')->where('action', '*')->first()->id);
+        $role->policies()->attach(\App\Policy::where('scope', 'customer')->where('action', 'view')->first()->id);
         $role->policies()->attach(\App\Policy::where('scope', 'appointment')->where('action', '*')->first()->id);
 
         $role = new Role();
