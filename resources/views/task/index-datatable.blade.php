@@ -96,7 +96,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-complete-task"> Complete Task</h4>
+                    <h4 class="modal-title" id="modal-complete-task-label"> Complete Task</h4>
                 </div>
                 <div class="modal-body">
                     @yield('journal-create-form')
@@ -323,12 +323,87 @@
             $('#task-modal').modal('show');
         }
 
-        function completeTask(id){
-            $('#journal_modal_button').val('Complete Task');
+        function closeTask(id, status){
+
+            $('#journal_modal_button').val(status+ ' Task');
+            $('#modal-complete-task-label').val(status+ ' Task');
+            if(status='Complete'){
+                status='Done';
+            }
+            else if(status=='Cancel'){
+                status = 'Cancelled';
+            }
+
             $('#origin_id').val(id);
             $('#journal-customer-id').remove();
 
             $('#task-modal-complete').modal('show');
+            $('#journalForm').on('submit',function(e) {
+                e.preventDefault();
+                var _token = $('input[name="_token"]').val();
+
+                var journal = {
+                    originId : $('#'+journalInputMap.originId).val(),
+                    journalTitle : $('#'+journalInputMap.journalTitle).val(),
+                    journalDescription : $('#'+journalInputMap.journalDescription).val(),
+                    journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
+                };
+                if($('input[name=followUpType]:checked').val() === 'appointment'){
+                    journal.followup = {
+                        type : 'appointment',
+                        followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
+                        appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
+                        followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                        followupAppointmentStartTime : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                        followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
+                    };
+                }
+
+                else if($('input[name=followUpType]:checked').val() === 'task'){
+                    journal.followup = {
+                        type : 'task',
+                        followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
+                        followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
+                        followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
+                        followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
+                    };
+                }
+
+                var data = {
+                    _token : _token,
+                    journal: journal,
+                    action: status
+                };
+
+
+
+                var request = jQuery.ajax({
+                    url: "{{ route('close.task') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+
+                    if(response.result == 'Saved'){
+                        reset_journal_form($('#journalForm')[0]);
+                        $('#task-modal-complete').modal('hide');
+                        get_all_task_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(jqXHT.responseJSON.message, "error");
+                });
+
+
+
+            });
+
         }
 
 
@@ -374,52 +449,6 @@
         }
 
 
-        function cancelTask(id) {
-            var _token = $('input[name="_token"]').val();
-            var data = {
-                _token : _token,
-                id: id
-            };
-            swal({
-                    title: "Are you sure?",
-                    text: "This Information will be cancelled!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, cancel it!",
-                    cancelButtonText: "No, Do not cancel !",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
-
-                        //deletion process is going on....
-
-
-                        $.post("{{ route('cancel.task') }}", data, function(result){
-
-                            if(result.result == 'Success'){
-                                swal("Cancelled!", "Task has been cancelled.", "success");
-                                get_all_task_data();
-                                $.notify('Task Cancelled successfully', "danger");
-                            }
-                            else{
-                                swal("Failed", "Failed to cancel the task", "error");
-                            }
-
-                            if(result.cancel_message != ''){
-                                swal("Already Cancelled!", "You do not need to cancel it.", "success");
-                                //get_all_task_data();
-                                //$.notify('Task Cancelled successfully', "danger");
-                            }
-
-                        });
-                    } else {
-                        swal("Cancelled", "Task is safe :)", "error");
-                    }
-                });
-        }
 
         function get_all_task_data(){
             datatable.ajax.reload(null, false);
@@ -440,6 +469,15 @@
                     //task_date = moment(data.task.due_date);
                     $('#viewTaskPriority').html(data.task.priority);
                     $('#viewTaskStatus').html(data.task.status);
+                    if(data.task.status == "Done" || data.task.status == "Complete"){
+                        $("#complete-task-button").hide();
+                        $("#cancel-task-button").hide();
+                    }
+                    else {
+                        $("#complete-task-button").show();
+                        $("#cancel-task-button").show();
+
+                    }
                     //updateDates();
                     //var id = data.task.id;
                     //console.log(id);
@@ -472,75 +510,27 @@
             $('#task-modal-view').modal('hide');
 
 
-            completeTask(id);
+            closeTask(id, 'Complete');
+
+        }
+        function cancelTaskWithClosingView(id){
+            var id = $('#taskIdForView').val();
+
+            $('#task-modal-view').modal('hide');
+
+
+            closeTask(id, 'Cancel');
 
         }
 
-
-        $('#journalForm').on('submit',function(e) {
-            e.preventDefault();
-            var _token = $('input[name="_token"]').val();
-
-            var journal = {
-                originId : $('#'+journalInputMap.originId).val(),
-                journalTitle : $('#'+journalInputMap.journalTitle).val(),
-                journalDescription : $('#'+journalInputMap.journalDescription).val(),
-                journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
-            };
-            if($('input[name=followUpType]:checked').val() === 'appointment'){
-                journal.followup = {
-                    type : 'appointment',
-                    followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
-                    appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
-                    followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
-                    followupAppointmentStartTime : $('#'+journalInputMap.followupAppointmentStartTime).val(),
-                    followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
-                };
-            }
-
-            else if($('input[name=followUpType]:checked').val() === 'task'){
-                journal.followup = {
-                    type : 'task',
-                    followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
-                    followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
-                    followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
-                    followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
-                };
-            }
-
-            var data = {
-                _token : _token,
-                journal: journal,
-            };
+        function cancelTask(id) {
+            $('#task-modal-view').modal('hide');
 
 
-
-                var request = jQuery.ajax({
-                    url: "{{ route('complete.task') }}",
-                    data: data,
-                    method: "POST",
-                    dataType: "json"
-                });
-                request.done(function (response) {
-
-                    if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
-                        $('#task-modal-complete').modal('hide');
-                        get_all_task_data();
-                        $.notify(response.message, "success");
-                    }
-                    else{
-                        jQuery.notify(response.message, "error");
-                    }
-                });
-
-                request.fail(function (jqXHT, textStatus) {
-                    $.notify(textStatus, "error");
-                });
+            closeTask(id, 'Cancel');
+        }
 
 
-
-        });
 
     </script>
 
