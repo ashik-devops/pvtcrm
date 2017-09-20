@@ -59,7 +59,7 @@ class AppointmentsController extends Controller
     }
 
     public function getAppointmentsAjax(){
-        $this->authorize('view',Appointment::class);
+        $this->authorize('index',Appointment::class);
 
         return DataTables::of(Index_appointment::all())
             ->addColumn('action',
