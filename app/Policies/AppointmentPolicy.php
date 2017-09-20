@@ -24,8 +24,9 @@ class AppointmentPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()->where('scope', 'customer')
-            ->where('action','list')->first());
+        return !is_null($user->role->policies()
+            ->whereIn('scope',['customer','*'])
+            ->whereIn('action',['*','list'])->first());
     }
 
     /**
@@ -42,8 +43,9 @@ class AppointmentPolicy
             return true;
         }
 
-        return !is_null($user->role->policies()->where('scope',  'appointment')
-                ->where('action','view')->first());
+        return !is_null($user->role->policies()
+            ->whereIn('scope',  ['appointment','*'])
+            ->whereIn('action',['view','*'])->first());
 
     }
 
@@ -58,8 +60,8 @@ class AppointmentPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->role->policies()->where('scope',  'customer')
-            ->where('action','create')->first());
+        return  !is_null($user->role->policies()->whereIn('scope',['customer','*'])
+            ->whereIn('action',['*','create'])->first());
     }
 
     /**
@@ -74,8 +76,8 @@ class AppointmentPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()->where('scope',  'customer')
-                ->where('action','edit')->first());
+        return !is_null($user->role->policies()->whereIn('scope',['customer','*'])
+                ->whereIn('action',['*','edit'])->first());
     }
 
     /**
@@ -90,8 +92,8 @@ class AppointmentPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()->where('scope',  'customer')
-                ->where('action','delete')->first()->id);
+        return !is_null($user->role->policies()->whereIn('scope',['customer','*'])
+                ->whereIn('action',['*','delete'])->first()->id);
     }
 
 

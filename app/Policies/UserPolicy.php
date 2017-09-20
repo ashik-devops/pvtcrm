@@ -39,7 +39,8 @@ class UserPolicy
         if($this->checkAdmin($authenticated_user)){
             return true;
         }
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
+        return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()
+                ->whereIn('scope', ['*', 'user'])
                 ->whereIn('action',['*','view'])->first());
     }
 
@@ -51,6 +52,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
+
         if($this->checkAdmin($user)){
             return true;
         }

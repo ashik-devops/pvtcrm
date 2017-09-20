@@ -51,50 +51,52 @@ class JournalController extends Controller
     }
 
     public function getAccountJournalsAjax(Account $account){
-        return DataTables::of($account->journals()->select('journals.id', 'journals.title', 'journals.description', 'journals.related_obj_type', 'journals.log_date'))
+        return DataTables::of($account->journals()->with(['journalable']))
             ->addColumn('action',
                 function ($journal){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
-            ->addColumn('related_obj_type',
+            ->addColumn('followup',
                 function($journal){
-                    if($journal->related_obj_type == 'App\Task'){
-                        return 'Task';
-                    }elseif($journal->related_obj_type == 'App\Appointment'){
-                        return 'Appointment';
+                    if(get_class($journal->journalable) == 'App\Task'){
+                        return '<a href="javascript:viewTask('.$journal->journalable->id.')">'.$journal->journalable->title;
+                    }elseif(get_class($journal->journalable) == 'App\Appointment'){
+                        return '<a href="javascript:viewAppointment('.$journal->journalable->id.')"'.$journal->journalable->title;
                     }else{
                         return '';
                     }
+                })
+            ->addColumn('id', function ($journal){
+                return $journal->id;
             })
 
-
-            ->rawColumns(['id', 'title', 'description', 'related_obj_type', 'log_date','action'])
+            ->rawColumns(['id', 'title', 'description', 'followup', 'log_date','action'])
             ->make(true);
     }
 
     public function getCustomerJournalsAjax(Customer $customer){
-        return DataTables::of($customer->journals()->select('id', 'title', 'description', 'related_obj_type', 'log_date'))
+        return DataTables::of($customer->journals()->with(['journalable']))
             ->addColumn('action',
                 function ($journal){
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
-            ->addColumn('related_obj_type',
+            ->addColumn('followup',
                 function($journal){
-                    if($journal->related_obj_type == 'App\Task'){
-                        return 'Task';
-                    }elseif($journal->related_obj_type == 'App\Appointment'){
-                        return 'Appointment';
+                    if(get_class($journal->journalable) == 'App\Task'){
+                        return '<a href="javascript:viewTask('.$journal->journalable->id.')">'.$journal->journalable->title;
+                    }elseif(get_class($journal->journalable) == 'App\Appointment'){
+                        return '<a href="javascript:viewAppointment('.$journal->journalable->id.')"'.$journal->journalable->title;
                     }else{
                         return '';
                     }
             })
 
 
-            ->rawColumns(['id', 'title', 'description', 'related_obj_type', 'log_date','action'])
+            ->rawColumns(['id', 'title', 'description', 'followup', 'log_date','action'])
             ->make(true);
     }
 
