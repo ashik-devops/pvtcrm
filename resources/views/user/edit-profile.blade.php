@@ -78,9 +78,9 @@
                                         <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }}">
                                             <label class="col-md-2  col-sm-3 col-xs-12 control-label">Role</label>
                                             <div class="col-md-10 col-sm-9 col-xs-12">
-                                                <select name="role" id="role" class="form-control" data-parsley-trigger="change" required value="{{ old('role', $user->role_id) }}" data-parsley-required-message="You must select a role.">
+                                                <select name="role" id="role" class="form-control" data-parsley-trigger="change" required data-parsley-required-message="You must select a role.">
                                                     @foreach($roles as $role)
-                                                        <option value="{{$role->id}}">{{$role->name}}</option>
+                                                        <option @if(old('role', $user->role->id) == $role->id) selected @endif value="{{$role->id}}">{{$role->name}}</option>
                                                     @endforeach
                                                 </select>
 
@@ -95,9 +95,9 @@
                                         <div class="form-group"{{ $errors->has('status') ? ' has-error' : '' }}>
                                             <label for="status" class="col-md-2 col-sm-3 col-xs-12 control-label">Status</label>
                                             <div class="col-md-10 col-sm-9 col-xs-12">
-                                            <select name="status" class="form-control" id="status" required value="{{old('status')}}">
-                                                <option value="1">Active</option>
-                                                <option value="0">Inactive</option>
+                                            <select name="status" class="form-control" id="status" required value="{{old('status',  $user->status)}}">
+                                                <option @if(old('role', $user->status) == 1) selected @endif  value="1">Active</option>
+                                                <option  @if(old('role', $user->role->id) == 0) selected @endif  value="0">Inactive</option>
                                             </select>
 
                                             @if ($errors->has('status'))
@@ -274,7 +274,15 @@
 
 
 @section('after-footer-script')
+
+    <script type="text/javascript">
+        jQuery('#status').select2({
+
+        });
+        jQuery('#role').select2({
+            placeholder: "Select a Role",
+        });
+    </script>
+
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
-    <script src="{{asset('storage/assets/js/forms-chosen.js')}}"></script>
-    <script src="{{asset('storage/assets/js/forms-wysihtml5.js')}}"></script>
 @endsection

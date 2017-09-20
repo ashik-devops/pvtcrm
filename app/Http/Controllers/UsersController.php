@@ -143,7 +143,7 @@ class UsersController extends Controller
 
     public function edit(User $user){
         $this->authorize('update', $user);
-        return view('user.view-profile')->with([
+        return view('user.edit-profile')->with([
             'user' => $user,
             'roles'=>Role::all()
         ]);
