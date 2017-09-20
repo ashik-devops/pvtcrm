@@ -174,7 +174,7 @@ class TasksController extends Controller
     public function updateTask(Request $request){
         $this->validator($request->task, true)->validate();
         $task = Task::findOrFail($request->task['taskId']);
-        $this->authorize('update',$customer);
+        $this->authorize('update',$task);
         $task->customer_id = $request->task['taskCustomerId'];
         $task->title = $request->task['taskTitle'];
         $task->description = $request->task['taskDescription'];
