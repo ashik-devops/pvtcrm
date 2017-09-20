@@ -3,6 +3,7 @@
 
         {{ csrf_field() }}
         <input type="hidden" id="journal_id" name="journalId">
+        <input type="hidden" id="origin_id" name="originId">
 
         <div class="form-group {{ $errors->has('journal-customer-id') ? ' has-error' : '' }}" id="journal-customer-id">
             <label class="sr-only">Customer</label>
@@ -172,4 +173,88 @@
         <input type="submit" id="journal_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Journal">
 
     </form>
+@endsection
+
+@section('journal-create-form-script')
+    <script>
+        var journalInputMap={
+            journalId : 'journal_id',
+            originId: 'origin_id',
+            journalCustomerId : 'journalCustomerId',
+            journalTitle : 'journalTitle',
+            journalDescription : 'journalDescription',
+            journalLogDate : 'journalLogDate',
+
+            followupTaskTitle : 'followupTaskTitle',
+            followupTaskDescription : 'followupTaskDescription',
+            followupTaskDueDate : 'followupTaskDueDate',
+            followupTaskPriority : 'followupTaskPriority',
+
+            followupAppointmentTitle : 'followupAppointmentTitle',
+            followupAppointmentDescription : 'followupAppointmentDescription',
+            followupAppointmentStartTime : 'followupAppointmentStartTime',
+            followupAppointmentEndTime : 'followupAppointmentEndTime'
+        };
+
+            $('#typeItem').hide();
+            $('#followUpTask').hide();
+            $('#followUpAppointment').hide();
+
+            function followUpTest(){
+                if($("#followUpCheck").prop('checked') == true) {
+                    $('#typeItem').show();
+
+                }else{
+                    $('#typeItem').hide();
+                    $('#followUpTask').hide();
+                    $('#followUpAppointment').hide();
+                }
+            }
+
+            $("input[name=followUpType]:radio").click(function () {
+                if ($('input[name=followUpType]:checked').val() === "task") {
+                    reset_followup_appointment_form();
+                    $("#followupTaskTitle").attr('required', '');
+                    $("#followupTaskDescription").attr('required', '');
+                    $("#followupTaskDueDate").attr('required', '');
+                    $('#followupTaskDueDateTimePicker').datetimepicker();
+                    $('#followUpTask').show();
+                    $('#followUpAppointment').hide();
+
+                } else if ($('input[name=followUpType]:checked').val() === "appointment") {
+                    reset_followup_task_form();
+                    $('#followUpTask').hide();
+                    $('#followUpAppointment').show();
+                    $('#followupAppointmentStartTimeContainer').datetimepicker();
+                    $('#followupAppointmentEndTimeContainer').datetimepicker();
+                }
+            });
+
+            function reset_journal_form(el){
+                el.reset();
+                $('#'+journalInputMap.journalId).val('');
+                reset_followup_task_form();
+                reset_followup_appointment_form();
+            }
+
+            function reset_followup_appointment_form(){
+                $('#'+journalInputMap.followupAppointmentTitle).val('');
+                $('#f'+journalInputMap.followupAppointmentDescription).val('');
+                $('#'+journalInputMap.followupAppointmentStartTime).val('');
+                $('#'+journalInputMap.followupAppointmentEndTime).val('')
+            }
+
+        function reset_followup_task_form(){
+            $('#'+journalInputMap.followupTaskTitle).val('');
+            $('#'+journalInputMap.followupTaskDescription).val('');
+            $('#'+journalInputMap.followupTaskDueDate).val('');
+            $('#'+journalInputMap.followupTaskPriority).val('');
+        }
+
+        $('#journalLogDate').datetimepicker();
+
+
+
+
+    </script>
 @endsection

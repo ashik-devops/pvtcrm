@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -22,8 +23,16 @@ class Journal extends Model
 
     public $obj_alias = 'Journal';
 
-    public function related_obj(): MorphTo {
+    public function journalable(): MorphTo {
         return $this->morphTo();
+    }
+
+    public function prev_journal() : HasOne{
+        return $this->hasOne('App\Journal', 'prev_journal_id');
+    }
+
+    public function next_journal(): HasOne{
+        return $this->hasOne('App\Journal', 'next_journal_id');
     }
 
     public function customer(){

@@ -326,7 +326,7 @@
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
-
+    @yield('journal-create-form-script')
     <script type="text/javascript">
         var task_date=moment();
         var journalDate=moment();
@@ -416,8 +416,6 @@
 
             $('#taskDueDateTimePicker').datetimepicker();
             updateTaskDate();
-
-            $('#journalLogDate').datetimepicker();
         });
 
         $("#startTime").on("dp.change", function (e) {
@@ -984,42 +982,6 @@
             }
         }
 
-        $("input[name=followUpType]:radio").click(function () {
-            if ($('input[name=followUpType]:checked').val() === "task") {
-                reset_followup_appointment_form();
-                $("#followupTaskTitle").attr('required', '');
-                $("#followupTaskDescription").attr('required', '');
-                $("#followupTaskDueDate").attr('required', '');
-                $('#followupTaskDueDateTimePicker').datetimepicker();
-                $('#followUpTask').show();
-                $('#followUpAppointment').hide();
-
-            } else if ($('input[name=followUpType]:checked').val() === "appointment") {
-                reset_followup_task_form();
-                $('#followUpTask').hide();
-                $('#followUpAppointment').show();
-                $('#followupAppointmentStartTimeContainer').datetimepicker();
-                $('#followupAppointmentEndTimeContainer').datetimepicker();
-            }
-        });
-
-        var journalInputMap={
-            journalId : 'journal_id',
-            journalCustomerId : 'journalCustomerId',
-            journalTitle : 'journalTitle',
-            journalDescription : 'journalDescription',
-            journalLogDate : 'journalLogDate',
-
-            followupTaskTitle : 'followupTaskTitle',
-            followupTaskDescription : 'followupTaskDescription',
-            followupTaskDueDate : 'followupTaskDueDate',
-            followupTaskPriority : 'followupTaskPriority',
-
-            followupAppointmentTitle : 'followupAppointmentTitle',
-            followupAppointmentDescription : 'followupAppointmentDescription',
-            followupAppointmentStartTime : 'followupAppointmentStartTime',
-            followupAppointmentEndTime : 'followupAppointmentEndTime'
-        };
 
         $('#journalForm').on('submit',function(e) {
             e.preventDefault();

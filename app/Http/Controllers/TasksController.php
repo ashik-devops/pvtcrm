@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Appointment;
 use App\Index_tasks;
+use App\Journal;
 use App\Task;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -207,33 +209,183 @@ class TasksController extends Controller
 
     }
 
-    public function cancelTask(Request $request){
-        $task = Task::findOrFail($request->id);
+    public function completeTask(Request $request){
 
-        if(!is_null($task)){
+        $rules=[
+            'journalTitle'=>'required|string',
+            'journalDescription'=>'required|string',
+            'journalLogDate'=>'required|date',
+            'originId'=>'required|integer|exists:tasks,id'
+        ];
 
-            if($task->status == 'Cancelled'){
-                $cancel_message = 'Already Cancelled';
-            }else{
-                $cancel_message = '';
-                $task->status = 'Cancelled';
-                $task->save();
+        if(isset($request->journal['followup']['type'])) {
+            if ($request->journal['followup']['type'] == 'task') {
+                $rules = array_merge($rules, [
+                    'followup.followupTaskTitle' => 'required|string',
+                    'followup.followupTaskDescription' => 'required|string',
+                    'followup.followupTaskDueDate' => 'required|string',
+                    'followup.followupTaskPriority' => 'required|string',
+                ]);
+            } else {
+                if ($request->journal['followup']['type'] == 'appointment') {
+                    $rules = array_merge($rules, [
+                        'followup.followupAppointmentTitle' => 'required|string',
+                        'followup.followupAppointmentDescription' => 'required|string',
+                        'followup.followupAppointmentStartTime' => 'required|string',
+                        'followup.followupAppointmentEndTime' => 'required|string',
+                    ]);
+                }
             }
+        }
+        $task= Task::findOrFail($request->journal['originId']);
+        $task->status = 'Done';
+        Validator::make($request->journal, $rules)->validate();
 
+        $journal = new Journal();
+        $journal->customer_id = $task->customer->id;
+        $journal->title = $request->journal['journalTitle'];
+        $journal->description = $request->journal['journalDescription'];
+        $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
 
-            return response()->json([
-                'result'=>'Success',
-                'message'=>'Task has been cancelled.',
-                'cancel_message' => $cancel_message
-            ]);
+        $followup=null;
+
+        if(isset($request->journal['followup']['type'])) {
+
+            if ($request->journal['followup']['type'] == 'task') {
+                $followup = new Task();
+                $followup->title
+                    = $request->journal['followup']['followupTaskTitle'];
+                $followup->customer_id = $task->customer->id;
+                $followup->description
+                    = $request->journal['followup']['followupTaskDescription'];
+                $followup->due_date
+                    = Carbon::parse($request->journal['followup']['followupTaskDueDate']);
+                $followup->status = "Due";
+                $followup->priority
+                    = $request->journal['followup']['followupTaskPriority'];
+            } else {
+                if ($request->journal['followup']['type'] == 'appointment') {
+                    $followup = new Appointment();
+                    $followup->title
+                        = $request->journal['followup']['followupAppointmentTitle'];
+                    $followup->customer_id
+                        = $task->customer->id;
+                    $followup->description
+                        = $request->journal['followup']['followupAppointmentDescription'];
+                    $followup->status = "Due";
+                    $followup->start_time
+                        = Carbon::parse($request->journal['followup']['followupAppointmentStartTime']);
+                    $followup->end_time
+                        = Carbon::parse($request->journal['followup']['followupAppointmentEndTime']);
+                }
+            }
         }
 
+                DB::beginTransaction();
+                $journal->save();
+                $task->save();
+                if(!is_null($task->journal)){
+                    $journal->prev_journal()->save($task->journal);
+                    $task->journal->next_journal()->save($journal);
+                }
+                if(!is_null($followup)){
+                    $followup->save();
+                    $followup->journal()->save($journal);
+                }
+            DB::commit();
+
         return response()->json([
-            'result'=>'Error',
-            'message'=>'Task not found.'
-        ]);
-
+            'result'=>'Saved',
+            'message'=>'Task Completed.'
+        ],200);
     }
+    public function cancelTask(Request $request){
+        $task= Task::findOrFail($request->journal['originId']);
+        $rules=[
+            'journalTitle'=>'required|string',
+            'journalDescription'=>'required|string',
+            'journalLogDate'=>'required|date',
+        ];
 
+        if(isset($request->journal['followup']['type'])) {
+            if ($request->journal['followup']['type'] == 'task') {
+                $rules = array_merge($rules, [
+                    'followup.followupTaskTitle' => 'required|string',
+                    'followup.followupTaskDescription' => 'required|string',
+                    'followup.followupTaskDueDate' => 'required|string',
+                    'followup.followupTaskPriority' => 'required|string',
+                ]);
+            } else {
+                if ($request->journal['followup']['type'] == 'appointment') {
+                    $rules = array_merge($rules, [
+                        'followup.followupAppointmentTitle' => 'required|string',
+                        'followup.followupAppointmentDescription' => 'required|string',
+                        'followup.followupAppointmentStartTime' => 'required|string',
+                        'followup.followupAppointmentEndTime' => 'required|string',
+                    ]);
+                }
+            }
+        }
+        $journal = $this->validate($request->journal, $rules);
+
+        $journal = new Journal();
+        $journal->customer_id = $task->customer->id;
+
+        $journal->title = $request->journal['journalTitle'];
+        $journal->description = $request->journal['journalDescription'];
+        $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
+
+        $followup=null;
+
+        if(isset($request->journal['followup']['type'])) {
+
+            if ($request->journal['followup']['type'] == 'task') {
+                $followup = new Task();
+                $followup->title
+                    = $request->journal['followup']['followupTaskTitle'];
+                $followup->customer_id = $request->journal['journalCustomerId'];
+                $followup->description
+                    = $request->journal['followup']['followupTaskDescription'];
+                $followup->due_date
+                    = Carbon::parse($request->journal['followup']['followupTaskDueDate']);
+                $followup->status = "Due";
+                $followup->priority
+                    = $request->journal['followup']['followupTaskPriority'];
+            } else {
+                if ($request->journal['followup']['type'] == 'appointment') {
+                    $followup = new Appointment();
+                    $followup->title
+                        = $request->journal['followup']['followupAppointmentTitle'];
+                    $followup->customer_id
+                        = $request->journal['journalCustomerId'];
+                    $followup->description
+                        = $request->journal['followup']['followupAppointmentDescription'];
+                    $followup->status = "Due";
+                    $followup->start_time
+                        = Carbon::parse($request->journal['followup']['followupAppointmentStartTime']);
+                    $followup->end_time
+                        = Carbon::parse($request->journal['followup']['followupAppointmentEndTime']);
+                }
+            }
+        }
+
+                DB::beginTransaction();
+                $journal->save();
+
+                if(!is_null($followup)){
+                    $followup->save();
+                    $followup->journals()->save($journal);
+                    if(!is_null($task->journal)){
+                        $journal->origin_obj->attach($task->journal);
+                    }
+                }
+                $task->save();
+            DB::commit();
+
+        return response()->json([
+            'result'=>'Saved',
+            'message'=>'Task Cancelled.'
+        ],200);
+    }
 
 }

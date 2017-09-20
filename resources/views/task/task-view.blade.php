@@ -29,4 +29,7 @@
     </table>
 
     <button class="btn btn-success" onClick="editTaskWithClosingView()">Edit Task</button>
+    <button class="btn btn-success" onClick="completeTaskWithClosingView()">Complete Task</button>
+    <button class="btn btn-success" onClick="editTaskWithClosingView()">Cancel Task</button>
+
 @endsection

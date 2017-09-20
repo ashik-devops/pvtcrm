@@ -44,15 +44,6 @@
         @endif
     </div>
 
-
-    <div class="form-group {{ $errors->has('status') ? ' has-error' : '' }}" id="status">
-        <label class="sr-only">Status</label>
-        <select name="status" id="taskStatus" class="form-control">
-            <option>Due</option>
-            <option>Done</option>
-            <option>Cancelled</option>
-        </select>
-    </div>
     <div class="form-group {{ $errors->has('priority') ? ' has-error' : '' }}" id="priority">
         <label class="sr-only">Priority</label>
         <select name="priority" id="taskPriority" class="form-control">

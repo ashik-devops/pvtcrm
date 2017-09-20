@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\LogsActivity;
@@ -23,8 +24,8 @@ class Appointment extends Model
     public function customer(){
         return $this->belongsTo('App\Customer');
     }
-    public function journals(){
-        return $this->morphMany('App\Journal','related_obj');
+    public function journal():MorphOne{
+        return $this->morphOne('App\Journal','journalable');
     }
     public function getLink(): string {
         return '#';

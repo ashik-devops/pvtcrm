@@ -18,8 +18,10 @@ class CreateJournalsTable extends Migration
             $table->string('title');
             $table->text('description');
             $table->integer('customer_id')->unsigned();
-            $table->integer('related_obj_id')->unsigned()->nullable();
-            $table->string('related_obj_type')->nullable();
+            $table->integer('prev_journal_id')->unsigned()->nullable(); //origin; prev node
+            $table->integer('next_journal_id')->unsigned()->nullable(); //followup; next node
+            $table->integer('journalable_id')->unsigned()->nullable(); //Prev node
+            $table->string('journalable_type')->nullable();
             $table->dateTime('log_date');
             $table->softDeletes();
             $table->timestamps();

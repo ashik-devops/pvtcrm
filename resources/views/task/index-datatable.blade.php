@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @include('task.create-form')
 @include('task.task-view')
+@include('journal.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -82,10 +83,23 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-task-label"> Task View</h4>
+                    <h4 class="modal-title" id="modal-view-task-label"> Task View</h4>
                 </div>
                 <div class="modal-body">
                     @yield('task-view')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal-complete" role="dialog" aria-labelledby="task-modal-complete">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-complete-task"> Complete Task</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
                 </div>
             </div>
         </div>
@@ -103,6 +117,7 @@
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+    @yield('journal-create-form-script')
     <script type="text/javascript">
         var inputMap={
             taskId : 'task_id',
@@ -137,7 +152,7 @@
                 ]
             });
 
-           var customer_select= jQuery("#taskCustomerId").select2({
+           var task_customer_select= jQuery("#taskCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -169,7 +184,7 @@
             form_el.reset();
             task_date=moment();
             $('#'+inputMap.taskId).val('');
-            customer_select.val('').trigger('change');
+            task_customer_select.val('').trigger('change');
 
         }
         jQuery('#new-task-btn').click(function () {
@@ -308,6 +323,14 @@
             $('#task-modal').modal('show');
         }
 
+        function completeTask(id){
+            $('#journal_modal_button').val('Complete Task');
+            $('#origin_id').val(id);
+            $('#journal-customer-id').remove();
+
+            $('#task-modal-complete').modal('show');
+        }
+
 
         function deleteTask(id){
             var _token = $('input[name="_token"]').val();
@@ -442,5 +465,86 @@
             editTask(id);
 
         }
+
+        function completeTaskWithClosingView(){
+            var id = $('#taskIdForView').val();
+
+            $('#task-modal-view').modal('hide');
+
+
+            completeTask(id);
+
+        }
+
+
+        $('#journalForm').on('submit',function(e) {
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+
+            var journal = {
+                originId : $('#'+journalInputMap.originId).val(),
+                journalTitle : $('#'+journalInputMap.journalTitle).val(),
+                journalDescription : $('#'+journalInputMap.journalDescription).val(),
+                journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
+            };
+            if($('input[name=followUpType]:checked').val() === 'appointment'){
+                journal.followup = {
+                    type : 'appointment',
+                    followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
+                    appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
+                    followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                    followupAppointmentStartTime : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                    followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
+                };
+            }
+
+            else if($('input[name=followUpType]:checked').val() === 'task'){
+                journal.followup = {
+                    type : 'task',
+                    followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
+                    followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
+                    followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
+                    followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
+                };
+            }
+
+            var data = {
+                _token : _token,
+                journal: journal,
+            };
+
+
+
+                var request = jQuery.ajax({
+                    url: "{{ route('complete.task') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+
+                    if(response.result == 'Saved'){
+                        reset_journal_form($('#journalForm')[0]);
+                        $('#task-modal-complete').modal('hide');
+                        get_all_task_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+
+
+        });
+
     </script>
+
+
+
+
 @endsection
