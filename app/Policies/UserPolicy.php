@@ -52,6 +52,7 @@ class UserPolicy
      */
     public function create(User $user)
     {
+
         if($this->checkAdmin($user)){
             return true;
         }

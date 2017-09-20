@@ -23,7 +23,7 @@ class TaskPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->policies()->whereIn('scope', ['customer','*'])
+        return !is_null($user->role->policies()->whereIn('scope', ['customer','*'])
             ->whereIn('action',['list','*'])->first());
     }
 
@@ -92,7 +92,7 @@ class TaskPolicy
             return true;
         }
         return $user->id === $task->customer->user->id && !is_null($user->role->policies()
-                ->whereIn('scope',  ['customer',*])
+                ->whereIn('scope',  ['customer','*'])
                 ->whereIn('action',['delete','*'])->first()->id);
     }
 

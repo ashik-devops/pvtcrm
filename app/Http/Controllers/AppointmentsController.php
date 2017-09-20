@@ -54,11 +54,12 @@ class AppointmentsController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $this->authorize('index', Appointment::class);
         return view('appointment.index-datatable');
     }
 
     public function getAppointmentsAjax(){
-
+        $this->authorize('view',Appointment::class);
 
         return DataTables::of(Index_appointment::all())
             ->addColumn('action',
@@ -105,7 +106,7 @@ class AppointmentsController extends Controller
     }
 
     public function getAppointmentsAjaxPending(){
-
+        $this->authorize('index',Appointment::class);
 
         return DataTables::of(Index_appointment::where('end_time', '<', Carbon::tomorrow())->where('status', '=','Due'))
             ->addColumn('action',
@@ -153,6 +154,7 @@ class AppointmentsController extends Controller
 
 
     public function createAppointment(Request $request){
+        $this->authorize('create',$request);
         $this->validator($request->appointment)->validate();
 
         $result=[
@@ -191,7 +193,7 @@ class AppointmentsController extends Controller
     }
 
     public function editAppointment(Request $request){
-
+        $this->authorize('update',$request);
         $appointment = Appointment::with('customer', 'customer.account')->findOrFail($request->id);
 
 
@@ -201,7 +203,7 @@ class AppointmentsController extends Controller
     }
 
    public function updateAppointment(Request $request){
-
+       $this->authorize('update',$request);
        $this->validator($request->appointment, true)->validate();
 
         $result=[
@@ -234,7 +236,7 @@ class AppointmentsController extends Controller
 
     public function deleteAppointment(Request $request){
         $appointment = Appointment::findOrFail($request->id);
-
+        $this->authorize('delete',$request);
         if(!is_null($appointment)){
 
             $appointment->delete();

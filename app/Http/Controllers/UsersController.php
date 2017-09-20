@@ -60,6 +60,7 @@ class UsersController extends Controller
     }
 
     public function listAll(Request $request){
+        $this->authorize('index',$request);
         $users = new User();
         if(!empty($request->q)){
 
@@ -74,6 +75,7 @@ class UsersController extends Controller
     }
 
     public function listAllTeamManagers(Request $request){
+        $this->authorize('index',$request);
         $users = new User();
         $users->role->policies()->whereIn('scope',['*', 'team'])->where('action','*');
         if(!empty($request->q)){
@@ -89,6 +91,7 @@ class UsersController extends Controller
     }
 
     public function listAllTeamMembers(Request $request){
+        $this->authorize('index',$request);
         $users = new User();
         $users->role->policies()->whereIn('scope',['*', 'team'])->whereNotIn('action','*');
         if(!empty($request->q)){
@@ -104,6 +107,7 @@ class UsersController extends Controller
     }
 
     public function createUser(Request $request){
+        $this->authorize('create',$request);
         $user = new User();
         $user->name = $request->user['userName'];
         $user->email = $request->user['userEmail'];

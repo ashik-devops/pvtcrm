@@ -52,10 +52,12 @@ class TasksController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $this->authorize('index', Task::class);
         return view('task.index-datatable');
     }
 
     public function getTasksAjax(){
+        $this->authorize('index', Task::class);
         return DataTables::of(Index_tasks::all())
             ->addColumn('action',
                 function ($task){
@@ -92,6 +94,7 @@ class TasksController extends Controller
     }
 
     public function getTasksAjaxDue(){
+        $this->authorize('index', Task::class);
 
         return DataTables::of(Index_tasks::where('status','=','Due')->where('due_date', '<', Carbon::tomorrow())->orderBy('due_date','desc'))
 
@@ -130,6 +133,7 @@ class TasksController extends Controller
     }
 
     public function createTask( Request $request){
+        $this->authorize('create', Task::class);
         $this->validator($request->task)->validate();
         $task = new Task();
         $task->title = $request->task['taskTitle'];
@@ -155,6 +159,7 @@ class TasksController extends Controller
 
     public function editTask(Request $request){
 
+        $this->authorize('view',$request);
 
         $task = Task::with('customer')->findOrFail($request->id);
 
@@ -167,6 +172,7 @@ class TasksController extends Controller
     public function updateTask(Request $request){
         $this->validator($request->task, true)->validate();
         $task = Task::findOrFail($request->task['taskId']);
+        $this->authorize('update',$customer);
         $task->customer_id = $request->task['taskCustomerId'];
         $task->title = $request->task['taskTitle'];
         $task->description = $request->task['taskDescription'];
@@ -189,7 +195,7 @@ class TasksController extends Controller
 
     public function deleteTask(Request $request){
         $task = Task::findOrFail($request->id);
-
+        $this->authorize('delete',$request);
         if(!is_null($task)){
 
             $task->delete();
@@ -209,7 +215,7 @@ class TasksController extends Controller
 
     public function cancelTask(Request $request){
         $task = Task::findOrFail($request->id);
-
+        $this->authorize('update',$request);
         if(!is_null($task)){
 
             if($task->status == 'Cancelled'){

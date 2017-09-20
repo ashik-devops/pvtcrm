@@ -78,17 +78,20 @@ class CustomersController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(){
+        $this->authorize('index', Customer::class);
         return view('customer.index-datatable');
     }
 
     public function viewCustomer(Customer $customer){
+        $this->authorize('view', $customer);
+
         return view('customer.view')->with([
             'customer'=>$customer
         ]);
     }
 
     public function getCustomersAjax(){
-
+        $this->authorize('index', Customer::class);
         return DataTables::of(Index_customer::get())
             ->addColumn('action',
                 function ($customer){
@@ -127,6 +130,7 @@ class CustomersController extends Controller
 
 
     public function createCustomer( Request $request){
+            $this->authorize('create', Customer::class);
             $this->validator(['customer'=>$request->customer, 'account'=>$request->account])->validate();
 
             $customer = new Customer();
@@ -177,9 +181,9 @@ class CustomersController extends Controller
     }
 
     public function getCustomer(Request $request){
-
         $customer = Customer::findOrFail($request->id);
-        $this->authorize('view',$customer);
+        $this->authorize('view', $customer);
+
         $user = User::findOrFail($customer->user_id);
 
 
@@ -274,6 +278,8 @@ class CustomersController extends Controller
 
     public function bulkDeleteCustomer(Request $request){
 
+//        $this->authorize('delete', Customer::class);
+
         if(Customer::whereIn('id',explode(',', $request->ids))->delete()){
             return response()->json([
                 'result'=>'Success',
@@ -289,6 +295,9 @@ class CustomersController extends Controller
     }
 
     public function getCustomerOptions(Request $request){
+
+        $this->authorize('index', Customer::class);
+
         $customer = new Index_customer;
         if($request->q){
             $customer = $customer->where('name', 'LIKE', '%'.$request->q.'%')
@@ -308,21 +317,7 @@ class CustomersController extends Controller
         ]);
     }
 
-    public function getCustomerAccountWise(Request $request){
-         if($request->accountId){
-             return response()->json([
-                 'customers' =>Customer::where('account_id',$request->accountId)->get()->map(
-                     function($customer){
-                         $name=implode(', ', [$customer->last_name, $customer->first_name]);
 
-
-                         return ['id'=>$customer->id,'text'=>$name];
-                     })
-             ]);
-         }
-
-
-    }
 
     /**
      * Sends json data to datatable of all tasks of account falls under current user scope.
@@ -331,6 +326,7 @@ class CustomersController extends Controller
      */
 
     public function     getCustomerTasksAjax(Customer $customer){
+        $this->authorize('view',$customer);
         return DataTables::of(Index_tasks::where('customer_id', $customer->id))
             ->addColumn('customer_name', function ($task){
                 return '<a href="#">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
@@ -352,6 +348,7 @@ class CustomersController extends Controller
      */
 
     public function getCustomerAppointmentsAjax(Customer $customer){
+        $this->authorize('view',$customer);
         return DataTables::of(Index_appointment::where('customer_id', $customer->id))
             ->addColumn('action',
                 function ($appointment){

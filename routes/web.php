@@ -30,7 +30,6 @@ Route::post('/ajax/customer/update', 'CustomersController@updateCustomer')->name
 Route::post('/ajax/customer/delete', 'CustomersController@deleteCustomer')->name('delete.customer.data');
 Route::post('/ajax/customer/bulk/delete', 'CustomersController@bulkDeleteCustomer')->name('bulk.delete.customer.data');
 Route::get('/ajax/get-customer-options', 'CustomersController@getCustomerOptions')->name('get-customer-options')->middleware('can:index,App\Customer');
-Route::get('/ajax/get-customer-account-wise', 'CustomersController@getCustomerAccountWise')->name('get-customer-account-wise');//->middleware('can:index,App\Customer');
 Route::get('/ajax/customer/tasks/{customer}', 'CustomersController@getCustomerTasksAjax')->name('customer-tasks-list');//->middleware('can:list,App\Customer');
 Route::get('/ajax/customer/appointments/{customer}', 'CustomersController@getCustomerAppointmentsAjax')->name('customer-appointments-list');//->middleware('can:list,App\Customer');
 Route::get('/customer/view/{customer}', 'CustomersController@viewCustomer')->name('view-customer');//->middleware('can:list,App\Customer');
@@ -82,6 +81,7 @@ Route::post('/accounts/create', 'AccountsController@createAccount')->name('creat
 Route::get('/accounts/view/{account}', 'AccountsController@viewAccount')->name('view-account');//->middleware('can:list,App\Customer');
 Route::get('/accounts/edit/', 'AccountsController@editAccount')->name('edit.modal.data');//->middleware('can:list,App\Customer');
 Route::post('/accounts/update', 'AccountsController@updateAccount')->name('update.account');//->middleware('can:list,App\Customer');
+Route::get('/ajax/get-customer-account-wise', 'AccountsController@getCustomerAccountWise')->name('get-customer-account-wise');//->middleware('can:index,App\Customer');
 
 Route::post('/accounts/delete', 'AccountsController@deleteAccount')->name('delete.account');//->middleware('can:list,App\Customer');
 Route::get('/ajax/accounts/data', 'AccountsController@getAccountsAjax')->name('account-data');//->middleware('can:list,App\Customer');
