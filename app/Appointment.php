@@ -18,7 +18,7 @@ class Appointment extends Model
     public $obj_alias = 'Appointment';
 
     public  $with = ['customer'];
-    protected $dates = ['deleted_at'];
+    protected $dates = ['deleted_at', 'created_at', 'updated_at', 'start_time', 'end_time'];
     protected $fillable = ['title','customer_id','description','status','start_time','end_time'];
 
     public function customer(){
@@ -34,5 +34,14 @@ class Appointment extends Model
         if($this->id > 0){
             return $this->title;
         }
+    }
+
+    protected function asDateTime($value)
+    {
+        $defaultZone = 'America/New_York';
+//        if(Auth::user()){
+//            Auth::user()
+//        }
+        return parent::asDateTime($value)->timezone($defaultZone);
     }
 }
