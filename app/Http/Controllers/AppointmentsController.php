@@ -67,7 +67,7 @@ class AppointmentsController extends Controller
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a onClick="viewAppointment('.$appointment->id.')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        <a class="btn btn-xs btn-primary"  onClick="viewAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
 
 
@@ -154,7 +154,7 @@ class AppointmentsController extends Controller
 
 
     public function createAppointment(Request $request){
-        $this->authorize('create',$request);
+        $this->authorize('create',Appointment::class);
         $this->validator($request->appointment)->validate();
 
         $result=[
@@ -193,8 +193,8 @@ class AppointmentsController extends Controller
     }
 
     public function editAppointment(Request $request){
-        $this->authorize('update',$request);
         $appointment = Appointment::with('customer', 'customer.account')->findOrFail($request->id);
+        $this->authorize('update',$appointment);
 
 
         return response()->json([
@@ -203,7 +203,7 @@ class AppointmentsController extends Controller
     }
 
    public function updateAppointment(Request $request){
-       $this->authorize('update',$request);
+       $this->authorize('update',Appointment::class);
        $this->validator($request->appointment, true)->validate();
 
         $result=[

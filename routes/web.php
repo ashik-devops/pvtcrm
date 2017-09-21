@@ -56,6 +56,7 @@ Route::post('/appointment/create', 'AppointmentsController@createAppointment')->
 Route::get('/appointment/edit', 'AppointmentsController@editAppointment')->name('edit.appointment');
 Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->name('update.appointment');
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
+Route::post('/appointment/close', 'AppointmentsController@closeAppointment')->name('close.appointment');
 
 Route::get('/sales-teams', 'SalesteamsController@index')->name('sales-team-index');
 Route::get('/sales-teams-options', 'UsersController@listAll')->name('get-sales-team-options');
