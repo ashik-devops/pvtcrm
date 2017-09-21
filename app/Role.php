@@ -11,7 +11,7 @@ class Role extends Model
 
     public $obj_alias = 'Role';
 
-    public function profile(){
+    public function users(){
         return $this->hasMany('App\User');
     }
 

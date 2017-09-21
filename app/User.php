@@ -73,6 +73,10 @@ class User extends Authenticatable
         return "";
     }
 
+    public function timezone():Timezone{
+        return $this->profile->timezone;
+    }
+
     public function getSubordinates(){
         return [];
     }

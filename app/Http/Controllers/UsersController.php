@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Policies\UserPolicy;
 use App\Role;
+use App\Timezone;
 use App\User_profile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -113,8 +114,6 @@ class UsersController extends Controller
         $user->email = $request->user['userEmail'];
         $user->password = $request->user['userPassword'];
         $user->status = $request->user['userStatus'];
-        $user->role_id = $request->user['userRole'];
-
         $user_profile = new User_profile();
         $user_profile->profile_pic = null;
         $user_profile->initial = $request->user['userInitial'];
@@ -131,6 +130,8 @@ class UsersController extends Controller
         DB::beginTransaction();
         $user->save();
         $user->profile()->save($user_profile);
+        $user->role()->save(Role::find($request->user['role']));
+        $user_profile->timezone()->save(Role::find($request->user['timezone']));
         DB::commit();
         return response()->json(['result' => "Saved", 'message' => 'User is Saved.'], 200);
     }
@@ -168,7 +169,6 @@ class UsersController extends Controller
         $user->name = $data['name'];
         $user->email = $data['email'];
         $user->status=$data['status'];
-        $user->role_id=$data['role'];
         $user->profile->initial=$data['initial'];
         $user->profile->primary_phone_no=$data['primary_phone_no'];
         $user->profile->secondary_phone_no=$data['secondary_phone_no'];
@@ -178,19 +178,23 @@ class UsersController extends Controller
         $user->profile->state=$data['state'];
         $user->profile->country=$data['country'];
         $user->profile->zip=$data['zip'];
-
+        $timezone=Timezone::find($data['timezone']);
         /*handle image upload*/
         if ($request->hasFile('pro_pic') && $request->file('pro_pic')->isValid()) {
             $user->profile->profile_pic = $request->file('pro_pic')->storePublicly('assets/images/profiles', ['disk'=>'public']);
-
         }
 
         /* Handle password reset*/
         if($data['password']!='unchanged'){
             $user->password = bcrypt($data['password']);
         }
+        DB::beginTransaction();
+
         $user->save();
         $user->profile->save();
+        Role::find($data['role'])->users()->save($user);
+        $timezone->profiles()->save($user->profile);
+        DB::commit();
         return back();
     }
 

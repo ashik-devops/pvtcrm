@@ -100,8 +100,8 @@
                                                     <label for="status" class="col-md-2 col-sm-3 col-xs-12 control-label">Status</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
                                                         <select name="status" class="form-control" id="status" required value="{{old('status',  $user->status)}}">
-                                                            <option @if(old('role', $user->status) == 1) selected @endif  value="1">Active</option>
-                                                            <option  @if(old('role', $user->role->id) == 0) selected @endif  value="0">Inactive</option>
+                                                            <option @if(old('status', $user->status) == 1) selected @endif  value="1">Active</option>
+                                                            <option  @if(old('status', $user->role->id) == 0) selected @endif  value="0">Inactive</option>
                                                         </select>
 
                                                         @if ($errors->has('status'))
@@ -267,16 +267,19 @@
 
                                             <fieldset class="fieldset">
                                                 <h3 class="fieldset-title">Timezone</h3>
-                                                <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }}">
+                                                <div class="form-group {{ $errors->has('timezone') ? ' has-error' : '' }}">
                                                     <label class="col-md-2  col-sm-3 col-xs-12 control-label">Timezone</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <select name="role" id="role" class="form-control" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">
-                                                            @foreach($roles as $role)
-                                                                <option @if(old('role', $user->role->id) == $role->id) selected @endif value="{{$role->id}}">{{$role->name}}</option>
-                                                            @endforeach
+                                                        <select required name="timezone" id="timezone" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">
+                                                            @if(old('timezone', $user->timezone()->id) > 0 )
+                                                            <option selected value="{{old('timezone', $user->timezone()->id)}}">{{\App\Timezone::find(old('timezone', $user->timezone()->id))->name}}</option>
+                                                            @else
+                                                                <option selected value="161">Europe/London</option>
+                                                            @endif
+
                                                         </select>
 
-                                                        @if ($errors->has('role'))
+                                                        @if ($errors->has('timezone'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('role') }}</strong>
                                     </span>
@@ -322,6 +325,32 @@
         jQuery('#role').select2({
             placeholder: "Select a Role",
         });
+
+       var timezone = jQuery("#timezone").select2({
+            allowClear:true,
+            placeholder: "Select a Role",
+            ajax: {
+                url: "{{route('timezones')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.timezones
+                    }
+                },
+
+                cache: true
+            }
+        });
+
+
     </script>
 
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
