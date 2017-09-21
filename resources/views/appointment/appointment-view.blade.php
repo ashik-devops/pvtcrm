@@ -29,8 +29,8 @@
 
     </table>
 
-    <button class="btn btn-success" onClick="editAppointmentWithClosingView()">Edit Task</button>
-    <button class="btn btn-success" onClick="completeAppointmentWithClosingView()">Complete Task</button>
-    <button class="btn btn-success" onClick="editAppointmentWithClosingView()">Cancel Task</button>
+    <button class="btn btn-success" onClick="editAppointmentWithClosingView()">Edit Appointment</button>
+    <button class="btn btn-success" onClick="completeAppointmentWithClosingView()">Complete Appointment</button>
+    <button class="btn btn-success" onClick="editAppointmentWithClosingView()">Cancel Appointment</button>
 
 @endsection

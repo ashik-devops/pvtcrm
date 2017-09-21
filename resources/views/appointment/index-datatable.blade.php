@@ -525,7 +525,7 @@
 
 
         function editAppointmentWithClosingView(){
-            var id = $('#appointmentIdForView').val();
+          var id = $('#appointmentIdForView').val();
 
             $('#appointment-modal-view').modal('hide');
 
