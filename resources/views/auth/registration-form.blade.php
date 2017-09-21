@@ -30,7 +30,7 @@
         </div>
         <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }}">
             <label class="sr-only">Role</label>
-            <select name="role"   id="userRole"  class="form-control" data-parsley-trigger="change" required value="{{ old('role') }}" data-parsley-required-message="You must select a role.">
+            <select name="role" style="width:100%"  id="userRole"  class="form-control" data-parsley-trigger="change" required value="{{ old('role') }}" data-parsley-required-message="You must select a role.">
                 @foreach($roles as $role)
                     <option value="{{$role->id}}">{{$role->name}}</option>
                 @endforeach
@@ -154,8 +154,8 @@
         <div class="form-group"{{ $errors->has('status') ? ' has-error' : '' }}>
             <label for="status" class="sr-only">Status</label>
 
-            <select name="status" class="form-control" id="userStatus" required value="{{old('status')}}">
-                <option value="1">Active</option>
+            <select name="status" class="form-control" id="userStatus" required value="{{old('status')}}" style="width:100%" >
+                <option value="1" selected>Active</option>
                 <option value="0">Inactive</option>
             </select>
 
@@ -166,9 +166,54 @@
             @endif
         </div>
 
+        <div class="form-group"{{ $errors->has('timezone') ? ' has-error' : '' }}>
+            <label for="timezone" class="sr-only">Timezone</label>
+
+            <select name="timezone" class="form-control" id="userTimezone" required value="{{old('timezone')}}" style="width:100%">
+                <option value="{{old('timezone', 161)}}">{{\App\Timezone::find(old('timezone', '161'))->name}}</option>
+            </select>
+
+            @if ($errors->has('timezone'))
+                <span class="help-block">
+                    <strong>{{ $errors->first('timezone') }}</strong>
+                </span>
+            @endif
+        </div>
+
 
         <button type="submit" class="btn btn-success margin-top-md center-block">Add User</button>
 
     </form>
+@endsection
+
+@section('registration-form-script')
+    <script type="text/javascript">
+        jQuery("#userStatus").select2();
+        jQuery("#userRole").select2({
+            placeholder: "Select Role"
+        });
+        jQuery("#userTimezone").select2({
+            ajax: {
+                url: "{{route('timezones')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.timezones
+                    }
+                },
+
+                cache: true
+            }
+        });
+
+    </script>
 @endsection
 

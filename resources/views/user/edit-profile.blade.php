@@ -327,8 +327,6 @@
         });
 
        var timezone = jQuery("#timezone").select2({
-            allowClear:true,
-            placeholder: "Select a Role",
             ajax: {
                 url: "{{route('timezones')}}",
                 dataType: 'json',

@@ -90,4 +90,6 @@
     </div><!--/modal-->
     @endif
 @endsection
-
+@section('after-footer-script')
+    @yield('registration-form-script')
+@endsection
