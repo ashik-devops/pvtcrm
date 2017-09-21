@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @include('appointment.create-form')
 @include('appointment.appointment-view')
+@include('journal.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -92,7 +93,21 @@
                 </div>
             </div>
         </div>
-    </div><!--/modal-->
+    </div>
+    <div class="modal customerModal" id="appointment-modal-complete" role="dialog" aria-labelledby="appointment-modal-complete">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-complete-appointment-label"> Complete Appointment</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/modal-->
 @endsection
 
 
@@ -106,6 +121,7 @@
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+    @yield('journal-create-form-script')
     <script type="text/javascript">
         var min_date = moment();
         var max_date = moment();
