@@ -16,4 +16,11 @@ class Timezone extends Model
     public function profiles():HasMany{
         return $this->hasMany('App\User_profile');
     }
+
+    public function setGMTOffset() {
+        $zone= new \DateTimeZone($this->name);
+        $gmt= new \DateTime('now', new \DateTimeZone('Europe/London'));
+        $this->gmt_offset =  $zone->getOffset($gmt)/3600;
+        return $this;
+    }
 }

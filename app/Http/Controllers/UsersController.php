@@ -25,7 +25,6 @@ class UsersController extends Controller
      */
     protected function validator(array $data, User $user = null)
     {
-
         return Validator::make($data, [
             'name' => 'required|string|max:255',
             'pro_pic'=>'image',
@@ -40,7 +39,8 @@ class UsersController extends Controller
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
-            'role'=>'required|integer',
+            'role'=>'required|integer|exists:roles,id',
+            'timezone'=>'required|integer|exists:timezones,id',
             'status'=>'required|integer|max:1'
         ]);
     }
@@ -61,7 +61,7 @@ class UsersController extends Controller
     }
 
     public function listAll(Request $request){
-        $this->authorize('index',$request);
+        $this->authorize('index',User::class);
         $users = new User();
         if(!empty($request->q)){
 
@@ -76,7 +76,7 @@ class UsersController extends Controller
     }
 
     public function listAllTeamManagers(Request $request){
-        $this->authorize('index',$request);
+        $this->authorize('index',User::class);
         $users = new User();
         $users->role->policies()->whereIn('scope',['*', 'team'])->where('action','*');
         if(!empty($request->q)){
@@ -92,7 +92,7 @@ class UsersController extends Controller
     }
 
     public function listAllTeamMembers(Request $request){
-        $this->authorize('index',$request);
+        $this->authorize('index',User::class);
         $users = new User();
         $users->role->policies()->whereIn('scope',['*', 'team'])->whereNotIn('action','*');
         if(!empty($request->q)){
@@ -107,34 +107,6 @@ class UsersController extends Controller
         ],200);
     }
 
-    public function createUser(Request $request){
-        $this->authorize('create',$request);
-        $user = new User();
-        $user->name = $request->user['userName'];
-        $user->email = $request->user['userEmail'];
-        $user->password = $request->user['userPassword'];
-        $user->status = $request->user['userStatus'];
-        $user_profile = new User_profile();
-        $user_profile->profile_pic = null;
-        $user_profile->initial = $request->user['userInitial'];
-        $user_profile->primary_phone_no = $request->user['userPrimaryPhone'];
-        $user_profile->secondary_phone_no = $request->user['userSecondaryPhone'];
-        $user_profile->address_line_1 = $request->user['userStreetAddress_1'];
-        $user_profile->address_line_2 = $request->user['userStreetAddress_2'];
-        $user_profile->city = $request->user['userCity'];
-        $user_profile->state = $request->user['userState'];
-        $user_profile->country = $request->user['userCountry'];
-        $user_profile->zip = $request->user['userZip'];
-
-
-        DB::beginTransaction();
-        $user->save();
-        $user->profile()->save($user_profile);
-        $user->role()->save(Role::find($request->user['role']));
-        $user_profile->timezone()->save(Role::find($request->user['timezone']));
-        DB::commit();
-        return response()->json(['result' => "Saved", 'message' => 'User is Saved.'], 200);
-    }
     /**
      * Shows edit form for requested user.
      *

@@ -1,7 +1,7 @@
 @include('layouts.header')
 @include('layouts.main-navigation')
-@include('layouts.copyright')
 @include('layouts.side-panel')
+@include('layouts.footer')
 
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}">
@@ -47,9 +47,8 @@
 
         @yield('content')
 
-        <footer>
-            @yield('copyright')
-        </footer>
+
+        @yield('footer')
         @yield('modal')
         @yield('activity-panel')
 

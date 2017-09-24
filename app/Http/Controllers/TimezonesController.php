@@ -14,7 +14,17 @@ class TimezonesController extends Controller
             $zones=$zones->where('name', 'LIKE', "%$request->q%");
         }
         return response()->json([
-            'timezones' =>$zones->get()
+            'timezones' =>$zones->get()->map(function($zone){
+                if($zone->gmt_offset >= 0){
+                    $name = "(UTC +"+number_format($zone->gmt_offset, 2)+" - $zone->name";
+                }
+                else {
+                    $name = "(UTC -"+number_format($zone->gmt_offset, 2)+" - $zone->name";
+
+                }
+
+                return ['id'=>$zone->id, 'name'=> $name];
+            })
         ], 200);
     }
 }

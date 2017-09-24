@@ -449,24 +449,6 @@
                         $('#AccountDataAtCustomerForm').hide();
                     }
 
-
-
-
-
-                    /* $('#account_id').val(data.account.id);
-                     $('#accountName').val(data.account.name);
-                     $('#accountEmail').val(data.account.email);
-                     $('#accountPhone').val(data.account.phone_no);
-                     $('#accountWebsite').val(data.account.website);
-
-                     if(data.account_address.length > 0){
-                     $('#streetAddress_1').val(data.account_address[0].street_address_1);
-                     $('#streetAddress_2').val(data.account_address[0].street_address_2);
-                     $('#city_id').val(data.account_address[0].city);
-                     $('#state_id').val(data.account_address[0].state);
-                     $('#country_id').val(data.account_address[0].country);
-                     $('#zip_id').val(data.account_address[0].zip);
-                     } */
                 }
             });
 

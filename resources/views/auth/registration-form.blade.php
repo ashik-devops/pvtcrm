@@ -1,5 +1,5 @@
 @section('registration-form')
-    <form method="post" role="form" action="{{ route('register') }}" data-parsley-validate id="userForm">
+    <form method="post" role="form" id="registration-form" action="{{ route('register') }}" data-parsley-validate id="userForm">
         {{ csrf_field() }}
         <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}" >
             <label class="sr-only">Name</label>
@@ -53,7 +53,7 @@
         </div>
         <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
             <label class="sr-only">Confirm Password</label>
-            <input type="password" name="password_confirmation" minlength="6"  class="form-control" placeholder="Enter Password Again" required data-parsley-trigger="change focusout" data-parsley-equalto="#userPassword" data-parsley-equalto-message="Passwords does not match" data-parsley-required-message="You must enter password again.">
+            <input type="password" name="password_confirmation" minlength="6" id="userPasswordConfirmation"  class="form-control" placeholder="Enter Password Again" required data-parsley-trigger="change focusout" data-parsley-equalto="#userPassword" data-parsley-equalto-message="Passwords does not match" data-parsley-required-message="You must enter password again.">
             @if ($errors->has('password_confirmation'))
                 <span class="help-block">
                     <strong>{{ $errors->first('password_confirmation') }}</strong>
@@ -187,6 +187,7 @@
 @endsection
 
 @section('registration-form-script')
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
         jQuery("#userStatus").select2();
         jQuery("#userRole").select2({
@@ -213,6 +214,26 @@
                 cache: true
             }
         });
+
+        var inputMap = {
+            'name': 'userName',
+            'email': 'userEmail',
+            'initial': 'userInitial',
+            'role': 'userRole',
+            'password': 'userPassword',
+            'password_confirmation': 'userPasswordConfirmation',
+            'primary_phone_no': 'userPrimaryPhone',
+            'secondary_phone_no': 'userSecondaryPhone',
+            'street_address_1': 'userStreetAddress_1',
+            'street_address_2': 'userStreetAddress_2',
+            'state': 'userState',
+            'city': 'userCity',
+            'country': 'userCountry',
+            'zip': 'userZip',
+            'status': 'userStatus',
+            'timezone': 'userTimezone',
+        }
+
 
     </script>
 @endsection

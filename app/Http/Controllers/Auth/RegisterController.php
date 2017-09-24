@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Timezone;
 use App\User;
 use App\Role;
 use App\Http\Controllers\Controller;
@@ -10,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Auth\Events\Registered;
-
+use DB;
 
 class RegisterController extends Controller
 {
@@ -60,7 +61,9 @@ class RegisterController extends Controller
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
-            'role'=>'required|integer'
+            'role'=>'required|integer|exists:roles,id',
+            'timezone'=>'required|integer|exists:timezones,id',
+
         ]);
     }
 
@@ -76,7 +79,6 @@ class RegisterController extends Controller
 
         event(new Registered($user = $this->create($request->all())));
 
-
         return $this->registered($request, $user)
             ?: redirect($this->redirectPath());
     }
@@ -91,29 +93,36 @@ class RegisterController extends Controller
     {
         /*Create the user*/
 
-        $user = new user();
+        $this->authorize('create',User::class);
+//        $data = $data['userData'];
+        $user = new User();
         $user->name = $data['name'];
         $user->email = $data['email'];
-        $user->password = bcrypt($data['password']);
-        $user->status=1;
-        $user->role_id=$data['role'];
+        $user->password = $data['password'];
+        $user->status = $data['status'];
+        $user_profile = new User_profile();
+        $user_profile->profile_pic = null;
+        $user_profile->initial = $data['initial'];
+        $user_profile->primary_phone_no = $data['primary_phone_no'];
+        $user_profile->secondary_phone_no = $data['secondary_phone_no'];
+        $user_profile->address_line_1 = $data['street_address_1'];
+        $user_profile->address_line_2 = $data['street_address_2'];
+        $user_profile->city = $data['city'];
+        $user_profile->state = $data['state'];
+        $user_profile->country = $data['country'];
+        $user_profile->zip = $data['zip'];
+
+
+        DB::beginTransaction();
         $user->save();
-
-        $user_profile=new User_profile();
-//        $user_profile->user_id=$user->id;
-        $user_profile->initial=$data['initial'];
-        $user_profile->primary_phone_no=$data['primary_phone_no'];
-        $user_profile->secondary_phone_no=$data['secondary_phone_no'];
-        $user_profile->address_line_1=$data['street_address_1'];
-        $user_profile->address_line_2=$data['street_address_2'];
-        $user_profile->city=$data['city'];
-        $user_profile->state=$data['state'];
-        $user_profile->country=$data['country'];
-        $user_profile->zip=$data['zip'];
         $user->profile()->save($user_profile);
+        Role::find($data['role'])->users()->save($user);
+        Timezone::find($data['timezone'])->profiles()->save($user->profile);
 
+        DB::commit();
 
-       return $user;
+        return $user;
+
     }
 
     /**
@@ -130,6 +139,10 @@ class RegisterController extends Controller
         ]);
     }
 
+    protected  function registered(Request $request, $user)
+    {
+       return response()->json(['result' => "Saved", 'message' => 'User is Saved.'], 200);
+    }
 
 
 }
