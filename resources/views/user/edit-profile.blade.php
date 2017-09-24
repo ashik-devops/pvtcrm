@@ -272,9 +272,9 @@
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
                                                         <select required name="timezone" id="timezone" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">
                                                             @if(old('timezone', $user->timezone()->id) > 0 )
-                                                            <option selected value="{{old('timezone', $user->timezone()->id)}}">{{\App\Timezone::find(old('timezone', $user->timezone()->id))->name}}</option>
+                                                            <option selected value="{{old('timezone', $user->timezone()->id)}}">{{\App\Timezone::find(old('timezone', $user->timezone()->id))->getLabel()}}</option>
                                                             @else
-                                                                <option selected value="161">Europe/London</option>
+                                                                <option selected value="161">{{\App\Timezone::find(161)->getLabel()}}</option>
                                                             @endif
 
                                                         </select>

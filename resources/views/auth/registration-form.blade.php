@@ -170,7 +170,7 @@
             <label for="timezone" class="sr-only">Timezone</label>
 
             <select name="timezone" class="form-control" id="userTimezone" required value="{{old('timezone')}}" style="width:100%">
-                <option value="{{old('timezone', 161)}}">{{\App\Timezone::find(old('timezone', '161'))->name}}</option>
+                <option value="{{old('timezone', 161)}}">{{\App\Timezone::find(old('timezone', '161'))->getLabel()}}</option>
             </select>
 
             @if ($errors->has('timezone'))

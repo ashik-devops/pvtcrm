@@ -23,4 +23,16 @@ class Timezone extends Model
         $this->gmt_offset =  $zone->getOffset($gmt)/3600;
         return $this;
     }
+
+    /**
+     * Returns name with UTC offset
+     *
+     * @return string
+     */
+    public function getLabel() : string {
+        if($this->gmt_offset >= 0){
+            return "(UTC (+".number_format($this->gmt_offset, 2).") - $this->name";
+        }
+            return "(UTC (".number_format($this->gmt_offset, 2).") - $this->name";
+    }
 }
