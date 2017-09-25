@@ -39,7 +39,7 @@ class UsersController extends Controller
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
-            'role'=>'required|integer|exists:role,id',
+            'role'=>'required|integer|exists:roles,id',
             'timezone'=>'required|integer|exists:timezones,id',
             'status'=>'required|integer|max:1'
         ]);
