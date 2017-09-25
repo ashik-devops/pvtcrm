@@ -7,6 +7,7 @@ use App\Appointment;
 use App\Policy;
 use App\Role;
 use App\Scope;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -32,10 +33,13 @@ class RolesController extends Controller
                 return $role->users()->count();
             })
             ->addColumn('action',function ($role){
-                return '<a href="#" class="btn btn-success">View</a>
+                $buttons =  '<a href="#" class="btn btn-success">View</a>
                         <a href="#" class="btn btn-primary">Edit</a>
-                        <a href="#" class="btn btn-danger">Delete</a>
                         ';
+                if($role->users()->count()==0 ){
+                    $buttons.='<button onclick="deleteRole('.$role->id.')" class="btn btn-danger">Delete</button>';
+                }
+                return $buttons;
             })
             ->rawColumns(['action'])
             ->make();
@@ -75,7 +79,16 @@ class RolesController extends Controller
 
     }
 
-    public function delete(){
+    public function delete(Role $role): JsonResponse{
+        $usercount=$role->users()->count();
+        if($usercount > 0){
+            return response()->json(['result'=>'error', 'message'=>'This role is assigned to '.$usercount.' user(s). Please assign them to another role first.'], 422);
+        }
+        DB::beginTransaction();
+        $role->policies()->delete();
+        $role->delete();
+        DB::commit();
 
+        return response()->json(['result'=>'success', 'message'=>'The Role has been deleted.'], 200);
     }
 }
