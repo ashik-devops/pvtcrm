@@ -26,7 +26,7 @@
                                 <div class="module-content-inner no-padding-bottom">
                                     <div class="clearfix"></div>
                                     <div class="table-responsive">
-                                        <table id="customers-table" class="table table-bordered display" style="width: 100%;">
+                                        <table id="roles-table" class="table table-bordered display" style="width: 100%;">
                                             <thead>
                                             <tr>
                                                 <th>Id</th>
@@ -56,4 +56,20 @@
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
+    <script type="text/javascript">
+        jQuery('#roles-table').dataTable({
+            serverSide: true,
+            paging:true,
+            lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
+            ajax: '{!! route('roles-list-data') !!}',
+            columns: [
+                { data: 'id', name: 'id' },
+                { data: 'name', name: 'name' },
+                { data: 'count', name: 'count'},
+                { data: 'action', name: 'action', orderable: false, searchable: false},
+
+            ],
+        });
+    </script>
 @endsection

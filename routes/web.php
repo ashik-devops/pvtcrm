@@ -112,3 +112,4 @@ Route::get('/ajax/timezones/', 'TimezonesController@index')->name('timezones')->
 Route::get('user/roles', 'RolesController@index')->name('role-index')->middleware('auth');
 Route::post('user/roles/create', 'RolesController@create')->name('create-role')->middleware('auth');
 Route::get('user/roles/create', 'RolesController@createForm')->name('create-role-form')->middleware('auth');
+Route::get('ajax/user/roles/', 'RolesController@getRolesAjax')->name('roles-list-data')->middleware('auth');
