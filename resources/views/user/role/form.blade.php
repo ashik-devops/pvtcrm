@@ -1,13 +1,12 @@
-@section('role-create-form')
+@section('role-form')
     <div class="col-sm-12 col-md-8 col-offset-2"></div>
     <form method="post" class="form-horizontal"  data-parsley-validate id="customerForm">
 
         {{ csrf_field() }}
-        <input type="hidden" id="role_id">
         <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}" id="name">
             <label class="sr-only">Role Name</label>
             <div class="col-sm-9">
-                <input id="name" type="text" name="name" class="form-control" placeholder="Role Name" data-parsley-trigger="change focusout" data-parsley-required-message="Role Name is required"  value="{{old('name')}}">
+                <input id="name" type="text" name="name" required class="form-control" placeholder="Role Name" data-parsley-trigger="change focusout" data-parsley-required-message="Role Name is required"  value="{{old('name', isset($role)?$role->name:'')}}">
                 @if ($errors->has('name'))
                     <span class="help-block">
                         <strong id="firstNameMessge">{{ $errors->first('name') }}</strong>
@@ -24,17 +23,19 @@
                     Please set access rules
                 </div>
             @endif
-
-
             @foreach(\App\Scope::all() as $scope)
                 <div class="scope">
                 <div class="title">{{$scope->label}} </div>
                 @foreach(\App\Action::all() as $action)
                 <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{$action->label}}</label>
+                            <label class="col-sm-3 control-label">{{$action->label}} </label>
                             <div class="col-sm-9">
-                                <input class="bootstrap-switch form-control" name="access[ {{$scope->id}} ][ {{$action->id}} ]" data-on-text="Yes" type="checkbox" value="true">
+                                <input class="bootstrap-switch form-control" name="access[{{$scope->id}}][{{$action->id}}]"
+                                       @if(isset(old("access", isset($access)?$access:[])[$scope->id][$action->id]))
+                                        checked="checked"
+                                       @endif
+                                       data-on-text="Yes" type="checkbox" value="true">
                             </div>
                         </div>
                     </div>
@@ -42,7 +43,7 @@
         </div>
             @endforeach
         </fieldset>
-        <div class="text-center"><input type="submit" class="btn btn-success" value="Create"></div>
+        <div class="text-center"><input type="submit" class="btn btn-success" value="Save"></div>
     </form>
 @endsection
 

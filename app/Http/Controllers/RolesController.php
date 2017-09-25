@@ -16,12 +16,15 @@ use Zend\Diactoros\Response;
 
 class RolesController extends Controller
 {
-    public function validator(array $data, $isUpdate=false): \Illuminate\Contracts\Validation\Validator{
+    public function validator(array $data, Role $role=null): \Illuminate\Contracts\Validation\Validator{
         $rules=[
-            'name'=>'required|string|max:32|unique:roles',
+            'name'=>'required|string|max:32|unique:roles,name',
             'access'=>'required|array'
         ];
 
+        if(!is_null($role)){
+            $rules['name']='required|string|max:32|unique:roles,name,'.$role->id;
+        }
         return Validator::make($data, $rules);
     }
 
@@ -36,7 +39,7 @@ class RolesController extends Controller
             })
             ->addColumn('action',function ($role){
                 $buttons =  '<a href="#" class="btn btn-success">View</a>
-                        <a href="#" class="btn btn-primary">Edit</a>
+                        <a href="'.route('edit-role', [$role->id]).'" class="btn btn-primary">Edit</a>
                         ';
                 if($role->users()->count()==0 ){
                     $buttons.='<button onclick="deleteRole('.$role->id.')" class="btn btn-danger">Delete</button>';
@@ -58,43 +61,71 @@ class RolesController extends Controller
 
         DB::beginTransaction();
         $role->save();
-        foreach ($request->access as $scope=>$actions){
-            $scope=Scope::find($scope);
-            foreach ($actions as $action=>$value){
-                $action=Action::find($action);
-                $role->policies()->attach(Policy::whereHas('action', function ($query) use ($action){
-                    $query->where('id', $action->id);
-                })
-                    ->whereHas('scope',function ($query) use ($scope){
-                    $query->where('id', $scope->id);
-                })
-                ->first()
-                );
-            }
-
-        }
+        $this->createPolicies($request, $role);
 
         DB::commit();
 
        return redirect(route('role-index'))->with(['message'=>'Role Created Succesfully.', 'message_class'=>'alert-success']);
     }
+    public function edit(Role $role){
+        $access=[];
+        $role->policies()->get()->map(function ($policy) use (&$access){
+            $access[$policy->scope_id][$policy->action_id]=true;
+        });
 
-    public function update(){
+        return view('user.role.edit')->with(['role'=>$role, 'access'=>$access]);
+    }
 
+    public function update(Request $request, Role $role){
+        $this->validator($request->all(), $role)->validate();
+        DB::beginTransaction();
+        $role->name=$request->name;
+        $role->save();
+        $role->policies()->detach();
+        $this->createPolicies($request->access, $role);
+        DB::commit();
+
+        return redirect(route('role-index'))->with(['message'=>'Role Updated Succesfully.', 'message_class'=>'alert-success']);
     }
 
     public function delete(Request $request): JsonResponse{
         $role=Role::find($request->id);
-
         $usercount=$role->users()->count();
         if($usercount > 0){
             return response()->json(['result'=>'error', 'message'=>'This role is assigned to '.$usercount.' user(s). Please assign them to another role first.'], 422);
         }
         DB::beginTransaction();
-        $role->policies()->delete();
+        $role->policies()->detach();
         $role->delete();
         DB::commit();
 
         return response()->json(['result'=>'Success', 'message'=>'The Role has been deleted.'], 200);
+    }
+
+    /**
+     * Created policies based on user input
+     *
+     * @param Request $request
+     * @param         $role
+     */
+    private function createPolicies(array $access, Role $role)
+    {
+        foreach ($access as $scope => $actions) {
+            $scope = Scope::find($scope);
+            foreach ($actions as $action => $value) {
+                $action = Action::find($action);
+                $policy=Policy::whereHas('action',
+                    function ($query) use ($action) {
+                        $query->where('id', $action->id);
+                    })
+                    ->whereHas('scope', function ($query) use ($scope) {
+                        $query->where('id', $scope->id);
+                    })
+                    ->first();
+
+                $role->policies()->attach($policy);
+            }
+
+        }
     }
 }
