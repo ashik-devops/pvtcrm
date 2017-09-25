@@ -31,7 +31,7 @@
         <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }}">
             <label class="sr-only">Role</label>
             <select name="role" style="width:100%"  id="userRole"  class="form-control" data-parsley-trigger="change" required value="{{ old('role') }}" data-parsley-required-message="You must select a role.">
-                @foreach($roles as $role)
+                @foreach(\App\Role::all() as $role)
                     <option value="{{$role->id}}">{{$role->name}}</option>
                 @endforeach
             </select>
@@ -107,7 +107,7 @@
             <label for="city" class="sr-only">City</label>
 
 
-            <input  type="text" class="form-control"   id="userCity"  placeholder="City" value="{{ old('city') }}" name="city" maxlength="32" required data-parsley-trigger="change focusout" required data-parsley-required-message="You must enter city required data-parsley-required-message = "" >
+            <input  type="text" class="form-control"   id="userCity"  placeholder="City" value="{{ old('city') }}" name="city" maxlength="32" data-parsley-trigger="change focusout" required data-parsley-required-message="You must enter city." >
             @if ($errors->has('city'))
                 <span class="help-block">
                     <strong>{{ $errors->first('city') }}</strong>

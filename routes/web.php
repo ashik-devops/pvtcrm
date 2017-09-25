@@ -108,3 +108,7 @@ Route::post('/journals/update', 'JournalController@updateJournal')->name('update
 Route::get('/ajax/activities/recent/{count?}', 'ActivityController@recentActivities')->name('recent-activities');
 
 Route::get('/ajax/timezones/', 'TimezonesController@index')->name('timezones')->middleware('auth');
+
+Route::get('user/roles', 'RolesController@index')->name('role-index')->middleware('auth');
+Route::post('user/roles/create', 'RolesController@create')->name('create-role')->middleware('auth');
+Route::get('user/roles/create', 'RolesController@createForm')->name('create-role-form')->middleware('auth');

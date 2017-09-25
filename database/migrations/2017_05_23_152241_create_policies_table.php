@@ -15,8 +15,8 @@ class CreatePoliciesTable extends Migration
     {
         Schema::create('policies', function (Blueprint $table){
             $table->increments('id');
-            $table->string('scope');
-            $table->string('action');
+            $table->string('scope_id');
+            $table->string('action_id');
             $table->timestamps();
         });
     }

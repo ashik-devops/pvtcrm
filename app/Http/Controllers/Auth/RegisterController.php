@@ -61,7 +61,7 @@ class RegisterController extends Controller
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
-            'role'=>'required|integer|exists:roles,id',
+            'role'=>'required|integer|exists:role,id',
             'timezone'=>'required|integer|exists:timezones,id',
 
         ]);
@@ -135,7 +135,7 @@ class RegisterController extends Controller
     {
         $roles=Role::all(['id','name']);
         return view('auth.register')->with([
-            'roles'=>$roles
+            'role'=>$roles
         ]);
     }
 

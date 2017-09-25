@@ -83,7 +83,7 @@
                                                     <label class="col-md-2  col-sm-3 col-xs-12 control-label">Role</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
                                                         <select name="role" id="role" class="form-control" data-parsley-trigger="change" required data-parsley-required-message="You must select a role.">
-                                                            @foreach($roles as $role)
+                                                            @foreach(\App\Role::all() as $role)
                                                                 <option @if(old('role', $user->role->id) == $role->id) selected @endif value="{{$role->id}}">{{$role->name}}</option>
                                                             @endforeach
                                                         </select>

@@ -39,7 +39,7 @@ class UsersController extends Controller
             'state'=>'required|string|max:32',
             'country'=>'required|string|max:32',
             'zip'=>'required|string|max:8',
-            'role'=>'required|integer|exists:roles,id',
+            'role'=>'required|integer|exists:role,id',
             'timezone'=>'required|integer|exists:timezones,id',
             'status'=>'required|integer|max:1'
         ]);
@@ -56,7 +56,7 @@ class UsersController extends Controller
         $roles=Role::all(['id','name']);
         return view('user.index')->with([
             'users' => $users,
-            'roles' => $roles
+            'role' => $roles
         ]);
     }
 
@@ -118,7 +118,7 @@ class UsersController extends Controller
         $this->authorize('update', $user);
         return view('user.edit-profile')->with([
             'user' => $user,
-            'roles'=>Role::all()
+            'role'=>Role::all()
         ]);
     }
 

@@ -36,10 +36,12 @@ class PoliciesSeeder extends Seeder
         ];
 
         foreach ($policies as $scope=>$actions){
+            $scope = \App\Scope::where('name','=' ,$scope)->first();
             foreach ($actions as $action) {
-                $policy = new Policy();
-                $policy->scope = $scope;
-                $policy->action = $action;
+                $action=\App\Action::where('name', '=', $action)->first();
+                $policy=new \App\Policy();
+                $policy->action()->associate($action);
+                $policy->scope()->associate($scope);
                 $policy->save();
             }
         }
