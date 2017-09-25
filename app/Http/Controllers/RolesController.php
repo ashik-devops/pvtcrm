@@ -12,12 +12,14 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
+use Zend\Diactoros\Response;
 
 class RolesController extends Controller
 {
     public function validator(array $data, $isUpdate=false): \Illuminate\Contracts\Validation\Validator{
         $rules=[
-            'name'=>'required|string|max:32|unique:roles'
+            'name'=>'required|string|max:32|unique:roles',
+            'access'=>'required|array'
         ];
 
         return Validator::make($data, $rules);
@@ -73,13 +75,17 @@ class RolesController extends Controller
         }
 
         DB::commit();
+
+       return redirect(route('role-index'))->with(['message'=>'Role Created Succesfully.', 'message_class'=>'alert-success']);
     }
 
     public function update(){
 
     }
 
-    public function delete(Role $role): JsonResponse{
+    public function delete(Request $request): JsonResponse{
+        $role=Role::find($request->id);
+
         $usercount=$role->users()->count();
         if($usercount > 0){
             return response()->json(['result'=>'error', 'message'=>'This role is assigned to '.$usercount.' user(s). Please assign them to another role first.'], 422);
@@ -89,6 +95,6 @@ class RolesController extends Controller
         $role->delete();
         DB::commit();
 
-        return response()->json(['result'=>'success', 'message'=>'The Role has been deleted.'], 200);
+        return response()->json(['result'=>'Success', 'message'=>'The Role has been deleted.'], 200);
     }
 }

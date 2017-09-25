@@ -19,10 +19,19 @@
                     <section class="module module-headings">
                         <div class="module-inner">
                             <div class="module-heading">
-
                             </div>
 
                             <div class="module-content collapse in" id="customers">
+                                {{ csrf_field() }}
+                                @if(Session::has('message'))
+
+                                    <div class="alert {{ Session::get('message_class') }} alert-theme alert-dismissible" role="alert">
+                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                                        {{ Session::get('message') }}
+                                    </div>
+
+                                @endif
+
                                 <div class="module-content-inner no-padding-bottom">
                                     <div class="clearfix"></div>
                                     <div class="table-responsive">
@@ -58,7 +67,8 @@
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 
     <script type="text/javascript">
-        jQuery('#roles-table').dataTable({
+        var token = jQuery('input[name="_token"]').val();
+        var roles_datatable = jQuery('#roles-table').DataTable({
             serverSide: true,
             paging:true,
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
@@ -71,5 +81,50 @@
 
             ],
         });
+
+        function deleteRole(id) {
+            swal({
+                    title: "Are you sure?",
+                    text: "This Information will be deleted!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+
+                        //deletion process is going on....
+                        var request = $.ajax({
+                            url: "{{route('delete-role')}}",
+                            data: {"id": id, '_token': token},
+                            type: 'DELETE',
+                            dataType: 'json'
+                        });
+                        request.success(function (response){
+                            if (response.result == 'Success') {
+                                swal("Deleted!", response.message, "success");
+                                reload_roles_datatable();
+                            }
+                            else {
+                                swal("Failed", response.message, "error");
+                            }
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        }
+
+        function reload_roles_datatable(){
+            roles_datatable.ajax.reload(null, false);
+        }
+
+
     </script>
 @endsection

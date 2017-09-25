@@ -18,6 +18,14 @@
         </div>
         <fieldset id="access_selectors" class="form-group">
             <div class="fieldset-title">Access Rules</div>
+            @if($errors->has('access'))
+                <div class="alert alert-theme alert-danger alert-dismissible" role="alert">
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+                    Please set access rules
+                </div>
+            @endif
+
+
             @foreach(\App\Scope::all() as $scope)
                 <div class="scope">
                 <div class="title">{{$scope->label}} </div>
