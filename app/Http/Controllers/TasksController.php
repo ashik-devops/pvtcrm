@@ -33,7 +33,6 @@ class TasksController extends Controller
         $rules=[
             'taskTitle' => 'required|string',
             'taskDescription' => 'required|string',
-            'taskStatus' => 'required|string',
             'taskDueDate'=>'required|date',
             'taskPriority'=>'required|string',
             'taskCustomerId'=>'required|integer|exists:customers,id'
@@ -142,7 +141,6 @@ class TasksController extends Controller
         $task->customer_id = $request->task['taskCustomerId'];
         $task->description = $request->task['taskDescription'];
         $task->due_date = Carbon::parse($request->task['taskDueDate']);
-        $task->status = $request->task['taskStatus'];
         $task->priority = $request->task['taskPriority'];
 
 
@@ -180,7 +178,6 @@ class TasksController extends Controller
         $task->description = $request->task['taskDescription'];
         $task->due_date = Carbon::parse($request->task['taskDueDate']);
         $task->priority= $request->task['taskPriority'];
-        $task->status= $request->task['taskStatus'];
 
         DB::beginTransaction();
 

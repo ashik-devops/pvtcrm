@@ -550,6 +550,8 @@
 
         }
 
+
+
         function completeAppointmentWithClosingView(){
             var id = $('#appointment-modal-view').val();
 
@@ -559,15 +561,7 @@
             closeAppointment(id, 'Complete');
 
         }
-        function editAppointmentWithClosingView(id){
-            var id = $('#appointmentIdForView').val();
 
-            $('#appointment-modal-view').modal('hide');
-
-
-            closeAppointment(id, 'Cancel');
-
-        }
 
         function cancelTask(id) {
             $('#appointment-modal-view').modal('hide');

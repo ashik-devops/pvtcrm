@@ -121,6 +121,7 @@ class AppointmentsController extends Controller
             ->addColumn('customer_name',
                 function ($appointment){
 
+
                     $string = '';
                     $string .= '<a href="'.route('view-customer', [$appointment->customer_id]).'">'.$appointment->customer_last_name.', '. $appointment->customer_first_name.'</a>';
                     if($appointment->account_name){
@@ -203,7 +204,9 @@ class AppointmentsController extends Controller
     }
 
    public function updateAppointment(Request $request){
-       $this->authorize('update',Appointment::class);
+       $appointment = Appointment::findOrFail($request->appointment['appointmentId']);
+
+       $this->authorize('update',$appointment);
        $this->validator($request->appointment, true)->validate();
 
         $result=[

@@ -76,8 +76,11 @@ class AppointmentPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()->whereIn('scope',['customer','*'])
-                ->whereIn('action',['*','edit'])->first());
+
+
+        return $user->id === $appointment->customer->user->id && !is_null($user->role->policies()
+                ->whereIn('scope',  ['customer','*'])
+                ->whereIn('action',['edit','*'])->first());
     }
 
     /**
