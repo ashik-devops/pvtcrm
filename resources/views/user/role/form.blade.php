@@ -18,15 +18,15 @@
         </div>
         <fieldset id="access_selectors" class="form-group">
             <div class="fieldset-title">Access Rules</div>
-            @foreach($policy_structure as $policy=>$actions)
+            @foreach(\App\Scope::all() as $scope)
                 <div class="scope">
-                <div class="title">{{mb_convert_case($policy, MB_CASE_TITLE)}} </div>
-                @foreach($actions as $action)
+                <div class="title">{{$scope->label}} </div>
+                @foreach(\App\Action::all() as $action)
                 <div class="form-horizontal">
                         <div class="form-group">
-                            <label class="col-sm-3 control-label">{{mb_convert_case($action, MB_CASE_TITLE)}}</label>
+                            <label class="col-sm-3 control-label">{{$action->label}}</label>
                             <div class="col-sm-9">
-                                <input class="bootstrap-switch form-control" name="access[ {{$policy}} ][ {{$action}} ]" data-on-text="Yes" type="checkbox" value="true">
+                                <input class="bootstrap-switch form-control" name="access[ {{$scope->id}} ][ {{$action->id}} ]" data-on-text="Yes" type="checkbox" value="true">
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
         </div>
             @endforeach
         </fieldset>
-
+        <div class="text-center"><input type="submit" class="btn btn-success" value="Create"></div>
     </form>
 @endsection
 

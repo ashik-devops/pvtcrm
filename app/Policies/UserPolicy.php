@@ -23,8 +23,13 @@ class UserPolicy
         if($this->checkAdmin($authenticated_user)){
             return true;
         }
-        return !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
-                    ->whereIn('action',['*','list'])->first());
+        return !is_null($authenticated_user->role->policies()
+            ->whereHas('action',function($query){
+                $query->whereIn('name', ['*', 'index']);
+            })
+            ->whereHas('scope',function($query){
+                $query->whereIn('name', ['*', 'user']);
+            })->first());
     }
 
     /**

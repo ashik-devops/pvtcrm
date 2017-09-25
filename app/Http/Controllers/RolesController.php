@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Policy;
+use App\Scope;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
@@ -21,18 +22,11 @@ class RolesController extends Controller
     }
 
     public function createForm(){
-        $structure = [];
-        Policy::distinct()->select(['scope'])->get()->map(function($policy) use (&$structure) {
-            $structure[$policy->scope]=Policy::distinct()->select('action')
-                ->where('scope', '=', $policy->scope)->get()->map(function($action){
-                    return $action->action;
-                });
-        });
-        return view('user.role.create')->with('policy_structure', $structure);
+        return view('user.role.create');
     }
 
-    public function create(){
-
+    public function create(Request $request){
+        dd($request->all());
     }
 
     public function update(){

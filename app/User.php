@@ -48,10 +48,20 @@ class User extends Authenticatable
     }
 
     public function isAdmin(){
-        return !is_null($this->role->policies()->where('action','*')->where('scope','*')->first());
+        return !is_null($this->role->policies()
+        ->whereHas('action',function($query){
+            $query->where('name', '=', '*');
+        })->whereHas('scope',function($query){
+            $query->where('name', '=', '*');
+            })->first());
     }
     public function isSuperAdmin(){
-        return $this->role->id==1 && !is_null($this->role->policies()->where('action','*')->where('scope','*')->first());
+        return $this->role->id==1 && !is_null($this->role->policies()
+                ->whereHas('action',function($query){
+                    $query->where('name', '=', '*');
+                })->whereHas('scope',function($query){
+                    $query->where('name', '=', '*');
+                })->first());
     }
 
     public function salesTeams(){
