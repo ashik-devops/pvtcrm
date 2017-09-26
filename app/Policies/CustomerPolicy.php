@@ -2,7 +2,7 @@
 
 namespace App\Policies;
 
-use App\Traits\AdminPolicies;
+use App\Traits\PolicyHelpers;
 use App\User;
 use App\Customer;
 use App\Policy;
@@ -10,7 +10,7 @@ use Illuminate\Auth\Access\HandlesAuthorization;
 
 class CustomerPolicy
 {
-    use HandlesAuthorization, AdminPolicies;
+    use HandlesAuthorization, PolicyHelpers;
 
     /**
      * Determine whether the user can list all customers.
@@ -42,7 +42,7 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
         return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->role->olicies()->whereIn('scope', ['customer', '*'])
+        return $user->id === $customer->user->id || !is_null($user->role->policies()->whereIn('scope', ['customer', '*'])
                 ->whereIn('action',['*','list'])->first());
 
     }

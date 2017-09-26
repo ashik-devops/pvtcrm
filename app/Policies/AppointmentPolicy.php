@@ -3,14 +3,14 @@
 namespace App\Policies;
 
 use App\Appointment;
-use App\Traits\AdminPolicies;
+use App\Traits\PolicyHelpers;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 use Illuminate\Support\Facades\App;
 
 class AppointmentPolicy
 {
-    use HandlesAuthorization, AdminPolicies;
+    use HandlesAuthorization, PolicyHelpers;
 
     /**
      * Determine whether the user can list all customers.

@@ -3,13 +3,13 @@
 namespace App\Policies;
 
 use App\Account;
-use App\Traits\AdminPolicies;
+use App\Traits\PolicyHelpers;
 use App\User;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class AccountPolicy
 {
-    use HandlesAuthorization, AdminPolicies;
+    use HandlesAuthorization, PolicyHelpers;
 
     /**
      * Determine whether the user can list all customers.
