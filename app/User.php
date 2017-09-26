@@ -77,7 +77,8 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\Sales_team', 'sales_teams_users');
     }
-    public function getLink(): string {
+    public function getLink(): string
+    {
         if($this->id > 0){
             return route('profile-edit', $this->id);
         }
@@ -85,7 +86,8 @@ class User extends Authenticatable
         return '#';
     }
 
-    public function getActivityTitle(): string {
+    public function getActivityTitle(): string
+    {
         if($this->id > 0){
             return $this->user->name;
         }
@@ -93,11 +95,18 @@ class User extends Authenticatable
         return "";
     }
 
-    public function timezone() : Timezone{
+    public function timezone() : Timezone
+    {
         return $this->profile->timezone;
     }
 
-    public function getSubordinates(){
+    public function getSubordinates(): array
+    {
         return [];
+    }
+
+    public function getNameAttribute(): string
+    {
+        return implode(', ', array_filter([$this->last_name, $this->first_name]));
     }
 }

@@ -18,14 +18,9 @@ class CreateUserProfilesTable extends Migration
             $table->integer('user_id')->unsigned()->unique();
             $table->string('profile_pic')->nullable();
             $table->string('initial',8);
-            $table->string('primary_phone_no',32)->unique();
+            $table->string('primary_phone_no',32)->nullable();
             $table->string('secondary_phone_no',32)->nullable();
-            $table->string('address_line_1',128);
-            $table->string('address_line_2',128)->nullable();
-            $table->string('city',32);
-            $table->string('state',32);
-            $table->string('country',32);
-            $table->string('zip',8);
+            $table->integer('address_id')->nullable();
             $table->timestamps();
         });
     }

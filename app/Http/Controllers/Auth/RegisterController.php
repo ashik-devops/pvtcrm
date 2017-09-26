@@ -49,20 +49,12 @@ class RegisterController extends Controller
     protected function validator(array $data)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:6|confirmed',
-            'initial'=>'required|string|max:8|unique:user_profiles',
-            'primary_phone_no'=>'required|string|max:32|unique:user_profiles',
-            'secondary_phone_no'=>'string|max:32|nullable',
-            'street_address_1'=>'required|string|max:128',
-            'street_address_2'=>'string|max:128|nullable',
-            'city'=>'required|string|max:32',
-            'state'=>'required|string|max:32',
-            'country'=>'required|string|max:32',
-            'zip'=>'required|string|max:8',
-            'role'=>'required|integer|exists:role,id',
-            'timezone'=>'required|integer|exists:timezones,id',
+            'role'=>'required|integer|exists:roles,id',
+            'status'=>'required|integer|max:1'
 
         ]);
     }
@@ -94,30 +86,20 @@ class RegisterController extends Controller
         /*Create the user*/
 
         $this->authorize('create',User::class);
-//        $data = $data['userData'];
         $user = new User();
-        $user->name = $data['name'];
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
         $user->email = $data['email'];
         $user->password = $data['password'];
         $user->status = $data['status'];
         $user_profile = new User_profile();
         $user_profile->profile_pic = null;
-        $user_profile->initial = $data['initial'];
-        $user_profile->primary_phone_no = $data['primary_phone_no'];
-        $user_profile->secondary_phone_no = $data['secondary_phone_no'];
-        $user_profile->address_line_1 = $data['street_address_1'];
-        $user_profile->address_line_2 = $data['street_address_2'];
-        $user_profile->city = $data['city'];
-        $user_profile->state = $data['state'];
-        $user_profile->country = $data['country'];
-        $user_profile->zip = $data['zip'];
-
+        $user_profile->initial=mb_convert_case($data['first_name'][0].$data['last_name'][0], MB_CASE_UPPER);
 
         DB::beginTransaction();
+        $user->role()->associate(Role::find($data['role']));
         $user->save();
         $user->profile()->save($user_profile);
-        Role::find($data['role'])->users()->save($user);
-        Timezone::find($data['timezone'])->profiles()->save($user->profile);
 
         DB::commit();
 

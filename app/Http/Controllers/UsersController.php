@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Address;
 use App\Policies\UserPolicy;
 use App\Role;
 use App\Timezone;
@@ -26,11 +27,11 @@ class UsersController extends Controller
     protected function validator(array $data, User $user = null)
     {
         return Validator::make($data, [
-            'name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'pro_pic'=>'image',
             'email' => 'required|string|email|max:255|unique:users'.is_null($user)===FALSE?',NULL,'.$user->id:'',
             'password' => 'required|string|min:6|confirmed',
-            'initial'=>'required|string|max:8|unique:user_profiles'.(is_null($user) && is_null($user->profile->id))===FALSE?',NULL,'.$user->profile->id:'',
             'primary_phone_no'=>'required|string|max:32|unique:user_profiles'.(is_null($user) && is_null($user->profile->id))===FALSE?',NULL,'.$user->profile->id:'',
             'secondary_phone_no'=>'string|max:32|nullable',
             'street_address_1'=>'required|string|max:128',
@@ -138,18 +139,27 @@ class UsersController extends Controller
 
         /* Update the user */
         $data = $request->all();
-        $user->name = $data['name'];
+        $user->first_name = $data['first_name'];
+        $user->last_name = $data['last_name'];
         $user->email = $data['email'];
         $user->status=$data['status'];
-        $user->profile->initial=$data['initial'];
+        $user->profile->initial=mb_convert_case($data['first_name'][0].$data['last_name'][0], MB_CASE_UPPER);
         $user->profile->primary_phone_no=$data['primary_phone_no'];
         $user->profile->secondary_phone_no=$data['secondary_phone_no'];
-        $user->profile->address_line_1=$data['street_address_1'];
-        $user->profile->address_line_2=$data['street_address_2'];
-        $user->profile->city=$data['city'];
-        $user->profile->state=$data['state'];
-        $user->profile->country=$data['country'];
-        $user->profile->zip=$data['zip'];
+
+        if(is_null($user->profile->address)){
+            $address=new Address();
+        }
+        else {
+            $address=$user->profile->address;
+        }
+
+        $address->street_address_1=$data['street_address_1'];
+        $address->street_address_2=$data['street_address_2'];
+        $address->city=$data['city'];
+        $address->state=$data['state'];
+        $address->country=$data['country'];
+        $address->zip=$data['zip'];
         $timezone=Timezone::find($data['timezone']);
         /*handle image upload*/
         if ($request->hasFile('pro_pic') && $request->file('pro_pic')->isValid()) {
@@ -163,7 +173,9 @@ class UsersController extends Controller
         DB::beginTransaction();
 
         $user->save();
+        $address->save();
         $user->profile->save();
+        $user->profile->address()->associate($address);
         Role::find($data['role'])->users()->save($user);
         $timezone->profiles()->save($user->profile);
         DB::commit();

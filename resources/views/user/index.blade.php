@@ -99,22 +99,13 @@
             var _token = $('input[name="_token"]').val();
             var data = {
                 '_token':_token,
-                'name': jQuery('#'+inputMap.name).val(),
+                'first_name': jQuery('#'+inputMap.first_name).val(),
+                'last_name': jQuery('#'+inputMap.last_name).val(),
                 'email': jQuery('#'+inputMap.email).val(),
-                'initial': jQuery('#'+inputMap.initial).val(),
                 'role': jQuery('#'+inputMap.role).val(),
                 'password': jQuery('#'+inputMap.password).val(),
                 'password_confirmation': jQuery('#'+inputMap.password_confirmation).val(),
-                'primary_phone_no': jQuery('#'+inputMap.primary_phone_no).val(),
-                'secondary_phone_no':jQuery('#'+inputMap.secondary_phone_no).val(),
-                'street_address_1': jQuery('#'+inputMap.street_address_1).val(),
-                'street_address_2': jQuery('#'+inputMap.street_address_2).val(),
-                'state': jQuery('#'+inputMap.state).val(),
-                'city': jQuery('#'+inputMap.city).val(),
-                'country': jQuery('#'+inputMap.country).val(),
-                'zip': jQuery('#'+inputMap.zip).val(),
                 'status':  jQuery('#'+inputMap.status).val(),
-                'timezone': jQuery('#'+inputMap.timezone).val(),
             }
 
 

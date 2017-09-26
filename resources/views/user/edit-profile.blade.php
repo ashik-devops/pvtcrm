@@ -53,32 +53,30 @@
                                                         <input type="file" name="pro_pic" class="file-uploader pull-left form-control">
                                                     </div>
                                                 </div>
-                                                <div class="form-group {{ $errors->has('name') ? ' has-error' : '' }}">
-                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Name</label>
+                                                <div class="form-group {{ $errors->has('first_name') ? ' has-error' : '' }}">
+                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">First Name</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Name is required" required value="{{old('name', $user->name)}}">
-                                                        @if ($errors->has('name'))
+                                                        <input type="text" name="first_name" class="form-control" placeholder="First Name" data-parsley-trigger="change focusout" data-parsley-required-message="First Name is required" required value="{{old('first_name', $user->first_name)}}">
+                                                        @if ($errors->has('first_name'))
                                                             <span class="help-block">
-                                        <strong>{{ $errors->first('name') }}</strong>
+                                        <strong>{{ $errors->first('first_name') }}</strong>
                                                  </span>
                                                         @endif
                                                     </div>
                                                 </div>
 
-
-
-                                                <div class="form-group {{ $errors->has('initial') ? ' has-error' : '' }}">
-                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Initial</label>
+                                                <div class="form-group {{ $errors->has('last_name') ? ' has-error' : '' }}">
+                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Last Name</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="text" name="initial" class="form-control" placeholder="Initial" required data-parsley-trigger="change focusout" value="{{ old('initial', $user->profile->initial) }}" data-parsley-required-message="You must enter initial.">
-                                                        @if ($errors->has('initial'))
+                                                        <input type="text" name="last_name" class="form-control" placeholder="Last Name" data-parsley-trigger="change focusout" data-parsley-required-message="Last Name is required" required value="{{old('last_name', $user->last_name)}}">
+                                                        @if ($errors->has('last_name'))
                                                             <span class="help-block">
-                                        <strong>{{ $errors->first('initial') }}</strong>
-                                    </span>
+                                        <strong>{{ $errors->first('last_name') }}</strong>
+                                                 </span>
                                                         @endif
-
                                                     </div>
                                                 </div>
+
                                                 <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }}">
                                                     <label class="col-md-2  col-sm-3 col-xs-12 control-label">Role</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
@@ -159,7 +157,7 @@
                                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">Steet Address</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
                                                         <div style="margin-bottom: 5px;">
-                                                            <input id="street_address_1" type="text" placeholder="Steet Address" class="form-control" data-parsley-trigger="change focusout" value="{{ old('street_address_1', $user->profile->address_line_1) }}" name="street_address_1" maxlength="128" required data-parsley-required-message="Please enter Address">
+                                                            <input id="street_address_1" type="text" placeholder="Steet Address" class="form-control" data-parsley-trigger="change focusout" value="{{ old('street_address_1', !is_null($user->profile->address)?$user->profile->address->street_address_1:'') }}" name="street_address_1" maxlength="128" required data-parsley-required-message="Please enter Address">
                                                             @if ($errors->has('street_address_1'))
                                                                 <span class="help-block">
                                         <strong>{{ $errors->first('street_address_1') }}</strong>
@@ -167,7 +165,7 @@
                                                             @endif
                                                         </div>
                                                         <div style="margin-bottom: 5px;">
-                                                            <input id="street_address_2" type="text"  placeholder="Steet Address" class="form-control"  data-parsley-trigger="change focusout" value="{{ old('street_address_2', $user->profile->address_line_2) }}" name="street_address_2" maxlength="128" >
+                                                            <input id="street_address_2" type="text"  placeholder="Steet Address" class="form-control"  data-parsley-trigger="change focusout" value="{{ old('street_address_2', !is_null($user->profile->address)?$user->profile->address->street_address_2:'') }}" name="street_address_2" maxlength="128" >
                                                             @if ($errors->has('street_address_2'))
                                                                 <span class="help-block">
                                         <strong>{{ $errors->first('street_address_2') }}</strong>
@@ -182,7 +180,7 @@
                                                     <label for="city" class="col-md-2 col-sm-3 col-xs-12 control-label">City</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
 
-                                                        <input id="city" type="text" class="form-control" placeholder="City" value="{{ old('city', $user->profile->city) }}" name="city" maxlength="32" required data-parsley-trigger="change focusout" required data-parsley-required-message="You must enter city" >
+                                                        <input id="city" type="text" class="form-control" placeholder="City" value="{{ old('city', !is_null($user->profile->address)?$user->profile->address->city:'') }}" name="city" maxlength="32" required data-parsley-trigger="change focusout" required data-parsley-required-message="You must enter city" >
                                                         @if ($errors->has('city'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('city') }}</strong>
@@ -194,7 +192,7 @@
                                                     <label for="state" class="col-md-2 col-sm-3 col-xs-12 control-label">State</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
 
-                                                        <input id="state" type="text" class="form-control" placeholder="State" value="{{ old('state', $user->profile->state) }}" name="state" maxlength="32" required required data-parsley-required-message = "You must enter state" data-parsley-trigger="change focusout">
+                                                        <input id="state" type="text" class="form-control" placeholder="State" value="{{ old('state', !is_null($user->profile->address)?$user->profile->address->state:'') }}" name="state" maxlength="32" required required data-parsley-required-message = "You must enter state" data-parsley-trigger="change focusout">
                                                         @if ($errors->has('state'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('state') }}</strong>
@@ -207,7 +205,7 @@
                                                     <label for="country" class="col-md-2 col-sm-3 col-xs-12 control-label">Country</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
 
-                                                        <input id="country" type="text" class="form-control" placeholder="Country" value="{{ old('country', $user->profile->country) }}" name="country" maxlength="32" required required data-parsley-required-message = "You must enter country" data-parsley-trigger="change focusout">
+                                                        <input id="country" type="text" class="form-control" placeholder="Country" value="{{ old('country', !is_null($user->profile->address)?$user->profile->address->country:'') }}" name="country" maxlength="32" required required data-parsley-required-message = "You must enter country" data-parsley-trigger="change focusout">
                                                         @if ($errors->has('country'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('country') }}</strong>
@@ -219,7 +217,7 @@
                                                     <label for="zip" class="col-md-2 col-sm-3 col-xs-12 control-label">ZIP</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
 
-                                                        <input id="zip" type="text" class="form-control" placeholder="Zip" value="{{ old('zip', $user->profile->zip) }}" name="zip" maxlength="8" required required data-parsley-required-message = "You must enter ZIP Code" data-parsley-trigger="change focusout">
+                                                        <input id="zip" type="text" class="form-control" placeholder="Zip" value="{{ old('zip', !is_null($user->profile->address)?$user->profile->address->zip:'') }}" name="zip" maxlength="8" required required data-parsley-required-message = "You must enter ZIP Code" data-parsley-trigger="change focusout">
                                                         @if ($errors->has('zip'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('zip') }}</strong>

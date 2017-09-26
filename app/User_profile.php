@@ -11,11 +11,11 @@ class User_profile extends Model
 
     public $obj_alias = 'User Profile';
 
-    public function user(){
+    public function user(): BelongsTo{
         return $this->belongsTo('App\User');
     }
 
-    public function timezone():BelongsTo{
+    public function timezone(): BelongsTo{
         return $this->belongsTo('App\Timezone');
     }
 
@@ -25,6 +25,10 @@ class User_profile extends Model
         }
 
         return '#';
+    }
+
+    public function address(): BelongsTo{
+        return $this->belongsTo('App\Address');
     }
 
     public function getActivityTitle(): string {
