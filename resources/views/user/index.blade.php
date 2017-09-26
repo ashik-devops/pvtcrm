@@ -21,6 +21,7 @@
                     <section class="module members-module module-no-heading">
                         <div class="module-inner">
                             <div class="module-content">
+                                @includeWhen(\Illuminate\Support\Facades\Session::has('message'), 'common.alert')
                                 <div class="module-content-inner no-padding-bottom">
                                     <div class="members-list">
                                         @foreach ($users->items() as $user)
@@ -42,14 +43,14 @@
                                                         <ul class="list-inline">
 
                                                             {{--<li class="chat"><a href="#"><span class="pe-icon pe-7s-chat icon"></span></a></li>--}}
-                                                            <li class="call"><a href="tel:{{$user->profile->primary_phone_no_no}}"><span class="pe-icon pe-7s-call icon"></span></a></li>
+                                                            <li class="call"><a href="tel:{{$user->profile->primary_phone_no}}"><span class="pe-icon pe-7s-call icon"></span></a></li>
                                                             <li class="message"><a href="mailto:{{$user->email}}"><span class="pe-icon pe-7s-mail icon"></span></a></li>
                                                             {{--<li class="location"><a href="#"><span class="pe-icon pe-7s-map-marker icon"></span></a></li>--}}
                                                         </ul>
                                                     </div>
                                                     <div class="data col-md-3 col-sm-3 col-xs-12">
                                                         <ul class="list-inline text-center">
-                                                            <li class="projects"><span class="figure">5</span><span>projects</span></li>
+                                                            <li class="projects"><span class="figure">{{$user->customers()->count()}}</span><span>Customers</span></li>
                                                             <li class="discussions"><span class="figure">231</span><span>discussions</span></li>
                                                             <li class="commits"><span class="figure">0</span><span>commits</span></li>
                                                         </ul>

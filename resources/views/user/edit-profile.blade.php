@@ -12,6 +12,8 @@
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module">
                         <div class="module-inner">
+                            @includeWhen(\Illuminate\Support\Facades\Session::has('message'), 'common.alert')
+
                             <div class="side-bar">
                                 <div class="user-info">
                                     <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />
@@ -36,7 +38,12 @@
 
                             <div class="content-panel">
                                 <form class="form-horizontal" method="post" action="{{route('profile-update', [$user->id])}}" enctype="multipart/form-data" data-parsley-validate>
-                                    <div class="text-right"><a class="btn btn-primary" href="{{route('profile-view', $user->id)}}">View Profile</a></div>
+                                    <div class="text-right">
+                                        <a class="btn btn-primary" href="{{route('profile-view', $user->id)}}">View Profile</a>
+                                        @can('delete', \App\User::class)
+                                            <button type="button" class="btn btn-danger" onclick="deleteUser()">Delete User</button>
+                                        @endcan
+                                    </div>
 
                                 <div class="tab-content">
                                     <div id="profile" role="tabpanel" class="tab-pane active">
@@ -76,30 +83,30 @@
                                                         @endif
                                                     </div>
                                                 </div>
+                                                @can('create', \App\User::class)
+                                                    <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }}">
+                                                        <label class="col-md-2  col-sm-3 col-xs-12 control-label">Role</label>
+                                                        <div class="col-md-10 col-sm-9 col-xs-12">
+                                                            <select name="role" id="role" class="form-control" data-parsley-trigger="change" required data-parsley-required-message="You must select a role.">
+                                                                @foreach(\App\Role::all() as $role)
+                                                                    <option @if(old('role', $user->role->id) == $role->id) selected @endif value="{{$role->id}}">{{$role->name}}</option>
+                                                                @endforeach
+                                                            </select>
 
-                                                <div class="form-group {{ $errors->has('role') ? ' has-error' : '' }}">
-                                                    <label class="col-md-2  col-sm-3 col-xs-12 control-label">Role</label>
-                                                    <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <select name="role" id="role" class="form-control" data-parsley-trigger="change" required data-parsley-required-message="You must select a role.">
-                                                            @foreach(\App\Role::all() as $role)
-                                                                <option @if(old('role', $user->role->id) == $role->id) selected @endif value="{{$role->id}}">{{$role->name}}</option>
-                                                            @endforeach
-                                                        </select>
-
-                                                        @if ($errors->has('role'))
-                                                            <span class="help-block">
-                                        <strong>{{ $errors->first('role') }}</strong>
-                                    </span>
-                                                        @endif
+                                                            @if ($errors->has('role'))
+                                                                <span class="help-block">
+                                            <strong>{{ $errors->first('role') }}</strong>
+                                        </span>
+                                                            @endif
+                                                        </div>
                                                     </div>
-                                                </div>
 
-                                                <div class="form-group"{{ $errors->has('status') ? ' has-error' : '' }}>
+                                                    <div class="form-group"{{ $errors->has('status') ? ' has-error' : '' }}>
                                                     <label for="status" class="col-md-2 col-sm-3 col-xs-12 control-label">Status</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
                                                         <select name="status" class="form-control" id="status" required value="{{old('status',  $user->status)}}">
                                                             <option @if(old('status', $user->status) == 1) selected @endif  value="1">Active</option>
-                                                            <option  @if(old('status', $user->role->id) == 0) selected @endif  value="0">Inactive</option>
+                                                            <option  @if(old('status', $user->status) == 0) selected @endif  value="0">Inactive</option>
                                                         </select>
 
                                                         @if ($errors->has('status'))
@@ -109,6 +116,7 @@
                                                         @endif
                                                     </div>
                                                 </div>
+                                                @endcan
                                             </fieldset>
                                             <fieldset class="fieldset">
                                                 <h3 class="fieldset-title">Contact Info</h3>
@@ -346,8 +354,31 @@
             }
         });
 
+        function deleteUser() {
+            swal({
+                    title: "Are you sure?",
+                    text: "This Information will be deleted!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        window.location.href = "{{route('user-delete', $user->id)}}";
 
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        }
     </script>
+
+
 
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 @endsection

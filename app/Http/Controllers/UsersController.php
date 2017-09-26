@@ -7,6 +7,7 @@ use App\Policies\UserPolicy;
 use App\Role;
 use App\Timezone;
 use App\User_profile;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use App\User;
@@ -26,24 +27,35 @@ class UsersController extends Controller
      */
     protected function validator(array $data, User $user = null)
     {
-        return Validator::make($data, [
+
+        $rules = [
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'pro_pic'=>'image',
-            'email' => 'required|string|email|max:255|unique:users'.is_null($user)===FALSE?',NULL,'.$user->id:'',
+            'pro_pic' => 'image',
+            'email' => 'required|string|email|max:255|unique:users'
+            . is_null($user) === false ? ',NULL,' . $user->id : '',
             'password' => 'required|string|min:6|confirmed',
-            'primary_phone_no'=>'required|string|max:32|unique:user_profiles'.(is_null($user) && is_null($user->profile->id))===FALSE?',NULL,'.$user->profile->id:'',
-            'secondary_phone_no'=>'string|max:32|nullable',
-            'street_address_1'=>'required|string|max:128',
-            'street_address_2'=>'string|max:128|nullable',
-            'city'=>'required|string|max:32',
-            'state'=>'required|string|max:32',
-            'country'=>'required|string|max:32',
-            'zip'=>'required|string|max:8',
-            'role'=>'required|integer|exists:roles,id',
-            'timezone'=>'required|integer|exists:timezones,id',
-            'status'=>'required|integer|max:1'
-        ]);
+            'primary_phone_no' => 'required|string|max:32|unique:user_profiles'
+            . (is_null($user) && is_null($user->profile->id)) === false
+                ? ',NULL,' . $user->profile->id : '',
+            'secondary_phone_no' => 'string|max:32|nullable',
+            'street_address_1' => 'required|string|max:128',
+            'street_address_2' => 'string|max:128|nullable',
+            'city' => 'required|string|max:32',
+            'state' => 'required|string|max:32',
+            'country' => 'required|string|max:32',
+            'zip' => 'required|string|max:8',
+            'timezone' => 'required|integer|exists:timezones,id',
+        ];
+
+        if(Auth::user()->can('create', User::class)){
+            $rules=array_merge($rules, [
+                'status' => 'required|integer|max:1',
+                'role' => 'required|integer|exists:roles,id',
+
+            ]);
+        }
+        return Validator::make($data, $rules);
     }
 
     /**
@@ -62,6 +74,8 @@ class UsersController extends Controller
     }
 
     public function view(User $user){
+        $this->authorize('view', $user);
+
         return view('user.view-profile')->with(['user'=>$user]);
     }
 
@@ -146,7 +160,9 @@ class UsersController extends Controller
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
         $user->email = $data['email'];
-        $user->status=$data['status'];
+        if(Auth::user()->can('create', User::class)) {
+            $user->status = $data['status'];
+        }
         $user->profile->initial=mb_convert_case($data['first_name'][0].$data['last_name'][0], MB_CASE_UPPER);
         $user->profile->primary_phone_no=$data['primary_phone_no'];
         $user->profile->secondary_phone_no=$data['secondary_phone_no'];
@@ -180,10 +196,21 @@ class UsersController extends Controller
         $address->save();
         $user->profile->save();
         $user->profile->address()->associate($address);
-        Role::find($data['role'])->users()->save($user);
-        $timezone->profiles()->save($user->profile);
+        if(Auth::user()->can('create', User::class)) {
+            Role::find($data['role'])->users()->save($user);
+        }$timezone->profiles()->save($user->profile);
         DB::commit();
-        return back();
+        return back()->with(['message'=>'User Updated Successfully.', 'message_class'=>'alert-success']);
+    }
+
+    public function delete(User $user){
+        $this->authorize('delete', User::class);
+        if($user->customers()->count() == 0){
+            $user->delete();
+            return redirect(route('users-index'))->with(['message'=>'User deleted Successfully.', 'message_class'=>'alert-success']);
+        }
+        return back()->with(['result'=>'error', 'message'=>'Please assign all contacts to some other user before deleting.', 'message_class'=>'alert-danger']);
+
     }
 
 }

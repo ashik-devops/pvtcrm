@@ -40,11 +40,25 @@
                 </a>
             </li>
             @can('index', \App\User::class)
-            <li class="{{Nav::isRoute('users-index',"active")}}">
-                <a href="{{route('users-index')}}">
+            <li class="{{Nav::urlDoesContain('user',"active")}}">
+                <a href="'#'">
                     <span aria-hidden="true" class="icon icon_group"></span>
                     <span class="nav-label">Users</span>
+                    <span class="fa arrow"></span>
                 </a>
+                <ul class="sub-menu">
+                    <li  class="{{Nav::isRoute('users-index',"active")}}">
+                        <a href="{{route('users-index')}}">
+                            <span class="nav-label">All Users</span>
+                        </a>
+                    </li>
+                    <li  class="{{Nav::isRoute('role-index',"active")}}">
+                        <a href="{{route('role-index')}}">
+                            <span class="nav-label">All Roles</span>
+                        </a>
+                    </li>
+
+                </ul>
             </li>
             @endcan
         </ul>

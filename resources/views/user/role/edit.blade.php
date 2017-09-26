@@ -13,6 +13,7 @@
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module">
                         <div class="module-inner">
+                            @includeWhen(\Illuminate\Support\Facades\Session::has('message'), 'common.alert')
                             @yield('role-form')
                         </div>
                     </section>

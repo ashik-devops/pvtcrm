@@ -44,7 +44,6 @@
 
         @yield('header')
         @yield('main-nav')
-
         @yield('content')
 
 

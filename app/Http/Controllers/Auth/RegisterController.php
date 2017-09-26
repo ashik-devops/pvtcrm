@@ -90,7 +90,7 @@ class RegisterController extends Controller
         $user->first_name = $data['first_name'];
         $user->last_name = $data['last_name'];
         $user->email = $data['email'];
-        $user->password = $data['password'];
+        $user->password = bcrypt($data['password']);
         $user->status = $data['status'];
         $user_profile = new User_profile();
         $user_profile->profile_pic = null;

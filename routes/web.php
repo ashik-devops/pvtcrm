@@ -18,6 +18,7 @@ Auth::routes();
 
 Route::get('/users', 'UsersController@index')->name('users-index')->middleware('can:index,App\User');
 Route::post('/user/create', 'UsersController@createUser')->name('create-user')->middleware('can:create,App\User');
+Route::get('/user/delete/{user}', 'UsersController@delete')->name('user-delete')->middleware('can:delete,App\User');
 Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-edit');//->middleware('can:update,App\User');
 Route::get('/user/profile/{user}', 'UsersController@view')->name('profile-view');//->middleware('can:update,App\User');
 

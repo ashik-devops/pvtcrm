@@ -23,14 +23,6 @@
 
                             <div class="module-content collapse in" id="customers">
                                 {{ csrf_field() }}
-                                @if(Session::has('message'))
-
-                                    <div class="alert {{ Session::get('message_class') }} alert-theme alert-dismissible" role="alert">
-                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-                                        {{ Session::get('message') }}
-                                    </div>
-
-                                @endif
 
                                 <div class="module-content-inner no-padding-bottom">
                                     <div class="clearfix"></div>

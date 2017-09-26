@@ -11,6 +11,8 @@
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module">
                         <div class="module-inner">
+                            @includeWhen(\Illuminate\Support\Facades\Session::has('message'), 'common.alert')
+
                             <div class="side-bar">
                                 <div class="user-info">
                                     <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />
@@ -36,7 +38,12 @@
                                 <form class="form-horizontal" method="post" action="{{route('profile-update', [$user->id])}}" enctype="multipart/form-data" data-parsley-validate>
 
                                 <div class="tab-content">
-                                    <div class="text-right"><a class="btn btn-primary" href="{{route('profile-edit', $user->id)}}">Edit Profile</a></div>
+                                    <div class="text-right">
+                                        <a class="btn btn-primary" href="{{route('profile-edit', $user->id)}}">Edit Profile</a>
+                                        @can('delete', \App\User::class)
+                                            <button type="button" class="btn btn-danger" onclick="deleteUser()">Delete User</button>
+                                        @endcan
+                                    </div>
 
                                     <div id="profile" role="tabpanel" class="tab-pane active">
 
@@ -45,6 +52,10 @@
                                                 <div class="row">
                                                     <label class="col-sm-3 col-xs-4 col-md-2 text-right">Name</label>
                                                     <div class="col-sm-9 col-xs-8 col-md-10">{{$user->name}}</div>
+                                                </div>
+                                                <div class="row">
+                                                    <label class="col-sm-3 col-xs-4 col-md-2 text-right">Initials</label>
+                                                    <div class="col-sm-9 col-xs-8 col-md-10">{{$user->profile->initial}}</div>
                                                 </div>
                                                 <div class="row">
                                                     <label class="col-sm-3 col-xs-4 col-md-2 text-right">Role</label>
@@ -143,6 +154,7 @@
 
 
 @section('after-footer-script')
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
 
     <script type="text/javascript">
         jQuery('#status').select2({
@@ -174,8 +186,29 @@
             }
         });
 
+        function deleteUser() {
+            swal({
+                    title: "Are you sure?",
+                    text: "This Information will be deleted!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                         window.location.href = "{{route('user-delete', $user->id)}}";
 
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        }
     </script>
 
-    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
 @endsection
