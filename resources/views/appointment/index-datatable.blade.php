@@ -413,6 +413,10 @@
         }
 
 
+
+
+
+
         function closeAppointment(id, status){
 
             $('#journal_modal_button').val(status+ ' Appointment');
@@ -449,9 +453,9 @@
                     };
                 }
 
-                else if($('input[name=followUpType]:checked').val() === 'appointment'){
+                else if($('input[name=followUpType]:checked').val() === 'task'){
                     journal.followup = {
-                        type : 'appointment',
+                        type : 'task',
                         followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
                         followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
                         followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
@@ -478,7 +482,7 @@
                     if(response.result == 'Saved'){
                         reset_journal_form($('#journalForm')[0]);
                         $('#appointment-modal-complete').modal('hide');
-                        get_all_task_data();
+                        get_all_appointment_data();
                         $.notify(response.message, "success");
                     }
                     else{
@@ -495,6 +499,7 @@
             });
 
         }
+
 
 
 
@@ -553,7 +558,7 @@
 
 
         function completeAppointmentWithClosingView(){
-            var id = $('#appointment-modal-view').val();
+            var id = $('#appointmentIdForView').val();
 
             $('#appointment-modal-view').modal('hide');
 
@@ -564,6 +569,8 @@
 
 
         function cancelTask(id) {
+            var id = $('#appointmentIdForView').val();
+
             $('#appointment-modal-view').modal('hide');
 
 
