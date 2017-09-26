@@ -18,18 +18,14 @@ class UserPolicy
      * @param  \App\User  $user
      * @return boolean
      */
-    public function index(User $authenticated_user) : bool
+    public function index(User $authenticated_user): bool
     {
         if($this->checkAdmin($authenticated_user)){
             return true;
         }
-        return !is_null($authenticated_user->role->policies()
-            ->whereHas('action',function($query){
-                $query->whereIn('name', ['*', 'index']);
-            })
-            ->whereHas('scope',function($query){
-                $query->whereIn('name', ['*', 'user']);
-            })->first());
+
+
+        return  $this->checkAccess($authenticated_user, ['*', 'user'], ['*','index']);
     }
 
     /**
@@ -39,7 +35,7 @@ class UserPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function view(User $authenticated_user, User $user) : bool
+    public function view(User $authenticated_user, User $user): bool
     {
         if($this->checkAdmin($authenticated_user)){
             return true;
@@ -54,14 +50,16 @@ class UserPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
 
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','create'])->first());
+
+
+        return  $this->checkAccess($user, ['*', 'user'], ['*','create']);
+
     }
 
     /**
@@ -77,8 +75,8 @@ class UserPolicy
             return true;
         }
 
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','edit'])->first());
+
+        return $user->id === $authenticated_user->id || $this->checkAccess($authenticated_user, ['*', 'user'], ['*','edit']);
     }
 
     /**
@@ -94,8 +92,9 @@ class UserPolicy
             return true;
         }
 
-        return !is_null($authenticated_user->role->policies()->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','delete'])->first());
+
+        return $this->checkAccess($authenticated_user, ['*', 'user'], ['*','delete']);
+
     }
 
 
