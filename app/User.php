@@ -2,6 +2,10 @@
 
 namespace App;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -36,18 +40,22 @@ class User extends Authenticatable
         'password', 'remember_token',
     ];
 
-    public function profile(){
+    public function profile() : HasOne
+    {
         return $this->hasOne('App\User_profile');
     }
-    public function role(){
+    public function role() : BelongsTo
+    {
         return $this->belongsTo('App\Role');
     }
 
-    public function customers(){
+    public function customers(): HasMany
+    {
         return $this->hasMany('App\Customer');
     }
 
-    public function isAdmin(){
+    public function isAdmin() : bool
+    {
         return !is_null($this->role->policies()
         ->whereHas('action',function($query){
             $query->where('name', '=', '*');
@@ -55,7 +63,8 @@ class User extends Authenticatable
             $query->where('name', '=', '*');
             })->first());
     }
-    public function isSuperAdmin(){
+    public function isSuperAdmin() : bool
+    {
         return $this->role->id==1 && !is_null($this->role->policies()
                 ->whereHas('action',function($query){
                     $query->where('name', '=', '*');
@@ -64,7 +73,8 @@ class User extends Authenticatable
                 })->first());
     }
 
-    public function salesTeams(){
+    public function salesTeams() : BelongsToMany
+    {
         return $this->belongsToMany('App\Sales_team', 'sales_teams_users');
     }
     public function getLink(): string {
@@ -83,7 +93,7 @@ class User extends Authenticatable
         return "";
     }
 
-    public function timezone():Timezone{
+    public function timezone() : Timezone{
         return $this->profile->timezone;
     }
 

@@ -9,14 +9,16 @@ namespace App\Traits;
 use App\User;
 trait PolicyHelpers
 {
-    public function checkAdmin(User $user): boolean{
+    public function checkAdmin(User $user): bool
+    {
         if($user->isAdmin() || $user->isSuperAdmin()){
             return true;
         }
         return false;
     }
 
-    public function checkAccess(User $user, array $scopes, array $actions): boolean{
+    public function checkAccess(User $user, array $scopes, array $actions): bool
+    {
         return !is_null($user->role->policies()
             ->whereHas('action',function($query) use ($actions){
                 $query->whereIn('name', $actions);

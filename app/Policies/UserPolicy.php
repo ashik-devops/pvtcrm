@@ -16,9 +16,9 @@ class UserPolicy
      *
      * @param  \App\User  $authenticated_user
      * @param  \App\User  $user
-     * @return mixed
+     * @return boolean
      */
-    public function index(User $authenticated_user)
+    public function index(User $authenticated_user) : bool
     {
         if($this->checkAdmin($authenticated_user)){
             return true;
@@ -39,14 +39,13 @@ class UserPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function view(User $authenticated_user, User $user)
+    public function view(User $authenticated_user, User $user) : bool
     {
         if($this->checkAdmin($authenticated_user)){
             return true;
         }
-        return $user->id === $authenticated_user->id || !is_null($authenticated_user->role->policies()
-                ->whereIn('scope', ['*', 'user'])
-                ->whereIn('action',['*','view'])->first());
+
+        return $user->id === $authenticated_user->id || $this->checkAccess($authenticated_user, ['*', 'user'], ['*','view']);
     }
 
     /**
