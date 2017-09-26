@@ -27,9 +27,9 @@
                                             <div class="item">
                                                 <div class="row">
                                                     <div class="profile col-md-3 col-sm-3 col-xs-12">
-                                                        <a class="profile-img" href="{{route('profile-edit', [$user->id])}}"><img src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" /></a>
+                                                        <a class="profile-img" href="{{route('profile-view', [$user->id])}}"><img src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" /></a>
                                                         <ul class="info list-unstyled">
-                                                            <li class="name"><a href="{{route('profile-edit', [$user->id])}}">{{$user->name}}</a></li>
+                                                            <li class="name"><a href="{{route('profile-view', [$user->id])}}">{{$user->name}}</a></li>
                                                             <li class="role">{{$user->role->name or "Not Set"}}</li>
                                                             <li class="email"><a href="mailto:{{$user->email}}">{{$user->email}}</a></li>
                                                             <li class="phone"><a href="tel:{{$user->profile->primary_phone_no}}">{{$user->profile->primary_phone_no}}</a></li>

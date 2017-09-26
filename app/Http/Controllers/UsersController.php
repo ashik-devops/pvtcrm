@@ -61,6 +61,10 @@ class UsersController extends Controller
         ]);
     }
 
+    public function view(User $user){
+        return view('user.view-profile')->with(['user'=>$user]);
+    }
+
     public function listAll(Request $request){
         $this->authorize('index',User::class);
         $users = new User();

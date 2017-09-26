@@ -204,8 +204,8 @@
                     <i class="fa fa-caret-down"></i>
                 </div>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu-user" >
-                    <li><span class="arrow"></span><a role="menuitem" href="user-profile.html"><span class="pe-icon pe-7s-user icon"></span>My Account</a></li>
-                    <li><a role="menuitem" href="pricing.html"><span class="pe-icon pe-7s-paper-plane icon"></span>Upgrade Plan</a></li>
+                    <li><span class="arrow"></span><a role="menuitem" href="{{route('profile-view', \Illuminate\Support\Facades\Auth::user()->id)}}"><span class="pe-icon pe-7s-user icon"></span>My Account</a></li>
+                    {{--<li><a role="menuitem" href="pricing.html"><span class="pe-icon pe-7s-paper-plane icon"></span>Upgrade Plan</a></li>--}}
                     <li>
                         <a href="{{ route('logout') }}"
                            onclick="event.preventDefault();

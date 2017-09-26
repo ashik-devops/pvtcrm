@@ -7,7 +7,7 @@
 @section('content')
     <div id="content-wrapper" class="content-wrapper view view-account">
         <div class="container-fluid">
-            <h2 class="view-title">My Account</h2>
+            <h2 class="view-title">Edit Profile</h2>
             <div class="row">
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module">
@@ -36,10 +36,10 @@
 
                             <div class="content-panel">
                                 <form class="form-horizontal" method="post" action="{{route('profile-update', [$user->id])}}" enctype="multipart/form-data" data-parsley-validate>
+                                    <div class="text-right"><a class="btn btn-primary" href="{{route('profile-view', $user->id)}}">View Profile</a></div>
 
                                 <div class="tab-content">
                                     <div id="profile" role="tabpanel" class="tab-pane active">
-                                        <h2 class="title">Profile</h2>
                                             {{csrf_field()}}
                                             {{ method_field('PATCH')}}
 
