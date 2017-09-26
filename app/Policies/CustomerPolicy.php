@@ -19,15 +19,15 @@ class CustomerPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function index(User $user)
+    public function index(User $user): bool
     {
 
         if($this->checkAdmin($user)){
             return true;
         }
 
-        return !is_null($user->role->policies()->whereIn('scope', ['customer', '*'])
-            ->whereIn('action',['*','list'])->first());
+        return  $this->checkAccess($user, ['*', 'customer'], ['*','list']);
+
     }
 
     /**
@@ -42,8 +42,10 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
         return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->role->policies()->whereIn('scope', ['customer', '*'])
-                ->whereIn('action',['*','list'])->first());
+
+
+        return $user->id === $customer->user->id || $this->checkAccess($user, ['*', 'customer'], ['*','list']);
+
 
     }
 
@@ -58,8 +60,9 @@ class CustomerPolicy
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->role->policies()->whereIn('scope', ['customer', '*'])
-            ->whereIn('action',['*','create'])->first());
+
+        return $this->checkAccess($user, ['*', 'customer'], ['*','create']);
+
     }
 
     /**
@@ -69,14 +72,15 @@ class CustomerPolicy
      * @param  \App\Customer  $customer
      * @return mixed
      */
-    public function update(User $user, Customer $customer)
+    public function update(User $user, Customer $customer): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->role->policies()
-                ->whereIn('scope', ['customer', '*'])
-                ->whereIn('action',['*','edit'])->first());
+
+
+        return $user->id === $customer->user->id || $this->checkAccess($user, ['*', 'customer'], ['*','edit']);
+
     }
 
     /**
@@ -86,12 +90,14 @@ class CustomerPolicy
      * @param  \App\Customer  $customer
      * @return mixed
      */
-    public function delete(User $user, Customer $customer)
+    public function delete(User $user, Customer $customer): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $customer->user->id || !is_null($user->role->policies()->whereIn('scope', ['customer', '*'])
-                ->whereIn('action',['*','delete'])->first());
+
+
+        return $user->id === $customer->user->id || $this->checkAccess($user, ['*', 'customer'], ['*','delete']);
+
     }
 }

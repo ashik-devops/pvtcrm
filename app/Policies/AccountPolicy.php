@@ -18,13 +18,13 @@ class AccountPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function index(User $user)
+    public function index(User $user): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->policies()->whereIn('scope', ['*', 'account'])
-            ->whereIn('action',['*','list'])->first()->id);
+
+        return $this->checkAccess($user, ['*', 'account'], ['*','list']);
     }
 
     /**
@@ -34,13 +34,13 @@ class AccountPolicy
      * @param  \App\Customer  $company
      * @return mixed
      */
-    public function view(User $user, Account $company)
+    public function view(User $user, Account $company): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'account'])
-                ->whereIn('action',['*','view'])->first()->id);
+
+        return $user->id === $company->user->id || $this->checkAccess($user, ['*', 'account'], ['*','view']);
 
     }
 
@@ -50,13 +50,16 @@ class AccountPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->policies()->whereIn('scope', ['*', 'account'])
-            ->whereIn('action',['*','create'])->first()->id);
+
+
+        return  $this->checkAccess($user, ['*', 'account'], ['*','create']);
+
+
     }
 
     /**
@@ -66,13 +69,15 @@ class AccountPolicy
      * @param  \App\Customer  $company
      * @return mixed
      */
-    public function update(User $user, Account $company)
+    public function update(User $user, Account $company): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'account'])
-                ->whereIn('action',['*','edit'])->first()->id);
+
+
+        return $user->id === $company->user->id || $this->checkAccess($user, ['*', 'account'], ['*','edit']);
+
     }
 
     /**
@@ -82,12 +87,14 @@ class AccountPolicy
      * @param  \App\Customer  $company
      * @return mixed
      */
-    public function delete(User $user, Account $company)
+    public function delete(User $user, Account $company): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return $user->id === $company->user->id || !is_null($user->policies()->whereIn('scope', ['*', 'account'])
-                ->whereIn('action',['*','delete'])->first()->id);
+
+
+        return $user->id === $company->user->id || $this->checkAccess($user, ['*', 'account'], ['*','delete']);
+
     }
 }

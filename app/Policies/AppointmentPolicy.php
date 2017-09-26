@@ -19,14 +19,14 @@ class AppointmentPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function index(User $user)
+    public function index(User $user): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()
-            ->whereIn('scope',['customer','*'])
-            ->whereIn('action',['*','list'])->first());
+
+        return $this->checkAccess($user, ['*', 'customer'], ['*','list']);
+
     }
 
     /**
@@ -36,16 +36,16 @@ class AppointmentPolicy
      * @param  \App\Customer  $customer
      * @return mixed
      */
-    public function view(User $user, Appointment $appointment)
+    public function view(User $user, Appointment $appointment): bool
     {
 
         if($this->checkAdmin($user)){
             return true;
         }
 
-        return !is_null($user->role->policies()
-            ->whereIn('scope',  ['appointment','*'])
-            ->whereIn('action',['view','*'])->first());
+
+        return $this->checkAccess($user, ['*', 'appointment'], ['*','view']);
+
 
     }
 
@@ -55,13 +55,13 @@ class AppointmentPolicy
      * @param  \App\User  $user
      * @return mixed
      */
-    public function create(User $user)
+    public function create(User $user): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return  !is_null($user->role->policies()->whereIn('scope',['customer','*'])
-            ->whereIn('action',['*','create'])->first());
+
+        return $this->checkAccess($user, ['*', 'customer'], ['*','create']);
     }
 
     /**
@@ -71,13 +71,16 @@ class AppointmentPolicy
      * @param  \App\Customer  $customer
      * @return mixed
      */
-    public function update(User $user, Appointment $appointment)
+    public function update(User $user, Appointment $appointment): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()->whereIn('scope',['customer','*'])
-                ->whereIn('action',['*','edit'])->first());
+
+
+        return $this->checkAccess($user, ['*', 'customer'], ['*','edit']);
+
+
     }
 
     /**
@@ -87,13 +90,14 @@ class AppointmentPolicy
      * @param  \App\Customer  $customer
      * @return mixed
      */
-    public function delete(User $user, Appointment $appointment)
+    public function delete(User $user, Appointment $appointment): bool
     {
         if($this->checkAdmin($user)){
             return true;
         }
-        return !is_null($user->role->policies()->whereIn('scope',['customer','*'])
-                ->whereIn('action',['*','delete'])->first()->id);
+
+
+        return $this->checkAccess($user, ['*', 'customer'], ['*','delete']);
     }
 
 
