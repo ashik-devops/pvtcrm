@@ -9,3 +9,15 @@ npm-debug.log
 .env
 !/storage/app/public/assets/
 /vendor/
+./node_modules/node-gyp/node_modules/.bin/semver
+./node_modules/redeyed/node_modules/.bin/esparse
+./node_modules/redeyed/node_modules/.bin/esvalidate
+./node_modules/regjsparser/node_modules/.bin/jsesc
+./node_modules/send/node_modules/.bin/mime
+./node_modules/webpack-dev-middleware/node_modules/.bin/mime
+./node_modules/webpack-dev-server/node_modules/.bin/mime
+./public/storage
+./vendor/bin/generate-defuse-key
+./vendor/bin/php-parse
+./vendor/bin/phpunit
+./vendor/bin/psysh
