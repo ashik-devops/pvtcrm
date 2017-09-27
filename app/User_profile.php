@@ -5,10 +5,11 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User_profile extends Model
 {
-
+use SoftDeletes;
     public $obj_alias = 'User Profile';
 
     public function user(): BelongsTo{

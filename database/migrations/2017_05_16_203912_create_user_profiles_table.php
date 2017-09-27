@@ -21,6 +21,7 @@ class CreateUserProfilesTable extends Migration
             $table->string('primary_phone_no',32)->nullable();
             $table->string('secondary_phone_no',32)->nullable();
             $table->integer('address_id')->nullable();
+            $table->softDeletes();
             $table->timestamps();
         });
     }
