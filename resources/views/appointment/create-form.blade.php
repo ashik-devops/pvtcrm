@@ -53,10 +53,13 @@
         </div>
         <div class="form-group {{ $errors->has('end_time') ? ' has-error' : '' }}" id="end_time">
             <label class="sr-only">Date</label>
-            <div class="input-group date" id="end_timeTimePicker">
-                <input id="endTime" type="text" name="end_time" class="form-control" placeholder="End Time" data-parsley-trigger="change focusout" data-parsley-required-message="Due Date is required" required value="{{old('end_time')}}">
+            <div class="input-container" id="endtimeTimePickerContainer">
+                <div class="input-group date" id="end_timeTimePicker">
+                    <input id="endTime" type="text" name="end_time" class="form-control" placeholder="End Time" data-parsley-errors-container="#endtimeTimePickerContainer" data-parsley-trigger="change focusout" data-parsley-required-message="Due Date is required" required value="{{old('end_time')}}">
 
-                <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
+                    <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
+                </div>
+
             </div>
 
             @if ($errors->has('end_time'))

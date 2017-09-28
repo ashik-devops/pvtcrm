@@ -135,8 +135,10 @@
                                                 <div class="form-group {{ $errors->has('primary_phone_no') ? ' has-error' : '' }}">
                                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">Primary Phone</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="tel" name="primary_phone_no" id="primary_phone_no" class="phone form-control" required data-parsley-trigger="change focusout" value="{{ old('primary_phone_no', $user->profile->primary_phone_no) }}" data-parsley-required-message="You must enter phone no.">
-                                                        @if ($errors->has('primary_phone_no'))
+                                                        <div class="input-container" id="primary_phone_no_error_container">
+                                                            <input type="tel" name="primary_phone_no" data-parsley-errors-container="#primary_phone_no_error_container" id="primary_phone_no" class="phone form-control" required data-parsley-trigger="change focusout" value="{{ old('primary_phone_no', $user->profile->primary_phone_no) }}" data-parsley-required-message="You must enter phone no.">
+                                                        </div>
+                                                            @if ($errors->has('primary_phone_no'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('primary_phone_no') }}</strong>
                                     </span>
@@ -426,32 +428,26 @@
                     }
                 });
         }
-        var primary_phone_no = $("#primary_phone_no").intlTelInput({
+        var primary_phone_no = $("#primary_phone_no");
+        primary_phone_no.intlTelInput({
             nationalMode: true,
             formatOnDisplay: true,
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
 
-        primary_phone_no.keyup( function() {
+        primary_phone_no.on("keyup change",formatIntlTelephoneNumber(primary_phone_no));
+
+        function formatIntlTelephoneNumber(input) {
             if (typeof intlTelInputUtils !== 'undefined') {
 
-                var intlNumber = primary_phone_no.intlTelInput("getNumber");
-                console.log(intlNumber);
+                var intlNumber = primary_phone_no.input("getNumber");
+                if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
+                    input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
+                }
             }
-        });
-        {{--var secondary_phone_no = $("#secondary_phone_no").intlTelInput({--}}
-            {{--nationalMode: true,--}}
-            {{--formatOnDisplay: true,--}}
-            {{--utilsScript: "{{asset('storage/assets/js/utils.js')}}"--}}
-        {{--});--}}
+        }
 
-        {{--secondary_phone_no.on("keyup change", function() {--}}
-            {{--if (typeof intlTelInputUtils !== 'undefined') {--}}
 
-                {{--var intlNumber = secondary_phone_no.intlTelInput("getNumber");--}}
-                {{--console.log(intlNumber);--}}
-            {{--}--}}
-        {{--});--}}
     </script>
 
 
