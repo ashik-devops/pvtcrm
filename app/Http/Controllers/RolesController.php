@@ -9,6 +9,7 @@ use App\Role;
 use App\Scope;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -61,7 +62,7 @@ class RolesController extends Controller
 
         DB::beginTransaction();
         $role->save();
-        $this->createPolicies($request, $role);
+        $this->createPolicies($request->access, $role);
 
         DB::commit();
 

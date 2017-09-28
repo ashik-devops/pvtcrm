@@ -53,9 +53,7 @@
                                             <fieldset class="fieldset">
                                                 <h3 class="fieldset-title">Personal Info</h3>
                                                 <div class="form-group avatar">
-                                                    <figure class="figure col-md-2 col-sm-3 col-xs-12">
-                                                        <img class="img-rounded img-responsive" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />
-                                                    </figure>
+                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Upload new profile picture</label>
                                                     <div class="form-inline col-md-10 col-sm-9 col-xs-12">
                                                         <input type="file" name="pro_pic" class="file-uploader pull-left form-control">
                                                     </div>
