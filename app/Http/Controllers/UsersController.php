@@ -42,7 +42,7 @@ class UsersController extends Controller
             'street_address_1' => 'required|string|max:128',
             'street_address_2' => 'string|max:128|nullable',
             'city' => 'required|string|max:32',
-            'state' => 'required|string|max:32',
+            'state' => 'string|max:32',
             'country' => 'required|string|max:32',
             'zip' => 'required|string|max:8',
             'timezone' => 'required|integer|exists:timezones,id',

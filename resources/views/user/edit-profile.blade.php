@@ -229,30 +229,23 @@
                                         <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }}">
                                             <label for="country" class="col-md-2  col-sm-3 col-xs-12 control-label">Country</label>
                                             <div class="col-md-10 col-sm-9 col-xs-12">
-                                                <select required name="timezone" id="timezone" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">
-                                                    @if(old('timezone', $user->timezone()->id) > 0 )
-                                                        <option selected value="{{old('timezone', $user->timezone()->id)}}">{{\App\Timezone::find(old('timezone', $user->timezone()->id))->getLabel()}}</option>
+                                                <select required name="country" id="country" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">
+                                                    @if(!is_null(old('country', is_null($user->profile->address)? null: \App\Country::where('code', '=', $user->profile->address->country)->first()->code)))
+                                                        <option selected value="{{old('country', \App\Country::where('code', '=', $user->profile->address->country)->first()->code)}}">{{\App\Country::where('code', '=', $user->profile->address->country)->first()->name}}</option>
                                                     @else
-                                                        <option selected value="161">{{\App\Timezone::find(161)->getLabel()}}</option>
+                                                        <option selected value="US">{{\App\Country::find(235)->name}}</option>
                                                     @endif
 
                                                 </select>
 
-                                                @if ($errors->has('timezone'))
+                                                @if ($errors->has('country'))
                                                     <span class="help-block">
-                                        <strong>{{ $errors->first('role') }}</strong>
+                                        <strong>{{ $errors->first('country') }}</strong>
                                     </span>
                                                 @endif
 
                                             </div>
                                         </div>
-
-
-
-
-
-
-
 
                                         <div class="form-group"{{ $errors->has('zip') ? ' has-error' : '' }}>
                                             <label for="zip" class="col-md-2 col-sm-3 col-xs-12 control-label">ZIP</label>
@@ -380,6 +373,27 @@
 
                     return {
                         results: data.countries
+                    }
+                },
+
+                cache: true
+            }
+        });
+ var timezone = jQuery("#timezone").select2({
+            ajax: {
+                url: "{{route('timezones')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.timezones
                     }
                 },
 
