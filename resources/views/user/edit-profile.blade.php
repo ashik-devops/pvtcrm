@@ -2,6 +2,7 @@
 
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/intlTelInput.css')}}">
 @endsection
 
 @section('content')
@@ -134,7 +135,7 @@
                                                 <div class="form-group {{ $errors->has('primary_phone_no') ? ' has-error' : '' }}">
                                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">Primary Phone</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="text" name="primary_phone_no" class="form-control" placeholder="Primary Phone " required data-parsley-trigger="change focusout" value="{{ old('primary_phone_no', $user->profile->primary_phone_no) }}" data-parsley-required-message="You must enter phone no.">
+                                                        <input type="tel" name="primary_phone_no" class="phone form-control" placeholder="Primary Phone " required data-parsley-trigger="change focusout" value="{{ old('primary_phone_no', $user->profile->primary_phone_no) }}" data-parsley-required-message="You must enter phone no.">
                                                         @if ($errors->has('primary_phone_no'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('primary_phone_no') }}</strong>
@@ -146,7 +147,7 @@
                                                 <div class="form-group {{ $errors->has('secondary_phone_no') ? ' has-error' : '' }}">
                                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">Secondary Phone</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="text" name="secondary_phone_no" class="form-control" placeholder="Secondary Phone " data-parsley-trigger="change focusout" value="{{ old('secondary_phone_no', $user->profile->secondary_phone_no) }}">
+                                                        <input type="tel" name="secondary_phone_no" class="phone form-control" placeholder="Secondary Phone " data-parsley-trigger="change focusout" value="{{ old('secondary_phone_no', $user->profile->secondary_phone_no) }}">
                                                         @if ($errors->has('secondary_phone_no'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('secondary_phone_no') }}</strong>
@@ -321,6 +322,8 @@
 
 
 @section('after-footer-script')
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+    <script src="{{asset('storage/assets/js/intlTelInput.min.js')}}"></script>
 
     <script type="text/javascript">
         jQuery('#status').select2({
@@ -374,9 +377,10 @@
                     }
                 });
         }
+        $(".phone").intlTelInput();
     </script>
 
 
 
-    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
 @endsection
