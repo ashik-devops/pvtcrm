@@ -207,60 +207,88 @@
                                                         @endif
                                                     </div>
                                                 </div>
+                                        {{--
 
-                                                <div class="form-group"{{ $errors->has('name') ? ' has-error' : '' }}>
-                                                    <label for="country" class="col-md-2 col-sm-3 col-xs-12 control-label">Country</label>
-                                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                        <div class="form-group"{{ $errors->has('name') ? ' has-error' : '' }}>
+                                            <label for="country" class="col-md-2 col-sm-3 col-xs-12 control-label">Country</label>
+                                            <div class="col-md-10 col-sm-9 col-xs-12">
 
-                                                        <input id="country" type="text" class="form-control" placeholder="Country" value="{{ old('country', !is_null($user->profile->address)?$user->profile->address->country:'') }}" name="country" maxlength="32" required required data-parsley-required-message = "You must enter country" data-parsley-trigger="change focusout">
-                                                        @if ($errors->has('country'))
-                                                            <span class="help-block">
+                                                <input id="country" type="text" class="form-control" placeholder="Country" value="{{ old('country', !is_null($user->profile->address)?$user->profile->address->country:'') }}" name="country" maxlength="32" required required data-parsley-required-message = "You must enter country" data-parsley-trigger="change focusout">
+                                                @if ($errors->has('country'))
+                                                    <span class="help-block">
+                                <strong>{{ $errors->first('country') }}</strong>
+                            </span>
+                                                @endif
+                                            </div>
+                                        </div>
+
+                                            --}}
+
+
+
+
+                                        <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }}">
+                                            <label for="country" class="col-md-2  col-sm-3 col-xs-12 control-label">Country</label>
+                                            <div class="col-md-10 col-sm-9 col-xs-12">
+                                                <select required name="country" id="country" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">
+                                                    @if(!is_null(old('country', is_null($user->profile->address)? null: \App\Country::where('code', '=', $user->profile->address->country)->first()->code)))
+                                                        <option selected value="{{old('country', \App\Country::where('code', '=', $user->profile->address->country)->first()->code)}}">{{\App\Country::where('code', '=', $user->profile->address->country)->first()->name}}</option>
+                                                    @else
+                                                        <option selected value="US">{{\App\Country::find(235)->name}}</option>
+                                                    @endif
+
+                                                </select>
+
+                                                @if ($errors->has('country'))
+                                                    <span class="help-block">
                                         <strong>{{ $errors->first('country') }}</strong>
                                     </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group"{{ $errors->has('name') ? ' has-error' : '' }}>
-                                                    <label for="zip" class="col-md-2 col-sm-3 col-xs-12 control-label">ZIP</label>
-                                                    <div class="col-md-10 col-sm-9 col-xs-12">
+                                                @endif
 
-                                                        <input id="zip" type="text" class="form-control" placeholder="Zip" value="{{ old('zip', !is_null($user->profile->address)?$user->profile->address->zip:'') }}" name="zip" maxlength="8" required required data-parsley-required-message = "You must enter ZIP Code" data-parsley-trigger="change focusout">
-                                                        @if ($errors->has('zip'))
-                                                            <span class="help-block">
-                                        <strong>{{ $errors->first('zip') }}</strong>
-                                    </span>
-                                                        @endif
-                                                    </div></div>
+                                            </div>
+                                        </div>
 
-                                            </fieldset>
-                                            <fieldset class="fieldset">
-                                                <h3 class="fieldset-title">Update password</h3>
-                                                <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
-                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Password</label>
-                                                    <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="password" name="password" minlength="6" value="unchanged"  class="form-control" id="password" placeholder="Enter Password" required data-parsley-trigger="change focusout" data-parsley-required-message="You must enter a password.">
-                                                        @if ($errors->has('password'))
-                                                            <span class="help-block">
-                                        <strong>{{ $errors->first('password') }}</strong>
-                                    </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                                <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
-                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Confirm Password</label>
-                                                    <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="password" name="password_confirmation" value="unchanged" minlength="6"  class="form-control" placeholder="Enter Password Again" required data-parsley-trigger="change focusout" data-parsley-equalto="#password" data-parsley-equalto-message="Passwords does not match" data-parsley-required-message="You must enter password again.">
-                                                        @if ($errors->has('password_confirmation'))
-                                                            <span class="help-block">
-                                        <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                    </span>
-                                                        @endif
-                                                    </div>
-                                                </div>
-                                            </fieldset>
+                                        <div class="form-group"{{ $errors->has('zip') ? ' has-error' : '' }}>
+                                            <label for="zip" class="col-md-2 col-sm-3 col-xs-12 control-label">ZIP</label>
+                                            <div class="col-md-10 col-sm-9 col-xs-12">
 
-                                            <hr>
-                                            {{--<div class="form-group">--}}
+                                                <input id="zip" type="text" class="form-control" placeholder="Zip" value="{{ old('zip', !is_null($user->profile->address)?$user->profile->address->zip:'') }}" name="zip" maxlength="8" required required data-parsley-required-message = "You must enter ZIP Code" data-parsley-trigger="change focusout">
+                                                @if ($errors->has('zip'))
+                                                    <span class="help-block">
+                                <strong>{{ $errors->first('zip') }}</strong>
+                            </span>
+                                                @endif
+                                            </div></div>
+
+                                    </fieldset>
+                                    <fieldset class="fieldset">
+                                        <h3 class="fieldset-title">Update password</h3>
+                                        <div class="form-group {{ $errors->has('password') ? ' has-error' : '' }}">
+                                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">Password</label>
+                                            <div class="col-md-10 col-sm-9 col-xs-12">
+                                                <input type="password" name="password" minlength="6" value="unchanged"  class="form-control" id="password" placeholder="Enter Password" required data-parsley-trigger="change focusout" data-parsley-required-message="You must enter a password.">
+                                                @if ($errors->has('password'))
+                                                    <span class="help-block">
+                                <strong>{{ $errors->first('password') }}</strong>
+                            </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="form-group {{ $errors->has('password_confirmation') ? ' has-error' : '' }}">
+                                            <label class="col-md-2 col-sm-3 col-xs-12 control-label">Confirm Password</label>
+                                            <div class="col-md-10 col-sm-9 col-xs-12">
+                                                <input type="password" name="password_confirmation" value="unchanged" minlength="6"  class="form-control" placeholder="Enter Password Again" required data-parsley-trigger="change focusout" data-parsley-equalto="#password" data-parsley-equalto-message="Passwords does not match" data-parsley-required-message="You must enter password again.">
+                                                @if ($errors->has('password_confirmation'))
+                                                    <span class="help-block">
+                                <strong>{{ $errors->first('password_confirmation') }}</strong>
+                            </span>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </fieldset>
+
+                                    <hr>
+                                    {{--<div class="form-group">--}}
                                                 {{--<div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">--}}
                                                     {{--<input class="btn btn-primary" type="submit" value="Update Profile">--}}
                                                 {{--</div>--}}
@@ -333,7 +361,28 @@
             placeholder: "Select a Role",
         });
 
-       var timezone = jQuery("#timezone").select2({
+       var country = jQuery("#country").select2({
+            ajax: {
+                url: "{{route('countries')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.countries
+                    }
+                },
+
+                cache: true
+            }
+        });
+ var timezone = jQuery("#timezone").select2({
             ajax: {
                 url: "{{route('timezones')}}",
                 dataType: 'json',
