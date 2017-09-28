@@ -10,4 +10,8 @@ class Country extends Model
     public function timezones(): HasMany{
         return $this->hasMany('App\Timezone');
     }
+
+    public function states(): HasMany{
+        return $this->hasMany('App\State');
+    }
 }

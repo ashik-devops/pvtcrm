@@ -122,4 +122,5 @@ Route::get('/ajax/timezones/', 'TimezonesController@index')->name('timezones')->
 
 Route::get('/ajax/timezones/', 'TimezonesController@index')->name('timezones')->middleware('auth');
 
-Route::get('/ajax/country/', 'CountriesController@index')->name('countries')->middleware('auth');
+Route::get('/ajax/countries/', 'CountriesController@index')->name('countries')->middleware('auth');
+Route::get('/ajax/country/states/', 'CountriesController@states')->name('country-states')->middleware('auth');

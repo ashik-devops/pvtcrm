@@ -199,14 +199,21 @@
                                                 </div>
                                                 <div class="form-group"{{ $errors->has('name') ? ' has-error' : '' }}>
                                                     <label for="state" class="col-md-2 col-sm-3 col-xs-12 control-label">State</label>
-                                                    <div class="col-md-10 col-sm-9 col-xs-12">
 
-                                                        <input id="state" type="text" class="form-control" placeholder="State" value="{{ old('state', !is_null($user->profile->address)?$user->profile->address->state:'') }}" name="state" maxlength="32" required required data-parsley-required-message = "You must enter state" data-parsley-trigger="change focusout">
-                                                        @if ($errors->has('state'))
-                                                            <span class="help-block">
-                                        <strong>{{ $errors->first('state') }}</strong>
-                                    </span>
-                                                        @endif
+                                                        <div class="col-md-10 col-sm-9 col-xs-12">
+                                                            <div id="state-field-container">
+                                                            <select required name="state" data-parsley-errors-container="#state-field-container" id="state" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a state.">
+                                                                @if(!is_null(old('state', is_null($user->profile->address)? null: $user->profile->address->state)))
+                                                                    <option selected value="{{old('country', $user->profile->address->state)}}">{{$user->profile->address->state}}</option>
+                                                                @endif
+                                                            </select>
+                                                            </div>
+                                                            @if ($errors->has('state'))
+                                                                <span class="help-block">
+                                            <strong>{{ $errors->first('state') }}</strong>
+                                        </span>
+                                                            @endif
+
                                                     </div>
                                                 </div>
                                         {{--
@@ -232,7 +239,7 @@
                                         <div class="form-group {{ $errors->has('country') ? ' has-error' : '' }}">
                                             <label for="country" class="col-md-2  col-sm-3 col-xs-12 control-label">Country</label>
                                             <div class="col-md-10 col-sm-9 col-xs-12">
-                                                <select required name="country" id="country" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">
+                                                <select required name="country" id="country" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a country.">
                                                     @if(!is_null(old('country', is_null($user->profile->address)? null: \App\Country::where('code', '=', $user->profile->address->country)->first()->code)))
                                                         <option selected value="{{old('country', \App\Country::where('code', '=', $user->profile->address->country)->first()->code)}}">{{\App\Country::where('code', '=', $user->profile->address->country)->first()->name}}</option>
                                                     @else
@@ -363,6 +370,9 @@
             placeholder: "Select a Role",
         });
 
+
+
+
        var country = jQuery("#country").select2({
             ajax: {
                 url: "{{route('countries')}}",
@@ -384,6 +394,37 @@
                 cache: true
             }
         });
+
+
+       var state = jQuery("#state").select2({
+            ajax: {
+                placeholder: "Select State",
+                url: "{{route('country-states')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+
+                    return {
+                        country: jQuery("#country").val(),
+                        q: params.term, // search term
+
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.states
+                    }
+                },
+
+                cache: true
+            }
+        });
+
+        jQuery("#country").on('select2:select', function(){
+
+        });
+
  var timezone = jQuery("#timezone").select2({
             ajax: {
                 url: "{{route('timezones')}}",
@@ -435,12 +476,26 @@
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
 
-        primary_phone_no.on("keyup change",formatIntlTelephoneNumber(primary_phone_no));
+        primary_phone_no.on("keyup change",function () {
+            formatIntlTelephoneNumber(primary_phone_no);
+        });
+
+        var secondary_phone_no = $("#secondary_phone_no");
+        secondary_phone_no.intlTelInput({
+            nationalMode: true,
+            formatOnDisplay: true,
+            utilsScript: "{{asset('storage/assets/js/utils.js')}}"
+        });
+
+        secondary_phone_no.on("keyup change",function () {
+            formatIntlTelephoneNumber(secondary_phone_no);
+        });
 
         function formatIntlTelephoneNumber(input) {
             if (typeof intlTelInputUtils !== 'undefined') {
 
-                var intlNumber = primary_phone_no.input("getNumber");
+                var intlNumber = input.intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164);
+                console.log(intlNumber);
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
                     input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
                 }

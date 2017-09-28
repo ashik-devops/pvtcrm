@@ -22,4 +22,22 @@ class CountriesController extends Controller
             ], 200);
         }
 
+        public function states(Request $request){
+            $data = $this->validate($request, [
+                'q'=>'string',
+                'country'=>'required|string|exists:countries,code'
+            ]);
+            $country = Country::where('code','=', $data['country'])->first();
+
+            $states = $country->states()->select(['name'])->get();
+            if($request->q){
+              $states =  $states->where('name', 'LIKE', '%'.$request->q.'%')->select(['name'])->get();
+            }
+
+            return response()->json(['states'=>$states->map(function($state){
+                return ['id'=>$state->name, 'text'=>$state->name];
+            })],200);
+
+        }
+
 }
