@@ -105,6 +105,8 @@ return [
 
     'key' => env('APP_KEY'),
 
+    'version'=>env('APP_VERSION'),
+
     'cipher' => 'AES-256-CBC',
 
     /*
