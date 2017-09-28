@@ -202,9 +202,12 @@
 
                                                         <div class="col-md-10 col-sm-9 col-xs-12">
                                                             <div id="state-field-container">
-                                                            <select required name="state" data-parsley-errors-container="#state-field-container" id="state" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a state.">
+                                                            <select required name="state" data-parsley-errors-container="#state-field-container" id="state" class="form-control" style="width: 100%;" data-parsley-trigger="change focusout" required data-parsley-required-message="You must select a state.">
+
                                                                 @if(!is_null(old('state', is_null($user->profile->address)? null: $user->profile->address->state)))
                                                                     <option selected value="{{old('country', $user->profile->address->state)}}">{{$user->profile->address->state}}</option>
+                                                                @else
+                                                                    <option value="">Select State</option>
                                                                 @endif
                                                             </select>
                                                             </div>
@@ -396,9 +399,9 @@
         });
 
 
-       var state = jQuery("#state").select2({
+       jQuery("#state").select2({
             ajax: {
-                placeholder: "Select State",
+                placeholder:"Select state",
                 url: "{{route('country-states')}}",
                 dataType: 'json',
                 delay: 250,
@@ -421,8 +424,11 @@
             }
         });
 
-        jQuery("#country").on('select2:select', function(){
 
+        jQuery("#country").on('select2:select', function(){
+            $('#state').val('').trigger('change');
+            $("#state").parsley().reset();
+            $("#state-field-container .parsley-errors-list").remove();
         });
 
  var timezone = jQuery("#timezone").select2({
