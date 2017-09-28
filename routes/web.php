@@ -120,3 +120,6 @@ Route::get('/ajax/activities/recent/{count?}', 'ActivityController@recentActivit
 
 Route::get('/ajax/timezones/', 'TimezonesController@index')->name('timezones')->middleware('auth');
 
+Route::get('/ajax/timezones/', 'TimezonesController@index')->name('timezones')->middleware('auth');
+
+Route::get('/ajax/country/', 'CountriesController@index')->name('countries')->middleware('auth');
