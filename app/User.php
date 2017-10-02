@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -108,5 +109,17 @@ class User extends Authenticatable
     public function getNameAttribute(): string
     {
         return implode(', ', array_filter([$this->last_name, $this->first_name]));
+    }
+
+    /**
+     * Sends the password reset notification.
+     *
+     * @param  string $token
+     *
+     * @return void
+     */
+    public function sendPasswordResetNotification($token)
+    {
+        $this->notify(new ResetPassword($token, $this));
     }
 }

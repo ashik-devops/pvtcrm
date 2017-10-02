@@ -6,7 +6,7 @@
 @if ($level == 'error')
 # Whoops!
 @else
-# Hello!
+# Dear {{$user->name}}
 @endif
 @endif
 
