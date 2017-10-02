@@ -301,6 +301,7 @@
                                     <div class="form-group">
                                         <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
                                             <input class="btn btn-primary" type="submit" value="Update Profile">
+                                            <button type="button" class="btn btn-danger" onclick="goBack()">Cancel</button>
                                         </div>
                                     </div>
 
@@ -381,4 +382,10 @@
 
 
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
+    <script>
+        function goBack() {
+            window.history.back();
+        }
+    </script>
 @endsection

@@ -38,8 +38,7 @@ class RolesController extends Controller
                 return $role->users()->count();
             })
             ->addColumn('action',function ($role){
-                $buttons =  '<a href="#" class="btn btn-success">View</a>
-                        <a href="'.route('edit-role', [$role->id]).'" class="btn btn-primary">Edit</a>
+                $buttons =  '<a href="'.route('edit-role', [$role->id]).'" class="btn btn-primary">Edit</a>
                         ';
                 if($role->users()->count()==0 ){
                     $buttons.='<button onclick="deleteRole('.$role->id.')" class="btn btn-danger">Delete</button>';
