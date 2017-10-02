@@ -2,12 +2,14 @@
 
 namespace App;
 
+use App\Jobs\SendResetPasswordNotification;
 use App\Notifications\ResetPassword;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
@@ -16,7 +18,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class User extends Authenticatable
 {
-    use HasApiTokens ,Notifiable, SoftDeletes, CausesActivity, LogsActivity{
+    use HasApiTokens, DispatchesJobs, Notifiable, SoftDeletes, CausesActivity, LogsActivity{
     LogsActivity::activity insteadof CausesActivity;
     CausesActivity::activity as log;
 }
@@ -120,6 +122,7 @@ class User extends Authenticatable
      */
     public function sendPasswordResetNotification($token)
     {
-        $this->notify(new ResetPassword($token, $this));
+        $this->dispatch(new SendResetPasswordNotification($this, (new ResetPassword($token, $this))));
+
     }
 }
