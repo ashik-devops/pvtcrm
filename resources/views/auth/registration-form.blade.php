@@ -166,9 +166,10 @@
                 </span>
             @endif
         </div>
-
+        <div class="text-center modal-button-set">
+        <button type="button" class="btn btn-danger margin-top-md center-block" data-dismiss="modal">Close</button>
         <button type="submit" class="btn btn-success margin-top-md center-block">Add User</button>
-
+        </div>
     </form>
 @endsection
 

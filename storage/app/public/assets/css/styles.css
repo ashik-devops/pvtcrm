@@ -3,3 +3,7 @@ html{height:100%;background:#f9f9fb}.preload *{transition:none!important}.contai
 .actions{
     text-align: right;
 }
+
+.modal-button-set button{
+    display: inline-block;
+}

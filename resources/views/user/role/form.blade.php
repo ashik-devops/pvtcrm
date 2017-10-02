@@ -43,7 +43,11 @@
         </div>
             @endforeach
         </fieldset>
-        <div class="text-center"><input type="submit" class="btn btn-success" value="Save"></div>
+        <div class="text-center">
+            <button type="button" class="btn btn-success">Save</button>
+            <button type="button" class="btn btn-danger" onclick="goBack()">Cancel</button>
+        </div>
+
     </form>
 @endsection
 
@@ -73,4 +77,8 @@
 @section('role_form_scripts')
     <script src="{{asset('storage/assets/js/bootstrap-switch.js')}}"></script>
     <script src="{{asset('storage/assets/js/forms-bootstrap-switch.js')}}"></script>
+    <script>
+        function goBack() {
+            window.history.back();
+        }</script>
 @endsection
