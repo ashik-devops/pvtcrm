@@ -8,7 +8,7 @@
         <div class="form-group email {{ $errors->has('email') ? ' has-error' : '' }}">
             <label class="sr-only" for="login-email">Email or username</label>
             <span class="fa fa-user icon"></span>
-            <input id="login-email"  data-parsley-trigger="change focusout" data-parsley-required-message="You must enter your email" type="email" required name="email" class="form-control login-email " placeholder="Email or username">
+            <input id="login-email"  data-parsley-trigger="change focusout" data-parsley-required-message="You must enter your email" type="email" required name="email" class="form-control login-email " placeholder="Email ">
 
         </div>
 
@@ -18,7 +18,7 @@
             <input id="login-password" data-parsley-trigger="change focusout" name="password" data-parsley-required-message="You must enter your password" required type="password" class="form-control login-password" placeholder="Password">
 
 
-            <p class="forgot-password"><a href="reset-password.html">Forgot password?</a></p>
+            <p class="forgot-password"><a href="{{route('password.request')}}">Forgot password?</a></p>
         </div>
 
         <button type="submit" class="btn btn-block btn-primary">Login</button>
