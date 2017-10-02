@@ -12,6 +12,7 @@
 namespace Fxp\Composer\AssetPlugin\Repository;
 
 use Composer\DependencyResolver\Pool;
+use Composer\IO\IOInterface;
 use Composer\Package\CompletePackageInterface;
 use Composer\Package\Loader\ArrayLoader;
 use Composer\Repository\ArrayRepository;
@@ -137,6 +138,10 @@ class NpmRepository extends AbstractAssetsRepository
     /**
      * Create the array repository with the asset configs.
      *
+     * A warning message is displayed if the constraint versions of packages
+     * are broken. These versions are skipped and the plugin hope that other
+     * versions will be OK.
+     *
      * @param array $packageConfigs The configs of assets package versions
      *
      * @return CompletePackageInterface[]
@@ -147,10 +152,14 @@ class NpmRepository extends AbstractAssetsRepository
         $loader = new ArrayLoader();
 
         foreach ($packageConfigs as $version => $config) {
-            $config['version'] = $version;
-            $config = $this->assetType->getPackageConverter()->convert($config);
-            $config = $this->assetRepositoryManager->solveResolutions($config);
-            $packages[] = $loader->load($config);
+            try {
+                $config['version'] = $version;
+                $config = $this->assetType->getPackageConverter()->convert($config);
+                $config = $this->assetRepositoryManager->solveResolutions($config);
+                $packages[] = $loader->load($config);
+            } catch (\UnexpectedValueException $exception) {
+                $this->io->write("<warning>Skipped {$config['name']} version {$version}: {$exception->getMessage()}</warning>", IOInterface::VERBOSE);
+            }
         }
 
         return $packages;

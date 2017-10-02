@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
+class ComposerStaticInitc3540b3656ba929af3434d9e04fd811e
 {
     public static $files = array (
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
@@ -14,13 +14,13 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         '2c102faa651ef8ea5874edb585946bce' => __DIR__ . '/..' . '/swiftmailer/swiftmailer/lib/swift_required.php',
         'c964ee0ededf28c96ebd9db5099ef910' => __DIR__ . '/..' . '/guzzlehttp/promises/src/functions_include.php',
         'a0edc8309cc5e1d60e3047b5df6b7052' => __DIR__ . '/..' . '/guzzlehttp/psr7/src/functions_include.php',
-        'e91d0dc994644828154ae2387ede1ca8' => __DIR__ . '/..' . '/spatie/string/src/string_functions.php',
         'decc78cc4436b1292c6c0d151b19445c' => __DIR__ . '/..' . '/phpseclib/phpseclib/phpseclib/bootstrap.php',
         '37a3dc5111fe8f707ab4c132ef1dbc62' => __DIR__ . '/..' . '/guzzlehttp/guzzle/src/functions_include.php',
         'e7223560d890eab89cda23685e711e2c' => __DIR__ . '/..' . '/psy/psysh/src/Psy/functions.php',
-        '46441ce319666e68ac0d753056faa9f4' => __DIR__ . '/..' . '/devmarketer/easynav/src/DevMarketer/EasyNav/functions.php',
+        'e91d0dc994644828154ae2387ede1ca8' => __DIR__ . '/..' . '/spatie/string/src/string_functions.php',
         'f0906e6318348a765ffb6eb24e0d0938' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/helpers.php',
         '58571171fd5812e6e447dce228f52f4d' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Support/helpers.php',
+        '46441ce319666e68ac0d753056faa9f4' => __DIR__ . '/..' . '/devmarketer/easynav/src/DevMarketer/EasyNav/functions.php',
         '72b1e3f4a2af9b30b3f137b3ec2057fc' => __DIR__ . '/..' . '/spatie/laravel-activitylog/src/helpers.php',
         '0b47d6d4a00ca9112ba3953b49e7c9a4' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/helper.php',
     );
@@ -152,9 +152,9 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         ),
         'phpDocumentor\\Reflection\\' => 
         array (
-            0 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
-            1 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
-            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+            0 => __DIR__ . '/..' . '/phpdocumentor/reflection-common/src',
+            1 => __DIR__ . '/..' . '/phpdocumentor/type-resolver/src',
+            2 => __DIR__ . '/..' . '/phpdocumentor/reflection-docblock/src',
         ),
         'Zend\\Diactoros\\' => 
         array (
@@ -427,6 +427,7 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'ActionsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ActionsTableSeeder.php',
         'AddTimezoneUserProfileTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_21_071612_add_timezone_user_profile_table.php',
         'App\\Account' => __DIR__ . '/../..' . '/app/Account.php',
+        'App\\Action' => __DIR__ . '/../..' . '/app/Action.php',
         'App\\Address' => __DIR__ . '/../..' . '/app/Address.php',
         'App\\Appointment' => __DIR__ . '/../..' . '/app/Appointment.php',
         'App\\Console\\Kernel' => __DIR__ . '/../..' . '/app/Console/Kernel.php',
@@ -443,6 +444,7 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'App\\Http\\Controllers\\Auth\\ResetPasswordController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/ResetPasswordController.php',
         'App\\Http\\Controllers\\CalendarController' => __DIR__ . '/../..' . '/app/Http/Controllers/CalendarController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\CountriesController' => __DIR__ . '/../..' . '/app/Http/Controllers/CountriesController.php',
         'App\\Http\\Controllers\\CustomersController' => __DIR__ . '/../..' . '/app/Http/Controllers/CustomersController.php',
         'App\\Http\\Controllers\\HomeController' => __DIR__ . '/../..' . '/app/Http/Controllers/HomeController.php',
         'App\\Http\\Controllers\\JournalController' => __DIR__ . '/../..' . '/app/Http/Controllers/JournalController.php',
@@ -475,11 +477,13 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'App\\Providers\\RouteServiceProvider' => __DIR__ . '/../..' . '/app/Providers/RouteServiceProvider.php',
         'App\\Role' => __DIR__ . '/../..' . '/app/Role.php',
         'App\\Sales_team' => __DIR__ . '/../..' . '/app/Sales_team.php',
+        'App\\Scope' => __DIR__ . '/../..' . '/app/Scope.php',
+        'App\\State' => __DIR__ . '/../..' . '/app/State.php',
         'App\\Tag' => __DIR__ . '/../..' . '/app/Tag.php',
         'App\\Task' => __DIR__ . '/../..' . '/app/Task.php',
         'App\\Timezone' => __DIR__ . '/../..' . '/app/Timezone.php',
-        'App\\Traits\\AdminPolicies' => __DIR__ . '/../..' . '/app/Traits/AdminPolicies.php',
         'App\\Traits\\FilterScope' => __DIR__ . '/../..' . '/app/Traits/FilterScope.php',
+        'App\\Traits\\PolicyHelpers' => __DIR__ . '/../..' . '/app/Traits/PolicyHelpers.php',
         'App\\User' => __DIR__ . '/../..' . '/app/User.php',
         'App\\User_profile' => __DIR__ . '/../..' . '/app/User_profile.php',
         'AppointmentsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AppointmentsTableSeeder.php',
@@ -506,6 +510,7 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'CreateCustomerTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_29_010135_create_customer_table.php',
         'CreateCustomersIndexView' => __DIR__ . '/../..' . '/database/migrations/2017_07_16_092538_create_customers_index_view.php',
         'CreateCustomersTagsTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_06_200542_create_customers_tags_table.php',
+        'CreateJobsTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_02_061052_create_jobs_table.php',
         'CreateJournalsTable' => __DIR__ . '/../..' . '/database/migrations/2017_07_03_172856_create_journals_table.php',
         'CreatePasswordResetsTable' => __DIR__ . '/../..' . '/database/migrations/2014_10_12_100000_create_password_resets_table.php',
         'CreatePoliciesTable' => __DIR__ . '/../..' . '/database/migrations/2017_05_23_152241_create_policies_table.php',
@@ -4050,8 +4055,8 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
         'Yajra\\DataTables\\CollectionDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/CollectionDataTable.php',
         'Yajra\\DataTables\\Contracts\\DataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Contracts/DataTable.php',
         'Yajra\\DataTables\\DataTableAbstract' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTableAbstract.php',
-        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Datatables.php',
-        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DatatablesServiceProvider.php',
+        'Yajra\\DataTables\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTables.php',
+        'Yajra\\DataTables\\DataTablesServiceProvider' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/DataTablesServiceProvider.php',
         'Yajra\\DataTables\\EloquentDataTable' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/EloquentDataTable.php',
         'Yajra\\DataTables\\Exceptions\\Exception' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Exceptions/Exception.php',
         'Yajra\\DataTables\\Facades\\DataTables' => __DIR__ . '/..' . '/yajra/laravel-datatables-oracle/src/Facades/DataTables.php',
@@ -4189,10 +4194,10 @@ class ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitf1e853bd84a8e410f4b05a2775ad809e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitc3540b3656ba929af3434d9e04fd811e::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitc3540b3656ba929af3434d9e04fd811e::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitc3540b3656ba929af3434d9e04fd811e::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitc3540b3656ba929af3434d9e04fd811e::$classMap;
 
         }, null, ClassLoader::class);
     }
