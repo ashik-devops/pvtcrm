@@ -3,14 +3,12 @@
 namespace App\Notifications;
 
 use App\User;
-use Illuminate\Bus\Queueable;
-use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
+;
 use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Support\Facades\Mail;
 
 class ResetPassword extends \Illuminate\Auth\Notifications\ResetPassword
 {
+
     /**
      * The password reset token.
      *
