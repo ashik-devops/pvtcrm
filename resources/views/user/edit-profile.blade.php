@@ -502,7 +502,6 @@
             if (typeof intlTelInputUtils !== 'undefined') {
 
                 var intlNumber = input.intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164);
-                console.log(intlNumber);
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
                     input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
                 }
