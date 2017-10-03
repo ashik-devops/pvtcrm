@@ -8,8 +8,10 @@ use App\Account;
 use App\Policies\AppointmentPolicy;
 use App\Policies\AccountPolicy;
 use App\Policies\CustomerPolicy;
+use App\Policies\RolePolicy;
 use App\Policies\TaskPolicy;
 use App\Policies\UserPolicy;
+use App\Role;
 use App\Task;
 use App\User;
 use Carbon\Carbon;
@@ -30,7 +32,8 @@ class AuthServiceProvider extends ServiceProvider
         Customer::class => CustomerPolicy::class,
         Task::class=>TaskPolicy::class,
         Appointment::class=>AppointmentPolicy::class,
-        Account::class=>AccountPolicy::class
+        Account::class=>AccountPolicy::class,
+        Role::class =>RolePolicy::class
     ];
 
     /**
@@ -60,6 +63,9 @@ class AuthServiceProvider extends ServiceProvider
         ]);
         Gate::resource('customer_company', AccountPolicy::class, [
             'index'=>CustomerPolicy::class.'@index'
+        ]);
+        Gate::resource('role', RolePolicy::class, [
+            'index'=>RolePolicy::class.'@index'
         ]);
     }
 }

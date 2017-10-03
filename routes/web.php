@@ -23,14 +23,14 @@ Route::get('/user/profile/edit/{user}', 'UsersController@edit')->name('profile-e
 Route::get('/user/profile/{user}', 'UsersController@view')->name('profile-view');//->middleware('can:update,App\User');
 
 Route::patch('/user/profile/update/{user}', 'UsersController@update')->name('profile-update');//->middleware('can:update,App\User');
-Route::get('/ajax/users/list', 'UsersController@listAll')->name('list-users')->middleware('can:index,App\User');;
-Route::get('user/roles', 'RolesController@index')->name('role-index')->middleware('auth');
-Route::post('user/roles/create', 'RolesController@create')->name('create-role')->middleware('auth');
-Route::get('user/roles/edit/{role}', 'RolesController@edit')->name('edit-role')->middleware('auth');
-Route::post('user/roles/edit/{role}', 'RolesController@update')->name('update-role')->middleware('auth');
-Route::get('user/roles/create', 'RolesController@createForm')->name('create-role-form')->middleware('auth');
-Route::get('ajax/user/roles/', 'RolesController@getRolesAjax')->name('roles-list-data')->middleware('auth');
-Route::delete('ajax/user/roles/delete/', 'RolesController@delete')->name('delete-role')->middleware('auth');
+Route::get('/ajax/users/list', 'UsersController@listAll')->name('list-users')->middleware('can:index,App\User');
+Route::get('user/roles', 'RolesController@index')->name('role-index')->middleware(['auth', 'can:index,App\Role']);
+Route::post('user/roles/create', 'RolesController@create')->name('create-role')->middleware(['auth', 'can:create,App\Role']);
+Route::get('user/roles/edit/{role}', 'RolesController@edit')->name('edit-role')->middleware(['auth', 'can:update,App\Role']);
+Route::post('user/roles/edit/{role}', 'RolesController@update')->name('update-role')->middleware(['auth', 'can:update,App\Role']);
+Route::get('user/roles/create', 'RolesController@createForm')->name('create-role-form')->middleware(['auth', 'can:create,App\Role']);
+Route::get('ajax/user/roles/', 'RolesController@getRolesAjax')->name('roles-list-data')->middleware(['auth', 'can:index,App\Role']);
+Route::delete('ajax/user/roles/delete/', 'RolesController@delete')->name('delete-role')->middleware(['auth', 'can:delete,App\Role']);
 
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');

@@ -11,10 +11,7 @@ trait PolicyHelpers
 {
     public function checkAdmin(User $user): bool
     {
-        if($user->isAdmin() || $user->isSuperAdmin()){
-            return true;
-        }
-        return false;
+        return $user->isAdmin() || $user->isSuperAdmin();
     }
 
     public function checkAccess(User $user, array $scopes, array $actions): bool

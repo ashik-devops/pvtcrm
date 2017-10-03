@@ -60,7 +60,7 @@ class RolesController extends Controller
 
         DB::beginTransaction();
         $role->save();
-        $this->createPolicies($request, $role);
+        $this->createPolicies($request->access, $role);
 
         DB::commit();
 
