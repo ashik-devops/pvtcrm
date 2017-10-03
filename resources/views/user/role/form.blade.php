@@ -44,7 +44,7 @@
             @endforeach
         </fieldset>
         <div class="text-center">
-            <button type="button" class="btn btn-success">Save</button>
+            <button type="submit" class="btn btn-success">Save</button>
             <button type="button" class="btn btn-danger" onclick="goBack()">Cancel</button>
         </div>
 

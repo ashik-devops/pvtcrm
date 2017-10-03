@@ -80,7 +80,7 @@ class UsersController extends Controller
     }
 
     public function listAll(Request $request){
-        $this->authorize('index',User::class);
+//        $this->authorize('index',User::class);
         $users = new User();
         if(!empty($request->q)){
 
@@ -204,7 +204,7 @@ class UsersController extends Controller
     }
 
     public function delete(User $user){
-        $this->authorize('delete', User::class);
+//        $this->authorize('delete', User::class);
         if($user->customers()->count() == 0){
             $user->delete();
             return redirect(route('users-index'))->with(['message'=>'User deleted Successfully.', 'message_class'=>'alert-success']);
