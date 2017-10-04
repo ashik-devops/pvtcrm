@@ -33,6 +33,9 @@ class Role extends Model
     }
 
     public function getLink(): string {
+        if($this->id > 0){
+            return route('edit-role', [$this->id]);
+        }
         return '#';
     }
 

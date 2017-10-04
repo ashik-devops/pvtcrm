@@ -27,14 +27,13 @@
                                 <div class="module-content-inner no-padding-bottom">
                                     <div class="clearfix"></div>
                                     <div class="table-responsive">
-                                        <table id="roles-table" class="table table-bordered display" style="width: 100%;">
+                                        <table id="activity-table" class="table table-bordered display" style="width: 100%;">
                                             <thead>
                                             <tr>
-                                                <th>Id</th>
-                                                <th>Name</th>
-                                                <th>User Count</th>
-                                                <th>Actions</th>
-                                            </tr>
+                                                <th>Date</th>
+                                                <th>User</th>
+                                                <th>Summary</th>
+                                                </tr>
                                             </thead>
                                         </table>
                                     </div>
@@ -56,4 +55,29 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+
+    <script>
+        $('#activity-table').DataTable({
+            processing: true,
+            serverSide: true,
+            ajax: "{{route('activities.all.data')}}",
+            columns: [
+                {data: 'created_at', name: 'created_at'},
+                {data: 'user', name: 'user'},
+                {data: 'summary', name: 'summary'}
+            ],
+            initComplete: function () {
+                this.api().columns().every(function () {
+                    var column = this;
+                    var input = document.createElement('input');
+                    $(input).appendTo($(column.header()).empty())
+                        .on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                            column.search(val ? val : '', true, false).draw();
+                        });
+                });
+            }
+        });
+    </script>
 @endsection
