@@ -66,18 +66,6 @@
                 {data: 'user', name: 'user'},
                 {data: 'summary', name: 'summary'}
             ],
-            initComplete: function () {
-                this.api().columns().every(function () {
-                    var column = this;
-                    var input = document.createElement('input');
-                    $(input).appendTo($(column.header()).empty())
-                        .on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                });
-            }
         });
     </script>
 @endsection
