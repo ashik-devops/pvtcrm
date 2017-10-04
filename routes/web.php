@@ -117,6 +117,7 @@ Route::post('/journals/update', 'JournalController@updateJournal')->name('update
 
 
 Route::get('/ajax/activities/recent/{count?}', 'ActivityController@recentActivities')->name('recent-activities');
+Route::get('/ajax/activities/', 'ActivityController@getActivities')->name('activities.all.data');
 
 Route::get('/ajax/timezones/', 'TimezonesController@index')->name('timezones')->middleware('auth');
 

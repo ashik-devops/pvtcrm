@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityController extends Controller
@@ -13,7 +14,12 @@ class ActivityController extends Controller
         $this->middleware('auth');
     }
 
-    public function index(){}
+    public function getActivities(Request $request){
+        $from = Carbon::today()->startOfDay();
+        $to =   Carbon::today()->endOfDay();
+        $activities =  Activity::with(['causer', 'subject'])->whereBetween('created_at', [$from, $to])->get();
+        return $activities;
+    }
     public function recentActivities($count=10){
         return response()->json(Activity::with('causer', 'subject')->orderBy('created_at', 'desc')->take($count)->get()->map(function($activity){
 
