@@ -5,6 +5,11 @@
 
     <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
+
+    <style>
+        #filters-contaier{margin-bottom: 15px;}
+    </style>
 @endsection
 
 @section('content')
@@ -24,8 +29,53 @@
                             <div class="module-content collapse in" id="customers">
                                 {{ csrf_field() }}
 
-                                <div class="module-content-inner no-padding-bottom">
+                                <div class="module-content-inner no-padding-top">
                                     <div class="clearfix"></div>
+
+                                    <div class="module-content collapse in" id="tasks">
+                                        <div class="module-content-inner no-padding-middle">
+                                            <div class="row" id="filters-contaier">
+                                                <form action="#" id="filterForm">
+                                                <div class="col-xs-12 col-md-4">
+                                                    <div class="input-group date form-group" id="filterFromDateContainer">
+                                                        <input id="filterFromDate" type="text" name="from-date" class="form-control" placeholder="Started Date" >
+
+                                                        <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
+                                                    </div>
+
+                                                     <div class="input-group form-group date" id="filterToDateContainer">
+                                                        <input id="filterToDate" type="text" name="to-date" class="form-control" placeholder="Ended Date">
+
+                                                        <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-xs-12 col-md-4">
+                                                    <div class="form-group">
+                                                    <select id="userSelect" class="form-control select2" style="min-width: 200px;">
+                                                        <option value="" selected>All Users</option>
+                                                        {{--<option value="Delete">Delete</option>--}}
+                                                    </select>
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                    <select id="typeSelect" class="form-control select2" style="min-width: 200px;">
+                                                        <option value="" selected>All Types</option>
+                                                        {{--<option value="Delete">Delete</option>--}}
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                                <div class="col-xs-12 col-md-4">
+                                                    <button type="submit" id="filter-submit" class="btn btn-success">Filter</button>
+                                                </div>
+
+                                                </form>
+
+                                                </div>
+                                            <div class="clearfix"></div>
+
+
+
                                     <div class="table-responsive">
                                         <table id="activity-table" class="table table-bordered display" style="width: 100%;">
                                             <thead>
@@ -55,17 +105,39 @@
     {{--<script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>--}}
     <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.3.1/js/dataTables.buttons.min.js"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
 
     <script>
-        $('#activity-table').DataTable({
+       var activityTable= $('#activity-table').DataTable({
             processing: true,
             serverSide: true,
-            ajax: "{{route('activities.all.data')}}",
+            ajax: {
+                url: "{{route('activities.all.data')}}",
+                data: function (data) {
+                    data.from = jQuery("#filterFromDate").val();
+                    data.to = jQuery("#filterToDate").val();
+                    data.user = jQuery("#userSelect").val();
+                    data.type = jQuery("#typeSelect").val();
+                }
+            },
             columns: [
                 {data: 'created_at', name: 'created_at'},
                 {data: 'user', name: 'user'},
                 {data: 'summary', name: 'summary'}
             ],
         });
+
+        jQuery("#filterForm").submit(function(e){
+            e.preventDefault();
+            activityTable.draw();
+
+        });
+
+
+            $('#filterFromDateContainer').datetimepicker();
+            $('#filterToDateContainer').datetimepicker();
+            $(".select2").select2();
+
     </script>
 @endsection

@@ -502,9 +502,12 @@
             if (typeof intlTelInputUtils !== 'undefined') {
 
                 var intlNumber = input.intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164);
+//                var lastChar = input.val().trim().split('').reverse()[0];
+
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
                     input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
                 }
+
             }
         }
 
