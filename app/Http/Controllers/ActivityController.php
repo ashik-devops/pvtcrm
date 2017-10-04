@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\DataTables\DataTables;
@@ -20,8 +21,9 @@ class ActivityController extends Controller
     }
 
     public function getActivities(Request $request){
-        $from = Carbon::today()->startOfDay();
-        $to =   Carbon::today()->endOfDay();
+        $from = is_null($request->from)?Carbon::today()->firstOfMonth()->startOfDay():Carbon::createFromFormat('m/d/Y H:i A', $request->from);
+        $to = is_null($request->to)?Carbon::today()->endOfDay():Carbon::createFromFormat('m/d/Y H:i A', $request->to);
+
         $activities =  Activity::with(['causer', 'subject'])->whereBetween('created_at', [$from, $to]);
 
         return DataTables::of($activities)

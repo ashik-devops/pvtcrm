@@ -106,9 +106,15 @@ class User extends Authenticatable
         return $this->profile->timezone;
     }
 
-    public function getSubordinates(): array
+    public function getSubordinates() : array
     {
-        return [];
+        if($this->isAdmin() || $this->isSuperAdmin()){
+            return User::select(['id'])->get()->map(function($user){
+                return $user->id;
+            })->toArray();
+        }
+
+        return [$this->id];
     }
 
     public function getNameAttribute(): string

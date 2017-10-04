@@ -15,10 +15,7 @@
 @section('content')
     <div id="content-wrapper" class="content-wrapper view">
         <div class="container-fluid">
-            <h2 class="view-title">Roles</h2>
-            <div class="actions">
-                <a class="btn btn-success" href="{{route('create-role-form')}}"><i class="fa fa-plus"></i>New Role</a>
-            </div>
+            <h2 class="view-title">Activities</h2>
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module module-headings">
@@ -54,14 +51,20 @@
                                                     <div class="form-group">
                                                     <select id="userSelect" class="form-control select2" style="min-width: 200px;">
                                                         <option value="" selected>All Users</option>
-                                                        {{--<option value="Delete">Delete</option>--}}
+                                                        @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
+                                                            {{$user=\App\User::find($user)}}
+                                                        <option value="{{$user->id}}">{{$user->name}}</option>
+                                                        @endforeach
                                                     </select>
                                                     </div>
 
                                                     <div class="form-group">
                                                     <select id="typeSelect" class="form-control select2" style="min-width: 200px;">
                                                         <option value="" selected>All Types</option>
-                                                        {{--<option value="Delete">Delete</option>--}}
+                                                        @foreach(\Spatie\Activitylog\Models\Activity::distinct()->get(['description']) as $type)
+                                                            {{$user=\App\User::find($user)}}
+                                                            <option value="{{$type->description}}">{{mb_convert_case($type->description, MB_CASE_TITLE)}}</option>
+                                                        @endforeach
                                                     </select>
                                                     </div>
                                                 </div>
