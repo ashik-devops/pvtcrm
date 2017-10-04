@@ -80,9 +80,9 @@ class RolesController extends Controller
         $this->validator($request->all(), $role)->validate();
         DB::beginTransaction();
         $role->name=$request->name;
-        $role->save();
         $role->policies()->detach();
         $this->createPolicies($request->access, $role);
+        $role->save();
         DB::commit();
 
         return redirect(route('role-index'))->with(['message'=>'Role Updated Succesfully.', 'message_class'=>'alert-success']);

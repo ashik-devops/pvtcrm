@@ -23,6 +23,9 @@ class User extends Authenticatable
     CausesActivity::activity as log;
 }
 
+    protected static $logAttributes = ['first_name', 'last_name', 'password', 'email', 'profile'];
+    protected static $logOnlyDirty = true;
+
     public $obj_alias = 'User';
 
     /**
@@ -31,7 +34,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'first_name', 'last_name', 'email', 'password',
     ];
 
     /**
@@ -92,7 +95,7 @@ class User extends Authenticatable
     public function getActivityTitle(): string
     {
         if($this->id > 0){
-            return $this->user->name;
+            return $this->name;
         }
 
         return "";
