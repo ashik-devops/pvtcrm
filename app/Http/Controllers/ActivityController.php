@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Traits\PolicyHelpers;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -11,6 +12,7 @@ use Yajra\DataTables\DataTables;
 
 class ActivityController extends Controller
 {
+    use PolicyHelpers;
     public function __construct()
     {
         $this->middleware('auth');
@@ -29,14 +31,20 @@ class ActivityController extends Controller
 
         $activities =  Activity::with(['causer', 'subject'])->whereBetween('created_at', [$from, $to]);
 
-        if(!is_null($request->user)){
-            if($request->user == -1){
-                $activities = $activities->whereNull('causer_id');
-            }
-            else {
-                $activities = $activities->where('causer_id', '=', $request->user);
+        if($this->checkAdmin(Auth::user())){
+            if(!is_null($request->user)){
+                if($request->user == -1){
+                    $activities = $activities->whereNull('causer_id');
+                }
+                else {
+                    $activities = $activities->where('causer_id', '=', $request->user);
+                }
             }
         }
+        else{
+            $activities = $activities->where('causer_id', '=', Auth::user()->id);
+        }
+
 
         if(!is_null($request->type)){
             $activities = $activities->where('description', '=', $request->type);
