@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'AccountsTableSeeder' => $baseDir . '/database/seeds/AccountsTableSeeder.php',
     'ActionsTableSeeder' => $baseDir . '/database/seeds/ActionsTableSeeder.php',
+    'AddFieldActivityTypeInActivityTable' => $baseDir . '/database/migrations/2017_10_05_080031_add_field_activity_type_in_activity_table.php',
     'AddTimezoneUserProfileTable' => $baseDir . '/database/migrations/2017_09_21_071612_add_timezone_user_profile_table.php',
     'App\\Account' => $baseDir . '/app/Account.php',
     'App\\Action' => $baseDir . '/app/Action.php',
@@ -52,6 +53,7 @@ return array(
     'App\\Policies\\AccountPolicy' => $baseDir . '/app/Policies/AccountPolicy.php',
     'App\\Policies\\AppointmentPolicy' => $baseDir . '/app/Policies/AppointmentPolicy.php',
     'App\\Policies\\CustomerPolicy' => $baseDir . '/app/Policies/CustomerPolicy.php',
+    'App\\Policies\\RolePolicy' => $baseDir . '/app/Policies/RolePolicy.php',
     'App\\Policies\\TaskPolicy' => $baseDir . '/app/Policies/TaskPolicy.php',
     'App\\Policies\\UserPolicy' => $baseDir . '/app/Policies/UserPolicy.php',
     'App\\Policy' => $baseDir . '/app/Policy.php',

@@ -2,18 +2,18 @@
 
 namespace App;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Address extends Model
 {
-    use SoftDeletes;/*, CausesActivity, LogsActivity{
+    use SoftDeletes, CausesActivity, DetectsChanges, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
-    }*/
+    }
 
     public $obj_alias = 'Address';
 

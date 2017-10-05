@@ -2,14 +2,15 @@
 
 namespace App;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Account extends Model
 {
-    use SoftDeletes, CausesActivity, LogsActivity{
+    use SoftDeletes, CausesActivity, DetectsChanges, LogsActivityy{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }

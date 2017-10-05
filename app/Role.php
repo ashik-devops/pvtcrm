@@ -2,22 +2,21 @@
 
 namespace App;
 
-use function foo\func;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
+use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Role extends Model
 {
-    use CausesActivity, LogsActivity{
+    use CausesActivity, DetectsChanges, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
 
-    protected static $logAttributes = ['name', 'policyjson' ];
+    protected static $logAttributes = ['name'];
     protected static $logOnlyDirty = true;
 
 
@@ -57,9 +56,4 @@ class Role extends Model
 
         return json_encode($policies);
     }
-
-
-
-
-
 }
