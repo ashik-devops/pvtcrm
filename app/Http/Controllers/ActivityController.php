@@ -17,7 +17,10 @@ class ActivityController extends Controller
     }
 
     public function index(){
-        return view('activity.index');
+        return view('activity.index', [
+            'from'=>Carbon::today()->firstOfMonth()->startOfDay()->format('m/d/Y H:i A'),
+            'to'=>Carbon::today()->endOfDay()->format('m/d/Y H:i A'),
+            ]);
     }
 
     public function getActivities(Request $request){
@@ -25,6 +28,14 @@ class ActivityController extends Controller
         $to = is_null($request->to)?Carbon::today()->endOfDay():Carbon::createFromFormat('m/d/Y H:i A', $request->to);
 
         $activities =  Activity::with(['causer', 'subject'])->whereBetween('created_at', [$from, $to]);
+
+        if(!is_null($request->user)){
+            $activities = $activities->where('causer_id', '=', $request->user);
+        }
+
+        if(!is_null($request->type)){
+            $activities = $activities->where('description', '=', $request->type);
+        }
 
         return DataTables::of($activities)
             ->addColumn('user', function ($activity){

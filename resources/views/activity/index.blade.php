@@ -35,13 +35,13 @@
                                                 <form action="#" id="filterForm">
                                                 <div class="col-xs-12 col-md-4">
                                                     <div class="input-group date form-group" id="filterFromDateContainer">
-                                                        <input id="filterFromDate" type="text" name="from-date" class="form-control" placeholder="Started Date" >
+                                                        <input id="filterFromDate" value="{{$from}}" type="text" name="from-date" class="form-control" placeholder="Started Date" >
 
                                                         <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
                                                     </div>
 
                                                      <div class="input-group form-group date" id="filterToDateContainer">
-                                                        <input id="filterToDate" type="text" name="to-date" class="form-control" placeholder="Ended Date">
+                                                        <input id="filterToDate" value="{{$to}}" type="text" name="to-date" class="form-control" placeholder="Ended Date">
 
                                                         <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
                                                     </div>
@@ -49,7 +49,7 @@
 
                                                 <div class="col-xs-12 col-md-4">
                                                     <div class="form-group">
-                                                    <select id="userSelect" class="form-control select2" style="min-width: 200px;">
+                                                    <select id="userSelect" name="user" class="form-control select2" style="min-width: 200px;">
                                                         <option value="" selected>All Users</option>
                                                         @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
                                                             {{$user=\App\User::find($user)}}
@@ -59,7 +59,7 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                    <select id="typeSelect" class="form-control select2" style="min-width: 200px;">
+                                                    <select id="typeSelect" name="type" class="form-control select2" style="min-width: 200px;">
                                                         <option value="" selected>All Types</option>
                                                         @foreach(\Spatie\Activitylog\Models\Activity::distinct()->get(['description']) as $type)
                                                             {{$user=\App\User::find($user)}}
