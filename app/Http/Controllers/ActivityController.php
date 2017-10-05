@@ -3,10 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Traits\PolicyHelpers;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
 use Spatie\Activitylog\Models\Activity;
 use Yajra\DataTables\DataTables;
 

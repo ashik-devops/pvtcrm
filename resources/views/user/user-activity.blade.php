@@ -1,64 +1,21 @@
-@extends('layouts.app')
-@section('after-head-style')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
-    {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
-
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/1.3.1/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
-    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
-
-    <style>
-        #filters-contaier{margin-bottom: 15px;}
-    </style>
-@endsection
-
-@section('content')
-    <div id="content-wrapper" class="content-wrapper view">
-        <div class="container-fluid">
-            <h2 class="view-title">Activities</h2>
-            <div id="masonry" class="row">
-                <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
-                    <section class="module module-headings">
-                        <div class="module-inner">
-                            <div class="module-heading">
-                            </div>
-
-                            <div class="module-content collapse in" id="customers">
-                                {{ csrf_field() }}
-
-                                <div class="module-content-inner no-padding-top">
-                                    <div class="clearfix"></div>
-
-                                    <div class="module-content collapse in" id="tasks">
-                                        <div class="module-content-inner no-padding-middle">
+@section('user-activity-index')
                                             <div class="row" id="filters-contaier">
                                                 <form action="#" id="filterForm">
                                                     <div class="col-xs-12 col-md-4">
                                                         <div class="input-group date form-group" id="filterFromDateContainer">
-                                                            <input id="filterFromDate" value="{{$from}}" type="text" name="from-date" class="form-control" placeholder="Started Date" >
+                                                            <input id="filterFromDate" value="{{\Carbon\Carbon::today()->firstOfMonth()->startOfDay()->format('m/d/Y H:i A')}}" type="text" name="from-date" class="form-control" placeholder="Started Date" >
 
                                                             <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
                                                         </div>
 
                                                         <div class="input-group form-group date" id="filterToDateContainer">
-                                                            <input id="filterToDate" value="{{$to}}" type="text" name="to-date" class="form-control" placeholder="Ended Date">
+                                                            <input id="filterToDate" value="{{\Carbon\Carbon::today()->endOfDay()->format('m/d/Y H:i A')}}" type="text" name="to-date" class="form-control" placeholder="Ended Date">
 
                                                             <span class="input-group-addon"><i class="fa fa-calendar cursor-pointer"></i></span>
                                                         </div>
                                                     </div>
 
                                                     <div class="col-xs-12 col-md-4">
-                                                        <div class="form-group">
-                                                            <select id="userSelect" name="user" class="form-control select2" style="min-width: 200px;">
-                                                                <option value="" selected>All Users</option>
-                                                                <option value="-1">System</option>
-                                                            @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
-                                                                    {{$user=\App\User::find($user)}}
-                                                                    <option value="{{$user->id}}">{{$user->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
-
                                                         <div class="form-group">
                                                             <select id="typeSelect" name="type" class="form-control select2" style="min-width: 200px;">
                                                                 <option value="" selected>All Types</option>
@@ -90,19 +47,10 @@
                                                     </thead>
                                                 </table>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-                </div>
-            </div>
-        </div>
-    </div>
+
 @endsection
 
-@section('after-footer-script')
+@section('view-user-activity-scripts')
 
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
@@ -122,7 +70,7 @@
                 data: function (data) {
                     data.from = jQuery("#filterFromDate").val();
                     data.to = jQuery("#filterToDate").val();
-                    data.user = jQuery("#userSelect").val();
+                    data.user = "{{$user->id}}";
                     data.type = jQuery("#typeSelect").val();
                 }
             },

@@ -1,4 +1,5 @@
 @extends('layouts.app')
+@include('user.user-activity', ['user'=>$user])
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
 @endsection
@@ -28,6 +29,7 @@
                                 <nav class="side-menu">
                                     <ul class="nav nav-tabs nav-tabs-theme-2 tablist">
                                         <li class="active" role="presentation"><a href="#profile" aria-controls="profile" aria-expanded="true" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-user icon"></span> Profile</a></li>
+                                        <li  role="presentation"><a href="#activity" aria-controls="activity" aria-expanded="true" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-user icon"></span> Activity</a></li>
 
                                     </ul>
                                 </nav>
@@ -35,7 +37,6 @@
                             </div>
 
                             <div class="content-panel">
-                                <form class="form-horizontal" method="post" action="{{route('profile-update', [$user->id])}}" enctype="multipart/form-data" data-parsley-validate>
 
                                 <div class="tab-content">
                                     <div class="text-right">
@@ -105,35 +106,15 @@
                                             {{--</div>--}}
                                     </div>
 
-                                    {{--<div id="settings" role="tabpanel" class="tab-pane">--}}
-                                        {{--<h2 class="title">Settings</h2>--}}
+                                    <div id="activity" role="tabpanel" class="tab-pane">
+                                        <fieldset class="fieldset">
+                                        <h3 class="fieldset-title">Activity</h3>
 
-                                            {{--<fieldset class="fieldset">--}}
-                                                {{--<h3 class="fieldset-title">Timezone</h3>--}}
-                                                {{--<div class="form-group {{ $errors->has('timezone') ? ' has-error' : '' }}">--}}
-                                                    {{--<label class="col-md-2  col-sm-3 col-xs-12 control-label">Timezone</label>--}}
-                                                    {{--<div class="col-md-10 col-sm-9 col-xs-12">--}}
-                                                        {{--<select required name="timezone" id="timezone" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">--}}
-                                                            {{--@if(old('timezone', $user->timezone()->id) > 0 )--}}
-                                                            {{--<option selected value="{{old('timezone', $user->timezone()->id)}}">{{\App\Timezone::find(old('timezone', $user->timezone()->id))->getLabel()}}</option>--}}
-                                                            {{--@else--}}
-                                                                {{--<option selected value="161">{{\App\Timezone::find(161)->getLabel()}}</option>--}}
-                                                            {{--@endif--}}
 
-                                                        {{--</select>--}}
+                                            @yield('user-activity-index')
 
-                                                        {{--@if ($errors->has('timezone'))--}}
-                                                            {{--<span class="help-block">--}}
-                                        {{--<strong>{{ $errors->first('role') }}</strong>--}}
-                                    {{--</span>--}}
-                                                        {{--@endif--}}
-                                                    {{--</div>--}}
-                                                {{--</div>--}}
-
-                                            {{--</fieldset>--}}
-                                            {{--<hr>--}}
-
-                                    {{--</div>--}}
+                                        </fieldset>
+                                    </div>
                                 </div>
 
 
@@ -155,7 +136,6 @@
 
 @section('after-footer-script')
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
-
     <script type="text/javascript">
         jQuery('#status').select2({
 
@@ -210,5 +190,6 @@
         }
     </script>
 
+    @yield('view-user-activity-scripts')
 
 @endsection
