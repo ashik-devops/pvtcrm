@@ -30,7 +30,12 @@ class ActivityController extends Controller
         $activities =  Activity::with(['causer', 'subject'])->whereBetween('created_at', [$from, $to]);
 
         if(!is_null($request->user)){
-            $activities = $activities->where('causer_id', '=', $request->user);
+            if($request->user == -1){
+                $activities = $activities->whereNull('causer_id');
+            }
+            else {
+                $activities = $activities->where('causer_id', '=', $request->user);
+            }
         }
 
         if(!is_null($request->type)){
