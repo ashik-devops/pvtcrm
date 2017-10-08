@@ -51,9 +51,9 @@ class ActivityController extends Controller
         }
 
         return DataTables::of($activities)
-            ->addColumn('date', function ($activity){
+            ->addColumn('created_at', function ($activity){
                 $date =  new Carbon($activity->created_at);
-                return $date->toFormattedDateString();
+                return $date->format('M d, Y h:i:s A');
             })
 
             ->rawColumns(['description'])
@@ -67,7 +67,7 @@ class ActivityController extends Controller
             $log->happened = $date->diffForHumans();
 
 
-            $log->message= $this->description;
+            $log->message= $activity->description;
             return $log;
         }), 200);
     }
