@@ -29,7 +29,7 @@
                                                 <div class="row">
                                                     <div class="profile col-md-3 col-sm-3 col-xs-12">
                                                         <a class="profile-img" href="{{route('profile-view', [$user->id])}}">
-                                                            @if(!is_null($user->profile->profile_pic))
+                                                            @if(!is_null($user->profile->profile_pic) && file_exists('storage/'.$user->profile->profile_pic))
                                                                 <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}"/>
                                                             @else
                                                                 <img data-name="{{$user->profile->initial}}" data-char-count="2" class="img-profile profile-avatar img-circle img-responsive center-block" />
