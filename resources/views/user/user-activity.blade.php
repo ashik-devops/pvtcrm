@@ -19,8 +19,8 @@
                                                         <div class="form-group">
                                                             <select id="typeSelect" name="type" class="form-control select2" style="min-width: 200px;">
                                                                 <option value="" selected>All Types</option>
-                                                                @foreach(\Spatie\Activitylog\Models\Activity::distinct()->get(['description']) as $type)
-                                                                    <option value="{{$type->description}}">{{mb_convert_case($type->description, MB_CASE_TITLE)}}</option>
+                                                                @foreach(\Spatie\Activitylog\Models\Activity::distinct()->get(['type']) as $type)
+                                                                    <option value="{{$type->type}}">{{mb_convert_case($type->type, MB_CASE_TITLE)}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
@@ -41,8 +41,8 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Date</th>
-                                                        <th>User</th>
-                                                        <th>Summary</th>
+
+                                                        <th>Description</th>
                                                     </tr>
                                                     </thead>
                                                 </table>
@@ -70,22 +70,16 @@
                 data: function (data) {
                     data.from = jQuery("#filterFromDate").val();
                     data.to = jQuery("#filterToDate").val();
-                    data.user = "{{$user->id}}";
+
                     data.type = jQuery("#typeSelect").val();
                 }
             },
             columns: [
                 {data: 'created_at', name: 'created_at'},
-                {data: 'user', name: 'user'},
-                {data: 'summary', name: 'summary'}
+
+                {data: 'description', name: 'description'}
             ],
-            "columnDefs": [
-                {
-                    "targets": [ 1 ],
-                    "visible": false,
-                    "searchable": false
-                }
-            ]
+
         });
 
         jQuery("#filterForm").submit(function(e){

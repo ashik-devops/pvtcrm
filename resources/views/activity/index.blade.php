@@ -53,8 +53,8 @@
                                                         <div class="form-group">
                                                             <select id="typeSelect" name="type" class="form-control select2" style="min-width: 200px;">
                                                                 <option value="" selected>All Types</option>
-                                                                @foreach(\Spatie\Activitylog\Models\Activity::distinct()->get(['description']) as $type)
-                                                                    <option value="{{$type->description}}">{{mb_convert_case($type->description, MB_CASE_TITLE)}}</option>
+                                                                @foreach(\Spatie\Activitylog\Models\Activity::distinct()->get(['type']) as $type)
+                                                                    <option value="{{$type->type}}">{{mb_convert_case($type->type, MB_CASE_TITLE)}}</option>
                                                                 @endforeach
                                                             </select>
                                                         </div>
