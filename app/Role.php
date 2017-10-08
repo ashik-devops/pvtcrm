@@ -38,13 +38,6 @@ class Role extends Model
         return '#';
     }
 
-    public function getActivityTitle(): string{
-
-        if($this->id > 0){
-            return $this->name;
-        }
-        return '';
-    }
 
     public function getPolicyjsonAttribute(){
         $this->load(['policies']);
@@ -57,6 +50,12 @@ class Role extends Model
         return json_encode($policies);
     }
 
+    public function getActivityTitle(): string{
 
+        if($this->id > 0){
+            return $this->name;
+        }
+        return '';
+    }
 
 }

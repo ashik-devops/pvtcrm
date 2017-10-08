@@ -127,4 +127,5 @@ trait LogsActivity
         //do not log update event if only ignored attributes are changed
         return (bool) count(array_except($this->getDirty(), $this->attributesToBeIgnored()));
     }
+
 }
