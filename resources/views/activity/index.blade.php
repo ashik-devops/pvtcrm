@@ -48,16 +48,7 @@
                                                     </div>
 
                                                     <div class="col-xs-12 col-md-4">
-                                                        <div class="form-group">
-                                                            <select id="userSelect" name="user" class="form-control select2" style="min-width: 200px;">
-                                                                <option value="" selected>All Users</option>
-                                                                <option value="-1">System</option>
-                                                            @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
-                                                                    {{$user=\App\User::find($user)}}
-                                                                    <option value="{{$user->id}}">{{$user->name}}</option>
-                                                                @endforeach
-                                                            </select>
-                                                        </div>
+
 
                                                         <div class="form-group">
                                                             <select id="typeSelect" name="type" class="form-control select2" style="min-width: 200px;">
@@ -84,8 +75,8 @@
                                                     <thead>
                                                     <tr>
                                                         <th>Date</th>
-                                                        <th>User</th>
-                                                        <th>Summary</th>
+
+                                                        <th>Description</th>
                                                     </tr>
                                                     </thead>
                                                 </table>
@@ -122,23 +113,17 @@
                 data: function (data) {
                     data.from = jQuery("#filterFromDate").val();
                     data.to = jQuery("#filterToDate").val();
-                    data.user = jQuery("#userSelect").val();
+
                     data.type = jQuery("#typeSelect").val();
                 }
             },
             columns: [
                 {data: 'created_at', name: 'created_at'},
-                {data: 'user', name: 'user'},
-                {data: 'summary', name: 'summary'}
+
+                {data: 'description', name: 'description'}
             ],
 
-            "columnDefs": [
-                {
-                    "targets": [ 1 ],
-                    "visible": false,
-                    "searchable": false
-                }
-            ]
+
         });
 
         jQuery("#filterForm").submit(function(e){
