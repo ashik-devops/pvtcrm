@@ -29,12 +29,12 @@ class CountriesController extends Controller
             ]);
             $country = Country::where('code','=', $data['country'])->first();
 
-            $states = $country->states()->select(['name'])->get();
+            $states = $country->states()->select('name');
             if($request->q){
-              $states =  $states->where('name', 'LIKE', '%'.$request->q.'%')->select(['name'])->get();
+              $states =  $states->where('name', 'LIKE', '%'.$request->q.'%');
             }
 
-            return response()->json(['states'=>$states->map(function($state){
+            return response()->json(['states'=>$states->get()->map(function($state){
                 return ['id'=>$state->name, 'text'=>$state->name];
             })],200);
 
