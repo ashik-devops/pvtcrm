@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Appointment extends Model
 {
-    use SoftDeletes,DetectsChanges, CausesActivity, LogsActivity{
+    use SoftDeletes, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }

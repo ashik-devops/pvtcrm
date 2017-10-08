@@ -11,7 +11,7 @@ use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Account extends Model
 {
-    use SoftDeletes, CausesActivity, DetectsChanges, LogsActivityy{
+    use SoftDeletes, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
