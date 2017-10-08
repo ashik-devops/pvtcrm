@@ -7,11 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Role extends Model
 {
-    use CausesActivity, DetectsChanges, LogsActivity{
+    use CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }

@@ -10,15 +10,16 @@ namespace App\Helpers;
 
 
 use Spatie\Activitylog\ActivityLogger as BaseActivityLogger;
+use Spatie\Activitylog\ActivitylogServiceProvider;
 
-class ActvityLogger extends  BaseActivityLogger
+class ActivityLogger extends  BaseActivityLogger
 {
     /**
      * @param string $description
      *
      * @return null|mixed
      */
-    public function log(string $description, $eventname)
+    public function log(string $description, $eventname=null)
     {
         if (! $this->logEnabled) {
             return;
