@@ -29,6 +29,15 @@ class Address extends Model
         return '#';
     }
 
+    public function getActivityTitle(): string{
+
+        if($this->id > 0){
+            if(!is_null($this->customer)){
+                return "Address of ".$this->customer->getCustomerNameWithAccount();
+            }
+        }
+        return '';
+    }
 
 
 }

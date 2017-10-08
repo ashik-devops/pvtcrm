@@ -2,10 +2,11 @@
 
 namespace App;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
+//use Spatie\Activitylog\Traits\LogsActivity;
 
 class Sales_team extends Model
 {

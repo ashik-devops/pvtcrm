@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Customer extends Model
 {
-    use SoftDeletes, DetectsChanges, CausesActivity, LogsActivity{
+    use SoftDeletes, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
@@ -50,8 +50,16 @@ class Customer extends Model
     }
     public function getActivityTitle(): string {
         if($this->id > 0){
-            return implode(', ', array_filter([$this->last_name, $this->first_name]))."({$this->account->account_no})";
+            return $this->getCustomerNameWithAccount();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerNameWithAccount(): string
+    {
+        return implode(', ', array_filter([$this->last_name, $this->first_name])) . "({$this->account->account_no})";
     }
 
 }
