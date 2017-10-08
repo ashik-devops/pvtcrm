@@ -61,6 +61,15 @@
                 </ul>
             </li>
             @endcan
+            @if(\Illuminate\Support\Facades\Auth::user()->isAdmin() || \Illuminate\Support\Facades\Auth::user()->isSuperAdmin())
+                <li class="{{Nav::isRoute('activities-index',"active")}}">
+                    <a href="{{route('activities-index')}}">
+                        <span aria-hidden="true" class="fa fa-space-shuttle"></span>
+                        <span class="nav-label">Activity Log</span>
+                    </a>
+                </li>
+            @endif
+
         </ul>
     </nav>
 </div>
