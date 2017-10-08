@@ -2,11 +2,11 @@
 
 namespace App;
 
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
 use Spatie\Activitylog\Traits\DetectsChanges;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Customer extends Model
 {
@@ -50,8 +50,16 @@ class Customer extends Model
     }
     public function getActivityTitle(): string {
         if($this->id > 0){
-            return implode(', ', array_filter([$this->last_name, $this->first_name]))."({$this->account->account_no})";
+            return $this->getCustomerNameWithAccount();
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getCustomerNameWithAccount(): string
+    {
+        return implode(', ', array_filter([$this->last_name, $this->first_name])) . "({$this->account->account_no})";
     }
 
 }

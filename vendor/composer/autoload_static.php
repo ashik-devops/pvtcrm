@@ -425,6 +425,7 @@ class ComposerStaticInitc3540b3656ba929af3434d9e04fd811e
     public static $classMap = array (
         'AccountsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/AccountsTableSeeder.php',
         'ActionsTableSeeder' => __DIR__ . '/../..' . '/database/seeds/ActionsTableSeeder.php',
+        'AddFieldActivityTypeInActivityTable' => __DIR__ . '/../..' . '/database/migrations/2017_10_05_080031_add_field_activity_type_in_activity_table.php',
         'AddTimezoneUserProfileTable' => __DIR__ . '/../..' . '/database/migrations/2017_09_21_071612_add_timezone_user_profile_table.php',
         'App\\Account' => __DIR__ . '/../..' . '/app/Account.php',
         'App\\Action' => __DIR__ . '/../..' . '/app/Action.php',
@@ -469,6 +470,7 @@ class ComposerStaticInitc3540b3656ba929af3434d9e04fd811e
         'App\\Policies\\AccountPolicy' => __DIR__ . '/../..' . '/app/Policies/AccountPolicy.php',
         'App\\Policies\\AppointmentPolicy' => __DIR__ . '/../..' . '/app/Policies/AppointmentPolicy.php',
         'App\\Policies\\CustomerPolicy' => __DIR__ . '/../..' . '/app/Policies/CustomerPolicy.php',
+        'App\\Policies\\RolePolicy' => __DIR__ . '/../..' . '/app/Policies/RolePolicy.php',
         'App\\Policies\\TaskPolicy' => __DIR__ . '/../..' . '/app/Policies/TaskPolicy.php',
         'App\\Policies\\UserPolicy' => __DIR__ . '/../..' . '/app/Policies/UserPolicy.php',
         'App\\Policy' => __DIR__ . '/../..' . '/app/Policy.php',

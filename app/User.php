@@ -4,6 +4,7 @@ namespace App;
 
 use App\Jobs\SendResetPasswordNotification;
 use App\Notifications\ResetPassword;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -14,8 +15,6 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
-
 class User extends Authenticatable
 {
     use HasApiTokens, DispatchesJobs, Notifiable, SoftDeletes, CausesActivity, LogsActivity{

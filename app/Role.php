@@ -2,13 +2,12 @@
 
 namespace App;
 
-use function foo\func;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\LogsActivity;
 
 class Role extends Model
 {
@@ -17,7 +16,7 @@ class Role extends Model
         CausesActivity::activity as log;
     }
 
-    protected static $logAttributes = ['name', 'policyjson' ];
+    protected static $logAttributes = ['name'];
     protected static $logOnlyDirty = true;
 
 
@@ -39,13 +38,6 @@ class Role extends Model
         return '#';
     }
 
-    public function getActivityTitle(): string{
-
-        if($this->id > 0){
-            return $this->name;
-        }
-        return '';
-    }
 
     public function getPolicyjsonAttribute(){
         $this->load(['policies']);
@@ -58,8 +50,12 @@ class Role extends Model
         return json_encode($policies);
     }
 
+    public function getActivityTitle(): string{
 
-
-
+        if($this->id > 0){
+            return $this->name;
+        }
+        return '';
+    }
 
 }
