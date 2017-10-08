@@ -29,45 +29,34 @@ class ActivityController extends Controller
         $from = is_null($request->from)?Carbon::today()->firstOfMonth()->startOfDay():Carbon::createFromFormat('m/d/Y H:i A', $request->from);
         $to = is_null($request->to)?Carbon::today()->endOfDay():Carbon::createFromFormat('m/d/Y H:i A', $request->to);
 
-        $activities =  Activity::with(['causer', 'subject'])->whereBetween('created_at', [$from, $to]);
+        $activities =  Activity::whereBetween('created_at', [$from, $to]);
 
-        if($this->checkAdmin(Auth::user())){
-            if(!is_null($request->user)){
-                if($request->user == -1){
-                    $activities = $activities->whereNull('causer_id');
-                }
-                else {
-                    $activities = $activities->where('causer_id', '=', $request->user);
-                }
-            }
-        }
-        else{
-            $activities = $activities->where('causer_id', '=', Auth::user()->id);
-        }
+        $activities = $this->applyUserFIltering($activities, $request->user);
 
 
         if(!is_null($request->type)){
             $activities = $activities->where('description', '=', $request->type);
         }
 
+        $activities = $activities->select('description', 'created_at');
+
         return DataTables::of($activities)
-            ->addColumn('date', function ($activity){
+            ->addColumn('created_at', function ($activity){
                 $date =  new Carbon($activity->created_at);
                 return $date->toFormattedDateString();
             })
-
             ->rawColumns(['description'])
             ->make();
     }
     public function recentActivities($count=10){
-        return response()->json(Activity::with('causer', 'subject')->orderBy('created_at', 'desc')->take($count)->get()->map(function($activity){
+        return response()->json($this->applyUserFIltering(Activity::with('causer', 'subject'))->orderBy('created_at', 'desc')->take($count)->get()->map(function($activity){
 
             $date =  new Carbon($activity->created_at);
             $log = new \stdClass();
             $log->happened = $date->diffForHumans();
 
 
-            $log->message= $this->description;
+            $log->message= $activity->description;
             return $log;
         }), 200);
     }
@@ -80,5 +69,26 @@ class ActivityController extends Controller
 
         return'<strong><a href="' . route('profile-view', [$activity->causer->id]) . '">' . $activity->causer->name . '</a><strong> has ' .$activity->description . ' ' . $activity->subject->obj_alias . ': <a href="' . $activity->subject->getLink() . '">' . $activity->subject->getActivityTitle() . '</a>';
 
+    }
+
+    /**
+     * @param Request $request
+     * @param $activities
+     * @return mixed
+     */
+    private function applyUserFIltering($activities, $user=null)
+    {
+        if ($this->checkAdmin(Auth::user())) {
+            if (!is_null($user)) {
+                if ($user == -1) {
+                    $activities = $activities->whereNull('causer_id');
+                } else {
+                    $activities = $activities->where('causer_id', '=', $user);
+                }
+            }
+        } else {
+            $activities = $activities->where('causer_id', 'IN', Auth::user()->getSubordinates());
+        }
+        return $activities;
     }
 }
