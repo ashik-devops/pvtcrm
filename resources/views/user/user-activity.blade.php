@@ -76,7 +76,7 @@
                 }
             },
             columns: [
-                {data: 'created_at', name: 'created_at', orderable: true},
+                {data: 'created_at', name: 'created_at'},
 
                 {data: 'description', name: 'description'}
             ],

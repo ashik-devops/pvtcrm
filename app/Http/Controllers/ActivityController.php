@@ -39,7 +39,6 @@ class ActivityController extends Controller
                 $date =  new Carbon($activity->created_at);
                 return $date->format('M d, Y h:i:s A');
             })
-//            ->orderColumn('created_at', 'created_at $1')
             ->rawColumns(['description'])
             ->make();
     }
