@@ -51,13 +51,12 @@ class ActivityController extends Controller
         }
 
         return DataTables::of($activities)
-            ->addColumn('user', function ($activity){
-                return is_null($activity->causer)?"System": $activity->causer->name;
+            ->addColumn('date', function ($activity){
+                $date =  new Carbon($activity->created_at);
+                return $date->toFormattedDateString();
             })
-            ->addColumn('summary', function($activity){
-                return $this->getLogMessage($activity);
-            })
-            ->rawColumns(['summary'])
+
+            ->rawColumns(['description'])
             ->make();
     }
     public function recentActivities($count=10){
@@ -68,7 +67,7 @@ class ActivityController extends Controller
             $log->happened = $date->diffForHumans();
 
 
-            $log->message= $this->getLogMessage($activity);
+            $log->message= $this->description;
             return $log;
         }), 200);
     }
