@@ -113,9 +113,6 @@ class ActivityController extends Controller
         if (!is_null($request->type)) {
             $activities = $activities->where('description', '=', $request->type);
         }
-
-        dd(get_class($activities));
-
         return $activities;
     }
 }
