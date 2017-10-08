@@ -2,6 +2,7 @@
 @include('user.user-activity', ['user'=>$user])
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
 @endsection
 
 @section('content')
