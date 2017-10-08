@@ -339,8 +339,9 @@
                                 </div>
                                     <div class="form-group">
                                         <div class="col-md-10 col-sm-9 col-xs-12 col-md-push-2 col-sm-push-3 col-xs-push-0">
-                                            <input class="btn btn-primary" type="submit" value="Update Profile">
                                             <button type="button" class="btn btn-danger" onclick="goBack()">Cancel</button>
+                                            <input class="btn btn-success" type="submit" value="Update Profile">
+
                                         </div>
                                     </div>
 

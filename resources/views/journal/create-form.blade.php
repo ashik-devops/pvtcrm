@@ -170,6 +170,7 @@
 
 
         <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+        <button type="button" class="btn btn-danger margin-top-md center-block" onclick="goBack()">Cancel</button>
         <input type="submit" id="journal_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Journal">
 
     </form>
