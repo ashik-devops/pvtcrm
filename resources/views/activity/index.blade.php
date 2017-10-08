@@ -122,7 +122,7 @@
                 data: function (data) {
                     data.from = jQuery("#filterFromDate").val();
                     data.to = jQuery("#filterToDate").val();
-
+                    data.user = jQuery("#userSelect").val();
                     data.type = jQuery("#typeSelect").val();
                 }
             },
