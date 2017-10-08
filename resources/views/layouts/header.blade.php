@@ -33,12 +33,12 @@
                 <div class="utilities">
                     <div id="tour-trigger" class="item item-tour hidden-xs tour-trigger" data-toggle="tooltip" data-placement="bottom" title="Guided Tour"><span class="sr-only">App Tour</span><span class="pe-icon pe-7s-info icon"></span></div>
                     <div class="item item-side-panel">
-                        <i id="side-panel-toggle" class="side-panel-toggle panel-hide icon fa fa-signal" data-toggle="tooltip" data-placement="bottom" title="Activities"><span class="badge badge-circle badge-warning">8</span></i>
+                        <i id="side-panel-toggle" class="side-panel-toggle panel-hide icon fa fa-signal" data-toggle="tooltip" data-placement="bottom" title="Activities"></i>
                     </div>
                     <div class="item item-notifications">
                         <div class="dropdown-toggle" id="dropdownMenu-notifications" data-toggle="dropdown" aria-expanded="true" role="button">
                             <span class="sr-only">Notifications</span>
-                            <span class="pe-icon pe-7s-bell icon" data-toggle="tooltip" data-placement="bottom" title="Notifiations"></span><span class="badge badge-circle badge-danger">3</span>
+                            <span class="pe-icon pe-7s-bell icon" data-toggle="tooltip" data-placement="bottom" title="Notifiations"></span>
                         </div>
                         <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu-notifications">
                             <span class="arrow"></span>
@@ -91,7 +91,7 @@
                     <div class="item item-messages dropdown">
                         <div class="dropdown-toggle" id="dropdownMenu-messages" data-toggle="dropdown" aria-expanded="true" role="button">
                             <span class="sr-only">Messages</span>
-                            <span class="pe-icon pe-7s-mail icon" data-toggle="tooltip" data-placement="bottom" title="Messages"></span><span class="badge badge-circle badge-success">5</span>
+                            <span class="pe-icon pe-7s-mail icon" data-toggle="tooltip" data-placement="bottom" title="Messages"></span>
                         </div>
                         <div class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu-messages">
                             <span class="arrow"></span>
