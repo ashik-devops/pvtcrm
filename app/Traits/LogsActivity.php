@@ -6,6 +6,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Helpers\ActivityLogger;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\ActivitylogServiceProvider;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Spatie\Activitylog\Traits\DetectsChanges;
@@ -62,7 +63,13 @@ trait LogsActivity
 
     public function getDescriptionForEvent(string $eventName): string
     {
-        return $eventName;
+        $user=Auth::user();
+        if (is_null(Auth::user())) {
+            return "<strong><a href='#'> System</a></strong> has {$eventName} {$this->obj_alias}: <a href='".$this->getLink()."'>".$this->getActivityTitle()."</a>";
+        }
+
+        return'<strong><a href="' . route('profile-view', [$user->id]) . '">' . $user->name . '</a><strong> has ' .$eventName . ' ' . $this->obj_alias . ': <a href="' . $this->getLink() . '">' . $this->getActivityTitle() . '</a>';
+
     }
 
     public function getLogNameToUse(string $eventName = ''): string

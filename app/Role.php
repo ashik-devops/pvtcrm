@@ -6,6 +6,7 @@ use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Activitylog\Traits\CausesActivity;
 
 class Role extends Model
@@ -55,4 +56,7 @@ class Role extends Model
 
         return json_encode($policies);
     }
+
+
+
 }

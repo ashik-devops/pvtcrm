@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Address extends Model
 {
-    use SoftDeletes, CausesActivity, DetectsChanges, LogsActivity{
+    use SoftDeletes, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
@@ -28,5 +28,7 @@ class Address extends Model
 
         return '#';
     }
+
+
 
 }
