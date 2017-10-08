@@ -52,6 +52,7 @@
         @yield('activity-panel')
 
         @yield('before-footer-script')
+        <script src="{{asset('storage/assets/js/initial.min.js')}}"></script>
         <script src="{{asset('storage/assets/js/bootstrap.js')}}"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
         <script src="{{asset('storage/assets/js/metisMenu.js')}}"></script>
@@ -64,6 +65,9 @@
         <script src="{{asset('storage/assets/js/select2.full.min.js')}}"></script>
         <script src="{{asset('storage/assets/js/main.js')}}"></script>
         <script src="{{asset('storage/assets/js/activity-panel.js')}}"></script>
+
+        <script>jQuery('.profile-avatar').initial();</script>
+
         @yield('after-footer-script')
 
 

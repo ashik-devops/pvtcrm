@@ -51,6 +51,7 @@ class UsersTableSeeder extends Seeder
         $address->save();
         $user_profile->save();
         $user_profile->address()->associate($address);
+        $user_profile->address->save();
         $user= new User();
         $user->first_name = "Dean";
         $user->last_name = "Shill";

@@ -15,7 +15,15 @@
 
                             <div class="side-bar">
                                 <div class="user-info">
-                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />
+                                    {{--<img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
+
+
+                                        @if(!is_null($user->profile->profile_pic))
+                                        <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}"/>
+                                        @else
+                                        <img data-name="{{$user->profile->initial}}" data-char-count="2" class="img-profile profile-avatar img-circle img-responsive center-block" />
+                                        @endif
+
                                     <ul class="meta list list-unstyled">
                                         <li class="name">{{$user->name}}
                                             <label class="label label-info">{{$user->role->name}}</label>
@@ -35,7 +43,6 @@
                             </div>
 
                             <div class="content-panel">
-                                <form class="form-horizontal" method="post" action="{{route('profile-update', [$user->id])}}" enctype="multipart/form-data" data-parsley-validate>
 
                                 <div class="tab-content">
                                     <div class="text-right">
@@ -139,6 +146,7 @@
 
                             </div>
 
+
                         </div>
 
                     </section>
@@ -155,6 +163,10 @@
 
 @section('after-footer-script')
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
+
+
+
 
     <script type="text/javascript">
         jQuery('#status').select2({
@@ -208,6 +220,8 @@
                     }
                 });
         }
+
+        jQuery('.profile-avatar').initial();
     </script>
 
 

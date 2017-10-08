@@ -200,7 +200,11 @@
             </div>
             <div class="user-container dropdown">
                 <div class="dropdown-toggle" id="dropdownMenu-user" data-toggle="dropdown" aria-expanded="true" role="button">
-                    <img src="{{asset('storage/assets/images/profiles/profile-3.png')}}" alt="" />
+                     @if(!is_null(\Illuminate\Support\Facades\Auth::user()->profile->profile_pic))
+                        <img class="img-profile img-circle" src="{{asset('storage/'.\Illuminate\Support\Facades\Auth::user()->profile->profile_pic)}}"/>
+                    @else
+                        <img data-name="{{\Illuminate\Support\Facades\Auth::user()->profile->initial}}" data-char-count="2" class="img-profile profile-avatar img-circle" />
+                    @endif
                     <i class="fa fa-caret-down"></i>
                 </div>
                 <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenu-user" >
