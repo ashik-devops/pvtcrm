@@ -79,6 +79,13 @@
                 {data: 'user', name: 'user'},
                 {data: 'summary', name: 'summary'}
             ],
+            "columnDefs": [
+                {
+                    "targets": [ 1 ],
+                    "visible": false,
+                    "searchable": false
+                }
+            ]
         });
 
         jQuery("#filterForm").submit(function(e){
