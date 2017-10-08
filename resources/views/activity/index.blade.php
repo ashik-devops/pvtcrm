@@ -48,7 +48,16 @@
                                                     </div>
 
                                                     <div class="col-xs-12 col-md-4">
-
+                                                        <div class="form-group">
+                                                            <select id="userSelect" name="user" class="form-control select2" style="min-width: 200px;">
+                                                                <option value="" selected>All Users</option>
+                                                                <option value="-1">System</option>
+                                                            @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
+                                                                    {{$user=\App\User::find($user)}}
+                                                                    <option value="{{$user->id}}">{{$user->name}}</option>
+                                                                @endforeach
+                                                            </select>
+                                                        </div>
 
                                                         <div class="form-group">
                                                             <select id="typeSelect" name="type" class="form-control select2" style="min-width: 200px;">
