@@ -37,7 +37,7 @@ class ActivityController extends Controller
         return DataTables::of($activities)
             ->addColumn('created_at', function ($activity){
                 $date =  new Carbon($activity->created_at);
-                return $date->toFormattedDateString();
+                return $date->format('M d, Y h:i:s A');
             })
             ->rawColumns(['description'])
             ->make();
