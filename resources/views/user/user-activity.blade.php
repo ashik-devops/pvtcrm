@@ -1,7 +1,7 @@
 @section('user-activity-index')
                                             <div class="row" id="filters-contaier">
                                                 <form action="#" id="filterForm">
-                                                    <div class="col-xs-12 col-md-4">
+                                                    <div class="col-xs-4 col-md-4">
                                                         <div class="input-group date form-group" id="filterFromDateContainer">
                                                             <input id="filterFromDate" value="{{\Carbon\Carbon::today()->firstOfMonth()->startOfDay()->format('m/d/Y H:i A')}}" type="text" name="from-date" class="form-control" placeholder="Started Date" >
 
@@ -15,7 +15,7 @@
                                                         </div>
                                                     </div>
 
-                                                    <div class="col-xs-12 col-md-4">
+                                                    <div class="col-xs-4 col-md-4">
                                                         <div class="form-group">
                                                             <select id="typeSelect" name="type" class="form-control select2" style="min-width: 200px;">
                                                                 <option value="" selected>All Types</option>
@@ -25,7 +25,7 @@
                                                             </select>
                                                         </div>
                                                     </div>
-                                                    <div class="col-xs-12 col-md-4">
+                                                    <div class="col-xs-4 col-md-4">
                                                         <button type="submit" id="filter-submit" class="btn btn-success">Filter</button>
                                                     </div>
 
@@ -97,7 +97,9 @@
 
         $('#filterFromDateContainer').datetimepicker();
         $('#filterToDateContainer').datetimepicker();
-        $(".select2").select2();
+        $(".select2").select2({
+            width: '200px'
+        });
 
     </script>
 @endsection
