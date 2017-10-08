@@ -17,7 +17,15 @@
 
                             <div class="side-bar">
                                 <div class="user-info">
-                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />
+                                    {{--<img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
+
+
+                                        @if(!is_null($user->profile->profile_pic))
+                                        <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}"/>
+                                        @else
+                                        <img data-name="{{$user->profile->initial}}" data-char-count="2" class="img-profile profile-avatar img-circle img-responsive center-block" />
+                                        @endif
+
                                     <ul class="meta list list-unstyled">
                                         <li class="name">{{$user->name}}
                                             <label class="label label-info">{{$user->role->name}}</label>
@@ -111,6 +119,17 @@
                                         <fieldset class="fieldset">
                                         <h3 class="fieldset-title">Activity</h3>
 
+                                            {{--<fieldset class="fieldset">--}}
+                                                {{--<h3 class="fieldset-title">Timezone</h3>--}}
+                                                {{--<div class="form-group {{ $errors->has('timezone') ? ' has-error' : '' }}">--}}
+                                                    {{--<label class="col-md-2  col-sm-3 col-xs-12 control-label">Timezone</label>--}}
+                                                    {{--<div class="col-md-10 col-sm-9 col-xs-12">--}}
+                                                        {{--<select required name="timezone" id="timezone" class="form-control" style="width: 100%;" data-parsley-trigger="change" required data-parsley-required-message="You must select a timezone.">--}}
+                                                            {{--@if(old('timezone', $user->timezone()->id) > 0 )--}}
+                                                            {{--<option selected value="{{old('timezone', $user->timezone()->id)}}">{{\App\Timezone::find(old('timezone', $user->timezone()->id))->getLabel()}}</option>--}}
+                                                            {{--@else--}}
+                                                                {{--<option selected value="161">{{\App\Timezone::find(161)->getLabel()}}</option>--}}
+                                                            {{--@endif--}}
 
                                             @yield('user-activity-index')
 
@@ -137,6 +156,7 @@
 
 @section('after-footer-script')
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
     <script type="text/javascript">
         jQuery('#status').select2({
 
@@ -191,6 +211,5 @@
         }
     </script>
 
-    @yield('view-user-activity-scripts')
 
 @endsection
