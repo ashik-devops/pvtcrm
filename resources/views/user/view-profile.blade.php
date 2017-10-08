@@ -211,5 +211,6 @@
         }
     </script>
 
+    @yield('view-user-activity-scripts')
 
 @endsection

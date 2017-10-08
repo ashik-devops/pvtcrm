@@ -1,6 +1,6 @@
 @section('user-activity-index')
-                                            <div class="row" id="filters-contaier">
-                                                <form action="#" id="filterForm">
+                                            <div class="row" id="filters-container">
+                                                <form id="filterForm">
                                                     <div class="col-xs-4 col-md-4">
                                                         <div class="input-group date form-group" id="filterFromDateContainer">
                                                             <input id="filterFromDate" value="{{\Carbon\Carbon::today()->firstOfMonth()->startOfDay()->format('m/d/Y H:i A')}}" type="text" name="from-date" class="form-control" placeholder="Started Date" >
@@ -65,17 +65,18 @@
         var activityTable= $('#activity-table').DataTable({
             processing: true,
             serverSide: true,
+            "order": [[ 0, "desc" ]],
             ajax: {
                 url: "{{route('activities.all.data')}}",
                 data: function (data) {
                     data.from = jQuery("#filterFromDate").val();
                     data.to = jQuery("#filterToDate").val();
-
+                    data.user = "{{$user->id}}";
                     data.type = jQuery("#typeSelect").val();
                 }
             },
             columns: [
-                {data: 'created_at', name: 'created_at'},
+                {data: 'created_at', name: 'created_at', orderable: true},
 
                 {data: 'description', name: 'description'}
             ],

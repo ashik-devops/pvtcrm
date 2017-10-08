@@ -39,6 +39,7 @@ class ActivityController extends Controller
                 $date =  new Carbon($activity->created_at);
                 return $date->format('M d, Y h:i:s A');
             })
+//            ->orderColumn('created_at', 'created_at $1')
             ->rawColumns(['description'])
             ->make();
     }
@@ -74,11 +75,11 @@ class ActivityController extends Controller
     /**
      * Applies filter according to user scope
      *
-     * @param Request $request
      * @param $activities
+     * @param $user int
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    private function applyUserFilters($activities, $user=null): Builder
+    private function applyUserFilters($activities, int $user=null): Builder
     {
         if ($this->checkAdmin(Auth::user())) {
             if (!is_null($user)) {
@@ -111,7 +112,7 @@ class ActivityController extends Controller
 
 
         if (!is_null($request->type)) {
-            $activities = $activities->where('description', '=', $request->type);
+            $activities = $activities->where('type', '=', $request->type);
         }
         return $activities;
     }
