@@ -29,7 +29,7 @@
                                 <nav class="side-menu">
                                     <ul class="nav nav-tabs nav-tabs-theme-2 tablist">
                                         <li class="active" role="presentation"><a href="#profile" aria-controls="profile" aria-expanded="true" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-user icon"></span> Profile</a></li>
-                                        <li  role="presentation"><a href="#activity" aria-controls="activity" aria-expanded="true" role="tab" data-toggle="tab"><span class="pe-icon pe-7s-user icon"></span> Activity</a></li>
+                                        <li  role="presentation"><a href="#activity" aria-controls="activity" aria-expanded="true" role="tab" data-toggle="tab"><span class="fa fa-space-shuttle"></span> Activity</a></li>
 
                                     </ul>
                                 </nav>
