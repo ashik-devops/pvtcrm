@@ -4,9 +4,9 @@
         {{ csrf_field() }}
         <input type="hidden" id="userGroup_id" name="userGroupId">
 
-        <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}" id="title">
+        <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}">
             <label class="sr-only">Name</label>
-            <input id="userGroupForm" type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Name is required" required value="{{old('name')}}">
+            <input id="userGroupName" type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Name is required" required value="{{old('name')}}">
             @if ($errors->has('name'))
                 <span class="help-block">
                     <strong>{{ $errors->first('name') }}</strong>
@@ -18,7 +18,7 @@
 
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">User</label>
-            <select name="user-id" id="userId" class="form-control" style="width: 100%" multiple="true">
+            <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true">
                 @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
                     @php
                     $user=\App\User::find($user)
@@ -43,9 +43,88 @@
 
 @section('group-form-scripts')
     <script type="text/javascript">
-        jQuery("#userId").select2({
+        jQuery("#userIds").select2({
             placeholder: "Choose Member Users",
             allowClear:true
         });
+
+        var inputMap ={
+            'userGroupId': 'userGroup_id',
+            'userGroupName': 'userGroupName',
+            'userIds':'userIds'
+        };
+        jQuery("#userGroupForm").submit(function(e){
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+            var user_group = {
+                userGroupId : jQuery('#'+inputMap.userGroupId).val(),
+                userGroupName : jQuery('#'+inputMap.userGroupName).val(),
+                userIds: jQuery('#'+inputMap.userIds).val()
+            };
+
+
+            var data = {
+                _token : _token,
+                userGroup: user_group
+            };
+
+            if(user_group.userGroupId === ''){
+                //account creating.....
+
+
+                var request = jQuery.ajax({
+                    url: "{{ route('user-group-create') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_form($('#userGroupForm')[0]);
+                        $('#modal-new-user-group').modal('hide');
+//                        get_all_account_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                })
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            }else{
+                //account editing.....
+
+                var request = jQuery.ajax({
+                    url: "{{ route('user-group-update') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_form($('#userGroupForm')[0]);
+
+                        $('#modal-new-user-group').modal('hide');
+//                        get_all_account_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                })
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+
+            }
+        });
+
+        function reset_form(el) {
+            el.reset();
+            $('#account_id').val('');
+        }
     </script>
 @endsection

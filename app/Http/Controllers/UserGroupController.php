@@ -6,6 +6,8 @@ use App\Customer;
 use App\Index_appointment;
 use App\Journal;
 use App\Task;
+use App\User;
+use App\UserGroup;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -15,7 +17,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class UsergroupController extends Controller
+class UserGroupController extends Controller
 {
     public function __construct()
     {
@@ -27,7 +29,7 @@ class UsergroupController extends Controller
     {
         $rules=[
             'userGroupName' => 'required|string',
-            'userId' =>'required|integer|exists:users,id',
+//            'userIds.*' =>'required|integer|exists:users,id',
 
         ];
 
@@ -46,16 +48,7 @@ class UsergroupController extends Controller
         return view('user-group.index-datatable');
     }
 
-
-
-
-
-
-
-
-
-
-    public function getUserGroupAjaxPending(){
+    public function getUserGroupsAjax(){
 //        $this->authorize('index',userGroup::class);
 
         return DataTables::of(Index_userGroupre)
@@ -66,14 +59,10 @@ class UsergroupController extends Controller
                         <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$userGroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                        <a onClick="viewUserGroup($userGroup->id)" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
-
-
-
             ->addColumn('user_group_name',
                 function ($userGroup){
                     return  substr($userGroup->name,0,70) . ' ....';
                 })
-
             ->rawColumns(['id','name', 'user_name'])
             ->make(true);
 
@@ -81,7 +70,7 @@ class UsergroupController extends Controller
 
 
 
-    public function createUserGroup(Request $request){
+    public function create(Request $request){
 //        $this->authorize('create',Appointment::class);
         $this->validator($request->userGroup)->validate();
 
@@ -90,33 +79,32 @@ class UsergroupController extends Controller
             'message'=>'Something went wrong.'
         ];
 
-        if(is_numeric($request->userGroup['userId'])){
-            $user=User::findOrFail($request->userGroup['userId']);
+        if($request->userGroup['userIds']){
+            $userGroup = new UserGroup();
+            $userGroup->name = $request->userGroup['userGroupName'];
 
-            if(is_null($user)){
-                $result['message']='Customer Not Found.';
-            }
-            else{
-                $userGroup = new userGroup();
+            DB::beginTransaction();
 
-                $userGroup->name = $request->userGroup['userGroupName'];
-                $userGroup->userId = $request->userGroup['userGroupUserId'];
-                DB::beginTransaction();
-                $user->userGroup()->save($userGroup);
-                DB::commit();
+            $userGroup->save();
 
-                $result['result']='Saved';
-                $result['message']='Appointment Saved Successfully.';
-            }
+            $userGroup->users()->attach($request->userGroup['userIds']);
+            DB::commit();
+
+            $result['result']='Saved';
+            $result['message']='User group has been created Successfully.';
+
         }
         else{
-            $result['message']='Customer Not Found.';
+            $result['message']='Please add at least 1 member';
         }
 
         return response()->json($result,200);
-
     }
 
+
+    public function update(Request $request){
+
+    }
 
 
 }

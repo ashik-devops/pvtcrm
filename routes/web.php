@@ -78,10 +78,10 @@ Route::post('/sales-team/delete', 'SalesteamsController@deleteSalesTeam')->name(
 Route::get('/ajax/sales-team/data', 'SalesteamsController@getSalesTeamAjax')->name('sales-team-data');
 
 
-Route::get('/user-group', 'UsergroupController@index')->name('usergroup-index');
-Route::get('/user-group', 'UsergroupController@index')->name('usergroup-index');
-Route::get('/user-group/create', 'UsergroupController@createUsergroup')->name('create.usergroup');
-
+Route::get('/user/group', 'UserGroupController@index')->name('user-group-index');
+Route::get('/ajax/user/group', 'UserGroupController@getUserGroupsAjax')->name('user-group-index.data');
+Route::post('ajax/user/group/create', 'UserGroupController@create')->name('user-group-create');
+Route::post('ajax/user/group/update', 'UserGroupController@update')->name('user-group-update');
 
 
 
