@@ -30,7 +30,7 @@ class Address extends Model
 
         if($this->id > 0){
             if(!is_null($this->addressable)){
-                return "Address of ".$this->addressable->getActivityTitle();
+                return "Address for ".$this->addressable->getActivityTitle();
             }
         }
         return '';
