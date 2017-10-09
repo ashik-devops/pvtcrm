@@ -80,6 +80,8 @@ $factory->define(App\Appointment::class, function(Faker\Generator $faker) {
 });
 
 
+
+
 $factory->define(App\Sales_team::class, function(Faker\Generator $faker) {
 
     return [
