@@ -35,7 +35,7 @@ $factory->define(App\Address::class, function (Faker\Generator $faker) {
         'street_address_2'=>$faker->streetName,
         'city'=>$faker->city,
         'state'=>$faker->state,
-        'country'=>$faker->country,
+        'country'=>$faker->countryCode,
         'zip'=>$faker->postcode,
         'email'=>$faker->unique()->email,
         'phone_no'=>$faker->unique()->phoneNumber,
