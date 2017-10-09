@@ -1,4 +1,4 @@
-@section('appointment-create-form')
+@section('usergroup-create-form')
     <form method="post" class="ajax-from"  data-parsley-validate id="userGroupForm">
 
         {{ csrf_field() }}
