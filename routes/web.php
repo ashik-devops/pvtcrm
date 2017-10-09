@@ -77,6 +77,13 @@ Route::post('/sales-team/update', 'SalesteamsController@updateSalesTeam')->name(
 Route::post('/sales-team/delete', 'SalesteamsController@deleteSalesTeam')->name('delete.sales.team');
 Route::get('/ajax/sales-team/data', 'SalesteamsController@getSalesTeamAjax')->name('sales-team-data');
 
+
+Route::get('/user-group', 'UsergroupController@index')->name('usergroup-index');
+Route::get('/user-group/create', 'UsergroupController@createUsergroup')->name('create.usergroup');
+
+
+
+
 Route::get('/tag-names', 'TagsController@index')->name('tag-index');
 Route::post('/tag/create', 'TagsController@createTag')->name('create.tag');
 Route::get('/tag/edit', 'TagsController@editTag')->name('edit.tag');
