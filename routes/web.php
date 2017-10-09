@@ -79,6 +79,7 @@ Route::get('/ajax/sales-team/data', 'SalesteamsController@getSalesTeamAjax')->na
 
 
 Route::get('/user-group', 'UsergroupController@index')->name('usergroup-index');
+Route::get('/user-group', 'UsergroupController@index')->name('usergroup-index');
 Route::get('/user-group/create', 'UsergroupController@createUsergroup')->name('create.usergroup');
 
 

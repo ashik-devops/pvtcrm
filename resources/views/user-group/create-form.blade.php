@@ -1,4 +1,4 @@
-
+@section('usergroup-create-form')
     <form method="post" class="ajax-from"  data-parsley-validate id="userGroupForm">
 
         {{ csrf_field() }}
@@ -19,9 +19,15 @@
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">User</label>
             <select name="user-id" id="userId" class="form-control" style="width: 100%" multiple="true">
-
+                @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
+                    @php
+                    $user=\App\User::find($user)
+                    @endphp
+                    <option value="{{$user->id}}">{{$user->name}}</option>
+                @endforeach
             </select>
         </div>
+
 
 
 
@@ -33,3 +39,13 @@
 
     </form>
 
+@endsection
+
+@section('group-form-scripts')
+    <script type="text/javascript">
+        jQuery("#userId").select2({
+            placeholder: "Choose Member Users",
+            allowClear:true
+        });
+    </script>
+@endsection
