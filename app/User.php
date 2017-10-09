@@ -22,7 +22,7 @@ class User extends Authenticatable
     CausesActivity::activity as log;
 }
 
-    protected static $logAttributes = ['first_name', 'last_name', 'password', 'email', 'profile'];
+    protected static $logAttributes = ['first_name', 'last_name', 'password', 'email'];
     protected static $logOnlyDirty = true;
 
     public $obj_alias = 'User';
@@ -85,7 +85,7 @@ class User extends Authenticatable
     public function getLink(): string
     {
         if($this->id > 0){
-            return route('profile-edit', $this->id);
+            return route('profile-view', $this->id);
         }
 
         return '#';

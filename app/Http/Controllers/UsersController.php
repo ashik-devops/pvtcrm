@@ -194,8 +194,8 @@ class UsersController extends Controller
 
         $user->save();
         $address->save();
-        $user->profile->save();
         $user->profile->address()->associate($address);
+        $user->profile->save();
         if(Auth::user()->can('create', User::class)) {
             Role::find($data['role'])->users()->save($user);
         }$timezone->profiles()->save($user->profile);

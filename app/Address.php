@@ -25,8 +25,6 @@ class Address extends Model
         return $this->belongsToMany('App\Account', '`customers_company_addresses`', 'address_id', 'customer_company_id');
     }
 
-
-
     public function getLink(): string {
 
         return '#';
