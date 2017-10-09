@@ -23,6 +23,9 @@ class CreateAddressesTable extends Migration
             $table->string('zip');
             $table->string('phone_no')->nullable();
             $table->string('email')->nullable();
+            $table->integer('addressable_id');
+            $table->string('addressable_type');
+            $table->string('type')->nullable();
             $table->softDeletes();
             $table->timestamps();
 

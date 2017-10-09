@@ -3,15 +3,16 @@
 namespace App;
 
 
+use App\Traits\Addressable;
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
-use Spatie\Activitylog\Traits\DetectsChanges;
 
 class Account extends Model
 {
-    use SoftDeletes, CausesActivity, LogsActivity{
+    use SoftDeletes, Addressable, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
     }
@@ -22,10 +23,6 @@ class Account extends Model
 
     public function employees(){
         return $this->hasMany('App\Customer');
-    }
-
-    public function addresses(){
-        return $this->belongsToMany('App\Address', 'account_addresses', 'account_id', 'address_id')->withPivot(['type']);
     }
 
     public function tasks(){
