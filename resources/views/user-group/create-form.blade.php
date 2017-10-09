@@ -124,7 +124,6 @@
 
         function reset_form(el) {
             el.reset();
-            $('#account_id').val('');
         }
     </script>
 @endsection

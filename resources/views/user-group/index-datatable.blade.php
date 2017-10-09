@@ -18,8 +18,6 @@
             <div class="actions">
                 <button id="new-apt-btn" class="btn btn-success" data-toggle="modal" data-target="#usergroup-modal"><i class="fa fa-plus"></i>New Group</button>
             </div>
-        </div>
-    </div>
 
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -33,7 +31,7 @@
                             <div class="module-content collapse in" id="groups">
                                 <div class="module-content-inner no-padding-bottom">
                                     <div class="table-responsive">
-                                        <table id="customers-table" class="table table-bordered display" style="width: 100%;">
+                                        <table id="user-groups-table" class="table table-bordered display" style="width: 100%;">
                                             <thead>
                                             <tr>
                                                 <th>Id</th>
@@ -102,22 +100,22 @@
 
     <script type="text/javascript">
 
-        var datatable = jQuery('#customers-table').DataTable({
+        var datatable = jQuery('#user-groups-table').DataTable({
 //                responsive: false,
             select: true,
             processing: true,
             serverSide: true,
             paging:true,
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-            ajax: '{!! route('usergroup-data') !!}',
+            ajax: '{!! route('user-group-index.data') !!}',
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
-
-
             ]
         });
 
     </script>
+
+    @yield('group-form-scripts')
 @endsection
