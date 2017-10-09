@@ -1,4 +1,4 @@
-@section('appointment-create-form')
+
     <form method="post" class="ajax-from"  data-parsley-validate id="userGroupForm">
 
         {{ csrf_field() }}
@@ -17,8 +17,8 @@
 
 
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
-            <label class="sr-only">Customer</label>
-            <select name="userId" id="userId" class="form-control" style="width: 100%" multiple="true">
+            <label class="sr-only">User</label>
+            <select name="user-id" id="userId" class="form-control" style="width: 100%" multiple="true">
 
             </select>
         </div>
@@ -27,9 +27,9 @@
 
         <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
         <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-        <input type="submit" id="appointment_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Appointment">
+        <input type="submit" id="user_group_modal_button"  class="btn btn-success margin-top-md center-block" value="Add User Group">
 
         </div>
 
     </form>
-@endsection
+
