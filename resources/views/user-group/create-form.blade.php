@@ -6,7 +6,7 @@
 
         <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}" id="title">
             <label class="sr-only">Name</label>
-            <input id="userGroupForm" type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Title is required" required value="{{old('title')}}">
+            <input id="userGroupForm" type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Name is required" required value="{{old('name')}}">
             @if ($errors->has('name'))
                 <span class="help-block">
                     <strong>{{ $errors->first('name') }}</strong>
