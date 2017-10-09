@@ -59,6 +59,10 @@ class User extends Authenticatable
         return $this->hasMany('App\Customer');
     }
 
+    public function groups():BelongsToMany{
+        return $this->belongsToMany('App\UserGroup', 'group_users', 'user_id', 'user_id');
+    }
+
     public function isAdmin() : bool
     {
         return !is_null($this->role->policies()
@@ -133,4 +137,5 @@ class User extends Authenticatable
         $this->dispatch(new SendResetPasswordNotification($this, (new ResetPassword($token, $this))));
 
     }
+
 }
