@@ -46,7 +46,7 @@ class UsersTableSeeder extends Seeder
         $address->street_address_2="Holly Hill";
         $address->city="Miami";
         $address->state="FL";
-        $address->country="USA";
+        $address->country="US";
         $address->zip = "104125";
         $address->type='CONTACT';
         $user_profile->save();
