@@ -47,27 +47,24 @@ class UserGroupController extends Controller
 
         return view('user-group.index-datatable');
     }
-
     public function getUserGroupsAjax(){
-//        $this->authorize('index',userGroup::class);
 
-        return DataTables::of(Index_userGroupre)
+        return DataTables::of(UserGroup::all())
             ->addColumn('action',
-                function ($userGroup){
+                function ($usergroup){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$userGroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$userGroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                       <a onClick="viewUserGroup($userGroup->id)" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="editUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a class="btn btn-xs btn-primary"  onClick="viewUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
-            ->addColumn('user_group_name',
-                function ($userGroup){
-                    return  substr($userGroup->name,0,70) . ' ....';
+            ->addColumn('name',
+                function ($usergroup){
+                    return $usergroup->name;
                 })
-            ->rawColumns(['id','name', 'user_name'])
+            ->rawColumns(['action','name'])
             ->make(true);
 
     }
-
 
 
     public function create(Request $request){
