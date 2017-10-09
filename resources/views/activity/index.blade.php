@@ -83,8 +83,8 @@
                                                 <table id="activity-table" class="table table-bordered display" style="width: 100%;">
                                                     <thead>
                                                     <tr>
+                                                        <th>Id</th>
                                                         <th>Date</th>
-
                                                         <th>Description</th>
                                                     </tr>
                                                     </thead>
@@ -117,6 +117,7 @@
         var activityTable= $('#activity-table').DataTable({
             processing: true,
             serverSide: true,
+            order: [[0, 'desc']],
             ajax: {
                 url: "{{route('activities.all.data')}}",
                 data: function (data) {
@@ -127,6 +128,7 @@
                 }
             },
             columns: [
+                {data: 'id', name: 'id', visible: false},
                 {data: 'created_at', name: 'created_at'},
 
                 {data: 'description', name: 'description'}

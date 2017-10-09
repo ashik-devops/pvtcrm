@@ -32,7 +32,7 @@ class ActivityController extends Controller
     public function getActivities(Request $request){
 
         $activities = $this->applyRequestFilters($request);
-        $activities = $activities->select('description', 'created_at');
+        $activities = $activities->select('id','description', 'created_at');
 
         return DataTables::of($activities)
             ->addColumn('created_at', function ($activity){
@@ -59,7 +59,7 @@ class ActivityController extends Controller
     public function customerActivity(Request $request, Customer $customer){
 
         $activities = $this->applyRequestFilters($request);
-        $activities = $activities->select('description', 'created_at');
+        $activities = $activities->select('id', 'description', 'created_at');
 
         return DataTables::of($activities)
             ->addColumn('created_at', function ($activity){
