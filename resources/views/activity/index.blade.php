@@ -53,7 +53,9 @@
                                                                 <option value="" selected>All Users</option>
                                                                 <option value="-1">System</option>
                                                             @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
-                                                                    {{$user=\App\User::find($user)}}
+                                                                    @php
+                                                                        $user=\App\User::find($user)
+                                                                    @endphp
                                                                     <option value="{{$user->id}}">{{$user->name}}</option>
                                                                 @endforeach
                                                             </select>

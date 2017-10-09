@@ -18,6 +18,8 @@
             <div class="actions">
                 <button id="new-apt-btn" class="btn btn-success" data-toggle="modal" data-target="#usergroup-modal"><i class="fa fa-plus"></i>New Group</button>
             </div>
+        </div>
+    </div>
 
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
