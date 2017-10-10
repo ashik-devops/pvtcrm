@@ -84,7 +84,7 @@ class UserGroupController extends Controller
 
             $userGroup->save();
 
-            $userGroup->users()->attach($request->userGroup['userIds']);
+            $userGroup->members()->attach($request->userGroup['userIds']);
             DB::commit();
 
             $result['result']='Saved';
@@ -100,6 +100,29 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
+
+    }
+
+    public function getGroup(Request $request){
+
+        $data =$this->validate($request, [
+            'groupId'=>'required|int|exists:UserGroups,id'
+        ]);
+
+        return response()->json(['group'=>UserGroup::find($request->groupId)->with(['members'])], 200);
+    }
+
+    public function edit(Request $request){
+        $this->validator($request->userGroup)->validate();
+
+        $result=[
+            'result'=>'Error',
+            'message'=>'Something went wrong.'
+        ];
+
+
+
+
 
     }
 
