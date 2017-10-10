@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use App\User;
 use App\UserGroup;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -45,9 +46,9 @@ class UserGroupController extends Controller
             ->addColumn('action',
                 function ($usergroup){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  onClick="viewUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a class="btn btn-xs btn-primary"  onClick="viewUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('name',
                 function ($usergroup){
@@ -97,11 +98,25 @@ class UserGroupController extends Controller
 
     public function getGroup(Request $request){
 
-//        $data =$this->validate($request, [
-//            'groupId'=>'required|int|exists:user_groups,id'
-//        ]);
+        $data =$this->validate($request, [
+            'groupId'=>'required|int|exists:user_groups,id'
+        ]);
 
-        return response()->json(['group'=>UserGroup::find($request->groupId)->with(['members'])], 200);
+        $group=UserGroup::with(['members'])->find($data['groupId']);
+
+        return response()->json(['group'=>
+
+                [
+                    'id'=>$group->id,
+                    'name'=>$group->name,
+                    'members'=>$group->members->map(function ($member){
+                        return [
+                            'id'=>$member->id,
+                            'name'=>$member->name
+                        ];
+                    })
+                ]
+        ],200);
     }
 
     public function edit(Request $request){

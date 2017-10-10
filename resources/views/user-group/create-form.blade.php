@@ -141,8 +141,19 @@
 
         function editUserGroup(id){
 
-            jQuery.ajax({
-                url: "{{route('single-user-group.data')}}"
+          var request =  jQuery.ajax({
+                method: "GET",
+                url: "{{route('single-user-group.data')}}",
+                data: {groupId: id},
+                dataType:'json',
+
+            });
+
+          request.done(function(response){
+                console.log(response);
+            });
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
             });
 
             jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Add New User Group");
