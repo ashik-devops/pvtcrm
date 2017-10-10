@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Index_appointment;
+use App\Index_usergroup;
 use App\Journal;
 use App\Task;
 use App\User;
@@ -47,9 +48,10 @@ class UserGroupController extends Controller
 
         return view('user-group.index-datatable');
     }
+
     public function getUserGroupsAjax(){
 
-        return DataTables::of(UserGroup::all())
+        return DataTables::of(Index_usergroup::all())
             ->addColumn('action',
                 function ($usergroup){
                     return
@@ -57,11 +59,14 @@ class UserGroupController extends Controller
                         <a  class="btn btn-xs btn-danger"  onClick="deleteUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                         <a class="btn btn-xs btn-primary"  onClick="viewUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
+
             ->addColumn('name',
                 function ($usergroup){
                     return $usergroup->name;
                 })
-            ->rawColumns(['action','name'])
+
+
+            ->rawColumns(['action','name','user_id'])
             ->make(true);
 
     }

@@ -8,3 +8,7 @@ class Index_appointment extends Model
 {
     protected $table='appointments_index';
 }
+
+
+
+
