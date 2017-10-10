@@ -512,7 +512,7 @@
         }
         var primary_phone_no = $("#primary_phone_no");
         primary_phone_no.intlTelInput({
-            nationalMode: true,
+            nationalMode: false,
             formatOnDisplay: true,
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
@@ -523,7 +523,7 @@
 
         var secondary_phone_no = $("#secondary_phone_no");
         secondary_phone_no.intlTelInput({
-            nationalMode: true,
+            nationalMode: false,
             formatOnDisplay: true,
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
@@ -536,10 +536,15 @@
             if (typeof intlTelInputUtils !== 'undefined') {
 
                 var intlNumber = input.intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164);
-//                var lastChar = input.val().trim().split('').reverse()[0];
-
+                var lastChar = input.val().trim().split('').reverse()[0];
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
-                    input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
+                    if(['e', 'x'].indexOf(lastChar) !== -1){
+                        input.
+                    }
+                    else{
+                        input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
+                    }
+
                 }
 
             }
