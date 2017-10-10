@@ -35,7 +35,7 @@ class UserGroupController extends Controller
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'userGroupId'=>'required|integer|exists:userGroup,id',
+                'userGroupId'=>'required|integer|exists:user_groups,id',
             ]);
         }
 
@@ -53,9 +53,9 @@ class UserGroupController extends Controller
             ->addColumn('action',
                 function ($usergroup){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  onClick="viewUsergroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a class="btn btn-xs btn-primary"  onClick="viewUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('name',
                 function ($usergroup){
@@ -100,31 +100,89 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
-
-    }
-
-    public function getGroup(Request $request){
-
-        $data =$this->validate($request, [
-            'groupId'=>'required|int|exists:UserGroups,id'
-        ]);
-
-        return response()->json(['group'=>UserGroup::find($request->groupId)->with(['members'])], 200);
-    }
-
-    public function edit(Request $request){
-        $this->validator($request->userGroup)->validate();
+        $this->validator($request->userGroup, true)->validate();
 
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
         ];
 
+        if($request->userGroup['userIds']){
+            $userGroup = UserGroup::find($request->userGroup['userGroupId']);
+            $userGroup->name = $request->userGroup['userGroupName'];
+
+            $current_members=$userGroup->members->map(function ($member){
+                return $member->id;
+            });
+
+            $removals=array_diff($current_members, $request->userGroup['userIds']);
+            $additions=array_diff($request->userGroup['userIds'], $current_members);
+
+            DB::beginTransaction();
 
 
 
 
+            if(count($removals)>0){
+                $userGroup->members()->detach($removals);
+            }
+
+
+            if(count($additions)>0){
+                $userGroup->members()->attach($removals);
+            }
+
+            $userGroup->members()->attach($request->userGroup['userIds']);
+            $userGroup->save();
+
+            DB::commit();
+
+            $result['result']='Saved';
+            $result['message']='User group has been created Successfully.';
+
+        }
+        else{
+            $result['message']='Please add at least 1 member';
+        }
+
+        return response()->json($result,200);
     }
+
+    public function getGroup(Request $request){
+
+        $data =$this->validate($request, [
+            'groupId'=>'required|int|exists:user_groups,id'
+        ]);
+        $group= UserGroup::find($data['groupId']);
+
+
+        return response()->json(['group'=>[
+            'id'=>$group->id,
+            'name'=>$group->name,
+            'members'=>$group->members->map(function($member){
+                return [
+                    'id'=>$member->id,
+                    'name'=>$member->name
+                ];
+            })
+        ], 200);
+    }
+
+    public function delete(Request $request){
+        $data =$this->validate($request, [
+            'groupId'=>'required|int|exists:user_groups,id'
+        ]);
+
+        $group= UserGroup::find($data['groupId']);
+        DB::beginTransaction();
+        $group->members()->detach();
+        $group->delete();
+        DB::commit();
+
+        return response()->json([
+            'result'=>'success',
+            'message'=>'Group has been deleted successfully.'
+        ],200);    }
 
 
 }

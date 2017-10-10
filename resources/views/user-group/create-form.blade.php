@@ -168,7 +168,7 @@
         }
 
         jQuery("#usergroup-modal").on('hidden.bs.modal', function(){
-            reset_form(jQuer("#userGroupForm"))
+            reset_form(jQuery("#userGroupForm"))
         });
 
     </script>
