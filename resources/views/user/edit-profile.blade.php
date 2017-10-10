@@ -512,7 +512,7 @@
         }
         var primary_phone_no = $("#primary_phone_no");
         primary_phone_no.intlTelInput({
-            nationalMode: true,
+            nationalMode: false,
             formatOnDisplay: true,
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
@@ -523,7 +523,7 @@
 
         var secondary_phone_no = $("#secondary_phone_no");
         secondary_phone_no.intlTelInput({
-            nationalMode: true,
+            nationalMode: false,
             formatOnDisplay: true,
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
