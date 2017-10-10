@@ -57,7 +57,7 @@
 
         @section('modal')
             <!-- Modal for creating customer -->
-                <div class="modal usergroupModal" id="usergroup-modal" role="dialog" aria-labelledby="usergroup-modal">
+                <div class="modal usergroupModal" id="usergroup-modal" role="dialog" aria-labeledby="usergroup-modal">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
@@ -71,19 +71,6 @@
                     </div>
                 </div><!--/modal-->
 
-            <div class="modal usergroupModal" id="usergroup-modal-view" role="dialog" aria-labelledby="usergroup-modal-view">
-                <div class="modal-dialog" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="modal-view-usergroup-label"> User Group View</h4>
-                        </div>
-                        <div class="modal-body">
-                            @yield('usergroup-view')
-                        </div>
-                    </div>
-                </div>
-            </div>
 
         @endsection
 

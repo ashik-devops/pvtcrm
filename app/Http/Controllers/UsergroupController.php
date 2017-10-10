@@ -28,7 +28,7 @@ class UserGroupController extends Controller
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'userGroupId'=>'required|integer|exists:userGroup,id',
+                'userGroupId'=>'required|integer|exists:user_groups,id',
             ]);
         }
 
@@ -110,10 +110,15 @@ class UserGroupController extends Controller
                 function($member){
                     return $member->id;
                 }
-            );
-            $userGroup->members()->detach(array_diff($current_members, $request->userIds));
-            $userGroup->members()->attach(array_diff($request->userIds, $current_members));
-
+            )->toArray();
+            $removals= array_diff($current_members, $request->userGroup['userIds']);
+            if(count($removals) > 0){
+                $userGroup->members()->detach($removals);
+            }
+            $additions=array_diff($request->userGroup['userIds'], $current_members);
+            if(count($additions) > 0) {
+                $userGroup->members()->attach($additions);
+            }
 
             $userGroup->save();
 

@@ -32,7 +32,7 @@
 
 
         <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
-        <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Cancel">Cancel</button>
+        <button type="button" class="btn btn-danger margin-top-md center-blockr" data-dismiss="modal" aria-label="Close">Cancel</button>
         <button type="submit" id="user_group_form_submit"  class="btn btn-success margin-top-md center-block">Create</button>
 
         </div>
@@ -48,7 +48,7 @@
             'userGroupName': 'userGroupName',
             'userIds': 'userIds'
         };
-        var userSelect = jQuery("#userIds").select2({
+        jQuery("#userIds").select2({
             placeholder: "Choose Member Users",
             allowClear: true
         });
@@ -90,7 +90,6 @@
                 });
                 request.done(function (response) {
                     if (response.result == 'Saved') {
-                        reset_form($('#userGroupForm')[0]);
                         jQuery("#usergroup-modal").hide();
                         get_all_user_groups();
                         $.notify(response.message, "success");
@@ -114,7 +113,6 @@
                 });
                 request.done(function (response) {
                     if (response.result == 'Saved') {
-                        reset_form($('#userGroupForm')[0]);
 
                         jQuery("#usergroup-modal").hide();
                         get_all_user_groups();
@@ -134,7 +132,8 @@
 
         function reset_form(el) {
             el.reset();
-            jQuery("#userIds").val('').trigger('change');
+            jQuery("#"+inputMap.userIds).val('').trigger('change');
+            jQuery("#"+inputMap.userGroupId).val('');
         }
 
         /*Edit user group*/
@@ -150,24 +149,27 @@
             });
 
           request.done(function(response){
-                console.log(response);
-            });
+              jQuery("#"+inputMap.userGroupId).val(response.group.id);
+              jQuery("#"+inputMap.userGroupName).val(response.group.name);
+              jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Edit User Group: "+response.group.name);
+              jQuery("#usergroup-modal #user_group_form_submit").html("Update");
+              jQuery("#usergroup-modal").show();
+              var members = response.group.members.map(function(obj){
+                  return obj.id;
+              });
+                jQuery("#"+inputMap.userIds).val(members).trigger('change');
+
+          });
             request.fail(function( jqXHR, textStatus ) {
                 alert( "Request failed: " + textStatus );
             });
 
-            jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Add New User Group");
-            jQuery("#usergroup-modal #user_group_form_submit").html("Create");
 
-
-            jQuery("#userIds").select2({
-                placeholder: "Choose Member Users",
-                allowClear: true
-            });
-
-            jQuery("#usergroup-modal").show();
         }
 
+        jQuery("#usergroup-modal").on('hidden.bs.modal', function(){
+            reset_form(jQuer("#userGroupForm"))
+        });
 
     </script>
 
