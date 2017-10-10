@@ -233,7 +233,7 @@
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
 
-            var appointment = {
+            var appointmgitent = {
                 appointmentId : $('#'+inputMap.appointmentId).val(),
                 aptCustomerId : parseInt($('#'+inputMap.aptCustomerId).val()),
                 appointmentTitle : $('#'+inputMap.appointmentTitle).val(),

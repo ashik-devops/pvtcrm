@@ -3,6 +3,7 @@
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/intlTelInput.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/jasny-bootstrap.css')}}">
 @endsection
 
 @section('content')
@@ -51,13 +52,45 @@
                                             {{csrf_field()}}
                                             {{ method_field('PATCH')}}
 
-                                            <fieldset class="fieldset">
+                                            <div class="fieldset">
                                                 <h3 class="fieldset-title">Personal Info</h3>
                                                 <div class="form-group avatar">
-                                                    <label class="col-md-2 col-sm-3 col-xs-12 control-label">Upload new profile picture</label>
-                                                    <div class="form-inline col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="file" name="pro_pic" class="file-uploader pull-left form-control">
+
+
+
+
+
+                                                    {{--<div class="form-inline col-md-10 col-sm-9 col-xs-12">--}}
+                                                        {{--<input type="file" name="pro_pic" class="file-uploader pull-left form-control">--}}
+                                                    {{--</div>--}}
+
+                                                    <div class="form-group col-md-6 col-sm-12 col-xs-12 control-label text-center">
+
+                                                        <div class="text-center fileinput fileinput-new"  data-provides="fileinput">
+                                                            <label class="label-control">Profile Image</label>
+                                                            <br>
+                                                            <div class="fileinput-preview thumbnail" data-trigger="fileinput" style="width: 120px; height: 80px;">
+                                                                <img  style="width: 120px; height: 80px;" data-holder-rendered="true"
+
+                                                            @if(!is_null($user->profile->profile_pic) && file_exists('storage/'.$user->profile->profile_pic))
+
+                                                                src="{{asset('storage/'.$user->profile->profile_pic)}}"
+                                                            @endif
+                                                                >
+                                                            </div>
+                                                            <div>
+													<span class="btn btn-primary btn-file"><span class="fileinput-new">Upload New</span><span class="fileinput-exists">Change</span>
+													<input type="file" name="pro_pic">
+													</span>
+                                                                <a href="#" class="btn btn-danger fileinput-exists" data-dismiss="fileinput">Remove</a>
+                                                            </div>
+                                                        </div>
                                                     </div>
+                                                </div>
+
+
+
+
                                                 </div>
                                                 <div class="form-group {{ $errors->has('first_name') ? ' has-error' : '' }}">
                                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">First Name</label>
@@ -516,6 +549,7 @@
     </script>
 
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+    <script src="{{asset('storage/assets/js/jasny-bootstrap.js')}}"></script>
 
     <script>
         function goBack() {
