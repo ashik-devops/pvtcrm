@@ -93,7 +93,41 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
+        $this->validator($request->userGroup, true)->validate();
 
+        $result=[
+            'result'=>'Error',
+            'message'=>'Something went wrong.'
+        ];
+
+        if($request->userGroup['userIds']){
+            $userGroup = UserGroup::find($request->userGroup['userGroupId']);
+
+            $userGroup->name = $request->userGroup['userGroupName'];
+
+            DB::beginTransaction();
+            $current_members=$userGroup->members->map(
+                function($member){
+                    return $member->id;
+                }
+            );
+            $userGroup->members()->detach(array_diff($current_members, $request->userIds));
+            $userGroup->members()->attach(array_diff($request->userIds, $current_members));
+
+
+            $userGroup->save();
+
+            DB::commit();
+
+            $result['result']='Saved';
+            $result['message']='User group has been created Successfully.';
+
+        }
+        else{
+            $result['message']='Please add at least 1 member';
+        }
+
+        return response()->json($result,200);
     }
 
     public function getGroup(Request $request){
@@ -117,20 +151,6 @@ class UserGroupController extends Controller
                     })
                 ]
         ],200);
-    }
-
-    public function edit(Request $request){
-        $this->validator($request->userGroup)->validate();
-
-        $result=[
-            'result'=>'Error',
-            'message'=>'Something went wrong.'
-        ];
-
-
-
-
-
     }
 
 
