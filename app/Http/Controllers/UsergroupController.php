@@ -22,8 +22,6 @@ class UserGroupController extends Controller
     {
         $rules=[
             'userGroupName' => 'required|string',
-//            'userIds.*' =>'required|integer|exists:users,id',
-
         ];
 
         if($isUpdateRequest){
@@ -155,6 +153,23 @@ class UserGroupController extends Controller
                         ];
                     })
                 ]
+        ],200);
+    }
+
+    public function delete(Request $request){
+
+        $data =$this->validate($request, [
+            'groupId'=>'required|int|exists:user_groups,id'
+        ]);
+
+        $group=UserGroup::find($data['groupId']);
+        DB::beginTransaction();
+        $group->members()->detach();
+        $group->delete();
+        DB::commit();
+        return response()->json( $result=[
+            'result'=>'success',
+            'message'=>'Group has been deleted successfully.'
         ],200);
     }
 
