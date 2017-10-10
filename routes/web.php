@@ -36,6 +36,7 @@ Route::get('/ajax/user/groups', 'UserGroupController@getUserGroupsAjax')->name('
 Route::post('ajax/user/group/create', 'UserGroupController@create')->name('user-group-create');
 Route::post('ajax/user/group/update', 'UserGroupController@update')->name('user-group-update');
 Route::post('ajax/user/group/edit', 'UserGroupController@edit')->name('user-group-edit');
+Route::get('ajax/user/group/delete', 'UserGroupController@delete')->name('user-group-delete');
 Route::get('ajax/user/group/', 'UserGroupController@getGroup')->name('single-user-group.data');
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');

@@ -182,7 +182,7 @@ class UserGroupController extends Controller
         DB::commit();
 
         return response()->json([
-            'result'=>'success',
+            'result'=>'Success',
             'message'=>'Group has been deleted successfully.'
         ],200);    }
 

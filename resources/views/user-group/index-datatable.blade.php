@@ -151,6 +151,49 @@
         function get_all_user_groups(){
             datatable.ajax.reload(null, false);
         }
+
+        function deleteUserGroup(id){
+
+            swal({
+                    title: "Are you sure?",
+                    text: "This Group will be deleted!",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes, delete it!",
+                    cancelButtonText: "No, cancel !",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var request = jQuery.ajax({
+                            url: "{{ route('user-group-delete') }}",
+                            data: {groupId: id},
+                            method: "GET",
+                            dataType: "json"
+                        });
+                        request.done(function (response) {
+                            if (response.result == 'Success') {
+                                get_all_user_groups();
+                                swal.close();
+                            }
+                            else {
+                                swal.message()
+
+                            }
+                        })
+
+                        request.fail(function (jqXHT, textStatus) {
+                            $.notify(textStatus, "error");
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        }
     </script>
 
     @yield('group-form-scripts')
