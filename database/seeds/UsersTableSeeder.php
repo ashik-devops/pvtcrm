@@ -48,10 +48,9 @@ class UsersTableSeeder extends Seeder
         $address->state="FL";
         $address->country="USA";
         $address->zip = "104125";
-        $address->save();
+        $address->type='CONTACT';
         $user_profile->save();
-        $user_profile->address()->associate($address);
-        $user_profile->address->save();
+        $user_profile->address()->save($address);
         $user= new User();
         $user->first_name = "Dean";
         $user->last_name = "Shill";

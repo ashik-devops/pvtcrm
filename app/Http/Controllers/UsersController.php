@@ -180,6 +180,7 @@ class UsersController extends Controller
         $address->state=$data['state'];
         $address->country=$data['country'];
         $address->zip=$data['zip'];
+        $address->type='CONTACT';
         $timezone=Timezone::find($data['timezone']);
         /*handle image upload*/
         if ($request->hasFile('pro_pic') && $request->file('pro_pic')->isValid()) {
@@ -193,9 +194,8 @@ class UsersController extends Controller
         DB::beginTransaction();
 
         $user->save();
-        $address->save();
+        $user->profile->address()->save($address);
         $user->profile->save();
-        $user->profile->address()->associate($address);
         if(Auth::user()->can('create', User::class)) {
             Role::find($data['role'])->users()->save($user);
         }$timezone->profiles()->save($user->profile);

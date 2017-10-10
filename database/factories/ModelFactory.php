@@ -39,6 +39,7 @@ $factory->define(App\Address::class, function (Faker\Generator $faker) {
         'zip'=>$faker->postcode,
         'email'=>$faker->unique()->email,
         'phone_no'=>$faker->unique()->phoneNumber,
+        'type'=>'CONTACT'
     ];
 });
 

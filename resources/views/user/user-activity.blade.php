@@ -65,7 +65,7 @@
         var activityTable= $('#activity-table').DataTable({
             processing: true,
             serverSide: true,
-            "order": [[ 0, "desc" ]],
+            order: [[0, 'desc']],
             ajax: {
                 url: "{{route('activities.all.data')}}",
                 data: function (data) {
