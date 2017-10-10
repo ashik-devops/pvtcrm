@@ -15,7 +15,7 @@ class UserGroup extends Model
         CausesActivity::activity as log;
     }*/
 
-    public function users(): BelongsToMany{
+    public function members(): BelongsToMany{
         return $this->belongsToMany('App\User', 'group_users', 'group_id', 'user_id');
     }
 

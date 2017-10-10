@@ -16,7 +16,7 @@
             <h2 class="view-title">User Groups</h2>
 
             <div class="actions">
-                <button id="new-apt-btn" class="btn btn-success" data-toggle="modal" data-target="#usergroup-modal"><i class="fa fa-plus"></i>New Group</button>
+                <button role="button" onclick="createNewUserGroup()" id="new-apt-btn" class="btn btn-success"><i class="fa fa-plus"></i>New Group</button>
             </div>
 
             <div id="masonry" class="row">
