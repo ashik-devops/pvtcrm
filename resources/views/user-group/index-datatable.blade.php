@@ -57,15 +57,15 @@
 
         @section('modal')
             <!-- Modal for creating customer -->
-                <div class="modal usergroupModal" id="usergroup-modal" role="dialog" aria-labeledby="usergroup-modal">
+                <div class="modal fade" id="user-group-modal" role="dialog" aria-labelledby="user-group-modal">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                <h4 class="modal-title" id="modal-new-usergroup-label">Add New User Group</h4>
+                                <h4 class="modal-title" id="modal-new-user-group-label">Add New User Group</h4>
                             </div>
                             <div class="modal-body">
-                                @yield('usergroup-create-form')
+                                @yield('user-group-create-form')
                             </div>
                         </div>
                     </div>
@@ -115,9 +115,9 @@
             request.done(function(response){
                 jQuery("#"+inputMap.userGroupId).val(response.group.id);
                 jQuery("#"+inputMap.userGroupName).val(response.group.name);
-                jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Edit User Group: "+response.group.name);
-                jQuery("#usergroup-modal #user_group_form_submit").html("Update");
-                jQuery("#usergroup-modal").show();
+                jQuery("#user-group-modal #modal-new-user-group-label.modal-title").html("Edit User Group: "+response.group.name);
+                jQuery("#user-group-modal #user_group_form_submit").html("Update");
+                jQuery("#user-group-modal").modal('show');
                 var members = response.group.members.map(function(obj){
                     return obj.id;
                 });
@@ -131,16 +131,21 @@
 
         }
         function createNewUserGroup() {
-            jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Add New User Group");
-            jQuery("#usergroup-modal #user_group_form_submit").html("Create");
+            jQuery("#user-group-modal #modal-new-user-group-label.modal-title").html("Add New User Group");
+            jQuery("#user-group-modal #user_group_form_submit").html("Create");
 
-            jQuery("#usergroup-modal").show();
+            jQuery("#user-group-modal").modal('show');
 
         }
 
-        jQuery("#usergroup-modal").on('hidden.bs.modal', function(){
-            reset_form(jQuery("#userGroupForm"))
+        jQuery("#user-group-modal").on('hidden.bs.modal', function(){
+            reset_form(jQuery("#userGroupForm")[0])
         });
+        function reset_form(el) {
+            el.reset();
+            jQuery("#"+inputMap.userIds).val('').trigger('change');
+            jQuery("#"+inputMap.userGroupId).val('');
+        }
 
 
         function get_all_user_groups(){

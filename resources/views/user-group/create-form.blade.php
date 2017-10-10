@@ -1,4 +1,4 @@
-@section('usergroup-create-form')
+@section('user-group-create-form')
     <form method="post" class="ajax-from"  data-parsley-validate id="userGroupForm">
 
         {{ csrf_field() }}
@@ -29,11 +29,12 @@
         </div>
 
 
+<div class="form-group margin-top-md center-block text-center">
+    <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+    <button type="submit" id="user_group_form_submit"  class="btn btn-success">Create</button>
+</div>
 
-
-        <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
-        <button type="button" class="btn btn-danger margin-top-md center-blockr" data-dismiss="modal" aria-label="Close">Cancel</button>
-        <button type="submit" id="user_group_form_submit"  class="btn btn-success margin-top-md center-block">Create</button>
 
         </div>
 
@@ -82,7 +83,7 @@
                 });
                 request.done(function (response) {
                     if (response.result == 'Saved') {
-                        jQuery("#usergroup-modal").hide();
+                        jQuery("#user-group-modal").modal('hide');
                         get_all_user_groups();
                         $.notify(response.message, "success");
                     }
@@ -105,7 +106,7 @@
                 request.done(function (response) {
                     if (response.result == 'Saved') {
 
-                        jQuery("#usergroup-modal").hide();
+                        jQuery("#user-group-modal").modal('hide');
                         get_all_user_groups();
                         $.notify(response.message, "success");
                     }
@@ -121,11 +122,6 @@
             }
         });
 
-        function reset_form(el) {
-            el.reset();
-            jQuery("#"+inputMap.userIds).val('').trigger('change');
-            jQuery("#"+inputMap.userGroupId).val('');
-        }
 
         /*Edit user group*/
 
