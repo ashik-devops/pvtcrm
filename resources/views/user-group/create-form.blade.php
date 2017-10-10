@@ -53,13 +53,6 @@
             allowClear: true
         });
 
-        function createNewUserGroup() {
-            jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Add New User Group");
-            jQuery("#usergroup-modal #user_group_form_submit").html("Create");
-
-            jQuery("#usergroup-modal").show();
-
-        }
 
 
 
@@ -79,7 +72,6 @@
             };
 
             if (user_group.userGroupId === '') {
-                //account creating.....
 
 
                 var request = jQuery.ajax({
@@ -103,7 +95,6 @@
                     $.notify(textStatus, "error");
                 });
             } else {
-                //account editing.....
 
                 var request = jQuery.ajax({
                     url: "{{ route('user-group-update') }}",
@@ -138,38 +129,7 @@
 
         /*Edit user group*/
 
-        function editUserGroup(id){
 
-          var request =  jQuery.ajax({
-                method: "GET",
-                url: "{{route('single-user-group.data')}}",
-                data: {groupId: id},
-                dataType:'json',
-
-            });
-
-          request.done(function(response){
-              jQuery("#"+inputMap.userGroupId).val(response.group.id);
-              jQuery("#"+inputMap.userGroupName).val(response.group.name);
-              jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Edit User Group: "+response.group.name);
-              jQuery("#usergroup-modal #user_group_form_submit").html("Update");
-              jQuery("#usergroup-modal").show();
-              var members = response.group.members.map(function(obj){
-                  return obj.id;
-              });
-                jQuery("#"+inputMap.userIds).val(members).trigger('change');
-
-          });
-            request.fail(function( jqXHR, textStatus ) {
-                alert( "Request failed: " + textStatus );
-            });
-
-
-        }
-
-        jQuery("#usergroup-modal").on('hidden.bs.modal', function(){
-            reset_form(jQuery("#userGroupForm"))
-        });
 
     </script>
 

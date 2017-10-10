@@ -113,7 +113,7 @@ class UserGroupController extends Controller
 
             $current_members=$userGroup->members->map(function ($member){
                 return $member->id;
-            });
+            })->toArray();
 
             $removals=array_diff($current_members, $request->userGroup['userIds']);
             $additions=array_diff($request->userGroup['userIds'], $current_members);
@@ -129,7 +129,7 @@ class UserGroupController extends Controller
 
 
             if(count($additions)>0){
-                $userGroup->members()->attach($removals);
+                $userGroup->members()->attach($additions);
             }
 
             $userGroup->members()->attach($request->userGroup['userIds']);
@@ -156,16 +156,18 @@ class UserGroupController extends Controller
         $group= UserGroup::find($data['groupId']);
 
 
-        return response()->json(['group'=>[
-            'id'=>$group->id,
-            'name'=>$group->name,
-            'members'=>$group->members->map(function($member){
-                return [
-                    'id'=>$member->id,
-                    'name'=>$member->name
-                ];
-            })
-        ], 200);
+        return response()->json([
+            'group'=>[
+                'id'=>$group->id,
+                'name'=>$group->name,
+                'members'=>$group->members->map(function($member){
+                    return [
+                        'id'=>$member->id,
+                        'name'=>$member->name
+                        ];
+                    })
+                ]
+            ], 200);
     }
 
     public function delete(Request $request){
