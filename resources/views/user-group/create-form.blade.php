@@ -43,26 +43,26 @@
 
 @section('group-form-scripts')
     <script type="text/javascript">
-
-        function createNewUserGroup() {
-            jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Add New User Group");
-            jQuery("#usergroup-modal #user_group_form_submit").html("Create");
-
-
-            jQuery("#userIds").select2({
-                placeholder: "Choose Member Users",
-                allowClear: true
-            });
-
-            jQuery("#usergroup-modal").show();
-
-        }
-
         var inputMap = {
             'userGroupId': 'userGroup_id',
             'userGroupName': 'userGroupName',
             'userIds': 'userIds'
         };
+        var userSelect = jQuery("#userIds").select2({
+            placeholder: "Choose Member Users",
+            allowClear: true
+        });
+
+        function createNewUserGroup() {
+            jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Add New User Group");
+            jQuery("#usergroup-modal #user_group_form_submit").html("Create");
+
+            jQuery("#usergroup-modal").show();
+
+        }
+
+
+
         jQuery("#userGroupForm").submit(function (e) {
             e.preventDefault();
             var _token = $('input[name="_token"]').val();
@@ -91,8 +91,8 @@
                 request.done(function (response) {
                     if (response.result == 'Saved') {
                         reset_form($('#userGroupForm')[0]);
-                        $('#usergroup-modal').modal('hide');
-//                        get_all_account_data();
+                        jQuery("#usergroup-modal").hide();
+                        get_all_user_groups();
                         $.notify(response.message, "success");
                     }
                     else {
@@ -116,8 +116,8 @@
                     if (response.result == 'Saved') {
                         reset_form($('#userGroupForm')[0]);
 
-                        $('#modal-new-user-group').modal('hide');
-//                        get_all_account_data();
+                        jQuery("#usergroup-modal").hide();
+                        get_all_user_groups();
                         $.notify(response.message, "success");
                     }
                     else {
@@ -134,6 +134,7 @@
 
         function reset_form(el) {
             el.reset();
+            jQuery("#userIds").val('').trigger('change');
         }
 
         /*Edit user group*/
@@ -141,7 +142,7 @@
         function editUserGroup(id){
 
             jQuery.ajax({
-                url: "{{route(single-user-group.data)}}"
+                url: "{{route('single-user-group.data')}}"
             });
 
             jQuery("#usergroup-modal #modal-new-usergroup-label.modal-title").html("Add New User Group");
@@ -155,6 +156,8 @@
 
             jQuery("#usergroup-modal").show();
         }
+
+
     </script>
 
 @endsection

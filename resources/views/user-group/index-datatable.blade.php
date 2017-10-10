@@ -114,7 +114,9 @@
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
-
+        function get_all_user_groups(){
+            datatable.ajax.reload(null, false);
+        }
     </script>
 
     @yield('group-form-scripts')
