@@ -59,6 +59,10 @@
 
         jQuery("#userGroupForm").submit(function (e) {
             e.preventDefault();
+            if(!$(this).parsley().isValid()){
+                return;
+            }
+
             var _token = $('input[name="_token"]').val();
             var user_group = {
                 userGroupId: jQuery('#' + inputMap.userGroupId).val(),
@@ -114,7 +118,10 @@
                         jQuery.notify(response.message, "error");
                     }
                 })
-
+                request.error(function(xhr){
+                    console.log(xhr);
+                    handle_error(xhr);
+                });
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
@@ -122,7 +129,14 @@
             }
         });
 
-
+        function handle_error(xhr) {
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    console.log(key + ": "+data);
+                    showParselyError(key, data[0]);
+                });
+            }
+        }
         /*Edit user group*/
 
 
