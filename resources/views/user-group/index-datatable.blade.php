@@ -35,9 +35,9 @@
                                             <thead>
                                             <tr>
                                                 <th>Id</th>
-                                                <th>Name</th>
+                                                <th>Group Name</th>
+                                                <th>Users</th>
                                                 <th>Action</th>
-
                                             </tr>
                                             </thead>
                                         </table>
@@ -98,6 +98,7 @@
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
+                {data: 'user_id', name: 'user_id'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });

@@ -17,6 +17,7 @@ use Laravel\Passport\HasApiTokens;
 use Spatie\Activitylog\Traits\CausesActivity;
 class User extends Authenticatable
 {
+
     use HasApiTokens, DispatchesJobs, Notifiable, SoftDeletes, CausesActivity, LogsActivity{
     LogsActivity::activity insteadof CausesActivity;
     CausesActivity::activity as log;
