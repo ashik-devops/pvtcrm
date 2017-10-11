@@ -543,7 +543,9 @@
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
 
                     if(['e', 'x'].indexOf(lastChar) !== -1){
-                        input.val(intlNumber+ ' ext. ');
+                        input.val(input.val().slice(0, input.val().indexOf('e')).trim()+ ' ext. ');
+
+
                     }
                     else{
                         var ext = input.intlTelInput("getExtension");
