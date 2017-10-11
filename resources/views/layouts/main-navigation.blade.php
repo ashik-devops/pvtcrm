@@ -58,6 +58,12 @@
                         </a>
                     </li>
 
+                    <li class="{{Nav::isRoute('user-group-index',"active")}}">
+                        <a href="{{route('user-group-index')}}">
+                            <span class="nav-label">User Groups</span>
+                        </a>
+                    </li>
+
                 </ul>
             </li>
             @endcan
@@ -68,6 +74,8 @@
                         <span class="nav-label">Activity Log</span>
                     </a>
                 </li>
+
+
             @endif
 
         </ul>

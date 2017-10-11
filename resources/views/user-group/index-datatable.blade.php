@@ -98,7 +98,7 @@
             columns: [
                 {data: 'id', name: 'id'},
                 {data: 'name', name: 'name'},
-                {data: 'user_id', name: 'user_id'},
+                {data: 'user_count', name: 'user_count'},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
             ]
         });
