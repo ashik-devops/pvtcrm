@@ -18,7 +18,7 @@
 
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">User</label>
-            <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true">
+            <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true" required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
                 @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
                     @php
                     $user=\App\User::find($user)
@@ -94,11 +94,16 @@
                     else {
                         jQuery.notify(response.message, "error");
                     }
-                })
+                });
+
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
 
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
                 });
+
             } else {
 
                 var request = jQuery.ajax({
@@ -119,7 +124,6 @@
                     }
                 })
                 request.error(function(xhr){
-                    console.log(xhr);
                     handle_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
@@ -130,12 +134,21 @@
         });
 
         function handle_error(xhr) {
+            console.log(xhr);
             if(xhr.status==422){
-                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
-                    console.log(key + ": "+data);
+                jQuery.map(xhr.responseJSON.errors, function (data, key) {
                     showParselyError(key, data[0]);
                 });
             }
+        }
+
+        function showParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.').reverse()[0];
+            }
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
         }
         /*Edit user group*/
 

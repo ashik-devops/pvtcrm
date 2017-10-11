@@ -382,6 +382,7 @@
                     handle_error(xhr);
                 });
                 request.fail(function (jqXHT, textStatus) {
+                    console.log(textStatus);
                     $.notify(textStatus, "error");
                 });
             }
