@@ -104,6 +104,9 @@
     <script>
         jQuery('#registration-form').submit(function (e) {
             e.preventDefault();
+            if(!$(this).parsley().isValid()){
+                return;
+            }
             var _token = $('input[name="_token"]').val();
             var data = {
                 '_token':_token,
