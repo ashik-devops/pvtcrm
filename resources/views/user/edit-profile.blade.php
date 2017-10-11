@@ -169,7 +169,7 @@
                                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">Primary Phone</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
                                                         <div class="input-container" id="primary_phone_no_error_container">
-                                                            <input type="tel" name="primary_phone_no" data-parsley-errors-container="#primary_phone_no_error_container" id="primary_phone_no" class="phone form-control" required data-parsley-trigger="change focusout" value="{{ old('primary_phone_no', $user->profile->primary_phone_no) }}" data-parsley-required-message="You must enter phone no.">
+                                                            <input type="text" width="100%" name="primary_phone_no" data-parsley-errors-container="#primary_phone_no_error_container" id="primary_phone_no" class="phone form-control" required data-parsley-trigger="change focusout" value="{{ old('primary_phone_no', $user->profile->primary_phone_no) }}" data-parsley-required-message="You must enter phone no.">
                                                         </div>
                                                             @if ($errors->has('primary_phone_no'))
                                                             <span class="help-block">
@@ -182,7 +182,7 @@
                                                 <div class="form-group {{ $errors->has('secondary_phone_no') ? ' has-error' : '' }}">
                                                     <label class="col-md-2 col-sm-3 col-xs-12 control-label">Secondary Phone</label>
                                                     <div class="col-md-10 col-sm-9 col-xs-12">
-                                                        <input type="tel" name="secondary_phone_no" id="secondary_phone_no" class="phone form-control"  data-parsley-trigger="change focusout" value="{{ old('secondary_phone_no', $user->profile->secondary_phone_no) }}">
+                                                        <input type="text" width="100%" name="secondary_phone_no" id="secondary_phone_no" class="phone form-control"  data-parsley-trigger="change focusout" value="{{ old('secondary_phone_no', $user->profile->secondary_phone_no) }}">
                                                         @if ($errors->has('secondary_phone_no'))
                                                             <span class="help-block">
                                         <strong>{{ $errors->first('secondary_phone_no') }}</strong>
@@ -514,6 +514,7 @@
         primary_phone_no.intlTelInput({
             nationalMode: false,
             formatOnDisplay: true,
+            allowExtensions: true,
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
 
@@ -525,6 +526,7 @@
         secondary_phone_no.intlTelInput({
             nationalMode: false,
             formatOnDisplay: true,
+            allowExtensions: true,
             utilsScript: "{{asset('storage/assets/js/utils.js')}}"
         });
 
@@ -536,13 +538,36 @@
             if (typeof intlTelInputUtils !== 'undefined') {
 
                 var intlNumber = input.intlTelInput("getNumber", intlTelInputUtils.numberFormat.E164);
+
                 var lastChar = input.val().trim().split('').reverse()[0];
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
+
                     if(['e', 'x'].indexOf(lastChar) !== -1){
                         input.val(intlNumber+ ' ext. ');
                     }
                     else{
-                        input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
+                        var ext = input.intlTelInput("getExtension");
+
+
+
+                        if((ext != null && ext.length > 0)){
+                            intlNumber=intlNumber+' ext. '+ext;
+                        }
+                        else {
+
+                            if(input.val().slice(input.val().length - 6, input.val().length) == ' ext. '){
+                                return;
+                            }
+
+                            else if(input.val().indexOf(' ext. ') < 0 ){
+                                if(input.val().indexOf('e') >=0){
+                                    intlNumber = input.val().slice(0, input.val().indexOf('e')).trim();
+                                }
+                            }
+
+                        }
+                            input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
+
                     }
                 }
 
