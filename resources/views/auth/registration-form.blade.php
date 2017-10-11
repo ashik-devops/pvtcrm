@@ -3,7 +3,7 @@
         {{ csrf_field() }}
         <div class="form-group {{ $errors->has('first_name') ? ' has-error' : '' }}" >
             <label class="sr-only">Name</label>
-            <input type="text" name="first_name" id="userFirstName" class="form-control" placeholder="First Name" data-parsley-trigger="change focusout" data-parsley-required-message="First Name is required" required value="{{old('first_name')}}">
+            <input type="text" name="first_name" id="userFirstName" class="form-control" placeholder="First Name" data-parsley-trigger="change focusout" data-parsley-required-message="First Name is required" required="required" value="{{old('first_name')}}">
             @if ($errors->has('first_name'))
                 <span class="help-block">
                     <strong>{{ $errors->first('first_name') }}</strong>
