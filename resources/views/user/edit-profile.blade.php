@@ -4,6 +4,12 @@
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/intlTelInput.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jasny-bootstrap.css')}}">
+    <style>
+        .intl-tel-input {
+            display: block;
+            width: 100%;
+        }
+    </style>
 @endsection
 
 @section('content')
