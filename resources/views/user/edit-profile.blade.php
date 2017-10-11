@@ -18,7 +18,12 @@
 
                             <div class="side-bar">
                                 <div class="user-info">
-                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />
+
+                                    @if(!is_null($user->profile->profile_pic) && file_exists('storage/'.$user->profile->profile_pic))
+                                        <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}"/>
+                                    @else
+                                        <img data-name="{{$user->profile->initial}}" data-char-count="2" class="img-profile profile-avatar img-circle img-responsive center-block" />
+                                    @endif
                                     <ul class="meta list list-unstyled">
                                         <li class="name">{{$user->name}}
                                             <label class="label label-info">{{$user->role->name}}</label>
@@ -542,12 +547,17 @@
                 var lastChar = input.val().trim().split('').reverse()[0];
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
 
-                    if(['e', 'x'].indexOf(lastChar) !== -1){
-                        input.val(input.val().slice(0, input.val().indexOf('e')).trim()+ ' ext. ');
-
-
+                    if(isNaN(lastChar)){
+                        if(['e', 'x'].indexOf(lastChar) !== -1){
+                            input.val(input.val().slice(0, input.val().indexOf('e')).trim()+ ' ext. ');
+                        }
+                        else{
+                            input.val(input.val().slice(0, input.val().indexOf(lastChar)).trim());
+                        }
                     }
+
                     else{
+
                         var ext = input.intlTelInput("getExtension");
 
 

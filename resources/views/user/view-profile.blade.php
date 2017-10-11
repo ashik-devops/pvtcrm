@@ -17,7 +17,6 @@
 
                             <div class="side-bar">
                                 <div class="user-info">
-                                    {{--<img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
 
 
                                         @if(!is_null($user->profile->profile_pic) && file_exists('storage/'.$user->profile->profile_pic))
