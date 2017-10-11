@@ -539,12 +539,11 @@
                 var lastChar = input.val().trim().split('').reverse()[0];
                 if (typeof intlNumber === 'string') { // sometimes the currentText is an object :)
                     if(['e', 'x'].indexOf(lastChar) !== -1){
-                        input.
+                        input.val(intlNumber+ ' ext. ');
                     }
                     else{
                         input.intlTelInput('setNumber', intlNumber); // will autoformat because of formatOnDisplay=true
                     }
-
                 }
 
             }
