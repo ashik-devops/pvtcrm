@@ -30,7 +30,7 @@ class UserGroupController extends Controller
     {
         $rules=[
             'userGroupName' => 'required|string',
-//            'userIds.*' =>'required|integer|exists:users,id',
+            'userIds' =>'required|array|exists:users,id',
 
         ];
 
