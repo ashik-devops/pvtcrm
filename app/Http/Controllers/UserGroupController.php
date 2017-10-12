@@ -34,13 +34,18 @@ class UserGroupController extends Controller
 
         ];
 
+        $messages=[
+            'userIds.required'=>'Please select at least one member.',
+            'userIds.exists'=>'One of more of selected users not found or could not be added to group.'
+        ];
+
         if($isUpdateRequest){
             $rules=array_merge($rules,[
                 'userGroupId'=>'required|integer|exists:user_groups,id',
             ]);
         }
 
-        return Validator::make($data, $rules);
+        return Validator::make($data, $rules, $messages);
     }
 
 
