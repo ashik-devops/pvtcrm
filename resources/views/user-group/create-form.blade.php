@@ -18,7 +18,7 @@
 
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">User</label>
-            <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true" required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
+            <select name="userIds[]" id="userIds" class="form-control" style="width: 100%" multiple="true" required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
                 @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
                     @php
                     $user=\App\User::find($user)
@@ -134,7 +134,7 @@
         });
 
         function handle_error(xhr) {
-            console.log(xhr);
+//            console.log(xhr);
             if(xhr.status==422){
                 jQuery.map(xhr.responseJSON.errors, function (data, key) {
                     showParselyError(key, data[0]);

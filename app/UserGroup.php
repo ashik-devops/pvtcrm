@@ -10,13 +10,29 @@ use Spatie\Activitylog\Traits\CausesActivity;
 
 class UserGroup extends Model
 {
-    use SoftDeletes;/*, CausesActivity, LogsActivity{
+    use SoftDeletes, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
         CausesActivity::activity as log;
-    }*/
+    }
 
     public function members(): BelongsToMany{
         return $this->belongsToMany('App\User', 'group_users', 'group_id', 'user_id');
+    }
+
+    public function getLink(): string {
+        if($this->id > 0){
+            return '#';
+        }
+
+        return '#';
+    }
+
+    public function getActivityTitle(): string {
+        if($this->id > 0){
+            return ' User Group '.$this->name;
+
+        }
+        return "";
     }
 
 

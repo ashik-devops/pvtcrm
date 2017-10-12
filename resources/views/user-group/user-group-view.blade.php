@@ -17,8 +17,7 @@
 
     </table>
 
-    <button class="btn btn-success" onClick="editUserGroupWithClosingView()">Edit Appointment</button>
-    <button class="btn btn-success" onClick="completeUserGroupWithClosingView()">Complete Appointment</button>
-    <button class="btn btn-success" onClick="editUserGroupWithClosingView()">Cancel Appointment</button>
+    <button class="btn btn-success" onClick="editUserGroupWithClosingView()">Edit Group</button>
+    <button class="btn btn-success" onClick="completeUserGroupWithClosingView()">Delete</button>
 
 @endsection
