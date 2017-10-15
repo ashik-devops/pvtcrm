@@ -5,12 +5,21 @@
 @section('content')
     <div id="content-wrapper" class="content-wrapper view view-account">
         <div class="container-fluid">
-            <div class="view-title"><h2>User Group Information</h2></div>
+            <div class="view-title"><h2>User Group Details</h2></div>
             <div class="row">
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="module">
                         <div class="module-inner">
                             <div class="side-bar">
+
+                                <div class="user-info">
+                                    {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
+                                    <ul class="meta list list-unstyled">
+                                        <li class="name"><h3>{{$userGroup->name}}</h3>
+
+
+                                    </ul>
+                                </div>
 
 
                                 <nav class="side-menu">
@@ -25,7 +34,7 @@
                                 <div id="memebers" role="tabpanel" class="tab-pane">
                                     <div class="panel panel-default">
                                         <div class="panel-heading">
-                                            <h3 class="panel-title">Contact Persons</h3>
+                                            <h3 class="panel-title">Members</h3>
                                         </div>
                                         <div class="panel-body">
                                             @foreach($userGroup->members as $member)
