@@ -14,7 +14,7 @@ class UserAuthEventsSubscriber
     public function onUserLogin($event) {
         app(ActivityLogger::class)
             ->causedBy($event->user)
-            ->log('<a href="'.$event->user->getLink().'">'.$event->user->getActivityTitle(). '</a> has logged in.', 'login');
+            ->log('<strong><a href="'.$event->user->getLink().'">'.$event->user->getActivityTitle(). '</a> has logged in.</strong>', 'login');
     }
 
     /**
@@ -24,7 +24,17 @@ class UserAuthEventsSubscriber
     public function onUserLogout($event) {
         app(ActivityLogger::class)
             ->causedBy($event->user)
-            ->log('<a href="'.$event->user->getLink().'">'.$event->user->getActivityTitle(). '</a> has logged out.', 'logout');
+            ->log('<strong></strong><a href="'.$event->user->getLink().'">'.$event->user->getActivityTitle(). '</a> has logged out.</strong>', 'logout');
+    }
+
+    /**
+     * @param $event
+     */
+    public function onUserLoginFailed($event){
+        app(ActivityLogger::class)
+            ->causedBy($event->user)
+            ->log('<strong>Attempt to log in as user: <a href="'.$event->user->getLink().'">'.$event->user->getActivityTitle(). '</a> has failed.</strong>strong>', 'logout');
+
     }
 
     /**
@@ -42,6 +52,11 @@ class UserAuthEventsSubscriber
         $events->listen(
             'Illuminate\Auth\Events\Logout',
             'App\Subscribers\UserAuthEventsSubscriber@onUserLogout'
+        );
+
+        $events->listen(
+            'Illuminate\Auth\Events\Failed',
+            'App\Subscribers\UserAuthEventsSubscriber@onUserLoginFailed'
         );
     }
 }
