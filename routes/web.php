@@ -31,7 +31,8 @@ Route::post('user/roles/edit/{role}', 'RolesController@update')->name('update-ro
 Route::get('user/roles/create', 'RolesController@createForm')->name('create-role-form')->middleware(['auth', 'can:create,App\Role']);
 Route::get('ajax/user/roles/', 'RolesController@getRolesAjax')->name('roles-list-data')->middleware(['auth', 'can:index,App\Role']);
 Route::delete('ajax/user/roles/delete/', 'RolesController@delete')->name('delete-role')->middleware(['auth', 'can:delete,App\Role']);
-Route::get('/user/group', 'UserGroupController@index')->name('user-group-index');
+Route::get('/user/groups', 'UserGroupController@index')->name('user-group-index');
+Route::get('/user/groups/view/{group}', 'UserGroupController@view')->name('view-user-group');
 Route::get('/ajax/user/groups', 'UserGroupController@getUserGroupsAjax')->name('user-group-index.data');
 Route::post('ajax/user/group/create', 'UserGroupController@create')->name('user-group-create');
 Route::post('ajax/user/group/update', 'UserGroupController@update')->name('user-group-update');

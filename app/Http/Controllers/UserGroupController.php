@@ -49,8 +49,8 @@ class UserGroupController extends Controller
     }
 
 
-    public function index(){
-
+    public function index()
+    {
         return view('user-group.index-datatable');
     }
 
@@ -196,5 +196,10 @@ class UserGroupController extends Controller
             'message'=>'Group has been deleted successfully.'
         ],200);    }
 
+    public function view(UserGroup $group){
+//        $this->authorize('view', $userGgroup);
+
+        return view('user-group.user-group-view')->with(['userGroup'=>$group]);
+    }
 
 }
