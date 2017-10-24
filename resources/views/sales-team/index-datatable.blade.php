@@ -42,7 +42,7 @@
                                                 <th>Id</th>
                                                 <th>Name</th>
                                                 <th>User</th>
-                                                <th>Note</th>
+                                                <th>Manager</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
