@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class UserGroupController extends Controller
+class userGroupController extends Controller
 {
     public function __construct()
     {
@@ -54,15 +54,15 @@ class UserGroupController extends Controller
         return view('user-group.index-datatable');
     }
 
-    public function getUserGroupsAjax(){
+    public function getuserGroupsAjax(){
 
         return DataTables::of(Index_usergroup::all())
             ->addColumn('action',
                 function ($usergroup){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  onClick="viewUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="edituserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteuserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$usergroup->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
                 })
 
             ->addColumn('name',
@@ -87,7 +87,7 @@ class UserGroupController extends Controller
         ];
 
         if($request->userGroup['userIds']){
-            $userGroup = new UserGroup();
+            $userGroup = new userGroup();
             $userGroup->name = $request->userGroup['userGroupName'];
 
             DB::beginTransaction();
@@ -98,7 +98,7 @@ class UserGroupController extends Controller
             DB::commit();
 
             $result['result']='Saved';
-            $result['message']='User group has been created Successfully.';
+            $result['message']='user group has been created Successfully.';
 
         }
         else{
@@ -110,7 +110,7 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
-        $this->validator($request->userGroup, true)->validate();
+        $this->validator($request->usersGroup, true)->validate();
 
         $result=[
             'result'=>'Error',
@@ -118,7 +118,7 @@ class UserGroupController extends Controller
         ];
 
         if($request->userGroup['userIds']){
-            $userGroup = UserGroup::find($request->userGroup['userGroupId']);
+            $userGroup = userGroup::find($request->userGroup['userGroupId']);
             $userGroup->name = $request->userGroup['userGroupName'];
 
             $current_members=$userGroup->members->map(function ($member){
@@ -148,7 +148,7 @@ class UserGroupController extends Controller
             DB::commit();
 
             $result['result']='Saved';
-            $result['message']='User group has been created Successfully.';
+            $result['message']='user group has been created Successfully.';
 
         }
         else{
@@ -158,12 +158,12 @@ class UserGroupController extends Controller
         return response()->json($result,200);
     }
 
-    public function getGroup(Request $request){
+    public function getuserGroup(Request $request){
 
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id'
         ]);
-        $group= UserGroup::find($data['groupId']);
+        $group= userGroup::find($data['groupId']);
 
 
         return response()->json([
@@ -174,10 +174,10 @@ class UserGroupController extends Controller
                     return [
                         'id'=>$member->id,
                         'name'=>$member->name
-                        ];
-                    })
-                ]
-            ], 200);
+                    ];
+                })
+            ]
+        ], 200);
     }
 
     public function delete(Request $request){
@@ -185,7 +185,7 @@ class UserGroupController extends Controller
             'groupId'=>'required|int|exists:user_groups,id'
         ]);
 
-        $group= UserGroup::find($data['groupId']);
+        $group= userGroup::find($data['groupId']);
         DB::beginTransaction();
         $group->members()->detach();
         $group->delete();
@@ -193,10 +193,10 @@ class UserGroupController extends Controller
 
         return response()->json([
             'result'=>'Success',
-            'message'=>'Group has been deleted successfully.'
+            'message'=>'user Group has been deleted successfully.'
         ],200);    }
 
-    public function view(UserGroup $group){
+    public function view(userGroup $group){
 //        $this->authorize('view', $userGgroup);
 
         return view('user-group.user-group-view')->with(['userGroup'=>$group]);
