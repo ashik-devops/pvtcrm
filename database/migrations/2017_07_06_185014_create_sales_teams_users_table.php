@@ -17,6 +17,7 @@ class CreateSalesTeamsUsersTable extends Migration
             $table->increments('id');
             $table->integer('user_id')->unsigned()->unique();
             $table->integer('sales_team_id')->unsigned();
+            $table->enum('role', ['MANAGER', 'MEMBER']);
             $table->timestamps();
         });
     }

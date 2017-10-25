@@ -55,7 +55,7 @@
 
 @endsection
 
-@section('group-form-scripts')
+@section('sales-team-form-scripts')
     <script type="text/javascript">
         var inputMap = {
             'sales-teamId': 'sales-team_id',

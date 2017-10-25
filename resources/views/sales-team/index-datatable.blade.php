@@ -272,4 +272,7 @@
         }
 
     </script>
+
+    @yield('sales-team-form-scripts')
+
 @endsection
