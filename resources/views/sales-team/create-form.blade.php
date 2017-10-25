@@ -2,7 +2,7 @@
     <form method="post" class="ajax-from"  data-parsley-validate id="sales-teamForm">
 
         {{ csrf_field() }}
-        <input type="hidden" id="salesTeam_id" name="salesTeamId">
+        <input type="hidden" id="sales-teamId" name="salesTeamId">
 
         <div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}">
             <label class="sr-only">Name</label>
@@ -17,7 +17,7 @@
 
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">Manager</label>
-            <select name="managerId" id="managerId" class="form-control" style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select a manager">
+            <select name="managerId" id="sales-teamManager" class="form-control" style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select a manager">
                 @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
                     @php
                         $user=\App\User::find($user)
@@ -31,7 +31,7 @@
 
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">User</label>
-            <select name="userIds[]" id="userIds" class="form-control select2-selection--multiple" multiple style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
+            <select name="userIds[]" id="sales-teamMembers" class="form-control select2-selection--multiple" multiple style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
                 @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
                     @php
                         $user=\App\User::find($user)
@@ -58,19 +58,20 @@
 @section('sales-team-form-scripts')
     <script type="text/javascript">
         var inputMap = {
-            'sales-teamId': 'sales-team_id',
-            'sales-teamName': 'sales-teamName',
-            'userIds': 'userIds'
+            'sales_teamId': 'sales-teamId',
+            'sales_teamName': 'sales-teamName',
+            'sales_teamMembers': 'sales-teamMembers',
+            'sales_teamManager': 'sales-teamManager'
         };
 
 
 
-        jQuery("#managerId").select2({
+        jQuery("#sales-teamManager").select2({
             placeholder: "Choose Manager",
         });
 
 
-        jQuery("#userIds").select2({
+        jQuery("#sales-teamMembers").select2({
             placeholder: "Choose Member Users",
             allowClear: true
         });
@@ -84,12 +85,13 @@
 
             var _token = $('input[name="_token"]').val();
             var sales_team = {
-                salesTeamId: jQuery('#' + inputMap.salesTeamId).val(),
-                salesTeamName: jQuery('#' + inputMap.salesTeamName).val(),
-                userIds: jQuery('#' + inputMap.userIds).val()
+                salesTeamId: jQuery('#' + inputMap.sales_teamId).val(),
+                salesTeamName: jQuery('#' + inputMap.sales_teamName).val(),
+                salesTeamManager:jQuery('#' +inputMap.sales_teamManager).val(),
+                salesTeamMembers: jQuery('#' + inputMap.sales_teamMembers).val()
             };
 
-
+ console.log(sales_team);
             var data = {
                 _token: _token,
                 salesTeam: sales_team
