@@ -78,13 +78,13 @@ Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
 Route::post('/appointment/close', 'AppointmentsController@closeAppointment')->name('close.appointment');
 
-Route::get('/sales-teams', 'SalesteamsController@index')->name('sales-team-index');
+Route::get('/sales-teams', 'SalesTeamsController@index')->name('sales-team-index');
 Route::get('/sales-teams-options', 'UsersController@listAll')->name('get-sales-team-options');
-Route::post('/sales-team/create', 'SalesteamsController@createSalesTeam')->name('create.sales.team');
-Route::get('/sales-team/edit', 'SalesteamsController@editSalesTeam')->name('edit.sales.team.data');
-Route::post('/sales-team/update', 'SalesteamsController@updateSalesTeam')->name('update.sales.team.data');
-Route::post('/sales-team/delete', 'SalesteamsController@deleteSalesTeam')->name('delete.sales.team');
-Route::get('/ajax/sales-team/data', 'SalesteamsController@getSalesTeamAjax')->name('sales-team-data');
+Route::post('/sales-team/create', 'SalesTeamsController@create')->name('create.sales.team');
+Route::get('/sales-team/edit', 'SalesTeamsController@edit')->name('edit.sales.team.data');
+Route::post('/sales-team/update', 'SalesTeamsController@update')->name('update.sales.team.data');
+Route::post('/sales-team/delete', 'SalesTeamsController@delete')->name('delete.sales.team');
+Route::get('/ajax/sales-team/data', 'SalesTeamsController@getSalesTeamAjax')->name('sales-team-data');
 
 
 

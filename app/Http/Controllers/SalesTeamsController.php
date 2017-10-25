@@ -8,7 +8,7 @@ use App\Index_usergroup;
 use App\Journal;
 use App\Task;
 use App\User;
-use App\UserGroup;
+use App\Sales_team;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
 
-class UserGroupController extends Controller
+class SalesTeamsController extends Controller
 {
     public function __construct()
     {
@@ -29,19 +29,19 @@ class UserGroupController extends Controller
     protected function validator(array $data, $isUpdateRequest=false)
     {
         $rules=[
-            'UserGroupName' => 'required|string',
-            'userIds' =>'required|array|exists:users,id',
-
+            'SalesTeamName' => 'required|string',
+            'SalesTeamMembers' =>'array|exists:users,id',
+            'SalesTeamManager'=>'required|int|exists:users,id'
         ];
 
         $messages=[
-            'userIds.required'=>'Please select at least one member.',
-            'userIds.exists'=>'One of more of selected users not found or could not be added to group.'
+            'SalesTeamMembers.exists'=>'One of more of selected users not found or could not be added to group.',
+            'SalesTeamManager.exists'=>'Selected team manager could not be added.'
         ];
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'UserGroupId'=>'required|integer|exists:user_groups,id',
+                'SalesTeamId'=>'required|integer|exists:user_groups,id',
             ]);
         }
 
@@ -51,17 +51,17 @@ class UserGroupController extends Controller
 
     public function index()
     {
-        return view('user-group.index-datatable');
+        return view('sales-team.index-datatable');
     }
 
-    public function getUserGroupsAjax(){
+    public function getSales_teamsAjax(){
 
         return DataTables::of(Index_usergroup::all())
             ->addColumn('action',
                 function ($usergroup){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        '<a  class="btn btn-xs btn-primary"  onClick="editSales_team('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteSales_team('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                         <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$usergroup->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
                 })
 
@@ -79,31 +79,26 @@ class UserGroupController extends Controller
 
     public function create(Request $request){
 //        $this->authorize('create',Appointment::class);
-        $this->validator($request->UserGroup)->validate();
+        $this->validator($request->salesTeam)->validate();
 
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
         ];
 
-        if($request->UserGroup['userIds']){
-            $UserGroup = new UserGroup();
-            $UserGroup->name = $request->UserGroup['UserGroupName'];
+            $team = new Sales_team();
+            $team->name = $request->salesTeam['SalesTeamName'];
 
             DB::beginTransaction();
 
-            $UserGroup->save();
-
-            $UserGroup->members()->attach($request->UserGroup['userIds']);
+            $team->save();
+            $team->members()->attach($request->salesTeam['salesTeamManager'], ['role'=>'MANAGER']);
+            $team->members()->attach($request->salesTeam['SalesTeamMembers'], ['role'=>'MEMBERS']);
             DB::commit();
 
             $result['result']='Saved';
-            $result['message']='user group has been created Successfully.';
+            $result['message']='Sales team has been created Successfully.';
 
-        }
-        else{
-            $result['message']='Please add at least 1 member';
-        }
 
         return response()->json($result,200);
     }
@@ -117,16 +112,16 @@ class UserGroupController extends Controller
             'message'=>'Something went wrong.'
         ];
 
-        if($request->UserGroup['userIds']){
-            $UserGroup = UserGroup::find($request->UserGroup['UserGroupId']);
-            $UserGroup->name = $request->UserGroup['UserGroupName'];
+        if($request->salesTeam['SalesTeamMembers']){
+            $team = Sales_team::find($request->salesTeam['SalesTeamId']);
+            $team->name = $request->salesTeam['SalesTeamName'];
 
-            $current_members=$UserGroup->members->map(function ($member){
+            $current_members=$team->members->map(function ($member){
                 return $member->id;
             })->toArray();
 
-            $removals=array_diff($current_members, $request->UserGroup['userIds']);
-            $additions=array_diff($request->UserGroup['userIds'], $current_members);
+            $removals=array_diff($current_members, $request->salesTeam['SalesTeamMembers']);
+            $additions=array_diff($request->salesTeam['SalesTeamMembers'], $current_members);
 
             DB::beginTransaction();
 
@@ -134,21 +129,21 @@ class UserGroupController extends Controller
 
 
             if(count($removals)>0){
-                $UserGroup->members()->detach($removals);
+                $team->members()->detach($removals);
             }
 
 
             if(count($additions)>0){
-                $UserGroup->members()->attach($additions);
+                $team->members()->attach($additions);
             }
 
-            $UserGroup->members()->attach($request->UserGroup['userIds']);
-            $UserGroup->save();
+            $team->members()->attach($request->salesTeam['SalesTeamMembers']);
+            $team->save();
 
             DB::commit();
 
             $result['result']='Saved';
-            $result['message']='user group has been created Successfully.';
+            $result['message']='sales team has been created Successfully.';
 
         }
         else{
@@ -158,12 +153,12 @@ class UserGroupController extends Controller
         return response()->json($result,200);
     }
 
-    public function getUserGroup(Request $request){
+    public function getSales_team(Request $request){
 
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id'
         ]);
-        $group= UserGroup::find($data['groupId']);
+        $group= Sales_team::find($data['groupId']);
 
 
         return response()->json([
@@ -185,7 +180,7 @@ class UserGroupController extends Controller
             'groupId'=>'required|int|exists:user_groups,id'
         ]);
 
-        $group= UserGroup::find($data['groupId']);
+        $group= Sales_team::find($data['groupId']);
         DB::beginTransaction();
         $group->members()->detach();
         $group->delete();
@@ -196,10 +191,10 @@ class UserGroupController extends Controller
             'message'=>'user Group has been deleted successfully.'
         ],200);    }
 
-    public function view(UserGroup $group){
+    public function view(Sales_team $group){
 //        $this->authorize('view', $userGgroup);
 
-        return view('user-group.user-group-view')->with(['UserGroup'=>$group]);
+        return view('user-group.user-group-view')->with(['Sales_team'=>$group]);
     }
 
 }
