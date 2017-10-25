@@ -17,7 +17,7 @@
 
 
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
-            <label class="sr-only">User</label>
+            <label class="sr-only">Members</label>
             <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true" required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
                 @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
                     @php
@@ -50,7 +50,7 @@
             'userIds': 'userIds'
         };
         jQuery("#userIds").select2({
-            placeholder: "Choose Member Users",
+            placeholder: "Choose Members",
             allowClear: true
         });
 
