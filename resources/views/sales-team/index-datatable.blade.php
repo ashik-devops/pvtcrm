@@ -12,6 +12,9 @@
         .datetimepicker{
             z-index: 999 !important;
         }
+        .select2-search__field{
+            width: auto !important;
+        }
     </style>
 @endsection
 
