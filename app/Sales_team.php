@@ -4,6 +4,7 @@ namespace App;
 
 use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
 //use Spatie\Activitylog\Traits\LogsActivity;
@@ -17,7 +18,7 @@ class Sales_team extends Model
 
     public $obj_alias = 'Team';
 
-    public function members(){
+    public function members(): BelongsToMany{
         return $this->belongsToMany('App\User', 'sales_teams_users')->withPivot(['role']);
     }
 
