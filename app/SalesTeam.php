@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\Traits\CausesActivity;
 //use Spatie\Activitylog\Traits\LogsActivity;
 
-class Sales_team extends Model
+class SalesTeam extends Model
 {
     use SoftDeletes, CausesActivity, LogsActivity{
         LogsActivity::activity insteadof CausesActivity;
@@ -19,7 +19,10 @@ class Sales_team extends Model
     public $obj_alias = 'Team';
 
     public function members(): BelongsToMany{
-        return $this->belongsToMany('App\User', 'sales_teams_users')->withPivot(['role']);
+        return $this->belongsToMany('App\User', 'sales_teams_users')->wherePivot('role', '=', 'MEMBER');
+    }
+    public function manager(): BelongsToMany{
+        return $this->belongsToMany('App\User', 'sales_teams_users')->wherePivot('role', '=', 'MANAGER');
     }
 
     public function getLink(): string {

@@ -64,7 +64,7 @@ class User extends Authenticatable
         return $this->belongsToMany('App\UserGroup', 'group_users', 'user_id', 'group_id');
     }
     public function salesTeam():BelongsToMany{
-        return $this->belongsToMany('App\Sales_Team', 'sales_teams_users', 'user_id', 'sales_team_id');
+        return $this->belongsToMany('App\SalesTeam', 'sales_teams_users', 'user_id', 'sales_team_id');
     }
 
     public function isAdmin() : bool
