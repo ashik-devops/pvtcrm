@@ -150,31 +150,32 @@ class SalesTeamsController extends Controller
     public function getSalesTeam(Request $request){
 
         $data =$this->validate($request, [
-            'groupId'=>'required|int|exists:user_groups,id'
+            'salesTeamId'=>'required|int|exists:sales_teams,id'
         ]);
-        $group= SalesTeam::find($data['groupId']);
+        $team= SalesTeam::find($data['salesTeamId']);
 
 
         return response()->json([
             'group'=>[
-                'id'=>$group->id,
-                'name'=>$group->name,
-                'members'=>$group->members->map(function($member){
+                'id'=>$team->id,
+                'name'=>$team->name,
+                'members'=>$team->members->map(function($member){
                     return [
                         'id'=>$member->id,
                         'name'=>$member->name
                     ];
-                })
+                }),
+                'manager'=>$team->manager[0]
             ]
         ], 200);
     }
 
     public function delete(Request $request){
         $data =$this->validate($request, [
-            'groupId'=>'required|int|exists:user_groups,id'
+            'salesTeamId'=>'required|int|exists:sales_teams,id'
         ]);
 
-        $team= SalesTeam::find($data['teamId']);
+        $team= SalesTeam::find($data['salesTeamId']);
         DB::beginTransaction();
         $team->members()->detach();
         $team->delete();
