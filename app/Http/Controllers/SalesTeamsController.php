@@ -29,19 +29,19 @@ class SalesTeamsController extends Controller
     protected function validator(array $data, $isUpdateRequest=false)
     {
         $rules=[
-            'SalesTeamName' => 'required|string',
-            'SalesTeamMembers' =>'array|exists:users,id',
-            'SalesTeamManager'=>'required|int|exists:users,id'
+            'salesTeamName' => 'required|string',
+            'salesTeamMembers' =>'array|exists:users,id',
+            'salesTeamManager'=>'required|int|exists:users,id'
         ];
 
         $messages=[
-            'SalesTeamMembers.exists'=>'One of more of selected users not found or could not be added to group.',
-            'SalesTeamManager.exists'=>'Selected team manager could not be added.'
+            'salesTeamMembers.exists'=>'One of more of selected users not found or could not be added to group.',
+            'salesTeamManager.exists'=>'Selected team manager could not be added.'
         ];
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'SalesTeamId'=>'required|integer|exists:user_groups,id',
+                'salesTeamId'=>'required|integer|exists:user_groups,id',
             ]);
         }
 
@@ -87,13 +87,13 @@ class SalesTeamsController extends Controller
         ];
 
             $team = new Sales_team();
-            $team->name = $request->salesTeam['SalesTeamName'];
+            $team->name = $request->salesTeam['salesTeamName'];
 
             DB::beginTransaction();
 
             $team->save();
             $team->members()->attach($request->salesTeam['salesTeamManager'], ['role'=>'MANAGER']);
-            $team->members()->attach($request->salesTeam['SalesTeamMembers'], ['role'=>'MEMBERS']);
+            $team->members()->attach($request->salesTeam['salesTeamMembers'], ['role'=>'MEMBERS']);
             DB::commit();
 
             $result['result']='Saved';
@@ -112,16 +112,16 @@ class SalesTeamsController extends Controller
             'message'=>'Something went wrong.'
         ];
 
-        if($request->salesTeam['SalesTeamMembers']){
-            $team = Sales_team::find($request->salesTeam['SalesTeamId']);
-            $team->name = $request->salesTeam['SalesTeamName'];
+        if($request->salesTeam['salesTeamMembers']){
+            $team = Sales_team::find($request->salesTeam['salesTeamId']);
+            $team->name = $request->salesTeam['salesTeamName'];
 
             $current_members=$team->members->map(function ($member){
                 return $member->id;
             })->toArray();
 
-            $removals=array_diff($current_members, $request->salesTeam['SalesTeamMembers']);
-            $additions=array_diff($request->salesTeam['SalesTeamMembers'], $current_members);
+            $removals=array_diff($current_members, $request->salesTeam['salesTeamMembers']);
+            $additions=array_diff($request->salesTeam['salesTeamMembers'], $current_members);
 
             DB::beginTransaction();
 
@@ -137,7 +137,7 @@ class SalesTeamsController extends Controller
                 $team->members()->attach($additions);
             }
 
-            $team->members()->attach($request->salesTeam['SalesTeamMembers']);
+            $team->members()->attach($request->salesTeam['salesTeamMembers']);
             $team->save();
 
             DB::commit();
