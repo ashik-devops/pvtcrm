@@ -114,7 +114,6 @@ class SalesTeamsController extends Controller
             'message'=>'Something went wrong.'
         ];
 
-        if($request->salesTeam['salesTeamMembers']){
             $team = SalesTeam::find($request->salesTeam['salesTeamId']);
             $team->name = $request->salesTeam['salesTeamName'];
 
@@ -126,9 +125,6 @@ class SalesTeamsController extends Controller
             $additions=array_diff($request->salesTeam['salesTeamMembers'], $current_members);
 
             DB::beginTransaction();
-
-
-
 
             if(count($removals)>0){
                 $team->members()->detach($removals);
@@ -147,10 +143,8 @@ class SalesTeamsController extends Controller
             $result['result']='Saved';
             $result['message']='sales team has been created Successfully.';
 
-        }
-        else{
-            $result['message']='Please add at least 1 member';
-        }
+
+
 
         return response()->json($result,200);
     }
