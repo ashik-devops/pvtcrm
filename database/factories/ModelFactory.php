@@ -87,6 +87,5 @@ $factory->define(App\Sales_team::class, function(Faker\Generator $faker) {
 
     return [
         'name'=>$faker->name,
-        'note'=>$faker->text(200),
     ];
 });
