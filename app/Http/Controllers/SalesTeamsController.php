@@ -88,14 +88,12 @@ class SalesTeamsController extends Controller
 
             $team = new SalesTeam();
             $team->name = $request->salesTeam['salesTeamName'];
-            $manager=User::find($request->salesTeam['salesTeamManager']);
-            $members=User::find(array_diff($request->salesTeam['salesTeamMembers'], [$request->salesTeam['salesTeamManager']]));
 
             DB::beginTransaction();
 
             $team->save();
-            $team->members()->save($manager, ['role'=>'MANAGER']);
-            $team->members()->saveMany($members, ['role'=>'MEMBERS']);
+            $team->members()->attach($request->salesTeam['salesTeamManager'], ['role'=>'MANAGER']);
+            $team->members()->attach(array_diff($request->salesTeam['salesTeamMembers'], [$request->salesTeam['salesTeamManager']]), ['role'=>'MEMBERS']);
             DB::commit();
 
             $result['result']='Saved';
@@ -176,10 +174,10 @@ class SalesTeamsController extends Controller
             'groupId'=>'required|int|exists:user_groups,id'
         ]);
 
-        $group= SalesTeam::find($data['groupId']);
+        $team= SalesTeam::find($data['teamId']);
         DB::beginTransaction();
-        $group->members()->detach();
-        $group->delete();
+        $team->members()->detach();
+        $team->delete();
         DB::commit();
 
         return response()->json([
