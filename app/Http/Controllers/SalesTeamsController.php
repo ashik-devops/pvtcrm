@@ -147,7 +147,7 @@ class SalesTeamsController extends Controller
         return response()->json($result,200);
     }
 
-    public function getSalesTeam(Request $request){
+    public function getSalesTeamAjax(Request $request){
 
         $data =$this->validate($request, [
             'salesTeamId'=>'required|int|exists:sales_teams,id'
@@ -156,7 +156,7 @@ class SalesTeamsController extends Controller
 
 
         return response()->json([
-            'group'=>[
+            'team'=>[
                 'id'=>$team->id,
                 'name'=>$team->name,
                 'members'=>$team->members->map(function($member){
@@ -165,7 +165,12 @@ class SalesTeamsController extends Controller
                         'name'=>$member->name
                     ];
                 }),
-                'manager'=>$team->manager[0]
+                'manager'=>$team->manager->map(function($manager){
+                    return [
+                        'id'=>$manager->id,
+                        'name'=>$manager->name
+                    ];
+                }),
             ]
         ], 200);
     }
