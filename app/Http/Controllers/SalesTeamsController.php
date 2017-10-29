@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Customer;
 use App\Index_appointment;
+use App\Index_sales_team;
 use App\Index_usergroup;
 use App\Journal;
 use App\Task;
@@ -56,22 +57,32 @@ class SalesTeamsController extends Controller
 
     public function getSalesTeamsAjax(){
 
-        return DataTables::of(Index_usergroup::all())
+        return DataTables::of(SalesTeam::all())
             ->addColumn('action',
-                function ($usergroup){
+                function ($team){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editSalesTeam('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteSalesTeam('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$usergroup->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="editSalesTeam('.$team->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteSalesTeam('.$team->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$team->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
                 })
 
             ->addColumn('name',
-                function ($usergroup){
-                    return $usergroup->name;
+                function ($team){
+                    return $team->name;
                 })
+            ->addColumn('manager_name', function($team){
+                if($team->managers->count() == 0){
+                    return '';
+                }
+                return '<ul><li>'.implode('</li><li>', $team->managers->map(function ($manager){
+                    return '<a href="'.route('profile-view', ['user'=>$manager->id]).'">'.$manager->name.'</a>';
 
-
-            ->rawColumns(['action','name'])
+                    })->toArray()).'</li></ul>';
+            })
+            ->addColumn('user_count', function($team){
+                return $team->members->count() + $team->managers->count();
+            })
+            ->rawColumns(['action','manager_name', 'name'])
             ->make(true);
 
     }

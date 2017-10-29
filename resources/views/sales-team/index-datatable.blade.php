@@ -44,7 +44,7 @@
                                             <tr>
                                                 <th>Id</th>
                                                 <th>Name</th>
-                                                <th>User</th>
+                                                <th>User Count</th>
                                                 <th>Manager</th>
                                                 <th>Action</th>
                                             </tr>
@@ -102,8 +102,8 @@
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'name', name: 'name'},
-                { data: 'user', name: 'user'},
-                { data: 'note', name: 'note'},
+                { data: 'user_count', name: 'user_count'},
+                { data: 'manager_name', name: 'manager_name'},
                 { data: 'action', name: 'action', orderable: false, searchable: false},
 
 
