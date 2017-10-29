@@ -30,13 +30,13 @@ class UserGroupController extends Controller
     {
         $rules=[
             'UserGroupName' => 'required|string',
-            'userIds' =>'required|array|exists:users,id',
+            'UserIds' =>'required|array|exists:users,id',
 
         ];
 
         $messages=[
-            'userIds.required'=>'Please select at least one member.',
-            'userIds.exists'=>'One of more of selected users not found or could not be added to group.'
+            'UserIds.required'=>'Please select at least one member.',
+            'UserIds.exists'=>'One of more of selected users not found or could not be added to group.'
         ];
 
         if($isUpdateRequest){

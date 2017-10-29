@@ -71,7 +71,7 @@ class SalesTeamsController extends Controller
                 })
 
 
-            ->rawColumns(['action','name','user_id'])
+            ->rawColumns(['action','name'])
             ->make(true);
 
     }
