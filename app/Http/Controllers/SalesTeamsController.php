@@ -217,7 +217,7 @@ class SalesTeamsController extends Controller
     public function view(SalesTeam $team){
 //        $this->authorize('view', $userGgroup);
 
-        return view('sales-team.view')->with(['SalesTeam'=>$team]);
+        return view('sales-team.sales-team-view')->with(['salesTeam'=>$team]);
     }
 
 }
