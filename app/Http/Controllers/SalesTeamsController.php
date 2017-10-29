@@ -75,7 +75,7 @@ class SalesTeamsController extends Controller
                     return '';
                 }
                 return '<ul><li>'.implode('</li><li>', $team->managers->map(function ($manager){
-                    return '<a href="'.route('profile-view', ['user'=>$manager->id]).'">'.$manager->name.'</a>';
+                        return '<a href="'.route('profile-view', ['user'=>$manager->id]).'">'.$manager->name.'</a>';
 
                     })->toArray()).'</li></ul>';
             })
@@ -218,6 +218,36 @@ class SalesTeamsController extends Controller
 //        $this->authorize('view', $userGgroup);
 
         return view('sales-team.view')->with(['SalesTeam'=>$team]);
+    }
+
+    public function changeManagerAjax(Request $request){
+        $data =$this->validate($request, [
+            'salesTeamId'=>'required|int|exists:sales_teams,id',
+            'userId'=>'required|int|exists:users,id'
+        ]);
+
+        $team= SalesTeam::find($data['salesTeamId']);
+        $user = SalesTeam::find($data['userId']);
+        $response=[
+            'result'=>'erorr',
+            'message'=>'Opps. Could not perform the request.'
+        ];
+
+        $current_managers=$team->managers->map(function ($manager){
+            return $manager->id;
+        })->toArray();
+        DB::beginTransaction();
+        $team->members()->detach([$user->id]);
+        $team->managers()->detach($current_managers);
+        $team->managers()->attach([$user->id], ['role'=>'MANAGER']);
+        $team->managers()->attach($current_managers, ['role'=>'MEMBER']);
+        $response=[
+            'result'=>'Success',
+            'message'=>$user->name.' has been made Team Manager.'
+        ];
+        DB::commit();
+
+        return response()->json($response, 200);
     }
 
 }
