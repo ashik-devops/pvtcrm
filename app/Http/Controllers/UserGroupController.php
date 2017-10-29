@@ -29,19 +29,19 @@ class UserGroupController extends Controller
     protected function validator(array $data, $isUpdateRequest=false)
     {
         $rules=[
-            'UserGroupName' => 'required|string',
-            'UserIds' =>'required|array|exists:users,id',
+            'userGroupName' => 'required|string',
+            'userIds' =>'required|array|exists:users,id',
 
         ];
 
         $messages=[
-            'UserIds.required'=>'Please select at least one member.',
-            'UserIds.exists'=>'One of more of selected users not found or could not be added to group.'
+            'userIds.required'=>'Please select at least one member.',
+            'userIds.exists'=>'One of more of selected users not found or could not be added to group.'
         ];
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'UserGroupId'=>'required|integer|exists:user_groups,id',
+                'userGroupId'=>'required|integer|exists:user_groups,id',
             ]);
         }
 
@@ -58,16 +58,16 @@ class UserGroupController extends Controller
 
         return DataTables::of(Index_usergroup::all())
             ->addColumn('action',
-                function ($usergroup){
+                function ($userGroup){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$usergroup->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$userGroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$userGroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
+                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$userGroup->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
                 })
 
             ->addColumn('name',
-                function ($usergroup){
-                    return $usergroup->name;
+                function ($userGroup){
+                    return $userGroup->name;
                 })
 
 
@@ -79,22 +79,22 @@ class UserGroupController extends Controller
 
     public function create(Request $request){
 //        $this->authorize('create',Appointment::class);
-        $this->validator($request->UserGroup)->validate();
+        $this->validator($request->userGroup)->validate();
 
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
         ];
 
-        if($request->UserGroup['userIds']){
-            $UserGroup = new UserGroup();
-            $UserGroup->name = $request->UserGroup['UserGroupName'];
+        if($request->userGroup['userIds']){
+            $userGroup = new userGroup();
+            $userGroup->name = $request->userGroup['userGroupName'];
 
             DB::beginTransaction();
 
-            $UserGroup->save();
+            $userGroup->save();
 
-            $UserGroup->members()->attach($request->UserGroup['userIds']);
+            $userGroup->members()->attach($request->userGroup['userIds']);
             DB::commit();
 
             $result['result']='Saved';
@@ -117,16 +117,16 @@ class UserGroupController extends Controller
             'message'=>'Something went wrong.'
         ];
 
-        if($request->UserGroup['userIds']){
-            $UserGroup = UserGroup::find($request->UserGroup['UserGroupId']);
-            $UserGroup->name = $request->UserGroup['UserGroupName'];
+        if($request->userGroup['userIds']){
+            $userGroup = userGroup::find($request->userGroup['userGroupId']);
+            $userGroup->name = $request->userGroup['userGroupName'];
 
-            $current_members=$UserGroup->members->map(function ($member){
+            $current_members=$userGroup->members->map(function ($member){
                 return $member->id;
             })->toArray();
 
-            $removals=array_diff($current_members, $request->UserGroup['userIds']);
-            $additions=array_diff($request->UserGroup['userIds'], $current_members);
+            $removals=array_diff($current_members, $request->userGroup['userIds']);
+            $additions=array_diff($request->userGroup['userIds'], $current_members);
 
             DB::beginTransaction();
 
@@ -134,14 +134,14 @@ class UserGroupController extends Controller
 
 
             if(count($removals)>0){
-                $UserGroup->members()->detach($removals);
+                $userGroup->members()->detach($removals);
             }
 
 
             if(count($additions)>0){
-                $UserGroup->members()->attach($additions);
+                $userGroup->members()->attach($additions);
             }
-            $UserGroup->save();
+            $userGroup->save();
 
             DB::commit();
 
