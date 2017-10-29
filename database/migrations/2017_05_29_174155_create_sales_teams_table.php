@@ -17,7 +17,6 @@ class CreateSalesTeamsTable extends Migration
         Schema::create('sales_teams', function (Blueprint $table){
             $table->increments('id');
             $table->string('name');
-            $table->text('note');
             $table->softDeletes();
             $table->timestamps();
         });
