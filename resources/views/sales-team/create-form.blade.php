@@ -18,12 +18,7 @@
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">Manager</label>
             <select name="managerId" id="sales-teamManager" class="form-control" style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select a manager">
-                @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
-                    @php
-                        $user=\App\User::find($user)
-                    @endphp
-                    <option value="{{$user->id}}">{{$user->name}}</option>
-                @endforeach
+
             </select>
         </div>
 
@@ -32,12 +27,7 @@
         <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
             <label class="sr-only">User</label>
             <select name="userIds[]" id="sales-teamMembers" class="form-control select2-selection--multiple" multiple style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
-                @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
-                    @php
-                        $user=\App\User::find($user)
-                    @endphp
-                    <option value="{{$user->id}}">{{$user->name}}</option>
-                @endforeach
+
             </select>
         </div>
 
@@ -58,16 +48,33 @@
 @section('sales-team-form-scripts')
     <script type="text/javascript">
         var inputMap = {
-            'sales_teamId': 'sales-teamId',
-            'sales_teamName': 'sales-teamName',
-            'sales_teamMembers': 'sales-teamMembers',
-            'sales_teamManager': 'sales-teamManager'
+            'salesTeamId': 'sales-teamId',
+            'salesTeamName': 'sales-teamName',
+            'salesTeamMembers': 'sales-teamMembers',
+            'salesTeamManager': 'sales-teamManager'
         };
 
 
 
         var manager_select= jQuery("#sales-teamManager").select2({
             placeholder: "Choose Manager",
+            ajax: {
+                url: "{{route('get-user-options')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.users
+                    }
+                },
+                cache: true
+            }
         });
 
 
@@ -101,13 +108,12 @@
 
             var _token = $('input[name="_token"]').val();
             var sales_team = {
-                salesTeamId: jQuery('#' + inputMap.sales_teamId).val(),
-                salesTeamName: jQuery('#' + inputMap.sales_teamName).val(),
-                salesTeamManager:jQuery('#' +inputMap.sales_teamManager).val(),
-                salesTeamMembers: jQuery('#' + inputMap.sales_teamMembers).val()
+                salesTeamId: jQuery('#' + inputMap.salesTeamId).val(),
+                salesTeamName: jQuery('#' + inputMap.salesTeamName).val(),
+                salesTeamManager:jQuery('#' +inputMap.salesTeamManager).val(),
+                salesTeamMembers: jQuery('#' + inputMap.salesTeamMembers).val()
             };
 
- console.log(sales_team);
             var data = {
                 _token: _token,
                 salesTeam: sales_team

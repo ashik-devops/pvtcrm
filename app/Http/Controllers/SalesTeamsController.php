@@ -116,7 +116,7 @@ class SalesTeamsController extends Controller
 
 
     public function update(Request $request){
-        $this->validator($request->usersGroup, true)->validate();
+        $this->validator($request->salesTeam, true)->validate();
 
         $result=[
             'result'=>'Error',

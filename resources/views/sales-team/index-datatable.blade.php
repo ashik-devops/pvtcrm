@@ -135,8 +135,8 @@
                     return new Option(obj.name, obj.id, true, true);
                 });
 
-                member_select.val(null).append(members).trigger('change.select2');
-
+                member_select.val(null).trigger('change.select2');
+                member_select.append(members).trigger('change.select2');
             });
             request.fail(function( jqXHR, textStatus ) {
                 alert( "Request failed: " + textStatus );
