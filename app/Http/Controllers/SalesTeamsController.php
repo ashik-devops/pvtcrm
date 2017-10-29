@@ -42,7 +42,7 @@ class SalesTeamsController extends Controller
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'salesTeamId'=>'required|integer|exists:user_groups,id',
+                'salesTeamId'=>'required|integer|exists:sales_teams,id',
             ]);
         }
 
@@ -136,8 +136,8 @@ class SalesTeamsController extends Controller
             return $manager->id;
         })->toArray();
 
-        $manager_removals=array_diff($current_managers, $request->salesTeam['salesTeamMembers']);
-        $manager_additions=array_diff($request->salesTeam['salesTeamMembers'], $current_managers);
+        $manager_removals=array_diff($current_managers, [$request->salesTeam['salesTeamManager']]);
+        $manager_additions=array_diff([$request->salesTeam['salesTeamManager']], $current_managers);
 
         DB::beginTransaction();
 

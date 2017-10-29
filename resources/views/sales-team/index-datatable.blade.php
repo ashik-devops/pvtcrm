@@ -157,7 +157,7 @@
             var _token = $('input[name="_token"]').val();
             var data = {
                 _token : _token,
-                id: id
+                salesTeamId: id
             };
             swal({
                     title: "Are you sure?",
