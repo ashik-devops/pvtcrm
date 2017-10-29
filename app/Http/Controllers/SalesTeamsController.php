@@ -86,18 +86,18 @@ class SalesTeamsController extends Controller
             'message'=>'Something went wrong.'
         ];
 
-            $team = new SalesTeam();
-            $team->name = $request->salesTeam['salesTeamName'];
+        $team = new SalesTeam();
+        $team->name = $request->salesTeam['salesTeamName'];
 
-            DB::beginTransaction();
+        DB::beginTransaction();
 
-            $team->save();
-            $team->members()->attach($request->salesTeam['salesTeamManager'], ['role'=>'MANAGER']);
-            $team->members()->attach(array_diff($request->salesTeam['salesTeamMembers'], [$request->salesTeam['salesTeamManager']]), ['role'=>'MEMBER']);
-            DB::commit();
+        $team->save();
+        $team->members()->attach($request->salesTeam['salesTeamManager'], ['role'=>'MANAGER']);
+        $team->managers()->attach(array_diff($request->salesTeam['salesTeamMembers'], [$request->salesTeam['salesTeamManager']]), ['role'=>'MEMBER']);
+        DB::commit();
 
-            $result['result']='Saved';
-            $result['message']='Sales team has been created Successfully.';
+        $result['result']='Saved';
+        $result['message']='Sales team has been created Successfully.';
 
 
         return response()->json($result,200);
@@ -112,37 +112,48 @@ class SalesTeamsController extends Controller
             'message'=>'Something went wrong.'
         ];
 
-            $team = SalesTeam::find($request->salesTeam['salesTeamId']);
-            $team->name = $request->salesTeam['salesTeamName'];
+        $team = SalesTeam::find($request->salesTeam['salesTeamId']);
+        $team->name = $request->salesTeam['salesTeamName'];
 
-            $current_members=$team->members->map(function ($member){
-                return $member->id;
-            })->toArray();
+        $current_members=$team->members->map(function ($member){
+            return $member->id;
+        })->toArray();
 
-            $removals=array_diff($current_members, $request->salesTeam['salesTeamMembers']);
-            $additions=array_diff($request->salesTeam['salesTeamMembers'], $current_members);
+        $member_removals=array_diff($current_members, $request->salesTeam['salesTeamMembers']);
+        $member_additions=array_diff($request->salesTeam['salesTeamMembers'], $current_members);
+        $current_managers=$team->managers->map(function ($manager){
+            return $manager->id;
+        })->toArray();
 
-            DB::beginTransaction();
+        $manager_removals=array_diff($current_managers, $request->salesTeam['salesTeamMembers']);
+        $manager_additions=array_diff($request->salesTeam['salesTeamMembers'], $current_managers);
 
-            if(count($removals)>0){
-                $team->members()->detach($removals);
-            }
+        DB::beginTransaction();
 
-
-            if(count($additions)>0){
-                $team->members()->attach($additions);
-            }
-
-            $team->members()->attach($request->salesTeam['salesTeamMembers']);
-            $team->save();
-
-            DB::commit();
-
-            $result['result']='Saved';
-            $result['message']='sales team has been created Successfully.';
+        if(count($member_removals)>0){
+            $team->members()->detach($member_removals);
+        }
 
 
+        if(count($member_additions)>0){
+            $team->members()->attach($member_additions, ['role'=>'MEMBER']);
+        }
 
+        if(count($manager_removals)>0){
+            $team->managers()->detach($manager_removals);
+        }
+
+
+        if(count($manager_additions)>0){
+            $team->managers()->attach($manager_additions, ['role'=>'MANAGER']);
+        }
+
+        $team->save();
+
+        DB::commit();
+
+        $result['result']='Saved';
+        $result['message']='Sales team has been updated Successfully.';
 
         return response()->json($result,200);
     }
@@ -183,6 +194,7 @@ class SalesTeamsController extends Controller
         $team= SalesTeam::find($data['salesTeamId']);
         DB::beginTransaction();
         $team->members()->detach();
+        $team->managers()->detach();
         $team->delete();
         DB::commit();
 

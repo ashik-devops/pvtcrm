@@ -141,8 +141,6 @@ class UserGroupController extends Controller
             if(count($additions)>0){
                 $UserGroup->members()->attach($additions);
             }
-
-            $UserGroup->members()->attach($request->UserGroup['userIds']);
             $UserGroup->save();
 
             DB::commit();
