@@ -227,7 +227,7 @@ class SalesTeamsController extends Controller
         ]);
 
         $team= SalesTeam::find($data['salesTeamId']);
-        $user = SalesTeam::find($data['userId']);
+        $user = User::find($data['userId']);
         $response=[
             'result'=>'erorr',
             'message'=>'Opps. Could not perform the request.'

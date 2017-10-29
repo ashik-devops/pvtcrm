@@ -96,7 +96,7 @@
                                                         @if(!is_null($member->profile->secondary_phone_no))
                                                             <li class="phone"><a href="tel:{{$member->profile->secondary_phone_no}}">{{$member->profile->secondary_phone_no}}</a></li>
                                                         @endif
-                                                        <li class="action"><button role="button" onclick="changeManager('{{ $salesTeam->id }}', '{{$member->id}}')">Make Manager</button></li>
+                                                        <li class="action"><button class="btn btn-warning" role="button" onclick="changeManager( {{ $salesTeam->id }}, {{$member->id}} )">Make Manager</button></li>
                                                     </ul>
 
                                                 </div>
@@ -117,24 +117,24 @@
 
 @endsection
 
-@section('after-footer-scripts)
-    <script>
+@section('after-footer-script')
+    <script type="text/javascript">
         function changeManager(teamid, userid){
             swal({
                     title: "Are you sure?",
-                    text: "This Group will be deleted!",
+                    text: "Manager of this team will be changed",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel !",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No!",
                     closeOnConfirm: false,
                     closeOnCancel: false
                 },
                 function (isConfirm) {
                     if (isConfirm) {
                         var request = jQuery.ajax({
-                            url: "{{ route('sales-team-change-manager') }}",
+                            url: "{{ route("sales-team-change-manager") }}",
                             data: {salesTeamId: teamid, userId: userid},
                             method: "GET",
                             dataType: 'json'
@@ -142,10 +142,17 @@
 
                         request.done(function (response) {
                             if (response.result == 'Success') {
-                                swal.message('Successful',response.message, 'success');
+                                swal('Successful',response.message, 'success', function () {
+                                    window.location.reload();
+                                });
 
-                                window.location.reload();
-                                swal.close();
+                                swal({
+                                    title: 'Successful',
+                                    text: response.message,
+                                    type: 'success',
+                                }, function () {
+                                    window.location.reload();
+                                });
                             }
                             else {
 
