@@ -63,7 +63,7 @@ class SalesTeamsController extends Controller
                     return
                         '<a  class="btn btn-xs btn-primary"  onClick="editSalesTeam('.$team->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="deleteSalesTeam('.$team->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$team->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                        <a class="btn btn-xs btn-primary"  href="'.route('view-sales-team',['team'=>$team->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
                 })
 
             ->addColumn('name',
@@ -214,10 +214,10 @@ class SalesTeamsController extends Controller
             'message'=>'user Group has been deleted successfully.'
         ],200);    }
 
-    public function view(SalesTeam $group){
+    public function view(SalesTeam $team){
 //        $this->authorize('view', $userGgroup);
 
-        return view('user-group.user-group-view')->with(['SalesTeam'=>$group]);
+        return view('sales-team.view')->with(['SalesTeam'=>$team]);
     }
 
 }
