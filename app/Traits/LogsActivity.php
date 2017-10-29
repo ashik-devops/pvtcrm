@@ -29,7 +29,12 @@ trait LogsActivity
 
                 $logName = $model->getLogNameToUse($eventName);
 
-                if ($description == '') {
+                $attributes = $model->attributeValuesToBeLogged($eventName);
+                if($eventName == 'updated' && !empty($attributes)){
+                    return;
+                }
+
+                    if ($description == '') {
                     return;
                 }
 

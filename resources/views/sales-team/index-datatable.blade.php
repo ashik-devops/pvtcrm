@@ -12,6 +12,9 @@
         .datetimepicker{
             z-index: 999 !important;
         }
+        .select2-search__field{
+            width: auto !important;
+        }
     </style>
 @endsection
 
@@ -42,7 +45,7 @@
                                                 <th>Id</th>
                                                 <th>Name</th>
                                                 <th>User</th>
-                                                <th>Note</th>
+                                                <th>Manager</th>
                                                 <th>Action</th>
                                             </tr>
                                             </thead>
@@ -86,6 +89,7 @@
     <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
 
         var datatable = jQuery('#customers-table').DataTable({
@@ -272,4 +276,8 @@
         }
 
     </script>
+
+    @yield('sales-team-form-scripts')
+
+
 @endsection

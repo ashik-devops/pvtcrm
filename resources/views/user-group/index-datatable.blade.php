@@ -6,6 +6,11 @@
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
     <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
+    <style>
+        .select2-search__field{
+            width: auto !important;
+        }
+        </style>
 @endsection
 
 

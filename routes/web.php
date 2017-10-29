@@ -32,7 +32,7 @@ Route::get('user/roles/create', 'RolesController@createForm')->name('create-role
 Route::get('ajax/user/roles/', 'RolesController@getRolesAjax')->name('roles-list-data')->middleware(['auth', 'can:index,App\Role']);
 Route::delete('ajax/user/roles/delete/', 'RolesController@delete')->name('delete-role')->middleware(['auth', 'can:delete,App\Role']);
 Route::get('/user/groups', 'UserGroupController@index')->name('user-group-index');
-Route::get('/user/group/view/{group}', 'UserGroupController@view')->name('view-user-group');
+Route::get('/user/groups/view/{group}', 'UserGroupController@view')->name('view-user-group');
 Route::get('/ajax/user/groups', 'UserGroupController@getUserGroupsAjax')->name('user-group-index.data');
 Route::post('ajax/user/group/create', 'UserGroupController@create')->name('user-group-create');
 Route::post('ajax/user/group/update', 'UserGroupController@update')->name('user-group-update');
@@ -76,13 +76,13 @@ Route::post('/appointment/update', 'AppointmentsController@updateAppointment')->
 Route::post('/appointment/delete', 'AppointmentsController@deleteAppointment')->name('delete.appointment');
 Route::post('/appointment/close', 'AppointmentsController@closeAppointment')->name('close.appointment');
 
-Route::get('/sales-teams', 'SalesteamsController@index')->name('sales-team-index');
+Route::get('/sales-teams', 'SalesTeamsController@index')->name('sales-team-index');
 Route::get('/sales-teams-options', 'UsersController@listAll')->name('get-sales-team-options');
-Route::post('/sales-team/create', 'SalesteamsController@createSalesTeam')->name('create.sales.team');
-Route::get('/sales-team/edit', 'SalesteamsController@editSalesTeam')->name('edit.sales.team.data');
-Route::post('/sales-team/update', 'SalesteamsController@updateSalesTeam')->name('update.sales.team.data');
-Route::post('/sales-team/delete', 'SalesteamsController@deleteSalesTeam')->name('delete.sales.team');
-Route::get('/ajax/sales-team/data', 'SalesteamsController@getSalesTeamAjax')->name('sales-team-data');
+Route::post('/sales-team/create', 'SalesTeamsController@create')->name('create.sales.team');
+Route::get('/sales-team/edit', 'SalesTeamsController@edit')->name('edit.sales.team.data');
+Route::post('/sales-team/update', 'SalesTeamsController@update')->name('update.sales.team.data');
+Route::post('/sales-team/delete', 'SalesTeamsController@delete')->name('delete.sales.team');
+Route::get('/ajax/sales-team/data', 'SalesTeamsController@getSalesTeamAjax')->name('sales-team-data');
 
 
 

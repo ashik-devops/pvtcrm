@@ -18,6 +18,7 @@ use SoftDeletes, CausesActivity, LogsActivity{
     CausesActivity::activity as log;
 }
     public $obj_alias = 'User Profile';
+    protected static $logOnlyDirty = true;
 
     public function user(): BelongsTo{
         return $this->belongsTo('App\User');
