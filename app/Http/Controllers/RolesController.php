@@ -46,7 +46,16 @@ class RolesController extends Controller
                 }
                 return $buttons;
             })
-            ->rawColumns(['action'])
+            ->addColumn('permissions', function ($role){
+                $content = "<ul><li>".$role->policies->map(
+                    function($policy){
+                        return $policy->scope->name." : ".$policy->action->name;
+                    })
+                    ->implode('</li><li>').'</li></ul>';
+
+                return str_replace('*', 'all', $content);
+            })
+            ->rawColumns(['action', 'permissions'])
             ->make();
     }
 

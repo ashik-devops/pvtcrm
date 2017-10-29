@@ -33,6 +33,7 @@
                                                 <th>Id</th>
                                                 <th>Name</th>
                                                 <th>User Count</th>
+                                                <th>Permissions</th>
                                                 <th>Actions</th>
                                             </tr>
                                             </thead>
@@ -69,6 +70,7 @@
                 { data: 'id', name: 'id' },
                 { data: 'name', name: 'name' },
                 { data: 'count', name: 'count'},
+                {data: 'permissions', name: 'permissions',  orderable: false, searchable: false},
                 { data: 'action', name: 'action', orderable: false, searchable: false},
 
             ],
