@@ -110,7 +110,7 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
-        $this->validator($request->usersGroup, true)->validate();
+        $this->validator($request->userGroup, true)->validate();
 
         $result=[
             'result'=>'Error',
