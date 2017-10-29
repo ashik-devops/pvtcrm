@@ -36,6 +36,7 @@
                                         checked="checked"
                                        @endif
                                        data-on-text="Yes" type="checkbox" value="true">
+
                             </div>
                         </div>
                     </div>

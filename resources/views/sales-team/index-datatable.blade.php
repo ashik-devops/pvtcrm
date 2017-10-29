@@ -110,6 +110,9 @@
             ]
         });
 
+
+
+
         var sales_member_select=jQuery("#userId").select2({
             placeholder: "Sales Team Member",
             ajax: {
@@ -211,25 +214,57 @@
             }
         });
 
+        {{--function editSalesTeam(id){--}}
+            {{--$('#modal_button').val('Update Sales Team');--}}
+            {{--$('#modal-new-sales-team-label').text('Edit Sales Team');--}}
+
+            {{--$.get("{{ route('edit.sales.team.data') }}", { id: id} ,function(data){--}}
+                {{--if(data){--}}
+                    {{--$('#salesTeam_id').val(data.salesTeam.id);--}}
+                    {{--$('#userId').html("<option selected value='"+data.user.id+"'>"+ data.user.name+ "</option>");--}}
+                    {{--$('#salesTeamName').val(data.salesTeam.name);--}}
+                    {{--$('#sales-teamManager').val(data.salesTeam.sales_teamManager);--}}
+                {{--}--}}
+            {{--});--}}
+
+            {{--$('#sales-team-modal').modal('show');--}}
+        {{--}--}}
+
+
         function editSalesTeam(id){
-            $('#modal_button').val('Update Sales Team');
-            $('#modal-new-sales-team-label').text('Edit Sales Team');
 
-            $.get("{{ route('edit.sales.team.data') }}", { id: id} ,function(data){
-                console.log(data.salesTeam);
-                if(data){
-                    $('#salesTeam_id').val(data.salesTeam.id);
-                    $('#userId').html("<option selected value='"+data.user.id+"'>"+ data.user.name+ "</option>");
-                    $('#salesTeamName').val(data.salesTeam.name);
-                    $('#salesTeamNote').val(data.salesTeam.note);
-
-
-                }
+            var request =  jQuery.ajax({
+                method: "GET",
+                url: "{{route('edit.sales.team.data')}}",
+                data: {salesTeamId: id},
+                dataType:'json',
 
             });
 
-            $('#sales-team-modal').modal('show');
+
+            $.get("{{ route('update.sales.team.data') }}", { id: id} ,function(data){
+                if(data){
+                    $('#sales-teamId').val(data.salesTeamId.id);
+                    $('#sales-teamMembers').html("<option selected value='"+data.user.id+"'>"+ data.user.name+ "</option>");
+                    $('#sales-teamName').val(data.salesTeam.name);
+                    $('#sales-teamManager').val(data.salesTeam.sales_teamManager);
+
+                    jQuery("#sales-team-modal #modal-new-sales-team-label.modal-title").html("Edit Sales Team: "+response.salesTeamName);
+                    jQuery("#sales-team-modal #sales_team_form_submit").html("Update");
+                    jQuery("#sales-team-modal").modal('show');
+
+                }
+            });
+
+
+            request.fail(function( jqXHR, textStatus ) {
+                alert( "Request failed: " + textStatus );
+            });
+
+
         }
+
+
 
         function deleteSalesTeam(id){
             var _token = $('input[name="_token"]').val();
