@@ -98,7 +98,7 @@
             processing: true,
             serverSide: true,
             paging:true,
-            ajax: '{!! route('sales-team-data') !!}',
+            ajax: '{!! route('sales-teams-data') !!}',
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'name', name: 'name'},
@@ -232,22 +232,12 @@
 
 
         function editSalesTeam(id){
-
-            var request =  jQuery.ajax({
-                method: "GET",
-                url: "{{route('edit.sales.team.data')}}",
-                data: {salesTeamId: id},
-                dataType:'json',
-
-            });
-
-
-            $.get("{{ route('update.sales.team.data') }}", { id: id} ,function(data){
+            $.get("{{ route('sales-team-data') }}", { salesTeamId: id} ,function(data){
                 if(data){
-                    $('#sales-teamId').val(data.salesTeamId.id);
+                    $('#sales-teamId').val(data.salesTeam.id);
                     $('#sales-teamMembers').html("<option selected value='"+data.user.id+"'>"+ data.user.name+ "</option>");
                     $('#sales-teamName').val(data.salesTeam.name);
-                    $('#sales-teamManager').val(data.salesTeam.sales_teamManager);
+                    $('#sales-teamManager').val(data.salesTeam.sales_team.manager[0]);
 
                     jQuery("#sales-team-modal #modal-new-sales-team-label.modal-title").html("Edit Sales Team: "+response.salesTeamName);
                     jQuery("#sales-team-modal #sales_team_form_submit").html("Update");

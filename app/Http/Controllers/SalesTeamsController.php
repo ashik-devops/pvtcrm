@@ -178,7 +178,7 @@ class SalesTeamsController extends Controller
 
 
         return response()->json([
-            'team'=>[
+            'salesTeam'=>[
                 'id'=>$team->id,
                 'name'=>$team->name,
                 'members'=>$team->members->map(function($member){
@@ -187,7 +187,7 @@ class SalesTeamsController extends Controller
                         'name'=>$member->name
                     ];
                 }),
-                'manager'=>$team->manager->map(function($manager){
+                'manager'=>$team->managers->map(function($manager){
                     return [
                         'id'=>$manager->id,
                         'name'=>$manager->name
