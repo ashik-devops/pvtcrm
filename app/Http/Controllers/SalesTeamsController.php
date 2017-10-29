@@ -93,7 +93,7 @@ class SalesTeamsController extends Controller
 
             $team->save();
             $team->members()->attach($request->salesTeam['salesTeamManager'], ['role'=>'MANAGER']);
-            $team->members()->attach(array_diff($request->salesTeam['salesTeamMembers'], [$request->salesTeam['salesTeamManager']]), ['role'=>'MEMBERS']);
+            $team->members()->attach(array_diff($request->salesTeam['salesTeamMembers'], [$request->salesTeam['salesTeamManager']]), ['role'=>'MEMBER']);
             DB::commit();
 
             $result['result']='Saved';
