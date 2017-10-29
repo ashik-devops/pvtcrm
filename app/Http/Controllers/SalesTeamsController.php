@@ -187,7 +187,7 @@ class SalesTeamsController extends Controller
                         'name'=>$member->name
                     ];
                 }),
-                'manager'=>$team->managers->map(function($manager){
+                'managers'=>$team->managers->map(function($manager){
                     return [
                         'id'=>$manager->id,
                         'name'=>$manager->name

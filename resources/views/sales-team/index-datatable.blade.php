@@ -135,8 +135,14 @@
                     return new Option(obj.name, obj.id, true, true);
                 });
 
+                var manager = response.salesTeam.managers.map(function(obj){
+                    return new Option(obj.name, obj.id, true, true);
+                });
+
                 member_select.val(null).trigger('change.select2');
+                manager_select.val(null).trigger('change.select2');
                 member_select.append(members).trigger('change.select2');
+                manager_select.append(manager[0]).trigger('change.select2');
             });
             request.fail(function( jqXHR, textStatus ) {
                 alert( "Request failed: " + textStatus );
