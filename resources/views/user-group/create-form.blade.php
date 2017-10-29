@@ -20,12 +20,7 @@
 
             <label class="sr-only">Members</label>
             <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true" required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
-                @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
-                    @php
-                    $user=\App\User::find($user)
-                    @endphp
-                    <option value="{{$user->id}}">{{$user->name}}</option>
-                @endforeach
+
             </select>
         </div>
 
@@ -50,13 +45,28 @@
             'userGroupName': 'userGroupName',
             'userIds': 'userIds'
         };
-        jQuery("#userIds").select2({
+
+
+        var user_select=jQuery("#userIds").select2({
             placeholder: "Choose Members",
-            allowClear: true
+            ajax: {
+                url: "{{route('get-user-options')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.users
+                    }
+                },
+                cache: true
+            }
         });
-
-
-
 
         jQuery("#userGroupForm").submit(function (e) {
             e.preventDefault();
