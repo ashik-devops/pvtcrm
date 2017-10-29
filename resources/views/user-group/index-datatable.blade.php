@@ -123,10 +123,12 @@
                 jQuery("#user-group-modal #modal-new-user-group-label.modal-title").html("Edit User Group: "+response.group.name);
                 jQuery("#user-group-modal #user_group_form_submit").html("Update");
                 jQuery("#user-group-modal").modal('show');
+
                 var members = response.group.members.map(function(obj){
-                    return obj.id;
+                    return new Option(obj.name, obj.id, true, true);
                 });
-                jQuery("#"+inputMap.userIds).val(members).trigger('change');
+
+                user_select.append(members).trigger('change');
 
             });
             request.fail(function( jqXHR, textStatus ) {
