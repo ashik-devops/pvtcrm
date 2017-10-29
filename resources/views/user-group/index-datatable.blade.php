@@ -128,7 +128,7 @@
                     return new Option(obj.name, obj.id, true, true);
                 });
 
-                user_select.append(members).trigger('change');
+                user_select.val(null).append(members).trigger('change.select2');
 
             });
             request.fail(function( jqXHR, textStatus ) {
@@ -146,12 +146,13 @@
         }
 
         jQuery("#user-group-modal").on('hidden.bs.modal', function(){
-            reset_form(jQuery("#userGroupForm")[0])
+            reset_form(jQuery("#userGroupForm")[0]);
         });
         function reset_form(el) {
             el.reset();
-            jQuery("#"+inputMap.userIds).val('').trigger('change');
+            user_select.val(null).trigger('change.select2');
             jQuery("#"+inputMap.userGroupId).val('');
+            console.log("cleared");
         }
 
 

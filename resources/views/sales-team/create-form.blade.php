@@ -66,14 +66,30 @@
 
 
 
-        jQuery("#sales-teamManager").select2({
+        var manager_select= jQuery("#sales-teamManager").select2({
             placeholder: "Choose Manager",
         });
 
 
-        jQuery("#sales-teamMembers").select2({
-            placeholder: "Choose Member Users",
-            allowClear: true
+        var member_select=jQuery("#sales-teamMembers").select2({
+            placeholder: "Choose Members",
+            ajax: {
+                url: "{{route('get-user-options')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.users
+                    }
+                },
+                cache: true
+            }
         });
 
 
