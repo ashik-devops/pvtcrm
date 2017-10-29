@@ -24,23 +24,26 @@
                 </div>
             @endif
             @foreach(\App\Scope::all() as $scope)
-                <div class="scope">
-                <div class="title">{{$scope->label}} </div>
-                @foreach(\App\Action::all() as $action)
-                <div class="form-horizontal">
-                        <div class="form-group">
-                            <label class="col-sm-3 control-label">{{$action->label}} </label>
-                            <div class="col-sm-9">
-                                <input class="bootstrap-switch form-control" name="access[{{$scope->id}}][{{$action->id}}]"
-                                       @if(isset(old("access", isset($access)?$access:[])[$scope->id][$action->id]))
-                                        checked="checked"
-                                       @endif
-                                       data-on-text="Yes" type="checkbox" value="true">
+                <div class="col-sm-6 col-lg-3 col-md-4 scope-box">
+                    <div class="scope">
+                        <div class="title">{{$scope->label}} </div>
+                        @foreach(\App\Action::all() as $action)
+                            <div class="form-horizontal switch-box">
+                                <div class="form-group">
+                                    <label class="col-sm-3 control-label">{{$action->label}} </label>
+                                    <div class="col-sm-9">
+                                        <input class="bootstrap-switch form-control" data-action="{{$action->label}}" name="access[{{$scope->id}}][{{$action->id}}]"
+                                               @if(isset(old("access", isset($access)?$access:[])[$scope->id][$action->id]))
+                                               checked="checked"
+                                               @endif
+                                               data-on-text="Yes" type="checkbox"  value="true">
+
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                        @endforeach
                     </div>
-                    @endforeach
-        </div>
+                </div>
             @endforeach
         </fieldset>
         <div class="text-center">
@@ -76,10 +79,20 @@
 @endsection
 
 @section('role_form_scripts')
+    <script src="{{asset('storage/assets/js/jquery.js')}}"></script>
     <script src="{{asset('storage/assets/js/bootstrap-switch.js')}}"></script>
     <script src="{{asset('storage/assets/js/forms-bootstrap-switch.js')}}"></script>
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-switch.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <script>
         function goBack() {
             window.history.back();
         }</script>
+    <script>
+        jQuery('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function(event,state) {
+            jQuery(.switch-box)
+
+        });
+
+    </script>
 @endsection

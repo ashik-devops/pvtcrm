@@ -1,3 +1,4 @@
+echo "hello";
 @extends('layouts.app')
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
