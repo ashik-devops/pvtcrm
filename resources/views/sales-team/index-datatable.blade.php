@@ -134,107 +134,10 @@
             }
         });
 
-        $('#salesTeamForm').on('submit',function(e){
-            e.preventDefault();
-            var _token = $('input[name="_token"]').val();
-            var salesTeam = {
-                salesTeamId : $('#salesTeam_id').val(),
-                userId : $('#userId').val(),
-                salesTeamName : $('#salesTeamName').val(),
-                salesTeamNote : $('#salesTeamNote').val(),
-            };
-
-            var data = {
-                _token : _token,
-                salesTeam: salesTeam
-            };
-
-            console.log(salesTeam);
-
-            if(salesTeam.salesTeamId < 1){
-                //customer creating.....
-
-
-                var request = jQuery.ajax({
-                    url: "{{ route('create.sales.team') }}",
-                    data: data,
-                    method: "POST",
-                    dataType: "json"
-                });
-                request.done(function (response) {
-
-                    if(response.result){
-                        if(response.result == 'Saved') {
-                            $('#salesTeamForm')[0].reset();
-                            jQuery("#salesTeamId").html("");
-                            $('#sales-team-modal').modal('hide');
-                            get_all_sales_team_data();
-                            $.notify(response.message, "success");
-
-                        }
-                        else{
-                            jQuery.notify(response.message, "error");
-
-                        }
-                    }
-
-                })
-
-                request.fail(function (jqXHT, textStatus) {
-                    $.notify(textStatus, "error");
-
-                });
-
-            }
-            else{
-                //updating sales team.....
-
-                var request = jQuery.ajax({
-                    url: "{{ route('update.sales.team.data') }}",
-                    data: data,
-                    method: "POST",
-                    dataType: "json"
-                });
-                request.done(function (response) {
-                    if(response.result == 'Saved'){
-                        $('#salesTeamForm')[0].reset();
-                        jQuery("#salesTeamId").html("");
-                        $('#sales-team-modal').modal('hide');
-                        get_all_sales_team_data();
-                        $.notify(response.message, "success");
-                    }
-                    else{
-                        jQuery.notify(response.message, "error");
-                    }
-                })
-
-                request.fail(function (jqXHT, textStatus) {
-                    $.notify(textStatus, "error");
-                });
-            }
-        });
-
-        {{--function editSalesTeam(id){--}}
-            {{--$('#modal_button').val('Update Sales Team');--}}
-            {{--$('#modal-new-sales-team-label').text('Edit Sales Team');--}}
-
-            {{--$.get("{{ route('edit.sales.team.data') }}", { id: id} ,function(data){--}}
-                {{--if(data){--}}
-                    {{--$('#salesTeam_id').val(data.salesTeam.id);--}}
-                    {{--$('#userId').html("<option selected value='"+data.user.id+"'>"+ data.user.name+ "</option>");--}}
-                    {{--$('#salesTeamName').val(data.salesTeam.name);--}}
-                    {{--$('#sales-teamManager').val(data.salesTeam.sales_teamManager);--}}
-                {{--}--}}
-            {{--});--}}
-
-            {{--$('#sales-team-modal').modal('show');--}}
-        {{--}--}}
-
-
         function editSalesTeam(id){
             $.get("{{ route('sales-team-data') }}", { salesTeamId: id} ,function(data){
                 if(data){
-                    $('#sales-teamId').val(data.salesTeam.id);
+                    $("#sales-teamId").val(data.salesTeam.id);
                     $('#sales-teamMembers').html("<option selected value='"+data.user.id+"'>"+ data.user.name+ "</option>");
                     $('#sales-teamName').val(data.salesTeam.name);
                     $('#sales-teamManager').val(data.salesTeam.sales_team.manager[0]);
