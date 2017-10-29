@@ -39,6 +39,9 @@ Route::post('ajax/user/group/update', 'UserGroupController@update')->name('user-
 Route::post('ajax/user/group/edit', 'UserGroupController@edit')->name('user-group-edit');
 Route::get('ajax/user/group/delete', 'UserGroupController@delete')->name('user-group-delete');
 Route::get('ajax/user/group/', 'UserGroupController@getUserGroupAjax')->name('single-user-group.data');
+Route::get('/ajax/user/get-user-options', 'UsersController@getUserOptions')->name('get-user-options')->middleware('can:index,App\User');
+
+
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
@@ -82,7 +85,8 @@ Route::post('/sales-team/create', 'SalesTeamsController@create')->name('create.s
 Route::get('/sales-team/edit', 'SalesTeamsController@edit')->name('edit.sales.team.data');
 Route::post('/sales-team/update', 'SalesTeamsController@update')->name('update.sales.team.data');
 Route::post('/sales-team/delete', 'SalesTeamsController@delete')->name('delete.sales.team');
-Route::get('/ajax/sales-team/data', 'SalesTeamsController@getSalesTeamsAjax')->name('sales-team-data');
+Route::get('/ajax/sales-teams', 'SalesTeamsController@getSalesTeamsAjax')->name('sales-teams-index');
+Route::get('/ajax/sales-team', 'SalesTeamsController@getSalesTeamAjax')->name('sales-team-index');
 
 
 

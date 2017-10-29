@@ -197,7 +197,7 @@ class UserGroupController extends Controller
     public function view(UserGroup $group){
 //        $this->authorize('view', $userGgroup);
 
-        return view('user-group.user-group-view')->with(['UserGroup'=>$group]);
+        return view('user-group.user-group-view')->with(['userGroup'=>$group]);
     }
 
 }

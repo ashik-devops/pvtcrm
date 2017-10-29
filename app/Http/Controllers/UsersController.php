@@ -213,4 +213,24 @@ class UsersController extends Controller
 
     }
 
+
+    public function getUserOptions(Request $request){
+
+        $users = User::whereIn('id', Auth::user()->getSubordinates())->where('status','=', 1);
+        if($request->q){
+            $users = $users->where(function($query) use ($request){
+                return $query->where('first_name', 'LIKE', $request->q.'%')
+                    ->orWhere('last_name', 'LIKE', $request->q.'%');
+            });
+        }
+        $query = $users->toSql();
+        return response()->json([
+            'users' =>$users->get()->map(
+                function($user){
+                    return ['id'=>$user->id,'text'=>$user->name];
+                })
+        ]);
+    }
+
+
 }
