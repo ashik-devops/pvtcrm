@@ -90,15 +90,23 @@
         }</script>
     <script>
            jQuery('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function(event,state) {
-                console.log(this);
-                console.log(event);
-                console.log(state);
-                //var value =state.value;
-                jQuery(":input").each(function () {
-                 jQuery(this).attr('checked', 'checked').trigger('change');               })
+               if ($(this).is(':checked')) {
+                   if($(this).data("scope")   != "All" && $(this).data("action")   != "All"){
+                       jQuery(":input").each(function () {
+                           jQuery(this).attr('checked', 'checked').trigger('change');})
 
+                   }
 
-            });
+               }
+               else if (!$(this).is(':checked')) {
+
+               }
+           });
+/*jQuery(":input").each(function () {
+jQuery(this).attr('checked', 'checked').trigger('change');})
+jQuery(":input").each(function () {
+jQuery(this).removeAttr('checked').trigger('change');
+})*/
 
     </script>
 @endsection
