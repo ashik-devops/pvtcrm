@@ -24,15 +24,15 @@
                 </div>
             @endif
             @foreach(\App\Scope::all() as $scope)
-                <div class="col-sm-6 col-lg-3 col-md-4 scope-box">
+                <div class="col-sm-6 col-lg-3 col-md-4 ">
                     <div class="scope">
-                        <div class="title">{{$scope->label}} </div>
+                        <div class="title scope-box">{{$scope->label}} </div><br><br>
                         @foreach(\App\Action::all() as $action)
-                            <div class="form-horizontal switch-box">
+                            <div class="form-horizontal ">
                                 <div class="form-group">
                                     <label class="col-sm-3 control-label">{{$action->label}} </label>
                                     <div class="col-sm-9">
-                                        <input class="bootstrap-switch form-control" data-action="{{$action->label}}" name="access[{{$scope->id}}][{{$action->id}}]"
+                                        <input class="bootstrap-switch form-control switch-box" data-scope="{{$scope->label}}" data-action="{{$action->label}}" name="access[{{$scope->id}}][{{$action->id}}]"
                                                @if(isset(old("access", isset($access)?$access:[])[$scope->id][$action->id]))
                                                checked="checked"
                                                @endif
@@ -79,9 +79,9 @@
 @endsection
 
 @section('role_form_scripts')
-    <script src="{{asset('storage/assets/js/jquery.js')}}"></script>
-    <script src="{{asset('storage/assets/js/bootstrap-switch.js')}}"></script>
-    <script src="{{asset('storage/assets/js/forms-bootstrap-switch.js')}}"></script>
+    <script type="text/javascript" src="{{asset('storage/assets/js/bootstrap.js')}}"></script>
+    <script type="text/javascript" src="{{asset('storage/assets/js/bootstrap-switch.js')}}"></script>
+    <script type="text/javascript" src="{{asset('storage/assets/js/forms-bootstrap-switch.js')}}"></script>
     <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-switch.css')}}">
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
     <script>
@@ -89,10 +89,16 @@
             window.history.back();
         }</script>
     <script>
-        jQuery('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function(event,state) {
-            jQuery(.switch-box)
+           jQuery('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function(event,state) {
+                console.log(this);
+                console.log(event);
+                console.log(state);
+                //var value =state.value;
+                jQuery(":input").each(function () {
+                 jQuery(this).attr('checked', 'checked').trigger('change');               })
 
-        });
+
+            });
 
     </script>
 @endsection
