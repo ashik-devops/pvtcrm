@@ -89,18 +89,106 @@
             window.history.back();
         }</script>
     <script>
-           jQuery('input[type="checkbox"]').on('switchChange.bootstrapSwitch', function(event,state) {
-               if ($(this).is(':checked')) {
-                   if($(this).data("scope")   != "All" && $(this).data("action")   != "All"){
-                       jQuery(":input").each(function () {
-                           jQuery(this).attr('checked', 'checked').trigger('change');})
+           jQuery('input[type="checkbox"].bootstrap-switch').on('switchChange.bootstrapSwitch', function(event,state) {
+//               if ($(this).is(':checked')) {
+//                   if($(this).data("scope")   == "All" && $(this).data("action")   == "All" ){
+//                       jQuery("input.bootstrap-switch[data-action='All']:not(input.bootstrap-switch[data-scope='All'][data-action='All'])").each(function () {
+//                           jQuery(this).prop('checked', true).trigger('change');
+//                           jQuery(this).bootstrapSwitch('disabled',true);
+//
+//                           })
+//
+////                       jQuery(this).bootstrapSwitch('disabled',false);
+//switchChange.bootstrapSwitch
+//
+//                   }
+//                   else { //if($(this).data("scope")=="Contact" && $(this).data("action")   == "All")
+//                       $("input.bootstrap-switch[data-action='All'][data-action='All']")
+//                       {
+//
+//                       }
+//                   }
+//
+//                   }
+//               if (!$(this).is(':checked')) {
+//                   if($(this).data("scope")   == "All" && $(this).data("action")   == "All" ){
+//                       jQuery("input.bootstrap-switch").each(function () {
+//                           jQuery(this).removeAttr('checked',false).trigger('change');
+//                           jQuery(this).bootstrapSwitch('disabled',false);
+//
+//                       })
+//
+//                   }
+//
+//               }
+//
+//
+//
+//
+
+               var scope = $(this).data("scope");
+               var action = $(this).data("action");
+               if (jQuery(this).is(':checked')) {
+                   var selector='';
+
+                   if(action   === "All"){
+
+                       if(scope==="All")
+                        selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"']), input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                      else
+                       selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
 
                    }
 
-               }
-               else if (!$(this).is(':checked')) {
+                   else { //if($(this).data("scope")=="Contact" && $(this).data("action")   == "All")
+                       if(scope === "All")
+                            selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                        else
+                           selector = "";
+
+                   }
+
+                   if(selector.length > 0){
+                       jQuery(selector).each(function () {
+                           jQuery(this).prop('checked', true).trigger('change');
+                           jQuery(this).bootstrapSwitch('disabled',true);
+
+                       })
+                   }
+
+
+                   }
+               if (!$(this).is(':checked')) {
+                   var selector='';
+                   if(action   === "All"){
+
+                       if(scope==="All")
+                           selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"']), input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                       else
+                           selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+
+                   }
+                   else { //if($(this).data("scope")=="Contact" && $(this).data("action")   == "All")
+                       if(scope === "All")
+                           selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                       else
+                           selector = "";
+
+                   }
+                   if(selector.length > 0){
+                       jQuery(selector).each(function () {
+                           jQuery(this).prop('checked', false).trigger('change');
+                           jQuery(this).bootstrapSwitch('disabled',false);
+
+                       })
+                   }
 
                }
+
+
+
+
+
            });
 /*jQuery(":input").each(function () {
 jQuery(this).attr('checked', 'checked').trigger('change');})
