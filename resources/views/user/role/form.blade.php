@@ -89,7 +89,7 @@
             window.history.back();
         }</script>
     <script>
-           jQuery('input[type="checkbox"].bootstrap-switch').on('switchChange.bootstrapSwitch', function(event,state) {
+        jQuery('input[type="checkbox"].bootstrap-switch').on('switchChange.bootstrapSwitch', function(event,state) {
 //               if ($(this).is(':checked')) {
 //                   if($(this).data("scope")   == "All" && $(this).data("action")   == "All" ){
 //                       jQuery("input.bootstrap-switch[data-action='All']:not(input.bootstrap-switch[data-scope='All'][data-action='All'])").each(function () {
@@ -126,107 +126,135 @@
 //
 //
 
-               var scope = $(this).data("scope");
-               var action = $(this).data("action");
-               if (jQuery(this).is(':checked')) {
-                   var selector='';
+            var scope = $(this).data("scope");
+            var action = $(this).data("action");
+            if (jQuery(this).is(':checked')) {
+                var selector='';
 
-                   if(action   === "All"){
+                if(action   === "All"){
 
-                       if(scope==="All")
+                    if(scope==="All")
                         selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"']), input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
-                      else
-                       selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                    else
+                        selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
 
-                   }
+                }
 
-                   else {
-                       if(scope === "All")
-                            selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
-                        else
-                           selector = "";
+                else {
+                    if(scope === "All")
+                        selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                    else
+                        selector = "";
 
-                   }
+                }
 
-                   if(selector.length > 0){
-                       jQuery(selector).each(function () {
-                           jQuery(this).prop('checked', true).trigger('change');
-                           jQuery(this).bootstrapSwitch('disabled',true);
+                if(selector.length > 0){
+                    jQuery(selector).each(function () {
+                        jQuery(this).prop('checked', true).trigger('change');
+                        jQuery(this).bootstrapSwitch('disabled',true);
 
-                       })
-                   }
+                    })
+                }
 
-                   updateOtherButtons(scope, action);
+                updateOtherButtons(scope, action);
 
 
-                   }
-               if (!$(this).is(':checked')) {
-                   var selector='';
-                   if(action   === "All"){
+            }
+            if (!$(this).is(':checked')) {
+                var selector='';
+                if(action   === "All"){
 
-                       if(scope==="All")
-                           selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"']), input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
-                       else
-                           selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                    if(scope==="All")
+                        selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"']), input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                    else
+                        selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
 
-                   }
-                   else {
-                       if(scope === "All")
-                           selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
-                       else
-                           selector = "";
+                }
+                else {
+                    if(scope === "All")
+                        selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
+                    else
+                        selector = "";
 
-                   }
-                   if(selector.length > 0){
-                       jQuery(selector).each(function () {
-                           jQuery(this).prop('checked', false).trigger('change');
-                           jQuery(this).bootstrapSwitch('disabled',false);
+                }
+                if(selector.length > 0){
+                    jQuery(selector).each(function () {
+                        jQuery(this).prop('checked', false).trigger('change');
+                        jQuery(this).bootstrapSwitch('disabled',false);
 
-                       })
-                   }
+                    })
+                }
 
-               }
+            }
 
-           });
+        });
 
-           function updateOtherButtons(scope, action) {
-               var selector='';
-               if(scope==='All'){
-                   if(action==='All'){
-                       selector='';
-                   }
+        function updateOtherButtons(scope, action) {
+            var selectors=['', ''];
+            if(scope==='All'){
+                if(action==='All'){
 
-                   else {
-                       selector="input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='All']";
-                   }
-               }
+                }
 
-               else{
-                    if(action == 'All'){
-                        selector="input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='All'][data-action='"+action+"']";
+                else {
+                    selectors[0]="input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='All'])";
+                }
+            }
+
+            else{
+                if(action == 'All'){
+                    selectors[0]="input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='All'][data-action='"+action+"'])";
+                }
+
+                else {
+                    selectors[0]="input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='All'][data-action='"+action+"'])";
+                    selectors[1]="input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='All'])";
+                }
+            }
+            jQuery.each(selectors, function(index, selector) {
+
+
+                if (selector !== '') {
+                    var all_selected = true;
+
+                    jQuery(selector).each(function () {
+                        if (!all_selected) {
+                            return;
+                        }
+
+                        all_selected=jQuery(this).is(':checked');
+                    })
+                    if (all_selected) {
+                        if (action == 'All') {
+                            if (scope !== 'All')
+                                selector = "input.bootstrap-switch[data-action='All']";
+
+                        }
+                        else {
+                            if (scope === 'All')
+                                selector = "input.bootstrap-switch[data-action='All']";
+                            else {
+                                if (index == 0)
+                                    selector = "input.bootstrap-switch[data-action='"+action+"'][data-scope='All']";
+                                else{
+                                    selector = "input.bootstrap-switch[data-action='All'][data-scope='" + scope + "']";
+                                }
+                            }
+
+                        }
+
+                        if (selector.length > 0) {
+                            console.log(selector)
+                            jQuery(selector).each(function () {
+                                jQuery(this).prop('checked', true).trigger('change');
+                                if(jQuery(this).data('action')!== "All")
+                                    jQuery(this).bootstrapSwitch('disabled', true);
+
+                            })
+                        }
                     }
-
-                    else {
-                        selector="input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='All'][data-action='"+action+"'], input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='All']";
-                    }
-               }
-
-               var all_selected=true;
-               jQuery(selector).each(function (item){
-                   if(all_selected==false){
-                       return;
-                   }
-                   if(!jQuery(this).is(':checked')){
-                        all_selected=false;
-                    }
-               })
-
-               if(action=='All'){
-                   selector = "input.bootstrap-switch[data-action='All'][data-scope='All]";
-               }
-               else{
-                   selector = "input.bootstrap-switch[data-action='All'][data-scope='All]";
-               }
-           }
+                }
+            })
+        }
     </script>
 @endsection
