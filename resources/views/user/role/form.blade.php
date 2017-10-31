@@ -140,7 +140,7 @@
 
                    }
 
-                   else { //if($(this).data("scope")=="Contact" && $(this).data("action")   == "All")
+                   else {
                        if(scope === "All")
                             selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
                         else
@@ -156,6 +156,8 @@
                        })
                    }
 
+                   updateOtherButtons(scope, action);
+
 
                    }
                if (!$(this).is(':checked')) {
@@ -168,7 +170,7 @@
                            selector  = "input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
 
                    }
-                   else { //if($(this).data("scope")=="Contact" && $(this).data("action")   == "All")
+                   else {
                        if(scope === "All")
                            selector = "input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='"+action+"'])";
                        else
@@ -185,16 +187,46 @@
 
                }
 
-
-
-
-
            });
-/*jQuery(":input").each(function () {
-jQuery(this).attr('checked', 'checked').trigger('change');})
-jQuery(":input").each(function () {
-jQuery(this).removeAttr('checked').trigger('change');
-})*/
 
+           function updateOtherButtons(scope, action) {
+               var selector='';
+               if(scope==='All'){
+                   if(action==='All'){
+                       selector='';
+                   }
+
+                   else {
+                       selector="input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='All']";
+                   }
+               }
+
+               else{
+                    if(action == 'All'){
+                        selector="input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='All'][data-action='"+action+"']";
+                    }
+
+                    else {
+                        selector="input.bootstrap-switch[data-action='"+action+"']:not(input.bootstrap-switch[data-scope='All'][data-action='"+action+"'], input.bootstrap-switch[data-scope='"+scope+"']:not(input.bootstrap-switch[data-scope='"+scope+"'][data-action='All']";
+                    }
+               }
+
+               var all_selected=true;
+               jQuery(selector).each(function (item){
+                   if(all_selected==false){
+                       return;
+                   }
+                   if(!jQuery(this).is(':checked')){
+                        all_selected=false;
+                    }
+               })
+
+               if(action=='All'){
+                   selector = "input.bootstrap-switch[data-action='All'][data-scope='All]";
+               }
+               else{
+                   selector = "input.bootstrap-switch[data-action='All'][data-scope='All]";
+               }
+           }
     </script>
 @endsection
