@@ -90,42 +90,6 @@
         }</script>
     <script>
         jQuery('input[type="checkbox"].bootstrap-switch').on('switchChange.bootstrapSwitch', function(event,state) {
-//               if ($(this).is(':checked')) {
-//                   if($(this).data("scope")   == "All" && $(this).data("action")   == "All" ){
-//                       jQuery("input.bootstrap-switch[data-action='All']:not(input.bootstrap-switch[data-scope='All'][data-action='All'])").each(function () {
-//                           jQuery(this).prop('checked', true).trigger('change');
-//                           jQuery(this).bootstrapSwitch('disabled',true);
-//
-//                           })
-//
-////                       jQuery(this).bootstrapSwitch('disabled',false);
-//switchChange.bootstrapSwitch
-//
-//                   }
-//                   else { //if($(this).data("scope")=="Contact" && $(this).data("action")   == "All")
-//                       $("input.bootstrap-switch[data-action='All'][data-action='All']")
-//                       {
-//
-//                       }
-//                   }
-//
-//                   }
-//               if (!$(this).is(':checked')) {
-//                   if($(this).data("scope")   == "All" && $(this).data("action")   == "All" ){
-//                       jQuery("input.bootstrap-switch").each(function () {
-//                           jQuery(this).removeAttr('checked',false).trigger('change');
-//                           jQuery(this).bootstrapSwitch('disabled',false);
-//
-//                       })
-//
-//                   }
-//
-//               }
-//
-//
-//
-//
-
             var scope = $(this).data("scope");
             var action = $(this).data("action");
             if (jQuery(this).is(':checked')) {
@@ -185,10 +149,12 @@
 
                     })
                 }
+                updateOtherButtons(scope, action);
 
             }
 
         });
+
 
         function updateOtherButtons(scope, action) {
             var selectors=['', ''];
@@ -256,6 +222,11 @@
                     }
                 }
             })
+
+
         }
+        jQuery(document).ready(function(){
+          jQuery("input.bootstrap-switch:checked").trigger('switchChange.bootstrapSwitch');
+        });
     </script>
 @endsection
