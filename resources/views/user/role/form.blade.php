@@ -180,6 +180,7 @@
                 if(selector.length > 0){
                     jQuery(selector).each(function () {
                         jQuery(this).prop('checked', false).trigger('change');
+
                         jQuery(this).bootstrapSwitch('disabled',false);
 
                     })
@@ -247,7 +248,7 @@
                             console.log(selector)
                             jQuery(selector).each(function () {
                                 jQuery(this).prop('checked', true).trigger('change');
-                                if(jQuery(this).data('action')!== "All")
+                                if(jQuery(this).data('action')!== "All" && jQuery(this).data('scope')!== "All")
                                     jQuery(this).bootstrapSwitch('disabled', true);
 
                             })
