@@ -51,20 +51,6 @@
                                         </div>
                                         <div class="panel-body">
 
-                                            <div class="col-lg-4 col-md-6 col-sm-12 text-center">
-
-
-
-                                                <a href="#">
-                                                    <img src="{{asset('storage/assets/images/plus-btn.png')}}" height="100px" width="100px" class="img-circle img-responsive center-block" />
-                                                    <h3>Add Member</h3>
-                                                </a>
-
-
-                                            </div>
-
-
-
 
                                             @foreach($salesTeam->managers as $manager)
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
@@ -117,6 +103,11 @@
 
                                                 </div>
                                             @endforeach
+
+                                                <div class="col-lg-4 col-md-6 col-sm-12 text-center">
+                                                    <button type="button" class="btn btn-default add-button"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+
+                                                </div>
                                         </div>
                                     </div>
 
