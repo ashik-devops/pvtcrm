@@ -33,10 +33,8 @@
                                     <div class="user-info">
                                         {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                         <ul class="meta list list-unstyled">
-                                            <li class="name"><h3>{{$salesTeam->name}}
+                                            <li class="name"><h3>{{trim($salesTeam->name)}}
                                                     <a href="javascript:editName();"><i class="glyphicon glyphicon-edit" style="font-size: 12px;"></i></a>
-
-
                                                 </h3>
 
                                             @foreach($salesTeam->managers as $manager)
@@ -147,8 +145,7 @@
 
 
 @section('modal')
-    <!-- Modal for creating customer -->
-    <div class="modal customerModal" id="sales-team-member-modal" role="dialog" aria-labelledby="sales-team-modal">
+    <div class="modal customerModal" id="sales-team-member-modal" role="dialog" aria-labelledby="sales-team-member-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -156,29 +153,61 @@
                     <h4 class="modal-title" id="modal-new-sales-team-label">Add New Members</h4>
                 </div>
                 <div class="modal-body">
-                    @yield('sales-team-new-member')
-                </div>
-            </div>
-        </div>
-    </div><!--/modal-->
+
+                    <form method="post" class="ajax-from"  data-parsley-validate id="sales-add-member-form">
+                        {{ csrf_field() }}
+                        <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
+                            <label class="sr-only">User</label>
+                            <select name="userIds[]" id="sales-teamMembers" class="form-control select2-selection--multiple" multiple style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
+
+                            </select>
+                        </div>
 
 
+                        <div class="form-group margin-top-md center-block text-center">
+                            <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Create</button>
+                        </div>
+                    </form>
 
-
-    <div class="modal customerModal" id="#sales-team-name-modal" role="dialog" aria-labelledby="sales-team-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-sales-team-label">Edit Name</h4>
-                </div>
-                <div class="modal-body">
-                    <input type="text" name="team-name" value="{{$salesTeam->name}}" required>
-                    {{--@yield('modal-sales-team-new-name')--}}
                 </div>
             </div>
         </div>
     </div>
+
+    <div class="modal customerModal" id="sales-team-name-modal" role="dialog" aria-labelledby="sales-team-name-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-sales-team-label">Add New Members</h4>
+                </div>
+                <div class="modal-body">
+
+                    <form method="post" class="ajax-from"  data-parsley-validate id="sales-team-edit-name-form">
+                        {{ csrf_field() }}
+                        <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
+                            <label class="sr-only">User</label>
+                            <input id="sales-teamName" type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Name is required" required value="{{old('name', $salesTeam->name)}}">
+                        </div>
+
+
+                        <div class="form-group margin-top-md center-block text-center">
+                            <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Create</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
 
 @endsection
 
@@ -307,6 +336,9 @@
 
         function editName(){
             console.log("Launching....");
+            if(jQuery('input#sales-teamName').val().trim().length == 0){
+                jQuery('input#sales-teamName').val("{{$salesTeam->name}}").trigger('change');
+            }
             jQuery("#sales-team-name-modal").modal('show');
         }
 
