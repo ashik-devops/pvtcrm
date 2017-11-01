@@ -50,6 +50,22 @@
                                             <h3 class="panel-title">Members</h3>
                                         </div>
                                         <div class="panel-body">
+
+                                            <div class="col-lg-4 col-md-6 col-sm-12 text-center">
+
+
+
+                                                <a href="#">
+                                                    <img src="{{asset('storage/assets/images/plus-btn.png')}}" height="100px" width="100px" class="img-circle img-responsive center-block" />
+                                                    <h3>Add Member</h3>
+                                                </a>
+
+
+                                            </div>
+
+
+
+
                                             @foreach($salesTeam->managers as $manager)
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
                                                     {{--{{$member->name}}--}}
