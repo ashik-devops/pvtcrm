@@ -1,37 +1,57 @@
 @extends('layouts.app')
+@include('sales-team.create-form')
+@include('task.task-view')
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
+    {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
+    <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/jquery-data-tables-bs3.css')}}">
+    <link rel="stylesheet" href="{{asset('storage/assets/css/bootstrap-datetimepicker.css')}}">
+
+    <style type="text/css">
+        .datetimepicker{
+            z-index: 999 !important;
+        }
+        .select2-search__field{
+            width: auto !important;
+        }
+    </style>
 @endsection
 @section('content')
 
     <div id="content-wrapper" class="content-wrapper view view-account">
         <div class="container-fluid">
-            <div class="view-title"><h2>Sales Team Details</h2></div>
+            <div class="view-title"><h2>Sales Team : {{$salesTeam->name}}</h2></div>
             <div class="row">
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="module">
                         <div class="module-inner">
                             <div class="side-bar">
 
-                                <div class="sales-team-info">
-                                    {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
-                                    <ul class="meta list list-unstyled">
-                                        <li class="name"><h3>{{$salesTeam->name}}</h3>
+
+                                    <div class="user-info">
+                                        {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
+                                        <ul class="meta list list-unstyled">
+                                            <li class="name"><h3>{{$salesTeam->name}}
+                                                    <a href="javascript:editName();"><i class="glyphicon glyphicon-edit" style="font-size: 12px;"></i></a>
 
 
-                                    </ul>
-                                </div>
+                                                </h3>
+
+                                            @foreach($salesTeam->managers as $manager)
+                                                <li class="name"><h5>{{$manager->name}}</h5>
+                                                    @endforeach
 
 
-                                <div class="sales-team-info">
-                                    {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
-                                    <ul class="meta list list-unstyled">
-                                        @foreach($salesTeam->managers as $manager)
-                                            <li class="name"><h3>{{$manager->name}}</h3>
-                                        @endforeach
+                                        </ul>
+                                    </div>
 
-                                    </ul>
-                                </div>
+
+
+
+
+
 
 
 
@@ -105,7 +125,7 @@
                                             @endforeach
 
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
-                                                    <button type="button" class="btn btn-default add-button"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+                                                    <button type="button" class="btn btn-default add-button" data-toggle="modal" data-target="#sales-team-member-modal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
 
                                                 </div>
                                         </div>
@@ -124,8 +144,101 @@
 
 @endsection
 
+
+
+@section('modal')
+    <!-- Modal for creating customer -->
+    <div class="modal customerModal" id="sales-team-member-modal" role="dialog" aria-labelledby="sales-team-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-sales-team-label">Add New Members</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('sales-team-new-member')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+
+
+
+
+    <div class="modal customerModal" id="#sales-team-name-modal" role="dialog" aria-labelledby="sales-team-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-sales-team-label">Edit Name</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="team-name" value="{{$salesTeam->name}}" required>
+                    {{--@yield('modal-sales-team-new-name')--}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+@endsection
+
+
+
+
+
+
+
+
+{{--@section('sales-team-form-scripts')--}}
+    {{--<script type="text/javascript">--}}
+
+        {{--var member_select=jQuery("#sales-teamMembers").select2({--}}
+            {{--placeholder: "Choose Members",--}}
+            {{--ajax: {--}}
+                {{--url: "{{route('get-user-options')}}",--}}
+                {{--dataType: 'json',--}}
+                {{--delay: 250,--}}
+                {{--data: function (params) {--}}
+                    {{--return {--}}
+                        {{--q: params.term, // search term--}}
+                    {{--};--}}
+                {{--},--}}
+                {{--processResults : function (data){--}}
+
+                    {{--return {--}}
+                        {{--results: data.users--}}
+                    {{--}--}}
+                {{--},--}}
+                {{--cache: true--}}
+            {{--}--}}
+        {{--});--}}
+
+
+    {{--</script>--}}
+    {{--@endsection--}}
+
+
+
 @section('after-footer-script')
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
+    {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
+    <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+    <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
+    <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
+
+
+
+
+
+
+
+
+
+
         function changeManager(teamid, userid){
             swal({
                     title: "Are you sure?",
@@ -178,5 +291,26 @@
                     }
                 });
         }
+
+        jQuery("#sales-team-member-modal").on('hidden.bs.modal', function(){
+            reset_form(jQuery("#sales-teamForm")[0]);
+        });
+
+        function reset_form(el) {
+            el.reset();
+            member_select.val(null).trigger('change.select2');
+            manager_select.val(null).trigger('change.select2');
+            jQuery("#"+inputMap.salesTeamId).val('');
+            console.log("cleared");
+
+        }
+
+        function editName(){
+            console.log("Launching....");
+            jQuery("#sales-team-name-modal").modal('show');
+        }
+
     </script>
+
+    @yield('sales-team-form-scripts')
 @endsection

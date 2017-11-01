@@ -45,6 +45,62 @@
 
 @endsection
 
+
+
+@section('sales-team-new-member')
+    <form method="post" class="ajax-from"  data-parsley-validate id="sales-teamForm">
+        {{ csrf_field() }}
+        <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
+            <label class="sr-only">User</label>
+            <select name="userIds[]" id="sales-teamMembers" class="form-control select2-selection--multiple" multiple style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
+
+            </select>
+        </div>
+
+
+        <div class="form-group margin-top-md center-block text-center">
+            <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Create</button>
+        </div>
+    </form>
+
+@endsection
+
+
+
+
+{{--@section('modal-sales-team-new-name')--}}
+    {{--<form method="post" class="ajax-from"  data-parsley-validate id="sales-teamForm">--}}
+        {{--{{ csrf_field() }}--}}
+        {{--<div class="form-group {{ $errors->has('title') ? ' has-error' : '' }}">--}}
+            {{--<label class="sr-only">Name</label>--}}
+            {{--<input id="sales-teamName" type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Name is required" required value="{{old('name')}}">--}}
+            {{--@if ($errors->has('name'))--}}
+                {{--<span class="help-block">--}}
+                    {{--<strong>{{ $errors->first('name') }}</strong>--}}
+                {{--</span>--}}
+            {{--@endif--}}
+        {{--</div>--}}
+
+
+        {{--<div class="form-group margin-top-md center-block text-center">--}}
+            {{--<!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->--}}
+            {{--<button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>--}}
+            {{--<button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Create</button>--}}
+        {{--</div>--}}
+    {{--</form>--}}
+
+{{--@endsection--}}
+
+
+
+
+
+
+
+
+
 @section('sales-team-form-scripts')
     <script type="text/javascript">
         var inputMap = {
@@ -53,6 +109,9 @@
             'salesTeamMembers': 'sales-teamMembers',
             'salesTeamManager': 'sales-teamManager'
         };
+
+
+
 
 
 
@@ -194,6 +253,10 @@
             el.addError('fieldError', {message: msg, updateClass: true});
         }
         /*Edit user group*/
+
+
+
+
 
 
 
