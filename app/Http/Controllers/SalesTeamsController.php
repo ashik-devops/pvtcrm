@@ -214,6 +214,30 @@ class SalesTeamsController extends Controller
             'message'=>'user Group has been deleted successfully.'
         ],200);    }
 
+
+
+
+        public function removeMemberAjax(Request $request){
+            $data =$this->validate($request, [
+                'salesTeamId'=>'required|int|exists:sales_teams,id',
+                'userId'=>'required|int|exists:users,id'
+            ]);
+
+            $team= SalesTeam::find($data['salesTeamId']);
+            $user = User::find($data['userId']);
+            DB::beginTransaction();
+            $team->members()->detach([$user->id]);
+
+//            $team->delete();
+            DB::commit();
+
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Member has been removed successfully.'
+            ],200);
+
+        }
+
     public function view(SalesTeam $team){
 //        $this->authorize('view', $userGgroup);
 

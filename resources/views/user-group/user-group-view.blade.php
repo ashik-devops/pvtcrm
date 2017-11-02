@@ -1,12 +1,14 @@
 echo "hello";
 @extends('layouts.app')
+@include('user-group.create-form')
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
 @endsection
 @section('content')
     <div id="content-wrapper" class="content-wrapper view view-account">
         <div class="container-fluid">
-            <div class="view-title"><h2>User Group Details</h2></div>
+            <div class="view-title"><h2>User Group : {{$userGroup->name}}
+                       </h2></div>
             <div class="row">
                 <div class="module-wrapper col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="module">
@@ -16,7 +18,10 @@ echo "hello";
                                 <div class="user-info">
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
-                                        <li class="name"><h3>{{$userGroup->name}}</h3>
+                                        <li class="name"><h3>{{$userGroup->name}}
+                                                <a href="javascript:editUserGroupName();"><i class="glyphicon glyphicon-edit" style="font-size: 12px;"></i></a>
+
+                                            </h3>
 
 
                                     </ul>
@@ -59,10 +64,17 @@ echo "hello";
                                                     @if(!is_null($member->profile->secondary_phone_no))
                                                         <li class="phone"><a href="tel:{{$member->profile->secondary_phone_no}}">{{$member->profile->secondary_phone_no}}</a></li>
                                                     @endif
+                                                    <li class="action"><button class="btn btn-danger" role="button" onclick="removeUser( {{ $userGroup->id }}, {{$member->id}} )">Remove User</button></li>
                                                 </ul>
 
                                             </div>
                                             @endforeach
+
+                                                <div class="col-lg-4 col-md-6 col-sm-12 text-center">
+                                                    <button type="button" class="btn btn-default add-button" data-toggle="modal" data-target="#user-group-member-modal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
+
+                                                </div>
+
                                         </div>
                                     </div>
 
@@ -77,4 +89,125 @@ echo "hello";
     </div>
 
 
+@endsection
+
+@section('modal')
+
+    <div class="modal customerModal" id="user-group-member-modal" role="dialog" aria-labelledby="user-group-member-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-sales-team-label">Add New Members</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('user-group-new-member')
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div class="modal customerModal" id="#user-group-name-modal" role="dialog" aria-labelledby="#user-group-name-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-sales-team-label">Edit Name</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" name="team-name" value="{{$userGroup->name}}" required>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @endsection
+
+
+
+
+@section('after-footer-script')
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
+    {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
+    <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
+    <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
+    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
+    <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+    <script type="text/javascript">
+
+
+
+
+        function removeUser(groupid, userid){
+            swal({
+                    title: "Are you sure?",
+                    text: "Member of this group will be removed",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var request = jQuery.ajax({
+                            url: "{{ route("user-group-remove-user") }}",
+                            data: {groupId: groupid, userId: userid},
+                            method: "GET",
+                            dataType: 'json'
+                        });
+
+                        request.done(function (response) {
+                            if (response.result == 'Success') {
+                                swal('Successful',response.message, 'success', function () {
+                                    window.location.reload();
+                                });
+
+                                swal({
+                                    title: 'Successful',
+                                    text: response.message,
+                                    type: 'success',
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.message('Failed',response.message, 'error');
+
+                            }
+                        })
+
+                        request.fail(function (jqXHT, textStatus) {
+                            $.notify(textStatus, "error");
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        }
+
+
+
+
+        function editUserGroupName(){
+            jQuery("##user-group-name-modal").show('show');
+        }
+
+
+
+
+
+    </script>
+
+    @yield('user-group-create-form')
 @endsection
