@@ -178,6 +178,33 @@ class UserGroupController extends Controller
         ], 200);
     }
 
+
+
+
+    public function removeUserAjax(Request $request){
+        $data =$this->validate($request, [
+            'groupId'=>'required|int|exists:user_groups,id',
+            'userId'=>'required|int|exists:users,id'
+        ]);
+
+        $group= UserGroup::find($data['groupId']);
+        $user = User::find($data['userId']);
+        DB::beginTransaction();
+        $group->members()->detach([$user->id]);
+
+//            $team->delete();
+        DB::commit();
+
+        return response()->json([
+            'result'=>'Success',
+            'message'=>'Member has been removed successfully.'
+        ],200);
+
+    }
+
+
+
+
     public function delete(Request $request){
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id'

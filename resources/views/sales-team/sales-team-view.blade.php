@@ -189,36 +189,6 @@
 
 
 
-{{--@section('sales-team-form-scripts')--}}
-    {{--<script type="text/javascript">--}}
-
-        {{--var member_select=jQuery("#sales-teamMembers").select2({--}}
-            {{--placeholder: "Choose Members",--}}
-            {{--ajax: {--}}
-                {{--url: "{{route('get-user-options')}}",--}}
-                {{--dataType: 'json',--}}
-                {{--delay: 250,--}}
-                {{--data: function (params) {--}}
-                    {{--return {--}}
-                        {{--q: params.term, // search term--}}
-                    {{--};--}}
-                {{--},--}}
-                {{--processResults : function (data){--}}
-
-                    {{--return {--}}
-                        {{--results: data.users--}}
-                    {{--}--}}
-                {{--},--}}
-                {{--cache: true--}}
-            {{--}--}}
-        {{--});--}}
-
-
-    {{--</script>--}}
-    {{--@endsection--}}
-
-
-
 @section('after-footer-script')
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
