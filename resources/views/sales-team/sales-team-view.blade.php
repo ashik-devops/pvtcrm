@@ -31,10 +31,9 @@
 
 
                                     <div class="user-info">
-                                        {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                         <ul class="meta list list-unstyled">
                                             <li class="name"><h3>{{$salesTeam->name}}
-                                                    <a href="javascript:editName();"><i class="glyphicon glyphicon-edit" style="font-size: 12px;"></i></a>
+                                                    <a href="javascript:editSalesTeamName();"><i class="glyphicon glyphicon-edit" style="font-size: 12px;"></i></a>
 
 
                                                 </h3>
@@ -118,7 +117,8 @@
                                                         @if(!is_null($member->profile->secondary_phone_no))
                                                             <li class="phone"><a href="tel:{{$member->profile->secondary_phone_no}}">{{$member->profile->secondary_phone_no}}</a></li>
                                                         @endif
-                                                        <li class="action"><button class="btn btn-warning" role="button" onclick="changeManager( {{ $salesTeam->id }}, {{$member->id}} )">Make Manager</button></li>
+                                                        <li class="action"><button class="btn btn-warning" role="button" onclick="changeManager( {{ $salesTeam->id }}, {{$member->id}} )">Make Manager</button>
+                                                       <button class="btn btn-danger" role="button" onclick="removeMember( {{ $salesTeam->id }}, {{$member->id}} )">Remove Member</button></li>
                                                     </ul>
 
                                                 </div>
@@ -148,7 +148,7 @@
 
 @section('modal')
     <!-- Modal for creating customer -->
-    <div class="modal customerModal" id="sales-team-member-modal" role="dialog" aria-labelledby="sales-team-modal">
+    <div class="modal customerModal" id="sales-team-member-modal" role="dialog" aria-labelledby="sales-team-member-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -165,7 +165,7 @@
 
 
 
-    <div class="modal customerModal" id="#sales-team-name-modal" role="dialog" aria-labelledby="sales-team-modal">
+    <div class="modal customerModal" id="#sales-team-name-modal" role="dialog" aria-labelledby="#sales-team-name-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -292,6 +292,86 @@
                 });
         }
 
+
+
+
+
+
+
+
+
+        function removeMember(teamid, userid){
+            swal({
+                    title: "Are you sure?",
+                    text: "Member of this team will be removed",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var request = jQuery.ajax({
+                            url: "{{ route("sales-team-remove-member") }}",
+                            data: {salesTeamId: teamid, userId: userid},
+                            method: "GET",
+                            dataType: 'json'
+                        });
+
+                        request.done(function (response) {
+                            if (response.result == 'Success') {
+                                swal('Successful',response.message, 'success', function () {
+                                    window.location.reload();
+                                });
+
+                                swal({
+                                    title: 'Successful',
+                                    text: response.message,
+                                    type: 'success',
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.message('Failed',response.message, 'error');
+
+                            }
+                        })
+
+                        request.fail(function (jqXHT, textStatus) {
+                            $.notify(textStatus, "error");
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         jQuery("#sales-team-member-modal").on('hidden.bs.modal', function(){
             reset_form(jQuery("#sales-teamForm")[0]);
         });
@@ -305,9 +385,9 @@
 
         }
 
-        function editName(){
+        function editSalesTeamName(){
             console.log("Launching....");
-            jQuery("#sales-team-name-modal").modal('show');
+            jQuery("#sales-team-name-modal").show('show');
         }
 
     </script>
