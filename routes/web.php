@@ -39,8 +39,9 @@ Route::post('ajax/user/group/update', 'UserGroupController@update')->name('user-
 Route::post('ajax/user/group/edit', 'UserGroupController@edit')->name('user-group-edit');
 Route::get('ajax/user/group/delete', 'UserGroupController@delete')->name('user-group-delete');
 Route::get('ajax/user/group/', 'UserGroupController@getUserGroupAjax')->name('single-user-group.data');
-Route::get('ajax/user/group/user-remove', 'UserGroupController@removeUserAjax')->name('user-group-remove-user');
+Route::post('ajax/user/group/user-remove', 'UserGroupController@removeUserAjax')->name('user-group-remove-user');
 Route::get('/ajax/user/get-user-options', 'UsersController@getUserOptions')->name('get-user-options')->middleware('can:index,App\User');
+Route::post('ajax/user/group/name-change', 'UserGroupController@changeNameAjax')->name('user-group-name-change');
 
 
 
@@ -92,6 +93,7 @@ Route::get('/ajax/sales-team', 'SalesTeamsController@getSalesTeamAjax')->name('s
 Route::post('/ajax/sales-team/change/manager', 'SalesTeamsController@changeManagerAjax')->name('sales-team-change-manager');
 Route::post('/ajax/sales-team/change/member', 'SalesTeamsController@removeMemberAjax')->name('sales-team-remove-member');
 Route::post('/ajax/sales-team/change/name', 'SalesTeamsController@changeNameAjax')->name('sales-team-name-change');
+Route::post('/ajax/sales-team/change/new-member', 'SalesTeamsController@newMemberAjax')->name('sales-team-new-member');
 
 
 

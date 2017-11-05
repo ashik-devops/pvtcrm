@@ -181,6 +181,40 @@ class UserGroupController extends Controller
 
 
 
+
+    public function changeNameAjax(Request $request){
+        $response_msg=[
+            'result'=>'error',
+            'message'=>'Failed to update team name.'
+        ];
+        $data =$this->validate($request, [
+            'userGroupId'=>'required|int|exists:user_groups,id',
+            'userGroupName'=>'required|string',
+        ]);
+
+        $team= UserGroup::find($data['userGroupId']);
+        $team->name= $data['userGroupName'];
+        DB::beginTransaction();
+
+        $team->save();
+
+        $response_msg=[
+            'result'=>'Success',
+            'message'=>'Team name has been updated successfully.'
+        ];
+
+        DB::commit();
+
+        return response()->json($response_msg,200);
+
+
+    }
+
+
+
+
+
+
     public function removeUserAjax(Request $request){
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id',

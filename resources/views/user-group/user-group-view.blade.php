@@ -109,7 +109,9 @@ echo "hello";
 
 
 
-    <div class="modal customerModal" id="#user-group-name-modal" role="dialog" aria-labelledby="#user-group-name-modal">
+
+
+    <div class="modal customerModal" id="user-group-name-modal" role="dialog" aria-labelledby="user-group-name-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -117,8 +119,21 @@ echo "hello";
                     <h4 class="modal-title" id="modal-new-sales-team-label">Edit Name</h4>
                 </div>
                 <div class="modal-body">
-                    <input type="text" name="team-name" value="{{$userGroup->name}}" required>
 
+                    <form method="post" class="ajax-from"  data-parsley-validate id="user-group-edit-name-form">
+                        {{ csrf_field() }}
+                        <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
+                            <label class="sr-only">User</label>
+                            <input id="userGroupName" type="text" name="name" class="form-control" placeholder="Name" data-parsley-trigger="change focusout" data-parsley-required-message="Name is required" required value="{{old('name', $userGroup->name)}}">
+                        </div>
+
+
+                        <div class="form-group margin-top-md center-block text-center">
+                            <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="submit" id="user_group_name_form_submit"  class="btn btn-success">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -143,6 +158,66 @@ echo "hello";
 
 
 
+
+        jQuery("#user-group-edit-name-form").submit(function(e){
+            e.preventDefault();
+            swal({
+                    title: "Are you sure?",
+                    text: "Name of this group will be changed",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var request = jQuery.ajax({
+                            url: "{{ route("user-group-name-change") }}",
+                            data: {'_token': $('input[name="_token"]').val().trim() ,userGroupId: '{{$userGroup->id}}', userGroupName: jQuery("input#userGroupName").val().trim() },
+                            method: "POST",
+                            dataType: 'json'
+                        });
+
+                        request.done(function (response) {
+                            if (response.result == 'Success') {
+                                swal('Successful',response.message, 'success', function () {
+                                    window.location.reload();
+                                });
+
+                                swal({
+                                    title: 'Successful',
+                                    text: response.message,
+                                    type: 'success',
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.message('Failed',response.message, 'error');
+
+                            }
+                        })
+
+                        request.fail(function (jqXHT, textStatus) {
+                            $.notify(textStatus, "error");
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        })
+
+
+
+
+
+
         function removeUser(groupid, userid){
             swal({
                     title: "Are you sure?",
@@ -159,8 +234,8 @@ echo "hello";
                     if (isConfirm) {
                         var request = jQuery.ajax({
                             url: "{{ route("user-group-remove-user") }}",
-                            data: {groupId: groupid, userId: userid},
-                            method: "GET",
+                            data: {'_token': $('input[name="_token"]').val().trim(), groupId: groupid, userId: userid},
+                            method: "POST",
                             dataType: 'json'
                         });
 
@@ -200,7 +275,11 @@ echo "hello";
 
 
         function editUserGroupName(){
-            jQuery("##user-group-name-modal").show('show');
+            if(jQuery('input#userGroupName').val().trim().length == 0){
+                jQuery('input#userGroupName').val("{{$userGroup->name}}").trigger('change');
+            }
+
+            jQuery("#user-group-name-modal").modal('show');
         }
 
 

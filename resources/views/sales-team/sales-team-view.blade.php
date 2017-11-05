@@ -234,6 +234,61 @@
 
 
 
+        jQuery("#sales-add-member-form").submit(function (e) {
+            e.preventDefault();
+            swal({
+                    title: "Are you sure?",
+                    text: "Member of this team will be changed",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var request = jQuery.ajax({
+                            url: "{{ route("sales-team-new-member") }}",
+                            data: {'_token': $('input[name="_token"]').val().trim() ,salesTeamId: '{{$salesTeam->id}}', userId: jQuery("input#sales-teamMembers").val() },
+                            method: "POST",
+                            dataType: 'json'
+                        });
+
+                        request.done(function (response) {
+                            if (response.result == 'Success') {
+                                swal('Successful',response.message, 'success', function () {
+                                    window.location.reload();
+                                });
+
+                                swal({
+                                    title: 'Successful',
+                                    text: response.message,
+                                    type: 'success',
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.message('Failed',response.message, 'error');
+
+                            }
+                        })
+
+                        request.fail(function (jqXHT, textStatus) {
+                            $.notify(textStatus, "error");
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        })
+
+
 
 
 
@@ -241,7 +296,7 @@
             e.preventDefault();
             swal({
                     title: "Are you sure?",
-                    text: "Manager of this team will be changed",
+                    text: "Name of this team will be changed",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -308,7 +363,7 @@
                     if (isConfirm) {
                         var request = jQuery.ajax({
                             url: "{{ route("sales-team-change-manager") }}",
-                            data: {salesTeamId: teamid, userId: userid},
+                            data: {'_token': $('input[name="_token"]').val().trim(),salesTeamId: teamid, userId: userid},
                             method: "POST",
                             dataType: 'json'
                         });
@@ -369,7 +424,7 @@
                     if (isConfirm) {
                         var request = jQuery.ajax({
                             url: "{{ route("sales-team-remove-member") }}",
-                            data: {salesTeamId: teamid, userId: userid},
+                            data: {'_token': $('input[name="_token"]').val().trim(),salesTeamId: teamid, userId: userid},
                             method: "POST",
                             dataType: 'json'
                         });
@@ -418,6 +473,22 @@
             jQuery("#"+inputMap.salesTeamId).val('');
 
         }
+
+
+
+        jQuery("#sales-team-member-modal").on('hidden.bs.modal', function(){
+            reset_form(jQuery("#sales-add-member-form")[0]);
+        });
+
+        function reset_form(el) {
+            el.reset();
+//            member_select.val(null).trigger('change.select2');
+//            manager_select.val(null).trigger('change.select2');
+            jQuery("#"+inputMap.salesTeamId).val('');
+
+        }
+
+
 
         function editSalesTeamName(){
             if(jQuery('input#sales-teamName').val().trim().length == 0){

@@ -240,6 +240,34 @@ class SalesTeamsController extends Controller
 
 
 
+
+    public function newMemberAjax(Request $request){
+        $data =$this->validate($request, [
+            'salesTeamId'=>'required|int|exists:sales_teams,id',
+            'userId'=>'required|int|exists:users,id'
+        ]);
+
+        $team= SalesTeam::find($data['salesTeamId']);
+        $user = User::find($data['userId']);
+        DB::beginTransaction();
+        $team->members()->attach([$user->id]);
+
+//            $team->delete();
+        $team->save();
+        DB::commit();
+
+        return response()->json([
+            'result'=>'Success',
+            'message'=>'Member has been added successfully.'
+        ],200);
+
+    }
+
+
+
+
+
+
         public function changeNameAjax(Request $request){
             $response_msg=[
                 'result'=>'error',
