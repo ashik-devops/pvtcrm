@@ -241,28 +241,29 @@ class SalesTeamsController extends Controller
 
 
         public function changeNameAjax(Request $request){
-
+            $response_msg=[
+                'result'=>'error',
+                'message'=>'Failed to update team name.'
+            ];
             $data =$this->validate($request, [
-                'salesTeamId'=>'required|int|exists:sales_teams,id'
+                'salesTeamId'=>'required|int|exists:sales_teams,id',
+                'salesTeamName'=>'required|string',
             ]);
 
             $team= SalesTeam::find($data['salesTeamId']);
-//            $name= SalesTeam::find($data['salesTeamName']);
-
-            $current_name=$team->name->map(function ($name){
-                return $name;});
-
+            $team->name= $data['salesTeamName'];
             DB::beginTransaction();
-            $team->detach($current_name);
-            $team->attach($current_name);
 
-//            $team->delete();
+            $team->save();
+
+            $response_msg=[
+                'result'=>'Success',
+                'message'=>'Team name has been updated successfully.'
+            ];
+
             DB::commit();
 
-            return response()->json([
-                'result'=>'Success',
-                'message'=>'Name has been change successfully.'
-            ],200);
+            return response()->json($response_msg,200);
 
 
         }

@@ -198,7 +198,7 @@
                         <div class="form-group margin-top-md center-block text-center">
                             <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
                             <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
-                            <button type="submit" id="sales_team_member_form_submit" onclick="newName( {{ $salesTeam->id }}, {{$salesTeam->name}} )"  class="btn btn-success">Save</button>
+                            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Save</button>
                         </div>
                     </form>
                 </div>
@@ -237,8 +237,8 @@
 
 
 
-        function newName(teamid,teamname) {
-
+        jQuery("#sales-team-edit-name-form").submit(function(e){
+            e.preventDefault();
             swal({
                     title: "Are you sure?",
                     text: "Manager of this team will be changed",
@@ -254,7 +254,7 @@
                     if (isConfirm) {
                         var request = jQuery.ajax({
                             url: "{{ route("sales-team-name-change") }}",
-                            data: {salesTeamId: teamid, salesTeamName: teamname},
+                            data: {'_token': $('input[name="_token"]').val().trim() ,salesTeamId: '{{$salesTeam->id}}', salesTeamName: jQuery("input#sales-teamName").val().trim() },
                             method: "POST",
                             dataType: 'json'
                         });
@@ -289,7 +289,7 @@
                         swal("Cancelled", "Cancelled", "error");
                     }
                 });
-        }
+        })
 
 
         function changeManager(teamid, userid){
@@ -405,24 +405,6 @@
                     }
                 });
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         jQuery("#sales-team-member-modal").on('hidden.bs.modal', function(){

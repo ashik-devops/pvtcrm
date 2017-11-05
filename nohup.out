@@ -1,0 +1,78 @@
+==> default: Doing an initial rsync...
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Watching: /Users/rode/PhpstormProjects/pvtcrm
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
+==> default: Rsyncing folder: /Users/rode/PhpstormProjects/pvtcrm/ => /var/www/html
+==> default:   - Exclude: [".vagrant/", ".git/", ".idea", ".vagrant", "Vagrantfile", "public/storage", "storage/logs", "storage/framework"]
