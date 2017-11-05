@@ -89,9 +89,9 @@ Route::post('/sales-team/delete', 'SalesTeamsController@delete')->name('delete.s
 Route::get('/sales-team/view/{team}', 'SalesTeamsController@view')->name('view-sales-team');
 Route::get('/ajax/sales-teams', 'SalesTeamsController@getSalesTeamsAjax')->name('sales-teams-data');
 Route::get('/ajax/sales-team', 'SalesTeamsController@getSalesTeamAjax')->name('sales-team-data');
-Route::get('/ajax/sales-team/change/manager', 'SalesTeamsController@changeManagerAjax')->name('sales-team-change-manager');
-Route::get('/ajax/sales-team/change/member', 'SalesTeamsController@removeMemberAjax')->name('sales-team-remove-member');
-
+Route::post('/ajax/sales-team/change/manager', 'SalesTeamsController@changeManagerAjax')->name('sales-team-change-manager');
+Route::post('/ajax/sales-team/change/member', 'SalesTeamsController@removeMemberAjax')->name('sales-team-remove-member');
+Route::post('/ajax/sales-team/change/name', 'SalesTeamsController@changeNameAjax')->name('sales-team-name-change');
 
 
 

@@ -238,6 +238,36 @@ class SalesTeamsController extends Controller
 
         }
 
+
+
+        public function changeNameAjax(Request $request){
+
+            $data =$this->validate($request, [
+                'salesTeamId'=>'required|int|exists:sales_teams,id'
+            ]);
+
+            $team= SalesTeam::find($data['salesTeamId']);
+//            $name= SalesTeam::find($data['salesTeamName']);
+
+            $current_name=$team->name->map(function ($name){
+                return $name;});
+
+            DB::beginTransaction();
+            $team->detach($current_name);
+            $team->attach($current_name);
+
+//            $team->delete();
+            DB::commit();
+
+            return response()->json([
+                'result'=>'Success',
+                'message'=>'Name has been change successfully.'
+            ],200);
+
+
+        }
+
+
     public function view(SalesTeam $team){
 //        $this->authorize('view', $userGgroup);
 

@@ -169,7 +169,7 @@
                         <div class="form-group margin-top-md center-block text-center">
                             <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
                             <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
-                            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Create</button>
+                            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Add</button>
                         </div>
                     </form>
 
@@ -183,7 +183,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-sales-team-label">Add New Members</h4>
+                    <h4 class="modal-title" id="modal-new-sales-team-label">Edit Name</h4>
                 </div>
                 <div class="modal-body">
 
@@ -198,7 +198,7 @@
                         <div class="form-group margin-top-md center-block text-center">
                             <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
                             <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
-                            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Create</button>
+                            <button type="submit" id="sales_team_member_form_submit" onclick="newName( {{ $salesTeam->id }}, {{$salesTeam->name}} )"  class="btn btn-success">Save</button>
                         </div>
                     </form>
                 </div>
@@ -237,7 +237,59 @@
 
 
 
+        function newName(teamid,teamname) {
 
+            swal({
+                    title: "Are you sure?",
+                    text: "Manager of this team will be changed",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+                        var request = jQuery.ajax({
+                            url: "{{ route("sales-team-name-change") }}",
+                            data: {salesTeamId: teamid, salesTeamName: teamname},
+                            method: "POST",
+                            dataType: 'json'
+                        });
+
+                        request.done(function (response) {
+                            if (response.result == 'Success') {
+                                swal('Successful',response.message, 'success', function () {
+                                    window.location.reload();
+                                });
+
+                                swal({
+                                    title: 'Successful',
+                                    text: response.message,
+                                    type: 'success',
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.message('Failed',response.message, 'error');
+
+                            }
+                        })
+
+                        request.fail(function (jqXHT, textStatus) {
+                            $.notify(textStatus, "error");
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        }
 
 
         function changeManager(teamid, userid){
@@ -257,7 +309,7 @@
                         var request = jQuery.ajax({
                             url: "{{ route("sales-team-change-manager") }}",
                             data: {salesTeamId: teamid, userId: userid},
-                            method: "GET",
+                            method: "POST",
                             dataType: 'json'
                         });
 
@@ -318,7 +370,7 @@
                         var request = jQuery.ajax({
                             url: "{{ route("sales-team-remove-member") }}",
                             data: {salesTeamId: teamid, userId: userid},
-                            method: "GET",
+                            method: "POST",
                             dataType: 'json'
                         });
 
