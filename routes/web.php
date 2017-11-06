@@ -85,9 +85,9 @@ Route::post('/appointment/close', 'AppointmentsController@closeAppointment')->na
 Route::get('/sales-teams', 'SalesTeamsController@index')->name('sales-team-index')->middleware('can:index, App\SalesTeam');
 //Route::get('/sales-teams-options', 'UsersControllerntroller@listAll')->name('get-sales-team-options');
 Route::post('/ajax/sales-team/create', 'SalesTeamsController@create')->name('create.sales.team')->middleware('can:create, App\SalesTeam');
-Route::get('/ajax/sales-team/edit', 'SalesTeamsController@edit')->name('edit.sales.team.data');
-Route::post('/ajax/sales-team/update', 'SalesTeamsController@update')->name('update.sales.team.data');
-Route::post('/ajax/sales-team/delete', 'SalesTeamsController@delete')->name('delete.sales.team');
+Route::get('/ajax/sales-team/edit', 'SalesTeamsController@edit')->name('edit.sales.team.data')->middleware('can:edit, App\SalesTeam');
+Route::post('/ajax/sales-team/update', 'SalesTeamsController@update')->name('update.sales.team.data')->middleware('can:update, App\SalesTeam');
+Route::post('/ajax/sales-team/delete', 'SalesTeamsController@delete')->name('delete.sales.team')->middleware('can:delete, App\SalesTeam');
 Route::get('/sales-team/view/{team}', 'SalesTeamsController@view')->name('view-sales-team')->middleware('can:view,team');
 Route::get('/ajax/sales-teams', 'SalesTeamsController@getSalesTeamsAjax')->name('sales-teams-data');
 Route::get('/ajax/sales-team', 'SalesTeamsController@getSalesTeamAjax')->name('sales-team-data');
