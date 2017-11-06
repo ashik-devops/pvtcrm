@@ -22,11 +22,11 @@
     <div id="content-wrapper" class="content-wrapper view">
         <div class="container-fluid">
             <h2 class="view-title">Sales Teams</h2>
-
+@can('create', \App\SalesTeam::class)
                 <div class="actions">
                     <button id="new-task-btn" class="btn btn-success" data-toggle="modal" data-target="#sales-team-modal"><i class="fa fa-plus"></i> New Sales Team</button>
                 </div>
-
+@endcan
             <div id="masonry" class="row">
                 <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <section class="module module-headings">

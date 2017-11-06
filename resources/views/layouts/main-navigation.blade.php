@@ -79,7 +79,7 @@
                 <li class="{{Nav::isRoute('sales-team-index',"active")}}">
                     <a href="{{route('sales-team-index')}}">
                         <span aria-hidden="true" class="fa fa-users"></span>
-                        <span class="nav-label">Activity Log</span>
+                        <span class="nav-label">Sales Teams</span>
                     </a>
                 </li>
 

@@ -30,20 +30,22 @@
                             <div class="side-bar">
 
 
-                                    <div class="user-info">
-                                        <ul class="meta list list-unstyled">
+                                <div class="user-info">
+                                    <ul class="meta list list-unstyled">
 
-                                            <li class="name"><h3>{{$salesTeam->name}}
+                                        <li class="name"><h3>{{$salesTeam->name}}
+                                                @can('update', $salesTeam)
                                                     <a href="javascript:editSalesTeamName();"><i class="glyphicon glyphicon-edit" style="font-size: 12px;"></i></a>
-                                                </h3>
+                                                @endcan
+                                            </h3>
 
-                                            @foreach($salesTeam->managers as $manager)
-                                                <li class="name"><h5>{{$manager->name}}</h5>
-                                                    @endforeach
+                                        @foreach($salesTeam->managers as $manager)
+                                            <li class="name"><h5>{{$manager->name}}</h5>
+                                        @endforeach
 
 
-                                        </ul>
-                                    </div>
+                                    </ul>
+                                </div>
 
 
 
@@ -69,12 +71,9 @@
                                         </div>
                                         <div class="panel-body">
 
-
                                             @foreach($salesTeam->managers as $manager)
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
                                                     {{--{{$member->name}}--}}
-
-
                                                     <a class="profile-img" href="{{route('profile-view', [$manager->id])}}">
                                                         @if(!is_null($manager->profile->profile_pic) && file_exists('storage/'.$manager->profile->profile_pic))
                                                             <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$manager->profile->profile_pic)}}"/>
@@ -92,14 +91,11 @@
                                                             <li class="phone"><a href="tel:{{$manager->profile->secondary_phone_no}}">{{$manager->profile->secondary_phone_no}}</a></li>
                                                         @endif
                                                     </ul>
-
                                                 </div>
                                             @endforeach
                                             @foreach($salesTeam->members as $member)
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
                                                     {{--{{$member->name}}--}}
-
-
                                                     <a class="profile-img" href="{{route('profile-view', [$member->id])}}">
                                                         @if(!is_null($member->profile->profile_pic) && file_exists('storage/'.$member->profile->profile_pic))
                                                             <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$member->profile->profile_pic)}}"/>
@@ -116,20 +112,22 @@
                                                         @if(!is_null($member->profile->secondary_phone_no))
                                                             <li class="phone"><a href="tel:{{$member->profile->secondary_phone_no}}">{{$member->profile->secondary_phone_no}}</a></li>
                                                         @endif
-                                                        <li class="action"><button class="btn btn-warning" role="button" onclick="changeManager( {{ $salesTeam->id }}, {{$member->id}} )">Make Manager</button>
-                                                       <button class="btn btn-danger" role="button" onclick="removeMember( {{ $salesTeam->id }}, {{$member->id}} )">Remove Member</button></li>
+                                                        @can('update',$salesTeam) <li class="action"><button class="btn btn-warning" role="button" onclick="changeManager( {{ $salesTeam->id }}, {{$member->id}} )">Make Manager</button>
+                                                            <button class="btn btn-danger" role="button" onclick="removeMember( {{ $salesTeam->id }}, {{$member->id}} )">Remove Member</button></li>
+                                                        @endcan
                                                     </ul>
-
                                                 </div>
                                             @endforeach
 
+                                            @can('update',$salesTeam)
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
+
                                                     <button type="button" class="btn btn-default add-button" data-toggle="modal" data-target="#sales-team-member-modal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button><br>
                                                     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sales-team-member-modal">Add Member</button></li>
                                                 </div>
+                                            @endcan
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
@@ -147,7 +145,8 @@
 
 @section('modal')
     <!-- Modal for creating customer -->
-    <div class="modal customerModal" id="sales-team-member-modal" role="dialog" aria-labelledby="sales-team-member-modal">
+    @can('update',$salesTeam)
+        <div class="modal customerModal" id="sales-team-member-modal" role="dialog" aria-labelledby="sales-team-member-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -205,12 +204,7 @@
             </div>
         </div>
     </div>
-
-
-
-
-
-
+@endcan
 @endsection
 
 
@@ -221,18 +215,18 @@
 
 
 @section('after-footer-script')
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    {{--<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
     {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
-    <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
-    <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
-    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
-    <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
+    {{--<script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>--}}
+    {{--<script src="{{asset('storage/assets/js/moment.min.js')}}"></script>--}}
+{{--    <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>--}}
+    {{--<script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>--}}
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
 
 
-
+@can('update', $salesTeam)
 
         jQuery("#sales-add-member-form").submit(function (e) {
             e.preventDefault();
@@ -509,4 +503,5 @@
     </script>
 
     @yield('sales-team-form-scripts')
+    @endcan
 @endsection
