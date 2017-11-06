@@ -40,7 +40,7 @@ class SalesTeamPolicy
             return true;
         }
 
-        return $user->id === $team->user->id || $this->checkAccess($user, ['*', 'team'], ['*','view']);
+        return $team->members()->where('user_id', '=', 5)->count() > 0||$team->managers()->where('user_id', '=', 5)->count() > 0 || $this->checkAccess($user, ['*', 'team'], ['*','view']);
 
     }
 
@@ -76,7 +76,7 @@ class SalesTeamPolicy
         }
 
 
-        return $user->id === $team->user->id || $this->checkAccess($user, ['*', 'team'], ['*','edit']);
+        return $this->checkAccess($user, ['*', 'team'], ['*','edit']);
 
     }
 
@@ -94,7 +94,7 @@ class SalesTeamPolicy
         }
 
 
-        return $user->id === $team->user->id || $this->checkAccess($user, ['*', 'team'], ['*','delete']);
+        return $this->checkAccess($user, ['*', 'team'], ['*','delete']);
 
     }
 }

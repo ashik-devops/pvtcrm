@@ -63,7 +63,7 @@ class User extends Authenticatable
     public function groups():BelongsToMany{
         return $this->belongsToMany('App\UserGroup', 'group_users', 'user_id', 'group_id');
     }
-    public function salesTeam():BelongsToMany{
+    public function salesTeams():BelongsToMany{
         return $this->belongsToMany('App\SalesTeam', 'sales_teams_users', 'user_id', 'sales_team_id');
     }
 
@@ -86,10 +86,7 @@ class User extends Authenticatable
                 })->first());
     }
 
-    public function salesTeams() : BelongsToMany
-    {
-        return $this->belongsToMany('App\Sales_team', 'sales_teams_users');
-    }
+
     public function getLink(): string
     {
         if($this->id > 0){

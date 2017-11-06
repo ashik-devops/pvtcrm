@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -57,14 +58,25 @@ class SalesTeamsController extends Controller
     }
 
     public function getSalesTeamsAjax(){
+        $teams=Auth::user()->salesTeams;
+        if(Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()){
+            $teams=SalesTeam::all();
+        }
 
-        return DataTables::of(SalesTeam::all())
+        return DataTables::of($teams)
             ->addColumn('action',
                 function ($team){
-                    return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editSalesTeam('.$team->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteSalesTeam('.$team->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  href="'.route('view-sales-team',['team'=>$team->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                $buttons = '';
+                    if(Auth::user()->can('update', $team)){
+                        $buttons.='<a  class="btn btn-xs btn-primary"  onClick="editSalesTeam('.$team->id.')"><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                    }
+                    if(Auth::user()->can('delete', $team)){
+                        $buttons.='<a  class="btn btn-xs btn-danger"  onClick="deleteSalesTeam('.$team->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+                    }
+                    if(Auth::user()->can('view', $team)) {
+                        $buttons .= '<a class="btn btn-xs btn-primary"  href="' . route('view-sales-team', ['team' => $team->id]) . '"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                    }
+                    return $buttons;
                 })
 
             ->addColumn('name',
