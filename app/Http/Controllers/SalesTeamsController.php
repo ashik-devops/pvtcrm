@@ -26,9 +26,10 @@ class SalesTeamsController extends Controller
         $this->middleware('auth');
     }
 
-
     protected function validator(array $data, $isUpdateRequest=false)
     {
+
+
         $rules=[
             'salesTeamName' => 'required|string',
             'salesTeamMembers' =>'array|exists:users,id',
@@ -124,6 +125,8 @@ class SalesTeamsController extends Controller
         ];
 
         $team = SalesTeam::find($request->salesTeam['salesTeamId']);
+        $this->authorize('update', $team);
+
         $team->name = $request->salesTeam['salesTeamName'];
 
         $current_members=$team->members->map(function ($member){
@@ -203,6 +206,8 @@ class SalesTeamsController extends Controller
         ]);
 
         $team= SalesTeam::find($data['salesTeamId']);
+        $this->authorize('delete', $team);
+
         DB::beginTransaction();
         $team->members()->detach();
         $team->managers()->detach();
@@ -213,9 +218,6 @@ class SalesTeamsController extends Controller
             'result'=>'Success',
             'message'=>'user Group has been deleted successfully.'
         ],200);    }
-
-
-
 
         public function removeMemberAjax(Request $request){
             $data =$this->validate($request, [
@@ -237,9 +239,6 @@ class SalesTeamsController extends Controller
             ],200);
 
         }
-
-
-
 
     public function newMemberAjax(Request $request){
         $data =$this->validate($request, [
@@ -299,7 +298,6 @@ class SalesTeamsController extends Controller
 
 
         }
-
 
     public function view(SalesTeam $team){
 //        $this->authorize('view', $userGgroup);

@@ -13,7 +13,9 @@ class PoliciesSeeder extends Seeder
     public function run()
     {
         $policies = [
-            '*'=>['create','view','list','edit','delete', '*'],
+            '*'=>[
+                'create','view','list','edit','delete', '*'
+            ],
             'user'=>[
                 'create','view','list','edit','delete', '*'
             ],
@@ -30,6 +32,9 @@ class PoliciesSeeder extends Seeder
                 'create','view','list','edit','delete','*'
             ],
             'account'=>[
+                'create','view','list','edit','delete','*'
+            ],
+            'group'=>[
                 'create','view','list','edit','delete','*'
             ]
 
