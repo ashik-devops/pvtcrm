@@ -244,13 +244,22 @@ class SalesTeamsController extends Controller
     public function newMemberAjax(Request $request){
         $data =$this->validate($request, [
             'salesTeamId'=>'required|int|exists:sales_teams,id',
-            'userId'=>'required|int|exists:users,id'
+            'userIds'=>'required|array|exists:users,id'
         ]);
 
         $team= SalesTeam::find($data['salesTeamId']);
-        $user = User::find($data['userId']);
+        $current_members=$team->members->map(function ($member){
+            return $member->id;
+        })->toArray();
+        $current_managers = $team->managers->map(function ($manager){
+            return $manager->id;
+        })->toArray();
+
+        $additions = array_diff($data['userIds'], $current_members, $current_managers);
+
+        $user = User::find($data['userIds']);
         DB::beginTransaction();
-        $team->members()->attach([$user->id]);
+        $team->members()->attach($additions, ['role'=>'MEMBER']);
 
 //            $team->delete();
         $team->save();
@@ -262,11 +271,6 @@ class SalesTeamsController extends Controller
         ],200);
 
     }
-
-
-
-
-
 
         public function changeNameAjax(Request $request){
             $response_msg=[

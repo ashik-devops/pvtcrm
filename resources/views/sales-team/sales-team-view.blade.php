@@ -249,9 +249,17 @@
                 },
                 function (isConfirm) {
                     if (isConfirm) {
+
+                        var data= {
+                            '_token': $('input[name="_token"]').val().trim() ,
+                            'salesTeamId': '{{$salesTeam->id}}',
+                            'userIds': jQuery("#sales-teamMembers").val() }
+
+                        console.log(data);
+
                         var request = jQuery.ajax({
                             url: "{{ route("sales-team-new-member") }}",
-                            data: {'_token': $('input[name="_token"]').val().trim() ,salesTeamId: '{{$salesTeam->id}}', userId: jQuery("input#sales-teamMembers").val() },
+                            data: data,
                             method: "POST",
                             dataType: 'json'
                         });
