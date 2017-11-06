@@ -213,6 +213,36 @@ class UserGroupController extends Controller
 
 
 
+    public function addMemberAjax(Request $request){
+        $data =$this->validate($request, [
+            'userGroupId'=>'required|int|exists:user_groups,id',
+            'userIds'=>'required|array|exists:users,id'
+        ]);
+
+        $group= UserGroup::find($data['userGroupId']);
+        $current_members=$group->members->map(function ($member){
+            return $member->id;
+        })->toArray();
+
+
+        $additions = array_diff($data['userIds'], $current_members);
+
+        $user = User::find($data['userIds']);
+        DB::beginTransaction();
+        $group->members()->attach($additions);
+
+//            $team->delete();
+        $group->save();
+        DB::commit();
+
+        return response()->json([
+            'result'=>'Success',
+            'message'=>'Member has been added successfully.'
+        ],200);
+
+    }
+
+
 
 
     public function removeUserAjax(Request $request){

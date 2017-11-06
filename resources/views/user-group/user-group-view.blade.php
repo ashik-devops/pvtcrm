@@ -71,8 +71,8 @@ echo "hello";
                                             @endforeach
 
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
-                                                    <button type="button" class="btn btn-default add-button" data-toggle="modal" data-target="#user-group-member-modal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
-
+                                                    <button type="button" class="btn btn-default add-button" data-toggle="modal" data-target="#user-group-member-modal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button><br>
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#user-group-member-modal">Add Member</button></li>
                                                 </div>
 
                                         </div>
@@ -101,7 +101,24 @@ echo "hello";
                     <h4 class="modal-title" id="modal-new-sales-team-label">Add New Members</h4>
                 </div>
                 <div class="modal-body">
-                    @yield('user-group-new-member')
+
+                    <form method="post" class="ajax-from"  data-parsley-validate id="user-group-member-form">
+                        {{ csrf_field() }}
+                        <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
+                            <label class="sr-only">User</label>
+                            <select name="userIds[]" id="userGroupMembers" class="form-control select2-selection--multiple" multiple style="width: 100%"  required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
+                            </select>
+
+                        </div>
+
+
+                        <div class="form-group margin-top-md center-block text-center">
+                            <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+                            <button type="submit" id="user_group_member_form_submit"  class="btn btn-success">Add</button>
+                        </div>
+                    </form>
+
                 </div>
             </div>
         </div>
@@ -154,6 +171,95 @@ echo "hello";
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
     <script type="text/javascript">
+
+
+
+
+
+        var user_select=jQuery("#userGroupMembers").select2({
+            placeholder: "Choose Members",
+            ajax: {
+                url: "{{route('get-user-options')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.users
+                    }
+                },
+                cache: true
+            }
+        });
+
+
+
+        jQuery("#user-group-member-form").submit(function (e) {
+            e.preventDefault();
+            swal({
+                    title: "Are you sure?",
+                    text: "Member of this group will be changed",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: "Yes",
+                    cancelButtonText: "No!",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function (isConfirm) {
+                    if (isConfirm) {
+
+                        var data= {
+                            '_token': $('input[name="_token"]').val().trim() ,
+                            'userGroupId': '{{$userGroup->id}}',
+                            'userIds': jQuery("#userGroupMembers").val() }
+
+                        console.log(data);
+
+                        var request = jQuery.ajax({
+                            url: "{{ route("user-group-new-member") }}",
+                            data: data,
+                            method: "POST",
+                            dataType: 'json'
+                        });
+
+                        request.done(function (response) {
+                            if (response.result == 'Success') {
+                                swal('Successful',response.message, 'success', function () {
+                                    window.location.reload();
+                                });
+
+                                swal({
+                                    title: 'Successful',
+                                    text: response.message,
+                                    type: 'success',
+                                }, function () {
+                                    window.location.reload();
+                                });
+                            }
+                            else {
+
+                                swal.message('Failed',response.message, 'error');
+
+                            }
+                        })
+
+                        request.fail(function (jqXHT, textStatus) {
+                            $.notify(textStatus, "error");
+                        });
+
+                    }
+                    else {
+                        swal("Cancelled", "Cancelled", "error");
+                    }
+                });
+        })
 
 
 
@@ -288,5 +394,5 @@ echo "hello";
 
     </script>
 
-    @yield('user-group-create-form')
+    @yield('group-form-scripts')
 @endsection

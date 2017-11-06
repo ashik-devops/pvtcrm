@@ -124,8 +124,8 @@
                                             @endforeach
 
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
-                                                    <button type="button" class="btn btn-default add-button" data-toggle="modal" data-target="#sales-team-member-modal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button>
-
+                                                    <button type="button" class="btn btn-default add-button" data-toggle="modal" data-target="#sales-team-member-modal"><i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i></button><br>
+                                                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#sales-team-member-modal">Add Member</button></li>
                                                 </div>
                                         </div>
                                     </div>

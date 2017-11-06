@@ -42,6 +42,7 @@ Route::get('ajax/user/group/', 'UserGroupController@getUserGroupAjax')->name('si
 Route::post('ajax/user/group/user-remove', 'UserGroupController@removeUserAjax')->name('user-group-remove-user');
 Route::get('/ajax/user/get-user-options', 'UsersController@getUserOptions')->name('get-user-options')->middleware('can:index,App\User');
 Route::post('ajax/user/group/name-change', 'UserGroupController@changeNameAjax')->name('user-group-name-change');
+Route::post('ajax/user/group/new-member', 'UserGroupController@addMemberAjax')->name('user-group-new-member');
 
 
 
