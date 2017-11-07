@@ -41,11 +41,11 @@ Route::post('ajax/user/group/update', 'UserGroupController@update')->name('user-
 Route::post('ajax/user/group/edit', 'UserGroupController@edit')->name('user-group-edit');
 Route::get('ajax/user/group/delete', 'UserGroupController@delete')->name('user-group-delete');
 Route::get('ajax/user/group/', 'UserGroupController@getUserGroupAjax')->name('single-user-group.data');
-Route::post('ajax/user/group/user-remove', 'UserGroupController@removeUserAjax')->name('user-group-remove-user');
+Route::post('ajax/user/group/{group}/remove/member', 'UserGroupController@removeUserAjax')->name('user-group-remove-user')->middleware('can:update,group');
 Route::get('/ajax/user/get-user-options', 'UsersController@getUserOptions')->name('get-user-options')->middleware('can:index,App\User');
-Route::post('ajax/user/group/name-change', 'UserGroupController@changeNameAjax')->name('user-group-name-change');
-Route::post('ajax/user/group/new-member', 'UserGroupController@addMemberAjax')->name('user-group-new-member');
-Route::get('ajax/user/group/{team}/users-options', 'UserGroupController@getUserGroupMemberOptions')->name('user-group-member-options');//->middleware('can:update,team');
+Route::post('ajax/user/group/{group}/update/name', 'UserGroupController@changeNameAjax')->name('user-group-name-change')->middleware('can:update,group');
+Route::post('ajax/user/group/{group}/add/member', 'UserGroupController@addMemberAjax')->name('user-group-new-member')->middleware('can:update,group');
+Route::get('ajax/user/group/{group}/users-options', 'UserGroupController@getUserGroupMemberOptions')->name('user-group-member-options')->middleware('can:update,group');
 
 Route::get('/customers', 'CustomersController@index')->name('customer-index')->middleware('can:index,App\Customer');
 Route::get('/ajax/customers/data', 'CustomersController@getCustomersAjax')->name('customers-data')->middleware('can:index,App\Customer');
@@ -92,11 +92,11 @@ Route::post('/ajax/sales-team/delete', 'SalesTeamsController@delete')->name('del
 Route::get('/sales-team/view/{team}', 'SalesTeamsController@view')->name('view-sales-team')->middleware('can:view,team');
 Route::get('/ajax/sales-teams', 'SalesTeamsController@getSalesTeamsAjax')->name('sales-teams-data');
 Route::get('/ajax/sales-team', 'SalesTeamsController@getSalesTeamAjax')->name('sales-team-data');
-Route::post('/ajax/sales-team/change/manager', 'SalesTeamsController@changeManagerAjax')->name('sales-team-change-manager');
-Route::post('/ajax/sales-team/change/member', 'SalesTeamsController@removeMemberAjax')->name('sales-team-remove-member');
-Route::post('/ajax/sales-team/change/name', 'SalesTeamsController@changeNameAjax')->name('sales-team-name-change');
-Route::post('/ajax/sales-team/change/new-member', 'SalesTeamsController@newMemberAjax')->name('sales-team-new-member');
-Route::get('/ajax/sales-team/{team}/users-options', 'SalesTeamsController@getSalesTeamMemberOptions')->name('sales-team-member-options');//->middleware('can:update,team');
+Route::post('/ajax/sales-team/{team}/change/manager', 'SalesTeamsController@changeManagerAjax')->name('sales-team-change-manager')->middleware('can:update,team');
+Route::post('/ajax/sales-team/{team}/remove/member', 'SalesTeamsController@removeMemberAjax')->name('sales-team-remove-member')->middleware('can:update,team');
+Route::post('/ajax/sales-team/{team}/change/name', 'SalesTeamsController@changeNameAjax')->name('sales-team-name-change')->middleware('can:update,team');
+Route::post('/ajax/sales-team/{team}/add-member/', 'SalesTeamsController@newMemberAjax')->name('sales-team-new-member')->middleware('can:update,team');
+Route::get('/ajax/sales-team/{team}/users-options', 'SalesTeamsController@getSalesTeamMemberOptions')->name('sales-team-member-options')->middleware('can:update,team');
 
 
 

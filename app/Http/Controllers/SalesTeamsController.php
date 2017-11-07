@@ -102,7 +102,6 @@ class SalesTeamsController extends Controller
 
 
     public function create(Request $request){
-        $this->authorize('create',SalesTeam::class);
         $this->validator($request->salesTeam)->validate();
 
         $result=[
@@ -129,7 +128,6 @@ class SalesTeamsController extends Controller
 
 
     public function update(Request $request){
-        $this->authorize('update',SalesTeam::class);
         $this->validator($request->salesTeam, true)->validate();
 
         $result=[
@@ -214,12 +212,12 @@ class SalesTeamsController extends Controller
     }
 
     public function delete(Request $request){
-        $this->authorize('delete',SalesTeam::class);
         $data =$this->validate($request, [
             'salesTeamId'=>'required|int|exists:sales_teams,id'
         ]);
 
         $team= SalesTeam::find($data['salesTeamId']);
+
         $this->authorize('delete', $team);
 
         DB::beginTransaction();
@@ -233,14 +231,11 @@ class SalesTeamsController extends Controller
             'message'=>'user Group has been deleted successfully.'
         ],200);    }
 
-        public function removeMemberAjax(Request $request){
-            $this->authorize('update',SalesTeam::class);
+        public function removeMemberAjax(Request $request, SalesTeam $team){
             $data =$this->validate($request, [
-                'salesTeamId'=>'required|int|exists:sales_teams,id',
                 'userId'=>'required|int|exists:users,id'
             ]);
 
-            $team= SalesTeam::find($data['salesTeamId']);
             $user = User::find($data['userId']);
             DB::beginTransaction();
             $team->members()->detach([$user->id]);
@@ -255,14 +250,12 @@ class SalesTeamsController extends Controller
 
         }
 
-    public function newMemberAjax(Request $request){
-        $this->authorize('update',SalesTeam::class);
+    public function newMemberAjax(Request $request, SalesTeam $team){
         $data =$this->validate($request, [
-            'salesTeamId'=>'required|int|exists:sales_teams,id',
             'userIds'=>'required|array|exists:users,id'
         ]);
 
-        $team= SalesTeam::find($data['salesTeamId']);
+
         $current_members=$team->members->map(function ($member){
             return $member->id;
         })->toArray();
@@ -287,18 +280,16 @@ class SalesTeamsController extends Controller
 
     }
 
-        public function changeNameAjax(Request $request){
-            $this->authorize('update',SalesTeam::class);
+        public function changeNameAjax(Request $request, SalesTeam $team){
             $response_msg=[
                 'result'=>'error',
                 'message'=>'Failed to update team name.'
             ];
             $data =$this->validate($request, [
-                'salesTeamId'=>'required|int|exists:sales_teams,id',
                 'salesTeamName'=>'required|string',
             ]);
 
-            $team= SalesTeam::find($data['salesTeamId']);
+
             $team->name= $data['salesTeamName'];
             DB::beginTransaction();
 
@@ -317,19 +308,16 @@ class SalesTeamsController extends Controller
         }
 
     public function view(SalesTeam $team){
-//        $this->authorize('view', $userGgroup);
 
         return view('sales-team.sales-team-view')->with(['salesTeam'=>$team]);
     }
 
-    public function changeManagerAjax(Request $request){
-        $this->authorize('update',SalesTeam::class);
+    public function changeManagerAjax(Request $request, SalesTeam $team){
         $data =$this->validate($request, [
-            'salesTeamId'=>'required|int|exists:sales_teams,id',
             'userId'=>'required|int|exists:users,id'
         ]);
 
-        $team= SalesTeam::find($data['salesTeamId']);
+
         $user = User::find($data['userId']);
         $response=[
             'result'=>'erorr',
@@ -373,7 +361,7 @@ class SalesTeamsController extends Controller
 
         return response()->json(['result'=>'Success','users'=>
             $users->get()->map(function($user){
-                return ['value'=>$user->id, 'text'=>$user->name];
+                return ['id'=>$user->id, 'text'=>$user->name];
             })
         ], 200);
     }

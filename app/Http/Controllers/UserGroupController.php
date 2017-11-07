@@ -56,7 +56,6 @@ class UserGroupController extends Controller
     }
 
     public function getUserGroupsAjax(){
-       // $this->authorize('create',UserGroup::class);
         $groups=Auth::user()->groups;
         if(Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()){
             $groups=UserGroup::all();
@@ -126,16 +125,13 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
-        $this->authorize('update',UserGroup::class);
         $this->validator($request->userGroup, true)->validate();
-
+        $userGroup = userGroup::find($request->userGroup['userGroupId']);
+        $this->authorize('update',$userGroup);
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
         ];
-
-        if($request->userGroup['userIds']){
-            $userGroup = userGroup::find($request->userGroup['userGroupId']);
             $userGroup->name = $request->userGroup['userGroupName'];
 
             $current_members=$userGroup->members->map(function ($member){
@@ -165,10 +161,6 @@ class UserGroupController extends Controller
             $result['result']='Saved';
             $result['message']='user group has been created Successfully.';
 
-        }
-        else{
-            $result['message']='Please add at least 1 member';
-        }
 
         return response()->json($result,200);
     }
@@ -199,22 +191,19 @@ class UserGroupController extends Controller
 
 
 
-    public function changeNameAjax(Request $request){
-        $this->authorize('update',UserGroup::class);
+    public function changeNameAjax(Request $request, UserGroup $group){
         $response_msg=[
             'result'=>'error',
             'message'=>'Failed to update team name.'
         ];
         $data =$this->validate($request, [
-            'userGroupId'=>'required|int|exists:user_groups,id',
             'userGroupName'=>'required|string',
         ]);
 
-        $team= UserGroup::find($data['userGroupId']);
-        $team->name= $data['userGroupName'];
+        $group->name= $data['userGroupName'];
         DB::beginTransaction();
 
-        $team->save();
+        $group->save();
 
         $response_msg=[
             'result'=>'Success',
@@ -230,9 +219,9 @@ class UserGroupController extends Controller
 
 
 
-    public function getUserGroupMemberOptions(Request $request, UserGroup $team){
+    public function getUserGroupMemberOptions(Request $request, UserGroup $group){
 
-        $members = $team->members->map(function($member){
+        $members = $group->members->map(function($member){
             return $member->id;
         })->toArray();
 
@@ -247,7 +236,7 @@ class UserGroupController extends Controller
 
         return response()->json(['result'=>'Success','users'=>
             $users->get()->map(function($user){
-                return ['value'=>$user->id, 'text'=>$user->name];
+                return ['id'=>$user->id, 'text'=>$user->name];
             })
         ], 200);
     }
@@ -255,14 +244,11 @@ class UserGroupController extends Controller
 
 
 
-    public function addMemberAjax(Request $request){
-        $this->authorize('update',UserGroup::class);
+    public function addMemberAjax(Request $request, UserGroup $group){
         $data =$this->validate($request, [
-            'userGroupId'=>'required|int|exists:user_groups,id',
             'userIds'=>'required|array|exists:users,id'
         ]);
 
-        $group= UserGroup::find($data['userGroupId']);
         $current_members=$group->members->map(function ($member){
             return $member->id;
         })->toArray();
@@ -274,7 +260,6 @@ class UserGroupController extends Controller
         DB::beginTransaction();
         $group->members()->attach($additions);
 
-//            $team->delete();
         $group->save();
         DB::commit();
 
@@ -288,14 +273,11 @@ class UserGroupController extends Controller
 
 
 
-    public function removeUserAjax(Request $request){
-        $this->authorize('update',UserGroup::class);
+    public function removeUserAjax(Request $request, UserGroup $group){
         $data =$this->validate($request, [
-            'groupId'=>'required|int|exists:user_groups,id',
             'userId'=>'required|int|exists:users,id'
         ]);
 
-        $group= UserGroup::find($data['groupId']);
         $user = User::find($data['userId']);
         DB::beginTransaction();
         $group->members()->detach([$user->id]);
@@ -314,12 +296,13 @@ class UserGroupController extends Controller
 
 
     public function delete(Request $request){
-        $this->authorize('delete',UserGroup::class);
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id'
         ]);
 
         $group= UserGroup::find($data['groupId']);
+        $this->authorize('delete',$group);
+
         DB::beginTransaction();
         $group->members()->detach();
         $group->delete();
@@ -331,7 +314,6 @@ class UserGroupController extends Controller
         ],200);    }
 
     public function view(UserGroup $group){
-//        $this->authorize('view', $userGgroup);
 
         return view('user-group.user-group-view')->with(['userGroup'=>$group]);
     }

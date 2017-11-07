@@ -217,13 +217,12 @@ echo "hello";
 
                         var data= {
                             '_token': $('input[name="_token"]').val().trim() ,
-                            'userGroupId': '{{$userGroup->id}}',
                             'userIds': jQuery("#userGroupMembers").val() }
 
                         console.log(data);
 
                         var request = jQuery.ajax({
-                            url: "{{ route("user-group-new-member") }}",
+                            url: "{{ route("user-group-new-member", ['group'=>$userGroup->id]) }}",
                             data: data,
                             method: "POST",
                             dataType: 'json'
@@ -281,8 +280,8 @@ echo "hello";
                 function (isConfirm) {
                     if (isConfirm) {
                         var request = jQuery.ajax({
-                            url: "{{ route("user-group-name-change") }}",
-                            data: {'_token': $('input[name="_token"]').val().trim() ,userGroupId: '{{$userGroup->id}}', userGroupName: jQuery("input#userGroupName").val().trim() },
+                            url: "{{ route("user-group-name-change", ['group'=>$userGroup->id]) }}",
+                            data: {'_token': $('input[name="_token"]').val().trim() , userGroupName: jQuery("input#userGroupName").val().trim() },
                             method: "POST",
                             dataType: 'json'
                         });
@@ -339,8 +338,8 @@ echo "hello";
                 function (isConfirm) {
                     if (isConfirm) {
                         var request = jQuery.ajax({
-                            url: "{{ route("user-group-remove-user") }}",
-                            data: {'_token': $('input[name="_token"]').val().trim(), groupId: groupid, userId: userid},
+                            url: "{{ route("user-group-remove-user", ['group'=>$userGroup->id]) }}",
+                            data: {'_token': $('input[name="_token"]').val().trim(), userId: userid},
                             method: "POST",
                             dataType: 'json'
                         });
@@ -394,5 +393,4 @@ echo "hello";
 
     </script>
 
-    @yield('group-form-scripts')
 @endsection

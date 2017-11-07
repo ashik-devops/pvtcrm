@@ -231,6 +231,27 @@
 
 @can('update', $salesTeam)
 
+        var member_select=jQuery("#sales-teamMembers").select2({
+                placeholder: "Choose Members",
+                ajax: {
+                    url: "{{route('sales-team-member-options', ['team'=>$salesTeam->id])}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                        };
+                    },
+                    processResults : function (data){
+
+                        return {
+                            results: data.users
+                        }
+                    },
+                    cache: true
+                }
+            });
+
         jQuery("#sales-add-member-form").submit(function (e) {
             e.preventDefault();
             swal({
@@ -249,13 +270,12 @@
 
                         var data= {
                             '_token': $('input[name="_token"]').val().trim() ,
-                            'salesTeamId': '{{$salesTeam->id}}',
                             'userIds': jQuery("#sales-teamMembers").val() }
 
                         console.log(data);
 
                         var request = jQuery.ajax({
-                            url: "{{ route("sales-team-new-member") }}",
+                            url: "{{ route("sales-team-new-member", ['team'=>$salesTeam->id]) }}",
                             data: data,
                             method: "POST",
                             dataType: 'json'
@@ -313,8 +333,8 @@
                 function (isConfirm) {
                     if (isConfirm) {
                         var request = jQuery.ajax({
-                            url: "{{ route("sales-team-name-change") }}",
-                            data: {'_token': $('input[name="_token"]').val().trim() ,salesTeamId: '{{$salesTeam->id}}', salesTeamName: jQuery("input#sales-teamName").val().trim() },
+                            url: "{{ route("sales-team-name-change", ['team'=>$salesTeam->id]) }}",
+                            data: {'_token': $('input[name="_token"]').val().trim() , salesTeamName: jQuery("input#sales-teamName").val().trim() },
                             method: "POST",
                             dataType: 'json'
                         });
@@ -367,8 +387,8 @@
                 function (isConfirm) {
                     if (isConfirm) {
                         var request = jQuery.ajax({
-                            url: "{{ route("sales-team-change-manager") }}",
-                            data: {'_token': $('input[name="_token"]').val().trim(),salesTeamId: teamid, userId: userid},
+                            url: "{{ route("sales-team-change-manager", ['team'=>$salesTeam->id]) }}",
+                            data: {'_token': $('input[name="_token"]').val().trim(), userId: userid},
                             method: "POST",
                             dataType: 'json'
                         });
@@ -405,14 +425,6 @@
                 });
         }
 
-
-
-
-
-
-
-
-
         function removeMember(teamid, userid){
             swal({
                     title: "Are you sure?",
@@ -428,8 +440,8 @@
                 function (isConfirm) {
                     if (isConfirm) {
                         var request = jQuery.ajax({
-                            url: "{{ route("sales-team-remove-member") }}",
-                            data: {'_token': $('input[name="_token"]').val().trim(),salesTeamId: teamid, userId: userid},
+                            url: "{{ route("sales-team-remove-member", ['team'=>$salesTeam->id]) }}",
+                            data: {'_token': $('input[name="_token"]').val().trim(),userId: userid},
                             method: "POST",
                             dataType: 'json'
                         });
@@ -505,6 +517,5 @@
 
     </script>
 
-    @yield('sales-team-form-scripts')
     @endcan
 @endsection
