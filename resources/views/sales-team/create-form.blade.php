@@ -114,6 +114,18 @@
             }
         });
 
+        jQuery("#sales-teamManager").change(function(){
+            var members=  jQuery("#sales-teamMembers").val();
+            if(members == null){
+                return;
+            }
+            var index=members.indexOf(jQuery(this).val());
+            if(index>-1){
+              members.splice(index, 1);
+            }
+            console.log(members);
+            jQuery("#sales-teamMembers").val(members).trigger('change');
+        });
 
         var member_select=jQuery("#sales-teamMembers").select2({
             placeholder: "Choose Members",
@@ -129,7 +141,12 @@
                 processResults : function (data){
 
                     return {
-                        results: data.users
+                        results: jQuery.map(data.users, function(user){
+                            if(jQuery("#sales-teamManager").val()==user.id){
+                                return null;
+                            }
+                            return user;
+                        })
                     }
                 },
                 cache: true
