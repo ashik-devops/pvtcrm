@@ -56,19 +56,31 @@ class UserGroupController extends Controller
     }
 
     public function getUserGroupsAjax(){
-
-        return DataTables::of(Index_usergroup::all())
+       // $this->authorize('create',UserGroup::class);
+        $groups=Auth::user()->groups;
+        if(Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()){
+            $groups=UserGroup::all();
+        }
+        return DataTables::of($groups)
             ->addColumn('action',
-                function ($userGroup){
-                    return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$userGroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$userGroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$userGroup->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                function ($group){
+                $buttons='';
+                    if(Auth::user()->can('update', $group)){
+                        $buttons.='<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$group->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                    }
+                    if(Auth::user()->can('delete', $group)){
+                        $buttons.='<a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$group->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+                    }
+                    if(Auth::user()->can('view', $group)) {
+                        $buttons .= '<a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$group->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                    }
+                    return $buttons;
+
                 })
 
             ->addColumn('name',
-                function ($userGroup){
-                    return $userGroup->name;
+                function ($group){
+                    return $group->name;
                 })
 
 
@@ -79,7 +91,7 @@ class UserGroupController extends Controller
 
 
     public function create(Request $request){
-//        $this->authorize('create',Appointment::class);
+        $this->authorize('create',UserGroup::class);
         $this->validator($request->userGroup)->validate();
 
         $result=[
@@ -111,6 +123,7 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
+        $this->authorize('update',UserGroup::class);
         $this->validator($request->userGroup, true)->validate();
 
         $result=[
@@ -184,6 +197,7 @@ class UserGroupController extends Controller
 
 
     public function changeNameAjax(Request $request){
+        $this->authorize('update',UserGroup::class);
         $response_msg=[
             'result'=>'error',
             'message'=>'Failed to update team name.'
@@ -215,6 +229,7 @@ class UserGroupController extends Controller
 
 
     public function addMemberAjax(Request $request){
+        $this->authorize('update',UserGroup::class);
         $data =$this->validate($request, [
             'userGroupId'=>'required|int|exists:user_groups,id',
             'userIds'=>'required|array|exists:users,id'
@@ -247,6 +262,7 @@ class UserGroupController extends Controller
 
 
     public function removeUserAjax(Request $request){
+        $this->authorize('update',UserGroup::class);
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id',
             'userId'=>'required|int|exists:users,id'
@@ -271,6 +287,7 @@ class UserGroupController extends Controller
 
 
     public function delete(Request $request){
+        $this->authorize('delete',UserGroup::class);
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id'
         ]);

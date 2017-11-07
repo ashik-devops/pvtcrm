@@ -102,7 +102,7 @@ class SalesTeamsController extends Controller
 
 
     public function create(Request $request){
-//        $this->authorize('create',Appointment::class);
+        $this->authorize('create',SalesTeam::class);
         $this->validator($request->salesTeam)->validate();
 
         $result=[
@@ -129,6 +129,7 @@ class SalesTeamsController extends Controller
 
 
     public function update(Request $request){
+        $this->authorize('update',SalesTeam::class);
         $this->validator($request->salesTeam, true)->validate();
 
         $result=[
@@ -213,6 +214,7 @@ class SalesTeamsController extends Controller
     }
 
     public function delete(Request $request){
+        $this->authorize('delete',SalesTeam::class);
         $data =$this->validate($request, [
             'salesTeamId'=>'required|int|exists:sales_teams,id'
         ]);
@@ -232,6 +234,7 @@ class SalesTeamsController extends Controller
         ],200);    }
 
         public function removeMemberAjax(Request $request){
+            $this->authorize('update',SalesTeam::class);
             $data =$this->validate($request, [
                 'salesTeamId'=>'required|int|exists:sales_teams,id',
                 'userId'=>'required|int|exists:users,id'
@@ -253,6 +256,7 @@ class SalesTeamsController extends Controller
         }
 
     public function newMemberAjax(Request $request){
+        $this->authorize('update',SalesTeam::class);
         $data =$this->validate($request, [
             'salesTeamId'=>'required|int|exists:sales_teams,id',
             'userIds'=>'required|array|exists:users,id'
@@ -284,6 +288,7 @@ class SalesTeamsController extends Controller
     }
 
         public function changeNameAjax(Request $request){
+            $this->authorize('update',SalesTeam::class);
             $response_msg=[
                 'result'=>'error',
                 'message'=>'Failed to update team name.'
@@ -318,6 +323,7 @@ class SalesTeamsController extends Controller
     }
 
     public function changeManagerAjax(Request $request){
+        $this->authorize('update',SalesTeam::class);
         $data =$this->validate($request, [
             'salesTeamId'=>'required|int|exists:sales_teams,id',
             'userId'=>'required|int|exists:users,id'
