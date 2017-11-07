@@ -234,6 +234,54 @@
 
 
 
+        var manager_select= jQuery("#sales-teamManager").select2({
+            placeholder: "Choose Manager",
+            ajax: {
+                url: "{{route('sales-team-member-options', ['team'=>$salesTeam->id])}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.users
+                    }
+                },
+                cache: true
+            }
+        });
+
+
+        var member_select=jQuery("#sales-teamMembers").select2({
+            placeholder: "Choose Members",
+            ajax: {
+                url: "{{route('sales-team-member-options', ['team'=>$salesTeam->id])}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.users
+                    }
+                },
+                cache: true
+            }
+        });
+
+
+
+
+
+
         jQuery("#sales-add-member-form").submit(function (e) {
             e.preventDefault();
             swal({
@@ -508,5 +556,5 @@
 
     </script>
 
-    @yield('sales-team-form-scripts')
+    @yield('sales-team-create-form')
 @endsection

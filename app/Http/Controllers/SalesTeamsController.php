@@ -337,4 +337,28 @@ class SalesTeamsController extends Controller
         return response()->json($response, 200);
     }
 
+
+    public function getSalesTeamMemberOptions(Request $request, SalesTeam $team){
+
+        $members = array_merge($team->members->map(function($member){
+            return $member->id;
+        })->toArray(), $team->managers->map(function($manager){
+            return $manager->id;
+        })->toArray());
+
+        $users = User::whereNotIn('id', $members)->where('status', '=', 1);
+
+        if($request->q){
+            $users = $users->where(function($query) use ($request){
+                return $query->where('first_name', 'LIKE', $request->q.'%')
+                    ->orWhere('last_name', 'LIKE', $request->q.'%');
+            });
+        }
+
+        return response()->json(['result'=>'Success','users'=>
+            $users->get()->map(function($user){
+                return ['value'=>$user->id, 'text'=>$user->name];
+            })
+        ], 200);
+    }
 }
