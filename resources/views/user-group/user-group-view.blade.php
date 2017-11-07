@@ -179,7 +179,7 @@ echo "hello";
         var user_select=jQuery("#userGroupMembers").select2({
             placeholder: "Choose Members",
             ajax: {
-                url: "{{route('get-user-options')}}",
+                url: "{{route('user-group-member-options', ['team'=>$userGroup->id])}}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {

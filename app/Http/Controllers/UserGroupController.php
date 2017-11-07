@@ -227,6 +227,30 @@ class UserGroupController extends Controller
 
 
 
+    public function getUserGroupMemberOptions(Request $request, UserGroup $team){
+
+        $members = $team->members->map(function($member){
+            return $member->id;
+        })->toArray();
+
+        $users = User::whereNotIn('id', $members)->where('status', '=', 1);
+
+        if($request->q){
+            $users = $users->where(function($query) use ($request){
+                return $query->where('first_name', 'LIKE', $request->q.'%')
+                    ->orWhere('last_name', 'LIKE', $request->q.'%');
+            });
+        }
+
+        return response()->json(['result'=>'Success','users'=>
+            $users->get()->map(function($user){
+                return ['value'=>$user->id, 'text'=>$user->name];
+            })
+        ], 200);
+    }
+
+
+
 
     public function addMemberAjax(Request $request){
         $this->authorize('update',UserGroup::class);

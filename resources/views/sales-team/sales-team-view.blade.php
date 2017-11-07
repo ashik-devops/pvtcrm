@@ -71,9 +71,12 @@
                                         </div>
                                         <div class="panel-body">
 
+
                                             @foreach($salesTeam->managers as $manager)
                                                 <div class="col-lg-4 col-md-6 col-sm-12 text-center">
                                                     {{--{{$member->name}}--}}
+
+
                                                     <a class="profile-img" href="{{route('profile-view', [$manager->id])}}">
                                                         @if(!is_null($manager->profile->profile_pic) && file_exists('storage/'.$manager->profile->profile_pic))
                                                             <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$manager->profile->profile_pic)}}"/>
