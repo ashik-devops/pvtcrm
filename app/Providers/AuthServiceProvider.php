@@ -39,7 +39,7 @@ class AuthServiceProvider extends ServiceProvider
         Account::class=>AccountPolicy::class,
         Role::class =>RolePolicy::class,
         SalesTeam::class=>SalesTeamPolicy::class,
-        UserGroup::class=>UserPolicy::class,
+        UserGroup::class=>UserGroupPolicy::class,
     ];
 
     /**

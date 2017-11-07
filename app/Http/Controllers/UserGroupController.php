@@ -83,6 +83,9 @@ class UserGroupController extends Controller
                     return $group->name;
                 })
 
+            ->addColumn('user_count', function($groups){
+                return $groups->members->count();
+            })
 
             ->rawColumns(['action','name','user_id'])
             ->make(true);

@@ -2,13 +2,14 @@
 
 namespace App\Policies;
 
+use App\Traits\PolicyHelpers;
 use App\User;
 use App\UserGroup;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class UserGroupPolicy
 {
-    use HandlesAuthorization;
+    use HandlesAuthorization, PolicyHelpers;
 
     /**
      * Create a new policy instance.
