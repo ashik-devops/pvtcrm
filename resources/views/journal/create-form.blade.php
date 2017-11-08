@@ -170,8 +170,14 @@
 
 
         <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
-        <button type="button" class="btn btn-danger margin-top-md center-block" onclick="goBack()">Cancel</button>
-        <input type="submit" id="journal_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Journal">
+        {{--<button type="button" class="btn btn-danger margin-top-md center-block" onclick="goBack()">Cancel</button>--}}
+        {{--<input type="submit" id="journal_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Journal">--}}
+        {{--<button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>--}}
+        <div class="form-group margin-top-md center-block text-center">
+            <button type="submit" id="journal_modal_button"  class="btn btn-success">Complete Task</button>
+            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+        </div>
+
 
     </form>
 @endsection
