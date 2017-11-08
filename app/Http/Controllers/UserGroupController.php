@@ -196,8 +196,7 @@ class UserGroupController extends Controller
             'result'=>'error',
             'message'=>'Failed to update team name.'
         ];
-        $data =$this->validate($request, [
-            'userGroupName'=>'required|string',
+        $data =$this->validate($request, ['userGroupName'=>'required|string',
         ]);
 
         $group->name= $data['userGroupName'];
