@@ -54,10 +54,12 @@
         </select>
     </div>
 
-
+    <div class="form-group margin-top-md center-block text-center">
     <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
-    <input type="submit" id="task_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Task">
-
+        {{--<input type="submit" id="task_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Task">--}}
+        <button type="submit" id="task_modal_button"  class="btn btn-success">Add Task</button>
+    <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+    </div>
     </div>
 
 
