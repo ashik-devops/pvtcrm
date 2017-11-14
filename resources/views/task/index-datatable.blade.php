@@ -327,7 +327,7 @@
 
             $('#journal_modal_button').val(status+ ' Task');
             $('#modal-complete-task-label').val(status+ ' Task');
-            if(status='Complete'){
+            if(status=='Complete'){
                 status='Done';
             }
             else if(status=='Cancel'){

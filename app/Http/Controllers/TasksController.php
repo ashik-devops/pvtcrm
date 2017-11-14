@@ -198,25 +198,25 @@ class TasksController extends Controller
 
     }
 
-    public function deleteTask(Request $request){
-        $task = Task::findOrFail($request->id);
-
-        if(!is_null($task)){
-
-            $task->delete();
-
-            return response()->json([
-                'result'=>'Success',
-                'message'=>'Task has been successfully deleted.'
-            ]);
-        }
-
-        return response()->json([
-            'result'=>'Error',
-            'message'=>'Task not found.'
-        ]);
-
-    }
+//    public function deleteTask(Request $request){
+//        $task = Task::findOrFail($request->id);
+//
+//        if(!is_null($task)){
+//
+//            $task->delete();
+//
+//            return response()->json([
+//                'result'=>'Success',
+//                'message'=>'Task has been successfully deleted.'
+//            ]);
+//        }
+//
+//        return response()->json([
+//            'result'=>'Error',
+//            'message'=>'Task not found.'
+//        ]);
+//
+//    }
 
     public function closeTask(Request $request){
         $task= Task::findOrFail($request->journal['originId']);

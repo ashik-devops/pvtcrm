@@ -35,7 +35,6 @@ class AppointmentsController extends Controller
         $rules=[
             'appointmentTitle' => 'required|string',
             'appointmentDescription' => 'required|string',
-            'appointmentStatus' => 'required|string',
             'startTime'=>'required|date',
             'endTime'=>'required|date',
             'aptCustomerId'=>'required|integer|exists:customers,id'
@@ -66,13 +65,17 @@ class AppointmentsController extends Controller
         return DataTables::of(Index_appointment::all())
             ->addColumn('action',
                 function ($appointment){
+                    if ($appointment->status == 'Due'){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  onClick="viewAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
-                })
-
-
+                        '<a class="btn btn-xs btn-primary"  onClick="viewAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                }
+                    else
+                        {
+                            return '<a class="btn btn-xs btn-primary"  onClick="viewAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        }
+                                     }
+                )
             ->addColumn('customer_name',
                 function ($appointment){
 
@@ -176,7 +179,7 @@ class AppointmentsController extends Controller
 
                 $appointment->title = $request->appointment['appointmentTitle'];
                 $appointment->description = $request->appointment['appointmentDescription'];
-                $appointment->status = $request->appointment['appointmentStatus'];
+//                $appointment->status = $request->appointment['appointmentStatus'];
                 $appointment->start_time = Carbon::parse($request->appointment['startTime']);
                 $appointment->end_time = Carbon::parse($request->appointment['endTime']);
                 DB::beginTransaction();
@@ -223,7 +226,7 @@ class AppointmentsController extends Controller
             $appointment = Appointment::findOrFail($request->appointment['appointmentId']);
             $appointment->title = $request->appointment['appointmentTitle'];
             $appointment->description = $request->appointment['appointmentDescription'];
-            $appointment->status = $request->appointment['appointmentStatus'];
+//            $appointment->status = $request->appointment['appointmentStatus'];
             $appointment->start_time = Carbon::parse($request->appointment['startTime']);
             $appointment->end_time = Carbon::parse($request->appointment['endTime']);
 
@@ -238,26 +241,26 @@ class AppointmentsController extends Controller
     }
 
 
+//
+//    public function deleteAppointment(Request $request){
+//        $appointment = Appointment::findOrFail($request->id);
+//        $this->authorize('delete',$request);
+//        if(!is_null($appointment)){
+//
+//            $appointment->delete();
+//
+//            return response()->json([
+//                'result'=>'Success',
+//                'message'=>'Appointment has been successfully deleted.'
+//            ]);
+//        }
+//
+//        return response()->json([
+//            'result'=>'Error',
+//            'message'=>'Appointment not found.'
+//        ]);
 
-    public function deleteAppointment(Request $request){
-        $appointment = Appointment::findOrFail($request->id);
-        $this->authorize('delete',$request);
-        if(!is_null($appointment)){
-
-            $appointment->delete();
-
-            return response()->json([
-                'result'=>'Success',
-                'message'=>'Appointment has been successfully deleted.'
-            ]);
-        }
-
-        return response()->json([
-            'result'=>'Error',
-            'message'=>'Appointment not found.'
-        ]);
-
-    }
+//    }
     public function closeAppointment(Request $request){
         $appointment= Appointment::findOrFail($request->journal['originId']);
         $this->authorize('update',$appointment);
@@ -364,5 +367,6 @@ class AppointmentsController extends Controller
             'message'=>$appointment->status == 'Done'?'Appointment Completed.':"Appointment $appointment->status"
         ],200);
     }
+
 
 }
