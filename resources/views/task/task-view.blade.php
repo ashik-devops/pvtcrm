@@ -4,27 +4,27 @@
         <input type="hidden" id="taskIdForView">
         <tr>
             <th>For</th>
-            <td id="viewTaskCustomer">Firoz Sabuz</td>
+            <td id="viewTaskCustomer"></td>
         </tr>
         <tr>
             <th>Title</th>
-            <td id="viewTaskTitle">somehting new</td>
+            <td id="viewTaskTitle"></td>
         </tr>
         <tr>
             <th>Deadline</th>
-            <td id="viewTaskDeadline">07/05/2017</td>
+            <td id="viewTaskDeadline"></td>
         </tr>
         <tr>
             <th>Status</th>
-            <td id="viewTaskStatus">Due</td>
+            <td id="viewTaskStatus"></td>
         </tr>
         <tr>
             <th>Priority</th>
-            <td id="viewTaskPriority">Low</td>
+            <td id="viewTaskPriority"></td>
         </tr>
         <tr>
             <th>Description</th>
-            <td id="viewTaskDescription">Multisource..</td>
+            <td id="viewTaskDescription"></td>
         </tr>
     </table>
 
