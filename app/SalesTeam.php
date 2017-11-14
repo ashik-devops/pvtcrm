@@ -21,7 +21,7 @@ class SalesTeam extends Model
     public function members(): BelongsToMany{
         return $this->belongsToMany('App\User', 'sales_teams_users')->wherePivot('role', '=', 'MEMBER');
     }
-    public function manager(): BelongsToMany{
+    public function managers(): BelongsToMany{
         return $this->belongsToMany('App\User', 'sales_teams_users')->wherePivot('role', '=', 'MANAGER');
     }
 

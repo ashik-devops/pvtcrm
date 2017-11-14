@@ -74,10 +74,16 @@
                         <span class="nav-label">Activity Log</span>
                     </a>
                 </li>
-
-
             @endif
+            @can('index', \App\SalesTeam::class)
+                <li class="{{Nav::isRoute('sales-team-index',"active")}}">
+                    <a href="{{route('sales-team-index')}}">
+                        <span aria-hidden="true" class="fa fa-users"></span>
+                        <span class="nav-label">Sales Teams</span>
+                    </a>
+                </li>
 
+            @endcan
         </ul>
     </nav>
 </div>

@@ -14,6 +14,7 @@ use Illuminate\Http\Request;
 
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Yajra\DataTables\DataTables;
@@ -29,7 +30,7 @@ class UserGroupController extends Controller
     protected function validator(array $data, $isUpdateRequest=false)
     {
         $rules=[
-            'UserGroupName' => 'required|string',
+            'userGroupName' => 'required|string',
             'userIds' =>'required|array|exists:users,id',
 
         ];
@@ -41,7 +42,7 @@ class UserGroupController extends Controller
 
         if($isUpdateRequest){
             $rules=array_merge($rules,[
-                'UserGroupId'=>'required|integer|exists:user_groups,id',
+                'userGroupId'=>'required|integer|exists:user_groups,id',
             ]);
         }
 
@@ -55,21 +56,35 @@ class UserGroupController extends Controller
     }
 
     public function getUserGroupsAjax(){
-
-        return DataTables::of(Index_usergroup::all())
+        $groups=Auth::user()->groups;
+        if(Auth::user()->isAdmin() || Auth::user()->isSuperAdmin()){
+            $groups=UserGroup::all();
+        }
+        return DataTables::of($groups)
             ->addColumn('action',
-                function ($usergroup){
-                    return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$usergroup->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$usergroup->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                function ($group){
+                $buttons='';
+                    if(Auth::user()->can('update', $group)){
+                        $buttons.='<a  class="btn btn-xs btn-primary"  onClick="editUserGroup('.$group->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                    }
+                    if(Auth::user()->can('delete', $group)){
+                        $buttons.='<a  class="btn btn-xs btn-danger"  onClick="deleteUserGroup('.$group->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>';
+                    }
+                    if(Auth::user()->can('view', $group)) {
+                        $buttons .= '<a class="btn btn-xs btn-primary"  href="'.route('view-user-group',['group'=>$group->id]).'"><i class="glyphicon glyphicon-eye"></i> View</a>';
+                    }
+                    return $buttons;
+
                 })
 
             ->addColumn('name',
-                function ($usergroup){
-                    return $usergroup->name;
+                function ($group){
+                    return $group->name;
                 })
 
+            ->addColumn('user_count', function($groups){
+                return $groups->members->count();
+            })
 
             ->rawColumns(['action','name','user_id'])
             ->make(true);
@@ -78,23 +93,23 @@ class UserGroupController extends Controller
 
 
     public function create(Request $request){
-//        $this->authorize('create',Appointment::class);
-        $this->validator($request->UserGroup)->validate();
+        $this->authorize('create',UserGroup::class);
+        $this->validator($request->userGroup)->validate();
 
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
         ];
 
-        if($request->UserGroup['userIds']){
-            $UserGroup = new UserGroup();
-            $UserGroup->name = $request->UserGroup['UserGroupName'];
+        if($request->userGroup['userIds']){
+            $userGroup = new userGroup();
+            $userGroup->name = $request->userGroup['userGroupName'];
 
             DB::beginTransaction();
 
-            $UserGroup->save();
+            $userGroup->save();
 
-            $UserGroup->members()->attach($request->UserGroup['userIds']);
+            $userGroup->members()->attach($request->userGroup['userIds']);
             DB::commit();
 
             $result['result']='Saved';
@@ -110,23 +125,21 @@ class UserGroupController extends Controller
 
 
     public function update(Request $request){
-        $this->validator($request->usersGroup, true)->validate();
-
+        $this->validator($request->userGroup, true)->validate();
+        $userGroup = userGroup::find($request->userGroup['userGroupId']);
+        $this->authorize('update',$userGroup);
         $result=[
             'result'=>'Error',
             'message'=>'Something went wrong.'
         ];
+            $userGroup->name = $request->userGroup['userGroupName'];
 
-        if($request->UserGroup['userIds']){
-            $UserGroup = UserGroup::find($request->UserGroup['UserGroupId']);
-            $UserGroup->name = $request->UserGroup['UserGroupName'];
-
-            $current_members=$UserGroup->members->map(function ($member){
+            $current_members=$userGroup->members->map(function ($member){
                 return $member->id;
             })->toArray();
 
-            $removals=array_diff($current_members, $request->UserGroup['userIds']);
-            $additions=array_diff($request->UserGroup['userIds'], $current_members);
+            $removals=array_diff($current_members, $request->userGroup['userIds']);
+            $additions=array_diff($request->userGroup['userIds'], $current_members);
 
             DB::beginTransaction();
 
@@ -134,31 +147,25 @@ class UserGroupController extends Controller
 
 
             if(count($removals)>0){
-                $UserGroup->members()->detach($removals);
+                $userGroup->members()->detach($removals);
             }
 
 
             if(count($additions)>0){
-                $UserGroup->members()->attach($additions);
+                $userGroup->members()->attach($additions);
             }
-
-            $UserGroup->members()->attach($request->UserGroup['userIds']);
-            $UserGroup->save();
+            $userGroup->save();
 
             DB::commit();
 
             $result['result']='Saved';
             $result['message']='user group has been created Successfully.';
 
-        }
-        else{
-            $result['message']='Please add at least 1 member';
-        }
 
         return response()->json($result,200);
     }
 
-    public function getUserGroup(Request $request){
+    public function getUserGroupAjax(Request $request){
 
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id'
@@ -180,12 +187,121 @@ class UserGroupController extends Controller
         ], 200);
     }
 
+
+
+
+
+    public function changeNameAjax(Request $request, UserGroup $group){
+        $response_msg=[
+            'result'=>'error',
+            'message'=>'Failed to update team name.'
+        ];
+        $data =$this->validate($request, ['userGroupName'=>'required|string',
+        ]);
+
+        $group->name= $data['userGroupName'];
+        DB::beginTransaction();
+
+        $group->save();
+
+        $response_msg=[
+            'result'=>'Success',
+            'message'=>'Team name has been updated successfully.'
+        ];
+
+        DB::commit();
+
+        return response()->json($response_msg,200);
+
+
+    }
+
+
+
+    public function getUserGroupMemberOptions(Request $request, UserGroup $group){
+
+        $members = $group->members->map(function($member){
+            return $member->id;
+        })->toArray();
+
+        $users = User::whereNotIn('id', $members)->where('status', '=', 1);
+
+        if($request->q){
+            $users = $users->where(function($query) use ($request){
+                return $query->where('first_name', 'LIKE', $request->q.'%')
+                    ->orWhere('last_name', 'LIKE', $request->q.'%');
+            });
+        }
+
+        return response()->json(['result'=>'Success','users'=>
+            $users->get()->map(function($user){
+                return ['id'=>$user->id, 'text'=>$user->name];
+            })
+        ], 200);
+    }
+
+
+
+
+    public function addMemberAjax(Request $request, UserGroup $group){
+        $data =$this->validate($request, [
+            'userIds'=>'required|array|exists:users,id'
+        ]);
+
+        $current_members=$group->members->map(function ($member){
+            return $member->id;
+        })->toArray();
+
+
+        $additions = array_diff($data['userIds'], $current_members);
+
+        $user = User::find($data['userIds']);
+        DB::beginTransaction();
+        $group->members()->attach($additions);
+
+        $group->save();
+        DB::commit();
+
+        return response()->json([
+            'result'=>'Success',
+            'message'=>'Member has been added successfully.'
+        ],200);
+
+    }
+
+
+
+
+    public function removeUserAjax(Request $request, UserGroup $group){
+        $data =$this->validate($request, [
+            'userId'=>'required|int|exists:users,id'
+        ]);
+
+        $user = User::find($data['userId']);
+        DB::beginTransaction();
+        $group->members()->detach([$user->id]);
+
+//            $team->delete();
+        DB::commit();
+
+        return response()->json([
+            'result'=>'Success',
+            'message'=>'Member has been removed successfully.'
+        ],200);
+
+    }
+
+
+
+
     public function delete(Request $request){
         $data =$this->validate($request, [
             'groupId'=>'required|int|exists:user_groups,id'
         ]);
 
         $group= UserGroup::find($data['groupId']);
+        $this->authorize('delete',$group);
+
         DB::beginTransaction();
         $group->members()->detach();
         $group->delete();
@@ -197,9 +313,8 @@ class UserGroupController extends Controller
         ],200);    }
 
     public function view(UserGroup $group){
-//        $this->authorize('view', $userGgroup);
 
-        return view('user-group.user-group-view')->with(['UserGroup'=>$group]);
+        return view('user-group.user-group-view')->with(['userGroup'=>$group]);
     }
 
 }

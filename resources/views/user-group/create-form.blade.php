@@ -20,12 +20,7 @@
 
             <label class="sr-only">Members</label>
             <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true" required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
-                @foreach(\Illuminate\Support\Facades\Auth::user()->getSubordinates() as $user)
-                    @php
-                    $user=\App\User::find($user)
-                    @endphp
-                    <option value="{{$user->id}}">{{$user->name}}</option>
-                @endforeach
+
             </select>
         </div>
 
@@ -43,6 +38,31 @@
 
 @endsection
 
+
+
+@section('user-group-new-member')
+    <form method="post" class="ajax-from"  data-parsley-validate id="userGroupForm">
+        {{ csrf_field() }}
+        <div class="form-group {{ $errors->has('user-id') ? ' has-error' : '' }}" id="user-id">
+            <label class="sr-only">User</label>
+            <select name="userids[]" id="userIds" class="form-control" style="width: 100%" multiple="true" required data-parsley-trigger="change focusout" data-parsley-required-message="Please select at least one member">
+
+            </select>
+        </div>
+
+
+        <div class="form-group margin-top-md center-block text-center">
+            <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+            <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Cancel</button>
+            <button type="submit" id="sales_team_member_form_submit"  class="btn btn-success">Create</button>
+        </div>
+    </form>
+
+@endsection
+
+
+
+
 @section('group-form-scripts')
     <script type="text/javascript">
         var inputMap = {
@@ -50,13 +70,28 @@
             'userGroupName': 'userGroupName',
             'userIds': 'userIds'
         };
-        jQuery("#userIds").select2({
+
+
+        var user_select=jQuery("#userIds").select2({
             placeholder: "Choose Members",
-            allowClear: true
+            ajax: {
+                url: "{{route('get-user-options')}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+
+                    return {
+                        results: data.users
+                    }
+                },
+                cache: true
+            }
         });
-
-
-
 
         jQuery("#userGroupForm").submit(function (e) {
             e.preventDefault();

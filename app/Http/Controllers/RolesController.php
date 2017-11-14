@@ -47,12 +47,12 @@ class RolesController extends Controller
                 return $buttons;
             })
             ->addColumn('permissions', function ($role){
-                $content = "<ul><li>".$role->policies->map(
+                $content = "<ul class='list-unstyled'><li>".$role->policies->map(
                     function($policy){
                         return $policy->scope->name." : ".$policy->action->name;
                     })
-                    ->implode('</li><li>').'</li></ul>';
-
+//                    ->implode('</li><li>').'</li></ul>';
+                ->implode('</li><li>').'</li></ul>';
                 return str_replace('*', 'all', $content);
             })
             ->rawColumns(['action', 'permissions'])

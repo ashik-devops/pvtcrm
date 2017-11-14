@@ -31,7 +31,13 @@ class UserAuthEventsSubscriber
      * @param $event
      */
     public function onUserLoginFailed($event){
-        app(ActivityLogger::class)
+        if(is_null($event->user)){
+            app(ActivityLogger::class)
+                ->log('<strong>Attempt to log in as user using username '.$event->credentials['email'].' has failed.</strong>strong>', 'login-failed-attempt');
+
+        }
+        else
+            app(ActivityLogger::class)
             ->causedBy($event->user)
             ->log('<strong>Attempt to log in as user: <a href="'.$event->user->getLink().'">'.$event->user->getActivityTitle(). '</a> has failed.</strong>strong>', 'logout');
 

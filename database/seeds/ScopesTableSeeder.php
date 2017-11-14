@@ -19,7 +19,8 @@ class ScopesTableSeeder extends Seeder
             'journal'=>'Journal Entry',
             'account'=>'Account',
             'user'=>'User',
-            'team'=>'Team'
+            'team'=>'Sales Team',
+            'group'=>'User Group'
         ];
         foreach ($scopes as $name=>$label){
             \App\Scope::create([

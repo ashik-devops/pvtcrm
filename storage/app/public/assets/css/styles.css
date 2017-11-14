@@ -7,3 +7,9 @@ html{height:100%;background:#f9f9fb}.preload *{transition:none!important}.contai
 .modal-button-set button{
     display: inline-block;
 }
+
+button.add-button{
+    font-size: 72px;
+    border: 0px;
+}
+

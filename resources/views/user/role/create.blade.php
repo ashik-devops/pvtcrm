@@ -4,7 +4,6 @@
 @section('after-head-style')
 @yield('role_form_styles')
 @endsection
-
 @section('content')
     <div id="content-wrapper" class="content-wrapper view">
         <div class="container-fluid">
