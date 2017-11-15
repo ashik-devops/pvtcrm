@@ -122,7 +122,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Tasks</h3>
-                                                <button id="new-task-btn" class="btn btn-warning pull-right" data-toggle="modal" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>Create Task</button>
+                                                <button id="new-task-btn" class="btn btn-warning pull-right"  style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>Create Task</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -168,7 +168,7 @@
                                                                                 <th>Id</th>
                                                                                 <th>Title</th>
                                                                                 {{--<th>Customer</th>--}}
-                                                                                <th>Description</th>
+                                                                                <th>Descriptionhuha</th>
                                                                                 <th>Start Time</th>
                                                                                 <th>End Time</th>
                                                                                 <th>Status</th>
@@ -261,7 +261,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" onclick="viewTask(id)" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
                 </div>
                 <div class="modal-body">
