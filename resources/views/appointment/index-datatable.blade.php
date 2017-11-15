@@ -226,13 +226,11 @@
         //creating appointment
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
-
         $('#appointmentForm').on('submit',function(e){
             e.preventDefault();
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
-
-            var appointmgitent = {
+            var appointment = {
                 appointmentId : $('#'+inputMap.appointmentId).val(),
                 aptCustomerId : parseInt($('#'+inputMap.aptCustomerId).val()),
                 appointmentTitle : $('#'+inputMap.appointmentTitle).val(),
@@ -363,46 +361,46 @@
         }
 
 
-        function deleteAppointment(id){
-            var _token = $('input[name="_token"]').val();
-            var data = {
-                _token : _token,
-                id: id
-            };
-            swal({
-                    title: "Are you sure?",
-                    text: "This Information will be trashed!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel !",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
+        {{--function deleteAppointment(id){--}}
+            {{--var _token = $('input[name="_token"]').val();--}}
+            {{--var data = {--}}
+                {{--_token : _token,--}}
+                {{--id: id--}}
+            {{--};--}}
+            {{--swal({--}}
+                    {{--title: "Are you sure?",--}}
+                    {{--text: "This Information will be trashed!",--}}
+                    {{--type: "warning",--}}
+                    {{--showCancelButton: true,--}}
+                    {{--confirmButtonColor: "#DD6B55",--}}
+                    {{--confirmButtonText: "Yes, delete it!",--}}
+                    {{--cancelButtonText: "No, cancel !",--}}
+                    {{--closeOnConfirm: false,--}}
+                    {{--closeOnCancel: false--}}
+                {{--},--}}
+                {{--function(isConfirm){--}}
+                    {{--if (isConfirm) {--}}
 
-                        //deletion process is going on....
+                        {{--//deletion process is going on....--}}
 
 
-                        $.post("{{ route('delete.appointment') }}", data, function(result){
+                        {{--$.post("{{ route('delete.appointment') }}", data, function(result){--}}
 
-                            if(result.result == 'Success'){
-                                swal("Deleted!", "Appointment has been deleted.", "success");
-                                get_all_appointment_data();
-                                $.notify('Appointment deleted successfully', "danger");
-                            }
-                            else{
-                                swal("Failed", "Failed to delete the Appointment", "error");
-                            }
+                            {{--if(result.result == 'Success'){--}}
+                                {{--swal("Deleted!", "Appointment has been deleted.", "success");--}}
+                                {{--get_all_appointment_data();--}}
+                                {{--$.notify('Appointment deleted successfully', "danger");--}}
+                            {{--}--}}
+                            {{--else{--}}
+                                {{--swal("Failed", "Failed to delete the Appointment", "error");--}}
+                            {{--}--}}
 
-                        });
-                    } else {
-                        swal("Cancelled", "Appointment is safe :)", "error");
-                    }
-                });
-        }
+                        {{--});--}}
+                    {{--} else {--}}
+                        {{--swal("Cancelled", "Appointment is safe :)", "error");--}}
+                    {{--}--}}
+                {{--});--}}
+        {{--}--}}
 
 
         function get_all_appointment_data(){
@@ -420,7 +418,7 @@
 
             $('#journal_modal_button').val(status+ ' Appointment');
             $('#modal-complete-appointment-label').val(status+ ' Appointment');
-            if(status='Complete'){
+            if(status=='Complete'){
                 status='Done';
             }
             else if(status=='Cancel'){
@@ -520,13 +518,16 @@
                     //$('#viewTaskPriority').html(data.task.priority);
 
                     $('#viewAppointmentStatus').html(data.appointment.status);
-                    if(data.appointment.status == "Done" || data.appointment.status == "Complete"){
+                    if(data.appointment.status == "Done" || data.appointment.status == "Complete"||data.appointment.status == "Cancel" || data.appointment.status == "Cancelled"){
                         $("#complete-appointment-button").hide();
                         $("#cancel-appointment-button").hide();
+                        $("#edit-appointment-button").hide();
+
                     }
                     else {
                         $("#complete-appointment-button").show();
                         $("#cancel-appointment-button").show();
+                        $("#edit-appointment-button").show();
 
                     }
                     //updateDates();
@@ -566,8 +567,17 @@
 
         }
 
+        function cancelAppointmentWithClosingView(id){
+            var id = $('#appointmentIdForView').val();
 
-        function cancelTask(id) {
+            $('#appointment-modal-view').modal('hide');
+
+
+            closeAppointment(id, 'Cancel');
+
+        }
+
+        function cancelAppointment(id) {
             var id = $('#appointmentIdForView').val();
 
             $('#appointment-modal-view').modal('hide');

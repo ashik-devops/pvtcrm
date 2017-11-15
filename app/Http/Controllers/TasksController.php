@@ -62,10 +62,16 @@ class TasksController extends Controller
         return DataTables::of(Index_tasks::all())
             ->addColumn('action',
                 function ($task){
+                if ($task->status == 'Due'){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="cancelTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Cancel</a>
-                        <a  class="btn btn-xs btn-primary"   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+
+                        '<a  class="btn btn-xs btn-primary "   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                }
+                else {
+                    return '<a  class="btn btn-xs btn-primary"   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                }
+
                 })
 
             ->addColumn('customer_name',
@@ -102,7 +108,7 @@ class TasksController extends Controller
             ->addColumn('action',
                 function ($task){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        '<a  class="btn btn-xs btn-primary btn-warning"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                         <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
                         <a href="viewtask('.$task->id.')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
 
@@ -192,25 +198,25 @@ class TasksController extends Controller
 
     }
 
-    public function deleteTask(Request $request){
-        $task = Task::findOrFail($request->id);
-
-        if(!is_null($task)){
-
-            $task->delete();
-
-            return response()->json([
-                'result'=>'Success',
-                'message'=>'Task has been successfully deleted.'
-            ]);
-        }
-
-        return response()->json([
-            'result'=>'Error',
-            'message'=>'Task not found.'
-        ]);
-
-    }
+//    public function deleteTask(Request $request){
+//        $task = Task::findOrFail($request->id);
+//
+//        if(!is_null($task)){
+//
+//            $task->delete();
+//
+//            return response()->json([
+//                'result'=>'Success',
+//                'message'=>'Task has been successfully deleted.'
+//            ]);
+//        }
+//
+//        return response()->json([
+//            'result'=>'Error',
+//            'message'=>'Task not found.'
+//        ]);
+//
+//    }
 
     public function closeTask(Request $request){
         $task= Task::findOrFail($request->journal['originId']);

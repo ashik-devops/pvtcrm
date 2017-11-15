@@ -327,7 +327,7 @@
 
             $('#journal_modal_button').val(status+ ' Task');
             $('#modal-complete-task-label').val(status+ ' Task');
-            if(status='Complete'){
+            if(status=='Complete'){
                 status='Done';
             }
             else if(status=='Cancel'){
@@ -463,19 +463,22 @@
                     $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
 
                     $('#viewTaskTitle').html(data.task.title);
-                    $('#taskDescription').html(data.task.description);
+                    $('#viewTaskDescription').html(data.task.description);
                     $('#viewTaskDeadline').html(data.task.due_date);
 
                     //task_date = moment(data.task.due_date);
                     $('#viewTaskPriority').html(data.task.priority);
                     $('#viewTaskStatus').html(data.task.status);
-                    if(data.task.status == "Done" || data.task.status == "Complete"){
+                    if(data.task.status == "Done" || data.task.status == "Complete"||data.task.status == "Cancel" || data.task.status == "Cancelled"){
                         $("#complete-task-button").hide();
                         $("#cancel-task-button").hide();
+                        $("#edit-task-button").hide();
+
                     }
                     else {
                         $("#complete-task-button").show();
                         $("#cancel-task-button").show();
+                        $("#edit-task-button").show();
 
                     }
                     //updateDates();
