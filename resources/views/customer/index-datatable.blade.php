@@ -252,7 +252,7 @@
         var user_select=jQuery("#userId").select2({
             placeholder: "Assign User",
             ajax: {
-                url: "{{route('list-users')}}",
+                url: "{{route('get-user-options')}}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -263,7 +263,7 @@
                 processResults : function (data){
 
                     return {
-                        results: JSON.parse(JSON.stringify(data.items).replace(new RegExp("\"name\":", 'g'), "\"text\":"))
+                        results: data.users
                     }
                 },
                 cache: true
