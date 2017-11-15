@@ -99,7 +99,7 @@ class TasksController extends Controller
             ->rawColumns(['title', 'customer_name', 'description', 'due_date' ,'status', 'priority', 'action'])
             ->make(true);
     }
-
+//dashboard
     public function getTasksAjaxDue(){
         $this->authorize('index', Task::class);
 
@@ -108,10 +108,8 @@ class TasksController extends Controller
             ->addColumn('action',
                 function ($task){
                     return
-                        '<a  class="btn btn-xs btn-primary btn-warning"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="viewtask('.$task->id.')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
-
+                        '<a  class="btn btn-xs btn-primary "   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
                 })
             ->addColumn('customer_name',
                 function ($task){
