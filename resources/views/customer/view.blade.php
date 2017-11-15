@@ -96,6 +96,7 @@
                                                 <h3 class="panel-title">Journal Entries</h3>
                                                 <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createJournal()" ><i class="fa fa-plus"></i>  Create Journal</button>
                                             </div>
+
                                             <div class="panel-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered" id="journals-list" style="width: 100%">
@@ -119,19 +120,20 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Tasks</h3>
-                                                <button id="new-task-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>  Create Task</button>
+                                                <button id="new-task-btn" class="btn btn-warning pull-right" data-toggle="modal" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>Create Task</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered" id="tasks-list" style="width: 100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>Id</th>
                                                             <th>Title</th>
-                                                            <th>Status</th>
+                                                            <th>Description</th>
                                                             <th>Due Date</th>
+                                                            <th>Status</th>
                                                             <th>Priority</th>
-                                                            <th>Actions</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
@@ -231,6 +233,7 @@
             </div>
         </div>
     </div><!--/modal-->
+
     <!-- Modal for creating customer -->
     <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
         <div class="modal-dialog" role="document">
@@ -254,6 +257,20 @@
                 </div>
                 <div class="modal-body">
                     @yield('task-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+
+    <div class="modal taskModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('task-view')
                 </div>
             </div>
         </div>
@@ -309,17 +326,18 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('customer-tasks-list', [$customer->id]) !!}',
+                ajax: '{!! route('task-data') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-                    { data: 'status', name: 'status' },
+                    { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
+                    { data: 'status', name: 'status' },
                     { data: 'priority', name: 'priority' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
-            });
+            })
 
 
             var appointment_datatable = jQuery('#appointments-list').DataTable({
@@ -336,7 +354,7 @@
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
             });
@@ -399,6 +417,49 @@
 
         function updateTaskDate(){
             $('#taskDueDateTimePicker').data("DateTimePicker").date(task_date);
+        }
+
+        function viewTask(id){
+
+            $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                //console.log(data.task);
+                if(data){
+                    $('#task_id').val(data.task.id);
+                    $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
+
+                    $('#viewTaskTitle').html(data.task.title);
+                    $('#viewTaskDescription').html(data.task.description);
+                    $('#viewTaskDeadline').html(data.task.due_date);
+
+                    //task_date = moment(data.task.due_date);
+                    $('#viewTaskPriority').html(data.task.priority);
+                    $('#viewTaskStatus').html(data.task.status);
+                    if(data.task.status == "Done" || data.task.status == "Complete"||data.task.status == "Cancel" || data.task.status == "Cancelled"){
+                        $("#complete-task-button").hide();
+                        $("#cancel-task-button").hide();
+                        $("#edit-task-button").hide();
+
+                    }
+                    else {
+                        $("#complete-task-button").show();
+                        $("#cancel-task-button").show();
+                        $("#edit-task-button").show();
+
+                    }
+                    //updateDates();
+                    //var id = data.task.id;
+                    //console.log(id);
+
+                }
+
+            });
+
+            $('#task-modal-view').modal('show');
+            $('#taskIdForView').val(id);
+
+
+
+
         }
 
 
