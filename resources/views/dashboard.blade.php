@@ -841,6 +841,16 @@
             endTime : 'endTime'
         };
 
+        jQuery('#task-modal-complete').on('shown.bs.modal', function () {
+            formPrepare();
+        });
+
+        jQuery('#task-modal-complete').on('hidden.bs.modal', function () {
+            console.log('reetting.....');
+            reset_journal_form(jQuery("#journalForm")[0]);
+        });
+
+
         jQuery('.modal').on('shown.bs.modal', function () {
 
 
@@ -1263,6 +1273,7 @@
             $('#journal-customer-id').remove();
 
             $('#task-modal-complete').modal('show');
+            $('#journalForm').unbind('submit');
             $('#journalForm').on('submit',function(e) {
 
                 e.preventDefault();
@@ -1349,6 +1360,7 @@
             $('#journal-customer-id').remove();
 
             $('#task-modal-complete').modal('show');
+            $('#journalForm').unbind('submit');
             $('#journalForm').on('submit',function(e) {
 
                 e.preventDefault();
