@@ -348,7 +348,9 @@
                     journalDescription : $('#'+journalInputMap.journalDescription).val(),
                     journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
                 };
-                if($('input[name=followUpType]:checked').val() === 'appointment'){
+
+                if($('input[name=followUpType]:checked').val() === 'appointment')
+                {
                     journal.followup = {
                         type : 'appointment',
                         followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
@@ -407,46 +409,46 @@
         }
 
 
-        function deleteTask(id){
-            var _token = $('input[name="_token"]').val();
-            var data = {
-                _token : _token,
-                id: id
-            };
-            swal({
-                    title: "Are you sure?",
-                    text: "This Information will be trashed!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel !",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
+        {{--function deleteTask(id){--}}
+            {{--var _token = $('input[name="_token"]').val();--}}
+            {{--var data = {--}}
+                {{--_token : _token,--}}
+                {{--id: id--}}
+            {{--};--}}
+            {{--swal({--}}
+                    {{--title: "Are you sure?",--}}
+                    {{--text: "This Information will be trashed!",--}}
+                    {{--type: "warning",--}}
+                    {{--showCancelButton: true,--}}
+                    {{--confirmButtonColor: "#DD6B55",--}}
+                    {{--confirmButtonText: "Yes, delete it!",--}}
+                    {{--cancelButtonText: "No, cancel !",--}}
+                    {{--closeOnConfirm: false,--}}
+                    {{--closeOnCancel: false--}}
+                {{--},--}}
+                {{--function(isConfirm){--}}
+                    {{--if (isConfirm) {--}}
 
-                        //deletion process is going on....
+                        {{--//deletion process is going on....--}}
 
 
-                        $.post("{{ route('delete.task') }}", data, function(result){
+                        {{--$.post("{{ route('delete.task') }}", data, function(result){--}}
 
-                            if(result.result == 'Success'){
-                                swal("Deleted!", "Task has been deleted.", "success");
-                                get_all_task_data();
-                                $.notify('Task deleted successfully', "danger");
-                            }
-                            else{
-                                swal("Failed", "Failed to delete the account", "error");
-                            }
+                            {{--if(result.result == 'Success'){--}}
+                                {{--swal("Deleted!", "Task has been deleted.", "success");--}}
+                                {{--get_all_task_data();--}}
+                                {{--$.notify('Task deleted successfully', "danger");--}}
+                            {{--}--}}
+                            {{--else{--}}
+                                {{--swal("Failed", "Failed to delete the account", "error");--}}
+                            {{--}--}}
 
-                        });
-                    } else {
-                        swal("Cancelled", "Account is safe :)", "error");
-                    }
-                });
-        }
+                        {{--});--}}
+                    {{--} else {--}}
+                        {{--swal("Cancelled", "Account is safe :)", "error");--}}
+                    {{--}--}}
+                {{--});--}}
+        {{--}--}}
 
 
 
