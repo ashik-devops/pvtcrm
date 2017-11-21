@@ -117,9 +117,9 @@ class AppointmentsController extends Controller
             ->addColumn('action',
                 function ($appointment){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                       <a onClick="viewAppointment(\'.$appointment->id.\')" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a class="btn btn-xs btn-primary"  onClick="viewAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>
+                        
+                       <a  class="btn btn-xs btn-primary btn-warning"  onClick="editAppointment('.$appointment->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
                 })
 
 
