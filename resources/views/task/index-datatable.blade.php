@@ -69,7 +69,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" onclick="viewTask(id)" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
                 </div>
                 <div class="modal-body">
@@ -457,7 +457,6 @@
         }
 
         function viewTask(id){
-
             $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
                 //console.log(data.task);
                 if(data){

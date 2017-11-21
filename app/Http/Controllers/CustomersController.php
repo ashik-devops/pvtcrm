@@ -333,10 +333,15 @@ class CustomersController extends Controller
             })
             ->addColumn('action',
                 function ($task){
-                    return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                    if ($task->status == 'Due'){
+                        return
+
+                            '<a  class="btn btn-xs btn-primary "   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                    }
+                    else {
+                        return '<a  class="btn btn-xs btn-primary"   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                    }
                 })
             ->rawColumns(['customer_name', 'action'])
             ->make(true);
