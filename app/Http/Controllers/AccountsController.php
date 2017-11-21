@@ -90,9 +90,10 @@ class AccountsController extends Controller
             ->addColumn('action',
                 function ($account){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editAccount('.$account->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteAccount('.$account->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                         <a href="'.route('view-account', [$account->id]).'" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '
+                        <a href="'.route('view-account', [$account->id]).'" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editAccount('.$account->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                         ';
                 })
             ->addColumn('email', function($account){
                 return "<a href='mailto:{$account->email}'>{$account->email}</a>";
