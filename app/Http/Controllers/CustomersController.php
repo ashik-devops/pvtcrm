@@ -96,9 +96,9 @@ class CustomersController extends Controller
             ->addColumn('action',
                 function ($customer){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editCustomer('.$customer->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteCustomer('.$customer->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="'.route('view-customer',[$customer->id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        ' <a href="'.route('view-customer',[$customer->id]).'" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
+                          <a  class="btn btn-xs btn-primary btn-warning"  onClick="editCustomer('.$customer->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                      ';
                 })
             ->addColumn('name',
                 function ($customer){
