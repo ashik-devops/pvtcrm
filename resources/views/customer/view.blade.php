@@ -1,8 +1,10 @@
 @extends('layouts.app')
 @include('customer.create-form')
 @include('appointment.create-form')
+@include('appointment.appointment-view')
 @include('journal.create-form')
 @include('task.create-form')
+@include('task.task-view')
 @section('after-head-style')
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
@@ -96,6 +98,7 @@
                                                 <h3 class="panel-title">Journal Entries</h3>
                                                 <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createJournal()" ><i class="fa fa-plus"></i>  Create Journal</button>
                                             </div>
+
                                             <div class="panel-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered" id="journals-list" style="width: 100%">
@@ -119,7 +122,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Tasks</h3>
-                                                <button id="new-task-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>  Create Task</button>
+                                                <button id="new-task-btn" class="btn btn-warning pull-right"  style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>Create Task</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -128,7 +131,6 @@
                                                         <tr>
                                                             <th>Id</th>
                                                             <th>Title</th>
-                                                            <th>Customer</th>
                                                             <th>Description</th>
                                                             <th>Due Date</th>
                                                             <th>Status</th>
@@ -147,22 +149,60 @@
                                                 <h3 class="panel-title">Appointments</h3>
                                                 <button id="new-apt-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createAppointment()" ><i class="fa fa-plus"></i>  Create Appointment</button>
                                             </div>
-                                            <div class="panel-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered" id="appointments-list" style="width: 100%">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Title</th>
-                                                            <th>Description</th>
-                                                            <th>Start Time</th>
-                                                            <th>End Time</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                        </thead>
-                                                    </table>
+
+                                            <div id="masonry" class="row">
+                                                <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <section class="module module-headings">
+                                                        <div class="module-inner">
+                                                            <div class="module-heading">
+                                                                {{--<h3 class="module-title">Appointment</h3>--}}
+
+                                                            </div>
+
+                                                            <div class="module-content collapse in" id="customers">
+                                                                <div class="module-content-inner no-padding-bottom">
+                                                                    <div class="table-responsive">
+                                                                        <table id="customers-appointment-table" class="table table-bordered display" style="width: 100%;">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Id</th>
+                                                                                <th>Title</th>
+                                                                                {{--<th>Customer</th>--}}
+                                                                                <th>Descriptionhuha</th>
+                                                                                <th>Start Time</th>
+                                                                                <th>End Time</th>
+                                                                                <th>Status</th>
+                                                                                {{--<th></th>--}}
+                                                                                {{--<th></th>--}}
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </section>
                                                 </div>
                                             </div>
+                                            {{--<div class="panel-body">--}}
+                                                {{--<div class="table-responsive">--}}
+                                                    {{--<table class="table table-bordered" id="appointments-list" style="width: 100%">--}}
+                                                        {{--<thead>--}}
+                                                        {{--<tr>--}}
+                                                            {{--<th>Id</th>--}}
+                                                            {{--<th>Title</th>--}}
+                                                            {{--<th>Customer</th>--}}
+                                                            {{--<th>Description</th>--}}
+                                                            {{--<th>Start Time</th>--}}
+                                                            {{--<th>End Time</th>--}}
+                                                            {{--<th>Status</th>--}}
+                                                            {{--<th>Action</th>--}}
+                                                        {{--</tr>--}}
+                                                        {{--</thead>--}}
+                                                    {{--</table>--}}
+                                                {{--</div>--}}
+                                            {{--</div>--}}
                                         </div>
                                     </div>
                                     <div id="addresses" role="tabpanel" class="tab-pane">
@@ -216,24 +256,47 @@
 @endsection
 
 @section('modal')
-    <!-- Modal for Editing account -->
-    <div class="modal" id="new-customer" tabindex="-1" role="dialog" aria-labelledby="modal-new-customer">
+    <!-- Modal for creating customer -->
+    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <div id="new_edit_account">
-                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Edit Customer</h4>
-                    </div>
-
+                    <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
                 </div>
                 <div class="modal-body">
-                    @yield('customer-create-form')
+                    @yield('task-create-form')
                 </div>
             </div>
         </div>
     </div><!--/modal-->
-    <!-- Modal for creating customer -->
+    <div class="modal customerModal" id="task-modal-view" role="dialog" aria-labelledby="task-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-task-label"> Task View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('task-view')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal-complete" role="dialog" aria-labelledby="task-modal-complete">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-complete-task-label"> Complete Task</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+
     <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -247,42 +310,27 @@
             </div>
         </div>
     </div><!--/modal-->
-    <div class="modal taskModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
+    <div class="modal customerModal" id="appointment-modal-view" role="dialog" aria-labelledby="appointment-modal-view">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
+                    <h4 class="modal-title" id="modal-view-appointment-label"> Appointment View</h4>
                 </div>
                 <div class="modal-body">
-                    @yield('task-create-form')
+                    @yield('appointment-view')
                 </div>
             </div>
         </div>
-    </div><!--/modal-->
+    </div>
 
-    <div class="modal customerModal" id="journal-modal" role="dialog" aria-labelledby="journal-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-journal-label">Add New Journal</h4>
-                </div>
-                <div class="modal-body">
-                    @yield('journal-create-form')
-                </div>
-            </div>
-        </div>
-    </div><!--/modal-->
 @endsection
-
-
-
 
 @section('after-footer-script')
     <!--<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
-    {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>--}}
-    {{--<script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>--}}
+    <!--<script type="text/javascript" src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/dataTables.responsive.min.js"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/responsive/2.1.1/js/responsive.bootstrap.min.js"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/select/1.2.2/js/dataTables.select.min.js"></script>
 
     <script src="{{asset('storage/assets/js/moment.min.js')}}"></script>
@@ -311,35 +359,35 @@
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('customer-tasks-list', [$customer->id]) !!}',
+                ajax: '{!! route('task-data') !!}',
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-                    { data: 'customer_name', name: 'customer_name'},
                     { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
-                    { data: 'status', name: 'status'},
-                    { data: 'priority', name: 'priority'},
-                    { data: 'action', name: 'action', orderable: false, searchable: false},
+                    { data: 'status', name: 'status' },
+                    { data: 'priority', name: 'priority' },
+                    { data: 'action', name: 'action', orderable: false, searchable: false}
 
                 ]
-            });
+            })
 
 
-            var appointment_datatable = jQuery('#appointments-list').DataTable({
+            var appointment_datatable = jQuery('#customers-appointment-table').DataTable({
 //               responsive: false,
                 select: true,
                 processing: true,
                 serverSide: true,
                 paging:true,
                 lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
-                ajax: '{!! route('customer-appointments-list', [$customer->id]) !!}',
+                ajax: '{!! route('appointment-data') !!}',
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
+                    {data: 'status', name: 'status'},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -405,6 +453,49 @@
             $('#taskDueDateTimePicker').data("DateTimePicker").date(task_date);
         }
 
+        function viewTask(id){
+
+            $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                console.log(data.task);
+                if(data){
+                    $('#task_id').val(data.task.id);
+                    $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
+
+                    $('#viewTaskTitle').html(data.task.title);
+                    $('#viewTaskDescription').html(data.task.description);
+                    $('#viewTaskDeadline').html(data.task.due_date);
+
+                    //task_date = moment(data.task.due_date);
+                    $('#viewTaskPriority').html(data.task.priority);
+                    $('#viewTaskStatus').html(data.task.status);
+                    if(data.task.status == "Done" || data.task.status == "Complete"||data.task.status == "Cancel" || data.task.status == "Cancelled"){
+                        $("#complete-task-button").hide();
+                        $("#cancel-task-button").hide();
+                        $("#edit-task-button").hide();
+
+                    }
+                    else {
+                        $("#complete-task-button").show();
+                        $("#cancel-task-button").show();
+                        $("#edit-task-button").show();
+
+                    }
+                    //updateDates();
+                    //var id = data.task.id;
+                    //console.log(id);
+
+                }
+
+            });
+
+            $('#task-modal-view').modal('show');
+            $('#taskIdForView').val(id);
+
+
+
+
+        }
+
 
         /*========Start Appointment Module in Company Single view =========*/
         var aptinputMap={
@@ -417,6 +508,48 @@
             endTime : 'endTime'
         };
 
+        function viewAppointment(id){
+
+            $.get("{{ route('edit.appointment') }}", { id: id} ,function(data){
+                //console.log(data.task);
+                if(data){
+                    $('#appointment_id').val(data.appointment.id);
+                    $('#viewAppointmentCustomer').html(data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.account.name);
+
+                    $('#viewAppointmentTitle').html(data.appointment.title);
+                    $('#viewAppointmentDescription').html(data.appointment.description);
+                    $('#viewAppointmentStart_time').html(data.appointment.start_time);
+                    $('#viewAppointmentEnd_time').html(data.appointment.end_time);
+
+                    //task_date = moment(data.task.due_date);
+                    //$('#viewTaskPriority').html(data.task.priority);
+
+                    $('#viewAppointmentStatus').html(data.appointment.status);
+                    if(data.appointment.status == "Done" || data.appointment.status == "Complete"||data.appointment.status == "Cancel" || data.appointment.status == "Cancelled"){
+                        $("#complete-appointment-button").hide();
+                        $("#cancel-appointment-button").hide();
+                        $("#edit-appointment-button").hide();
+
+                    }
+                    else {
+                        $("#complete-appointment-button").show();
+                        $("#cancel-appointment-button").show();
+                        $("#edit-appointment-button").show();
+
+                    }
+                    //updateDates();
+                    //var id = data.task.id;
+                    //console.log(id);
+
+                }
+
+            });
+
+            $('#appointment-modal-view').modal('show');
+            $('#appointmentIdForView').val(id);
+
+
+        }
 
 
         function createAppointment(){
@@ -724,9 +857,6 @@
         }
 
 
-
-
-
         function deleteTask(id){
             var _token = $('input[name="_token"]').val();
             var data = {
@@ -766,39 +896,6 @@
                         swal("Cancelled", "Task is safe :)", "error");
                     }
                 });
-
-
-            function viewTask(id){
-
-                $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
-                    //console.log(data.task);
-                    if(data){
-                        $('#task_id').val(data.task.id);
-                        $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
-
-                        $('#viewTaskTitle').html(data.task.title);
-                        $('#taskDescription').html(data.task.description);
-                        $('#viewTaskDeadline').html(data.task.due_date);
-
-                        //task_date = moment(data.task.due_date);
-                        $('#viewTaskPriority').html(data.task.priority);
-                        $('#viewTaskStatus').html(data.task.status);
-                        if(data.task.status == "Done" || data.task.status == "Complete"){
-                            $("#complete-task-button").hide();
-                            $("#cancel-task-button").hide();
-                        }
-                        else {
-                            $("#complete-task-button").show();
-                            $("#cancel-task-button").show();
-
-                        }
-                    }
-                });
-
-                $('#task-modal-view').modal('show');
-                $('#taskIdForView').val(id);
-
-            }
         }
 
         function get_all_task_data(){
@@ -831,15 +928,7 @@
             el.addError('fieldError', {message: msg, updateClass: true});
         }
 
-        function editTaskWithClosingView(){
-            var id = $('#taskIdForView').val();
 
-            $('#task-modal-view').modal('hide');
-
-
-            editTask(id);
-
-        }
 
 
         /*========End Task Module in Company Single view =========*/
