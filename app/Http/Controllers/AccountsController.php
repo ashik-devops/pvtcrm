@@ -59,7 +59,7 @@ class AccountsController extends Controller
     }
 
     public function listAll(Request $request){
-        $this->authorize('index', $request);
+        $this->authorize('index', Account::class);
         $accounts = new Account();
         if(!empty($request->q)){
 
@@ -296,7 +296,6 @@ class AccountsController extends Controller
     }
 
     public function getCustomerAccountWise(Request $request){
-        $this->authorize('view', $request);
         $this->authorize('view', Account::find($request->accountId));
         if($request->accountId){
             return response()->json([

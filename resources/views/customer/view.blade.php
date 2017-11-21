@@ -126,12 +126,14 @@
                                                     <table class="table table-bordered" id="tasks-list" style="width: 100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>Id</th>
                                                             <th>Title</th>
-                                                            <th>Status</th>
+                                                            <th>Customer</th>
+                                                            <th>Description</th>
                                                             <th>Due Date</th>
+                                                            <th>Status</th>
                                                             <th>Priority</th>
-                                                            <th>Actions</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
@@ -313,9 +315,11 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-                    { data: 'status', name: 'status' },
+                    { data: 'customer_name', name: 'customer_name'},
+                    { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
-                    { data: 'priority', name: 'priority' },
+                    { data: 'status', name: 'status'},
+                    { data: 'priority', name: 'priority'},
                     { data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -720,6 +724,9 @@
         }
 
 
+
+
+
         function deleteTask(id){
             var _token = $('input[name="_token"]').val();
             var data = {
@@ -759,6 +766,39 @@
                         swal("Cancelled", "Task is safe :)", "error");
                     }
                 });
+
+
+            function viewTask(id){
+
+                $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                    //console.log(data.task);
+                    if(data){
+                        $('#task_id').val(data.task.id);
+                        $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
+
+                        $('#viewTaskTitle').html(data.task.title);
+                        $('#taskDescription').html(data.task.description);
+                        $('#viewTaskDeadline').html(data.task.due_date);
+
+                        //task_date = moment(data.task.due_date);
+                        $('#viewTaskPriority').html(data.task.priority);
+                        $('#viewTaskStatus').html(data.task.status);
+                        if(data.task.status == "Done" || data.task.status == "Complete"){
+                            $("#complete-task-button").hide();
+                            $("#cancel-task-button").hide();
+                        }
+                        else {
+                            $("#complete-task-button").show();
+                            $("#cancel-task-button").show();
+
+                        }
+                    }
+                });
+
+                $('#task-modal-view').modal('show');
+                $('#taskIdForView').val(id);
+
+            }
         }
 
         function get_all_task_data(){
@@ -791,7 +831,15 @@
             el.addError('fieldError', {message: msg, updateClass: true});
         }
 
+        function editTaskWithClosingView(){
+            var id = $('#taskIdForView').val();
 
+            $('#task-modal-view').modal('hide');
+
+
+            editTask(id);
+
+        }
 
 
         /*========End Task Module in Company Single view =========*/
