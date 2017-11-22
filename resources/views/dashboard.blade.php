@@ -1,9 +1,10 @@
 @extends('layouts.app')
+@include('customer.create-form')
 @include('appointment.create-form')
-@include('task.create-form')
-@include('task.task-view')
 @include('appointment.appointment-view')
 @include('journal.create-form')
+@include('task.create-form')
+@include('task.task-view')
 @section('after-head-style')
 
     <link rel="stylesheet" href="{{asset('storage/assets/css/dashboard-projects.css')}}">
