@@ -90,12 +90,17 @@ class AccountsController extends Controller
             ->addColumn('action',
                 function ($account){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editAccount('.$account->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteAccount('.$account->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                         <a href="'.route('view-account', [$account->id]).'" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a href="'.route('view-account', [$account->id]).'" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-warning"  onClick="editAccount('.$account->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                         ';
                 })
+            ->addColumn('name', function($account){
+                return "<a href='".route('view-account', [$account->id])."'>{$account->name}</a>";
+
+            })
             ->addColumn('email', function($account){
                 return "<a href='mailto:{$account->email}'>{$account->email}</a>";
+
             })
 
             ->addColumn('phone_no', function($account){
@@ -104,7 +109,7 @@ class AccountsController extends Controller
             ->addColumn('website', function($account){
                 return "<a href='{$account->website}'>{$account->website}</a>";
             })
-            ->rawColumns(['email', 'action', 'phone_no', 'website'])
+            ->rawColumns(['name','email', 'action', 'phone_no', 'website'])
             ->make(true);
     }
 

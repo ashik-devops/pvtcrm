@@ -122,7 +122,7 @@
             columns: [
                 { data: 'id', name: 'id' },
                 { data: 'account_no', name: 'account_no' },
-                { data: 'name', name: 'name'},
+                { data: 'name', name: 'name',searchable: true},
                 { data: 'email', name: 'email' },
                 { data: 'phone_no', name: 'phone_no' },
                 { data: 'website', name: 'website' },
