@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2a79e55921ffe3178942edf804dcda1a
+class ComposerStaticInitb1ef59f103206c1c4acf349c12845d26
 {
     public static $files = array (
         '1d1b89d124cc9cb8219922c9d5569199' => __DIR__ . '/..' . '/hamcrest/hamcrest-php/hamcrest/Hamcrest.php',
@@ -476,7 +476,9 @@ class ComposerStaticInit2a79e55921ffe3178942edf804dcda1a
         'App\\Policies\\AppointmentPolicy' => __DIR__ . '/../..' . '/app/Policies/AppointmentPolicy.php',
         'App\\Policies\\CustomerPolicy' => __DIR__ . '/../..' . '/app/Policies/CustomerPolicy.php',
         'App\\Policies\\RolePolicy' => __DIR__ . '/../..' . '/app/Policies/RolePolicy.php',
+        'App\\Policies\\SalesTeamPolicy' => __DIR__ . '/../..' . '/app/Policies/SalesTeamPolicy.php',
         'App\\Policies\\TaskPolicy' => __DIR__ . '/../..' . '/app/Policies/TaskPolicy.php',
+        'App\\Policies\\UserGroupPolicy' => __DIR__ . '/../..' . '/app/Policies/UserGroupPolicy.php',
         'App\\Policies\\UserPolicy' => __DIR__ . '/../..' . '/app/Policies/UserPolicy.php',
         'App\\Policy' => __DIR__ . '/../..' . '/app/Policy.php',
         'App\\Providers\\AppServiceProvider' => __DIR__ . '/../..' . '/app/Providers/AppServiceProvider.php',
@@ -1716,6 +1718,7 @@ class ComposerStaticInit2a79e55921ffe3178942edf804dcda1a
         'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithContainer' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithContainer.php',
         'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithDatabase' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithDatabase.php',
         'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithExceptionHandling' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithExceptionHandling.php',
+        'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithRedis' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithRedis.php',
         'Illuminate\\Foundation\\Testing\\Concerns\\InteractsWithSession' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/InteractsWithSession.php',
         'Illuminate\\Foundation\\Testing\\Concerns\\MakesHttpRequests' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MakesHttpRequests.php',
         'Illuminate\\Foundation\\Testing\\Concerns\\MocksApplicationServices' => __DIR__ . '/..' . '/laravel/framework/src/Illuminate/Foundation/Testing/Concerns/MocksApplicationServices.php',
@@ -4215,10 +4218,10 @@ class ComposerStaticInit2a79e55921ffe3178942edf804dcda1a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2a79e55921ffe3178942edf804dcda1a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2a79e55921ffe3178942edf804dcda1a::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit2a79e55921ffe3178942edf804dcda1a::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit2a79e55921ffe3178942edf804dcda1a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb1ef59f103206c1c4acf349c12845d26::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb1ef59f103206c1c4acf349c12845d26::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitb1ef59f103206c1c4acf349c12845d26::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitb1ef59f103206c1c4acf349c12845d26::$classMap;
 
         }, null, ClassLoader::class);
     }

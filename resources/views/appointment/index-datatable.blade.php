@@ -135,7 +135,7 @@
         };
 
 
-            var datatable = jQuery('#customers-table').DataTable({
+        var datatable = jQuery('#customers-table').DataTable({
 //                responsive: false,
                 select: true,
                 processing: true,
@@ -160,7 +160,7 @@
             });
 
 
-            var customer_select =  jQuery("#aptCustomerId").select2({
+        var customer_select =  jQuery("#aptCustomerId").select2({
 
 
 
@@ -225,6 +225,7 @@
         //creating appointment
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
+
         $('#appointmentForm').on('submit',function(e){
             e.preventDefault();
             var _token = $('input[name="_token"]').val();

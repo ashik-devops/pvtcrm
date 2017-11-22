@@ -307,8 +307,12 @@ class AccountsController extends Controller
     }
 
     public function getCustomerAccountWise(Request $request){
+
+
         $this->authorize('view', Account::find($request->accountId));
+
         if($request->accountId){
+
             return response()->json([
                 'customers' =>Customer::where('account_id',$request->accountId)->get()->map(
                     function($customer){

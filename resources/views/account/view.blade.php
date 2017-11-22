@@ -29,7 +29,6 @@
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
                                         <li class="name"><h3>{{$account->name}}</h3>
-
                                         <li class="name"><h5>Account No #{{$account->account_no}}</h5>
                                             <label class="label label-info"></label></li>
                                         <li>
@@ -71,7 +70,6 @@
                                                         <tr>
                                                             <td>Account Name</td>
                                                             <td>{{$account->name}}</td>
-
                                                         </tr>
                                                         <tr>
                                                             <td>Account Phone</td>
@@ -122,20 +120,21 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Tasks</h3>
-                                                <button id="new-task-btn" class="btn btn-warning pull-right"  style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>Create Task</button>
+                                                <button id="new-task-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>  Create Task</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered" id="tasks-list" style="width: 100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>Id</th>
-                                                            <th>Title</th>k
-                                                            <th>Description</th>
+                                                            <th>#</th>
+                                                            <th>Title</th>
+                                                            <th>Status</th>
                                                             <th>Due Date</th>
                                                             <th>Status</th>
                                                             <th>Priority</th>
-                                                            <th>Action</th>
+                                                            <th>Employee</th>
+                                                            <th>Actions</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
@@ -282,7 +281,7 @@
 
                 </div>
                 <div class="modal-body">
-                    @yield('account-create-from')
+                    @yield('customer-create-from')
                 </div>
             </div>
         </div>
@@ -340,19 +339,19 @@
             </div>
         </div>
     </div><!--/modal-->
-    <div class="modal customerModal" id="appointment-modal-view" role="dialog" aria-labelledby="appointment-modal-view">
+    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-view-appointment-label"> Appointment View</h4>
+                    <h4 class="modal-title" id="modal-new-task-label">Add New Task</h4>
                 </div>
                 <div class="modal-body">
-                    @yield('appointment-view')
+                    @yield('task-create-form')
                 </div>
             </div>
         </div>
-    </div>
+    </div><!--/modal-->
 
     <div class="modal customerModal" id="journal-modal" role="dialog" aria-labelledby="journal-modal">
         <div class="modal-dialog" role="document">
@@ -392,9 +391,7 @@
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
-
     @yield('journal-create-form-script')
-
     <script type="text/javascript">
         var task_date=moment();
         var journalDate=moment();
@@ -443,19 +440,18 @@
         var min_date = moment();
         var max_date = moment();
 
-
-
-        var task_customer_select= jQuery("#taskCustomerId").select2({
+        var customer_select= jQuery("#aptCustomerId").select2({
             placeholder: "Select a Customer",
             allowClear:true,
             ajax: {
                 url: "{{route('get-customer-account-wise')}}",
                 dataType: 'json',
                 delay: 250,
+
                 data: function (params) {
                     return {
                         q: params.term, // search term
-
+                        accountId: account_id,
                     };
                 },
                 processResults : function (data){
@@ -469,24 +465,22 @@
             }
         });
 
-
-        var customer_select =  jQuery("#aptCustomerId").select2({
-
-
-
+        var customer_select= jQuery("#taskCustomerId").select2({
             placeholder: "Select a Customer",
             allowClear:true,
             ajax: {
                 url: "{{route('get-customer-account-wise')}}",
                 dataType: 'json',
                 delay: 250,
+
                 data: function (params) {
                     return {
                         q: params.term, // search term
+                        accountId: account_id,
                     };
                 },
                 processResults : function (data){
-                    //console.log(data);
+
                     return {
                         results: data.customers
                     }
@@ -495,9 +489,6 @@
                 cache: true
             }
         });
-
-
-
 
 
 
@@ -578,9 +569,7 @@
         function createAppointment(){
 
             $('#appointment-modal').modal('show');
-
         }
-
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
         $('#appointmentForm').on('submit',function(e){
@@ -680,12 +669,6 @@
 
 
         }
-
-
-
-
-
-
         function editAppointment(id){
 
             $('#appointment_modal_button').val('Update Appointment');
@@ -943,8 +926,6 @@
                         swal("Cancelled", "Task is safe :)", "error");
                     }
                 });
-
-
         }
 
 

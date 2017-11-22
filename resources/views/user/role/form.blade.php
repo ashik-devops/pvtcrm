@@ -45,6 +45,14 @@
                     </div>
                 </div>
             @endforeach
+
+            <script>
+
+
+
+
+            </script>
+
         </fieldset>
         <div class="text-center">
             <button type="button" class="btn btn-danger" onclick="goBack()">Cancel</button>
