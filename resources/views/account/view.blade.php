@@ -255,7 +255,7 @@
 
                 </div>
                 <div class="modal-body">
-                    @yield('customer-create-from')
+                    @yield('account-create-from')
                 </div>
             </div>
         </div>

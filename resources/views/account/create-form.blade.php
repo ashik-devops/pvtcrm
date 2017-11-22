@@ -1,4 +1,4 @@
-@section('customer-create-from')
+@section('account-create-from')
     <form method="post" class="ajax-from"  data-parsley-validate id="accountForm">
 
         {{ csrf_field() }}
