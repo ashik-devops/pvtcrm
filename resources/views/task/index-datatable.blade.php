@@ -2,7 +2,14 @@
 @include('task.create-form')
 @include('task.task-view')
 @include('journal.create-form')
+@include('account.create-form')
+@include('appointment.create-form')
+@include('task.create-form')
+@include('journal.create-form')
+@include('customer.create-form')
+@include('appointment.appointment-view')
 @section('after-head-style')
+
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
     <link rel="stylesheet" href="https://cdn.datatables.net/select/1.2.2/css/select.bootstrap.min.css">

@@ -117,7 +117,7 @@ Route::post('/accounts/create', 'AccountsController@createAccount')->name('creat
 Route::get('/accounts/view/{account}', 'AccountsController@viewAccount')->name('view-account');//->middleware('can:list,App\Customer');
 Route::get('/accounts/edit/', 'AccountsController@editAccount')->name('edit.modal.data');//->middleware('can:list,App\Customer');
 Route::post('/accounts/update', 'AccountsController@updateAccount')->name('update.account');//->middleware('can:list,App\Customer');
-Route::get('/ajax/get-customer-account-wise', 'AccountsController@getCustomerAccountWise')->name('get-customer-account-wise');//->middleware('can:index,App\Customer');
+Route::get('/ajax/get-customer-account-wise', 'AccountsController@getCustomerAccountWise')->name('get-customer-account-wise')->middleware('can:index,App\Customer');
 
 Route::post('/accounts/delete', 'AccountsController@deleteAccount')->name('delete.account');//->middleware('can:list,App\Customer');
 Route::get('/ajax/accounts/data', 'AccountsController@getAccountsAjax')->name('account-data');//->middleware('can:list,App\Customer');

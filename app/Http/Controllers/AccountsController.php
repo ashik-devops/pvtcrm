@@ -95,6 +95,11 @@ class AccountsController extends Controller
                         <a  class="btn btn-xs btn-primary btn-warning"  onClick="editAccount('.$account->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                          ';
                 })
+            ->addColumn('name', function($account){
+                return "<a href='".route('view-account', [$account->id])."'>{$account->name}</a>";
+
+            })
+
             ->addColumn('email', function($account){
                 return "<a href='mailto:{$account->email}'>{$account->email}</a>";
             })
@@ -105,7 +110,7 @@ class AccountsController extends Controller
             ->addColumn('website', function($account){
                 return "<a href='{$account->website}'>{$account->website}</a>";
             })
-            ->rawColumns(['email', 'action', 'phone_no', 'website'])
+            ->rawColumns(['name','email', 'action', 'phone_no', 'website'])
             ->make(true);
     }
 
@@ -119,14 +124,19 @@ class AccountsController extends Controller
         $this->authorize('create', $account);
         return DataTables::of(DB::table('tasks_index')->where('account_id', $account->id))
             ->addColumn('customer_name', function ($task){
-                return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
+                    return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
             })
             ->addColumn('action',
                 function ($task){
-                    return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                    if ($task->status == 'Due'){
+                        return
+
+                            '<a  class="btn btn-xs btn-primary "   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                    }
+                    else {
+                        return '<a  class="btn btn-xs btn-primary"   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                    }
                 })
             ->rawColumns(['customer_name', 'action'])
             ->make(true);
@@ -312,4 +322,8 @@ class AccountsController extends Controller
 
 
     }
+
+
+
+
 }
