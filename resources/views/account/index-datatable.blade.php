@@ -67,14 +67,14 @@
 @endsection
 
 @section('modal')
-    <!--modal for creating Customer account-->
+    <!-- Modal for Editing account -->
     <div class="modal" id="modal-new-account" tabindex="-1" role="dialog" aria-labelledby="modal-new-account">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                     <div id="new_edit_account">
-                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New account</h4>
+                        <h4 class="modal-title" id="modal-new-ticket-label new_edit_user">Create New Account</h4>
                     </div>
 
                 </div>
@@ -84,6 +84,7 @@
             </div>
         </div>
     </div><!--/modal-->
+    <!-- Modal for creating customer -->
     <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -97,7 +98,73 @@
             </div>
         </div>
     </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal-view" role="dialog" aria-labelledby="task-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-task-label"> Task View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('task-view')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal-complete" role="dialog" aria-labelledby="task-modal-complete">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-complete-task-label"> Complete Task</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-appointment-label">Add New Appointment</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('appointment-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="appointment-modal-view" role="dialog" aria-labelledby="appointment-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-appointment-label"> Appointment View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('appointment-view')
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <div class="modal customerModal" id="journal-modal" role="dialog" aria-labelledby="journal-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-journal-label">Add New Journal</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+@endsection
 
 
 @section('after-footer-script')
@@ -384,6 +451,7 @@
         function get_all_account_data(){
             datatable.ajax.reload(null, false);
         }
+
 
     </script>
 @endsection
