@@ -449,7 +449,7 @@
             placeholder: "Select a Customer",
             allowClear:true,
             ajax: {
-                url: "{{route('get-customer-account-wise')}}",
+                url: "{{route('get-customer-account-wise', [$account->id])}}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -477,7 +477,7 @@
             placeholder: "Select a Customer",
             allowClear:true,
             ajax: {
-                url: "{{route('get-customer-account-wise')}}",
+                url: "{{route('get-customer-account-wise', [$account->id])}}",
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
@@ -1076,7 +1076,7 @@
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
-                    url: "{{route('get-customer-account-wise')}}",
+                    url: "{{route('get-customer-account-wise', [$account->id])}}",
                     dataType: 'json',
                     delay: 250,
 

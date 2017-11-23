@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Address;
 use App\Account;
 use App\Customer;
+use App\Traits\PolicyHelpers;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -14,6 +16,7 @@ use Yajra\DataTables\DataTables;
 
 class AccountsController extends Controller
 {
+    use PolicyHelpers;
 
     public function __construct()
     {
@@ -306,11 +309,26 @@ class AccountsController extends Controller
 
     }
 
-    public function getCustomerAccountWise(Request $request){
-        $this->authorize('view', Account::find($request->accountId));
-        if($request->accountId){
+    public function getCustomerAccountWise(Request $request, Account $account){
+        $this->authorize('index', $account);
+        $this->authorize('index', Customer::class);
+
+        $customers = Auth::user()->customers();
+
+        if($this->checkAdmin(Auth::user())){
+            $customers = new Customer();
+        }
+
+        if(!is_null($request->q)){
+            $customers=$customers->where(function($query) use ($request){
+                $query->where('first_name', 'like', $request->q.'%');
+                $query->orWhere('last_name', 'like', $request->q.'%');
+
+            });
+        }
+
             return response()->json([
-                'customers' =>Customer::where('account_id',$request->accountId)->get()->map(
+                'customers' =>$customers->where('account_id',$account->id)->get()->map(
                     function($customer){
                         $name=implode(', ', [$customer->last_name, $customer->first_name]);
 
@@ -318,7 +336,7 @@ class AccountsController extends Controller
                         return ['id'=>$customer->id,'text'=>$name];
                     })
             ]);
-        }
+
 
 
     }
