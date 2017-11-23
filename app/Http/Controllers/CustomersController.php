@@ -9,6 +9,7 @@ use App\Account;
 use App\Index_appointment;
 use App\Index_customer;
 use App\Index_tasks;
+use App\Traits\PolicyHelpers;
 use App\User;
 use App\User_profile;
 use Illuminate\Http\Request;
@@ -19,6 +20,7 @@ use Yajra\DataTables\DataTables;
 
 class CustomersController extends Controller
 {
+    use PolicyHelpers;
 
     public function __construct()
     {
@@ -298,18 +300,24 @@ class CustomersController extends Controller
 
         $this->authorize('index', Customer::class);
 
-        $customer = new Index_customer;
+        $customers = Auth::user()->customers();
+
+        if($this->checkAdmin(Auth::user())){
+            $customers = new Customer();
+        }
+
         if($request->q){
-            $customer = $customer->where('name', 'LIKE', '%'.$request->q.'%')
+            $customers = $customers->where('first_name', 'LIKE', $request->q.'%')
+            ->orWhere('last_name', 'LIKE', $request->q."%")
             ->orWhere('account_name', 'LIKE', "%".$request->q."%")
             ->orWhere('account_no', '=', $request->q);
          }
         return response()->json([
-            'customers' =>$customer->get()->map(
+            'customers' =>$customers->get()->map(
                 function($customer){
-                $name=implode(', ', [$customer->name]);
+                $name=implode(', ', [$customer->last_name, $customer->first_name]);
                 if($customer->account_id > 0){
-                    $name.=' @ '.$customer->account_name;
+                    $name.=' @ '.$customer->account->name;
                 }
 
                 return ['id'=>$customer->id,'text'=>$name];

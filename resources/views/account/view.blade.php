@@ -3,7 +3,11 @@
 @include('appointment.create-form')
 @include('task.create-form')
 @include('journal.create-form')
+@include('customer.create-form')
+@include('appointment.appointment-view')
+@include('task.task-view')
 @section('after-head-style')
+
     <link rel="stylesheet" href="{{asset('storage/assets/css/account.css')}}">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.10.15/css/jquery.dataTables.min.css">
     {{--<link rel="stylesheet" href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css">--}}
@@ -25,6 +29,7 @@
                                     {{--                                    <img class="img-profile img-circle img-responsive center-block" src="{{asset('storage/'.$user->profile->profile_pic)}}" alt="" />--}}
                                     <ul class="meta list list-unstyled">
                                         <li class="name"><h3>{{$account->name}}</h3>
+
                                         <li class="name"><h5>Account No #{{$account->account_no}}</h5>
                                             <label class="label label-info"></label></li>
                                         <li>
@@ -66,6 +71,7 @@
                                                         <tr>
                                                             <td>Account Name</td>
                                                             <td>{{$account->name}}</td>
+
                                                         </tr>
                                                         <tr>
                                                             <td>Account Phone</td>
@@ -90,6 +96,8 @@
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Journal Entries</h3>
                                                 <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createJournal()" ><i class="fa fa-plus"></i>  Create Journal</button>
+                                                {{--<button id="new-apt-btn" class="btn btn-success" data-toggle="modal" data-target="#appointment-modal"><i class="fa fa-plus"></i>New Appointment</button>--}}
+
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
@@ -114,20 +122,20 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Tasks</h3>
-                                                <button id="new-task-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>  Create Task</button>
+                                                <button id="new-task-btn" class="btn btn-warning pull-right"  style="margin-top:-24px;" onClick="createTask()" ><i class="fa fa-plus"></i>Create Task</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="table-responsive">
                                                     <table class="table table-bordered" id="tasks-list" style="width: 100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
-                                                            <th>Title</th>
-                                                            <th>Status</th>
+                                                            <th>Id</th>
+                                                            <th>Title</th>k
+                                                            <th>Description</th>
                                                             <th>Due Date</th>
+                                                            <th>Status</th>
                                                             <th>Priority</th>
-                                                            <th>Employee</th>
-                                                            <th>Actions</th>
+                                                            <th>Action</th>
                                                         </tr>
                                                         </thead>
                                                     </table>
@@ -141,21 +149,40 @@
                                                 <h3 class="panel-title">Appointments</h3>
                                                 <button id="new-apt-btn" class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="createAppointment()" ><i class="fa fa-plus"></i>  Create Appointment</button>
                                             </div>
-                                            <div class="panel-body">
-                                                <div class="table-responsive">
-                                                    <table class="table table-bordered" id="appointments-list" style="width: 100%">
-                                                        <thead>
-                                                        <tr>
-                                                            <th>#</th>
-                                                            <th>Title</th>
-                                                            <th>Description</th>
-                                                            <th>Start Time</th>
-                                                            <th>End Time</th>
-                                                            <th>Employee</th>
-                                                            <th>Action</th>
-                                                        </tr>
-                                                        </thead>
-                                                    </table>
+
+                                            <div id="masonry" class="row">
+                                                <div class="module-wrapper masonry-item col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                    <section class="module module-headings">
+                                                        <div class="module-inner">
+                                                            <div class="module-heading">
+                                                                {{--<h3 class="module-title">Appointment</h3>--}}
+
+                                                            </div>
+
+                                                            <div class="module-content collapse in" id="customers">
+                                                                <div class="module-content-inner no-padding-bottom">
+                                                                    <div class="table-responsive">
+                                                                        <table id="customers-appointment-table" class="table table-bordered display" style="width: 100%;">
+                                                                            <thead>
+                                                                            <tr>
+                                                                                <th>Id</th>
+                                                                                <th>Title</th>
+                                                                                {{--<th>Customer</th>--}}
+                                                                                <th>Descriptionhuha</th>
+                                                                                <th>Start Time</th>
+                                                                                <th>End Time</th>
+                                                                                <th>Status</th>
+                                                                                {{--<th></th>--}}
+                                                                                {{--<th></th>--}}
+                                                                                <th>Action</th>
+                                                                            </tr>
+                                                                            </thead>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </section>
                                                 </div>
                                             </div>
                                         </div>
@@ -261,19 +288,6 @@
         </div>
     </div><!--/modal-->
     <!-- Modal for creating customer -->
-    <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-appointment-label">Add New Appointment</h4>
-                </div>
-                <div class="modal-body">
-                    @yield('appointment-create-form')
-                </div>
-            </div>
-        </div>
-    </div><!--/modal-->
     <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -287,6 +301,58 @@
             </div>
         </div>
     </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal-view" role="dialog" aria-labelledby="task-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-task-label"> Task View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('task-view')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="task-modal-complete" role="dialog" aria-labelledby="task-modal-complete">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-complete-task-label"> Complete Task</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-appointment-label">Add New Appointment</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('appointment-create-form')
+                </div>
+            </div>
+        </div>
+    </div><!--/modal-->
+    <div class="modal customerModal" id="appointment-modal-view" role="dialog" aria-labelledby="appointment-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-appointment-label"> Appointment View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('appointment-view')
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal customerModal" id="journal-modal" role="dialog" aria-labelledby="journal-modal">
         <div class="modal-dialog" role="document">
@@ -326,7 +392,9 @@
     <script src="{{asset('storage/assets/js/bootstrap-datetimepicker.js')}}"></script>
     <script src="{{asset('storage/assets/js/jquery-data-tables-bs3.js')}}"></script>
     <script src="{{asset('storage/assets/js/parsley.js')}}"></script>
+
     @yield('journal-create-form-script')
+
     <script type="text/javascript">
         var task_date=moment();
         var journalDate=moment();
@@ -377,32 +445,60 @@
 
 
 
-        function get_customer(account_id){
-            var customer_select= jQuery("#aptCustomerId").select2({
-                placeholder: "Select a Customer",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('get-customer-account-wise')}}",
-                    dataType: 'json',
-                    delay: 250,
+        var task_customer_select= jQuery("#taskCustomerId").select2({
+            placeholder: "Select a Customer",
+            allowClear:true,
+            ajax: {
+                url: "{{route('get-customer-account-wise', [$account->id])}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
 
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            accountId: account_id,
-                        };
-                    },
-                    processResults : function (data){
+                    };
+                },
+                processResults : function (data){
 
-                        return {
-                            results: data.customers
-                        }
-                    },
+                    return {
+                        results: data.customers
+                    }
+                },
 
-                    cache: true
-                }
-            });
-        }
+                cache: true
+            }
+        });
+
+
+        var customer_select =  jQuery("#aptCustomerId").select2({
+
+
+
+            placeholder: "Select a Customer",
+            allowClear:true,
+            ajax: {
+                url: "{{route('get-customer-account-wise', [$account->id])}}",
+                dataType: 'json',
+                delay: 250,
+                data: function (params) {
+                    return {
+                        q: params.term, // search term
+                    };
+                },
+                processResults : function (data){
+                    //console.log(data);
+                    return {
+                        results: data.customers
+                    }
+                },
+
+                cache: true
+            }
+        });
+
+
+
+
 
 
 
@@ -480,9 +576,11 @@
 
 
         function createAppointment(){
-            get_customer(account_id);
+
             $('#appointment-modal').modal('show');
+
         }
+
         $('#appointment_modal_button').val('Add Appointment');
         $('#modal-new-appointment-label').text('Add An Appointment');
         $('#appointmentForm').on('submit',function(e){
@@ -582,6 +680,12 @@
 
 
         }
+
+
+
+
+
+
         function editAppointment(id){
 
             $('#appointment_modal_button').val('Update Appointment');
@@ -682,30 +786,6 @@
 
 
         function createTask(){
-            var customer_select= jQuery("#taskCustomerId").select2({
-                placeholder: "Select a Customer",
-                allowClear:true,
-                ajax: {
-                    url: "{{route('get-customer-account-wise')}}",
-                    dataType: 'json',
-                    delay: 250,
-
-                    data: function (params) {
-                        return {
-                            q: params.term, // search term
-                            accountId: account_id,
-                        };
-                    },
-                    processResults : function (data){
-
-                        return {
-                            results: data.customers
-                        }
-                    },
-
-                    cache: true
-                }
-            });
 
             $('#task-modal').modal('show');
         }
@@ -863,7 +943,59 @@
                         swal("Cancelled", "Task is safe :)", "error");
                     }
                 });
+
+
         }
+
+
+
+        function viewTask(id){
+
+            $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
+                console.log(data.task);
+                if(data){
+                    $('#task_id').val(data.task.id);
+                    $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
+
+                    $('#viewTaskTitle').html(data.task.title);
+                    $('#viewTaskDescription').html(data.task.description);
+                    $('#viewTaskDeadline').html(data.task.due_date);
+
+                    //task_date = moment(data.task.due_date);
+                    $('#viewTaskPriority').html(data.task.priority);
+                    $('#viewTaskStatus').html(data.task.status);
+                    if(data.task.status == "Done" || data.task.status == "Complete"||data.task.status == "Cancel" || data.task.status == "Cancelled"){
+                        $("#complete-task-button").hide();
+                        $("#cancel-task-button").hide();
+                        $("#edit-task-button").hide();
+
+                    }
+                    else {
+                        $("#complete-task-button").show();
+                        $("#cancel-task-button").show();
+                        $("#edit-task-button").show();
+
+                    }
+                    //updateDates();
+                    //var id = data.task.id;
+                    //console.log(id);
+
+                }
+
+            });
+
+            $('#task-modal-view').modal('show');
+            $('#taskIdForView').val(id);
+
+
+
+
+        }
+
+
+
+
+
 
         function get_all_task_data(){
             task_datatable.ajax.reload(null, false);
@@ -944,7 +1076,7 @@
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
-                    url: "{{route('get-customer-account-wise')}}",
+                    url: "{{route('get-customer-account-wise', [$account->id])}}",
                     dataType: 'json',
                     delay: 250,
 
@@ -1259,6 +1391,127 @@
 
         function reset_account_form(el) {
             el.reset();
+
+        }
+
+
+
+        function completeTaskWithClosingView(){
+            var id = $('#taskIdForView').val();
+
+            $('#task-modal-view').modal('hide');
+
+
+            closeTask(id, 'Complete');
+
+        }
+
+        function cancelTaskWithClosingView(id){
+            var id = $('#taskIdForView').val();
+
+            $('#task-modal-view').modal('hide');
+
+
+            closeTask(id, 'Cancel');
+
+        }
+
+        function editTaskWithClosingView(){
+            var id = $('#taskIdForView').val();
+
+            $('#task-modal-view').modal('hide');
+
+
+            editTask(id);
+
+        }
+
+
+
+        function closeTask(id, status){
+
+
+            $('#journal_modal_button').val(status+ ' Task');
+            $('#modal-complete-task-label').val(status+ ' Task');
+            if(status=='Complete'){
+                status='Done';
+
+            }
+            else if(status=='Cancel'){
+                status = 'Cancelled';
+            }
+
+            $('#origin_id').val(id);
+            $('#journal-customer-id').remove();
+
+            $('#task-modal-complete').modal('show');
+            $('#journalForm').unbind('submit');
+            $('#journalForm').on('submit',function(e) {
+
+                e.preventDefault();
+                var _token = $('input[name="_token"]').val();
+
+                var journal = {
+                    originId : $('#'+journalInputMap.originId).val(),
+                    journalTitle : $('#'+journalInputMap.journalTitle).val(),
+                    journalDescription : $('#'+journalInputMap.journalDescription).val(),
+                    journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
+                };
+                if($('input[name=followUpType]:checked').val() === 'appointment'){
+                    journal.followup = {
+                        type : 'appointment',
+                        followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
+                        appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
+                        followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                        followupAppointmentStartTime : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                        followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
+                    };
+                }
+
+                else if($('input[name=followUpType]:checked').val() === 'task'){
+                    journal.followup = {
+                        type : 'task',
+                        followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
+                        followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
+                        followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
+                        followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
+                    };
+                }
+
+                var data = {
+                    _token : _token,
+                    journal: journal,
+                    action: status
+                };
+
+
+
+                var request = jQuery.ajax({
+                    url: "{{ route('close.task') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+
+                    if(response.result == 'Saved'){
+                        reset_journal_form($('#journalForm')[0]);
+                        $('#task-modal-complete').modal('hide');
+                        get_all_task_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(jqXHT.responseJSON.message, "error");
+                });
+
+
+
+            });
 
         }
 

@@ -364,6 +364,7 @@
 
     @yield('journal-create-form-script')
 
+
     <script type="text/javascript">
         var task_date=moment();
         var journalDate=moment();
@@ -378,7 +379,6 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-
                     { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
                     { data: 'status', name: 'status' },
@@ -1479,7 +1479,7 @@
                 $('#logDateTimePicker').datetimepicker();
 
             });
-            $('#journal-modal').modal('show');
+            $('#task-modal-complete').modal('show');
         }
 
 

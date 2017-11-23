@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Address;
 use App\Account;
 use App\Customer;
+use App\Traits\PolicyHelpers;
 use Illuminate\Http\Request;
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use phpDocumentor\Reflection\Types\Boolean;
@@ -14,6 +16,7 @@ use Yajra\DataTables\DataTables;
 
 class AccountsController extends Controller
 {
+    use PolicyHelpers;
 
     public function __construct()
     {
@@ -90,17 +93,18 @@ class AccountsController extends Controller
             ->addColumn('action',
                 function ($account){
                     return
-                        '<a href="'.route('view-account', [$account->id]).'" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
-                        <a  class="btn btn-xs btn-warning"  onClick="editAccount('.$account->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
+                        '
+                        <a href="'.route('view-account', [$account->id]).'" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editAccount('.$account->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
                          ';
                 })
             ->addColumn('name', function($account){
                 return "<a href='".route('view-account', [$account->id])."'>{$account->name}</a>";
 
             })
+
             ->addColumn('email', function($account){
                 return "<a href='mailto:{$account->email}'>{$account->email}</a>";
-
             })
 
             ->addColumn('phone_no', function($account){
@@ -123,14 +127,19 @@ class AccountsController extends Controller
         $this->authorize('create', $account);
         return DataTables::of(DB::table('tasks_index')->where('account_id', $account->id))
             ->addColumn('customer_name', function ($task){
-                return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
+                    return '<a href="'.route('view-customer',[$task->customer_id]).'">'.$task->customer_last_name.', '. $task->customer_first_name.'</a>';
             })
             ->addColumn('action',
                 function ($task){
-                    return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="deleteTask('.$task->id.')" ><i class="glyphicon glyphicon-remove"></i> Delete</a>
-                        <a href="#" target="_blank" class="btn btn-xs btn-primary"><i class="glyphicon glyphicon-edit"></i> View</a>';
+                    if ($task->status == 'Due'){
+                        return
+
+                            '<a  class="btn btn-xs btn-primary "   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>
+                        <a  class="btn btn-xs btn-primary btn-warning"  onClick="editTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>';
+                    }
+                    else {
+                        return '<a  class="btn btn-xs btn-primary"   onClick="viewTask('.$task->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                    }
                 })
             ->rawColumns(['customer_name', 'action'])
             ->make(true);
@@ -300,11 +309,26 @@ class AccountsController extends Controller
 
     }
 
-    public function getCustomerAccountWise(Request $request){
-        $this->authorize('view', Account::find($request->accountId));
-        if($request->accountId){
+    public function getCustomerAccountWise(Request $request, Account $account){
+        $this->authorize('index', $account);
+        $this->authorize('index', Customer::class);
+
+        $customers = Auth::user()->customers();
+
+        if($this->checkAdmin(Auth::user())){
+            $customers = new Customer();
+        }
+
+        if(!is_null($request->q)){
+            $customers=$customers->where(function($query) use ($request){
+                $query->where('first_name', 'like', $request->q.'%');
+                $query->orWhere('last_name', 'like', $request->q.'%');
+
+            });
+        }
+
             return response()->json([
-                'customers' =>Customer::where('account_id',$request->accountId)->get()->map(
+                'customers' =>$customers->where('account_id',$account->id)->get()->map(
                     function($customer){
                         $name=implode(', ', [$customer->last_name, $customer->first_name]);
 
@@ -312,8 +336,12 @@ class AccountsController extends Controller
                         return ['id'=>$customer->id,'text'=>$name];
                     })
             ]);
-        }
+
 
 
     }
+
+
+
+
 }
