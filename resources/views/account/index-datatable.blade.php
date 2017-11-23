@@ -79,7 +79,7 @@
 
                 </div>
                 <div class="modal-body">
-                    @yield('customer-create-from')
+                    @yield('account-create-from')
                 </div>
             </div>
         </div>
@@ -378,7 +378,7 @@
             $('#account_id').val('');
         }
 
-        function editAccount(id){
+        function editAccount( id){
 
             $('#new_edit_account .modal-title').html('Edit account');
 
@@ -406,47 +406,6 @@
             $('#modal-new-account').modal('show');
         }
 
-
-        function deleteAccount(id){
-            var _token = $('input[name="_token"]').val();
-            var data = {
-                _token : _token,
-                id: id
-            };
-            swal({
-                    title: "Are you sure?",
-                    text: "This Information will be trashed!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel !",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
-
-                        //deletion process is going on....
-
-
-                        $.post("{{ route('delete.account') }}", data, function(result){
-
-                            if(result.result == 'Success'){
-                                swal("Deleted!", "account has been deleted.", "success");
-                                get_all_account_data();
-                                $.notify(result, "danger");
-                            }
-                            else{
-                                swal("Failed", "Failed to delete the account", "error");
-                            }
-
-                        });
-                    } else {
-                        swal("Cancelled", "account is safe :)", "error");
-                    }
-                });
-        }
 
         function get_all_account_data(){
             datatable.ajax.reload(null, false);
