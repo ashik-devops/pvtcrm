@@ -1454,7 +1454,9 @@
 
 
         function createJournal(){
-            $('#modal-new-journal-label').text('Edit Journal');
+            $('#modal-complete-task-label').text('Add Journal');
+            $('#journal-customer-id').remove();
+            $('#journal_modal_button').text('Save');
             $('#FollowupSection').show();
             journalDate=moment();
             reset_journal_form($('#journalForm')[0]);
@@ -1464,13 +1466,8 @@
                 $('#logDateTimePicker').datetimepicker();
 
             });
-            $('#journal-modal').modal('show');
+            $('#task-modal-complete').modal('show');
         }
-
-
-
-
-
 
 
         $('#journalForm').on('submit',function(e) {

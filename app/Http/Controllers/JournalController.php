@@ -103,7 +103,7 @@ class JournalController extends Controller
     public function createJournal(Request $request){
         $this->validator($request->journal)->validate();
         $journal = new Journal();
-        $journal->customer_id = $request->journal['journalCustomerId'];
+//        $journal->customer_id = $request->journal['journalCustomerId'];
         $journal->title = $request->journal['journalTitle'];
         $journal->description = $request->journal['journalDescription'];
         $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
