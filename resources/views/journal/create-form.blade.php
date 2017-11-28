@@ -209,9 +209,6 @@
             $('#followUpTask').hide();
             $('#followUpAppointment').hide();
         }
-
-        formPrepare();
-
             function followUpTest(){
                 if($("#followUpCheck").prop('checked') == true) {
                     $('#typeItem').show();

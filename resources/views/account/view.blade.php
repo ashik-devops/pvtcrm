@@ -104,7 +104,6 @@
                                                     <table class="table table-bordered" id="journals-list" style="width: 100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
                                                             <th>Log Date</th>
                                                             <th>Title</th>
                                                             <th>Description</th>
@@ -885,6 +884,7 @@
             $('#journal-customer-id').remove();
 
             $('#journal-modal').modal('show');
+            $("#journal_modal_button").text("Complete Appointment");
             $('#journalForm').unbind('submit');
             $('#journalForm').on('submit',function(e) {
                 e.preventDefault();
@@ -935,7 +935,7 @@
                 request.done(function (response) {
 
                     if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
+
                         $('#journal-modal').modal('hide');
                         get_all_appointment_data();
                         $.notify(response.message, "success");
@@ -1147,7 +1147,6 @@
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
             ajax: '{!! route('account-journal-data', $account->id) !!}',
             columns: [
-                {data: 'id', name: 'id'},
                 {data: 'log_date', name: 'log_date'},
                 {data: 'title', name: 'title'},
                 {data: 'description', name: 'description'},
@@ -1160,13 +1159,16 @@
 
 
 
-        function createJournal(){
-            $('#modal-new-journal-label').text('Edit Journal');
-            $('#FollowupSection').show();
-            journalDate=moment();
-            reset_journal_form($('#journalForm')[0]);
+        function createJournal() {
+            $('#journal-modal').modal('show');
+            $('#modal-new-journal-label').text('Create Journal');
+            $("#journal_modal_button").text("Create Journal");
 
-            var customer_select= jQuery("#journalCustomerId").select2({
+            journalDate = moment();
+
+
+        }
+            var journal_customer_select= jQuery("#journalCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -1190,12 +1192,12 @@
                     cache: true
                 }
             });
+
             jQuery('.modal').on('shown.bs.modal', function () {
                 $('#logDateTimePicker').datetimepicker();
 
             });
-            $('#journal-modal').modal('show');
-        }
+
 
 
 
@@ -1247,7 +1249,7 @@
                 request.done(function (response) {
 
                     if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
+
                         $('#journal-modal').modal('hide');
                         get_all_journal_data();
                         $.notify(response.message, "success");
@@ -1272,7 +1274,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
+
                         $('#journal-modal').modal('hide');
                         get_all_journal_data();
                         jQuery.notify(response.message, "success");
@@ -1289,46 +1291,9 @@
 
         });
 
-        function reset_followup_task_form(){
-            $('#'+journalInputMap.followupTaskTitle).val('');
-                $('#'+journalInputMap.followupTaskDescription).val('');
-                $('#'+journalInputMap.followupTaskDueDate).val('');
-               $('#'+journalInputMap.followupTaskPriority).val('');
-        }
 
-        function reset_journal_form(el){
-            el.reset();
-            $('#'+journalInputMap.journalId).val('');
-            reset_followup_task_form();
-            reset_followup_appointment_form();
-        }
 
-        function reset_followup_appointment_form(){
-            $('#'+journalInputMap.followupAppointmentTitle).val('');
-               $('#f'+journalInputMap.followupAppointmentDescription).val('');
-              $('#'+journalInputMap.followupAppointmentStartTime).val('');
-               $('#'+journalInputMap.followupAppointmentEndTime).val('')
-        }
 
-        function editJournal(id){
-
-            $('#journal_modal_button').val('Update Journal');
-            $('#modal-new-journal-label').text('Edit Journal');
-            $('#FollowupSection').hide();
-            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
-                if(data){
-                    $('#journal_id').val(data.journal.id);
-                    $('#journalCustomerId').val(data.journal.customer_id);
-                    $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.account.name+"</option>");
-                    $('#journalTitle').val(data.journal.title);
-                    $('#journalDescription').val(data.journal.description);
-                    journalDate=moment(data.journal.log_date);
-                    updateJournalDates();
-                }
-
-            });
-            $('#journal-modal').modal('show');
-        }
         function updateJournalDates(){
             jQuery("#journalLogDate").data("DateTimePicker").date(journalDate);
             jQuery("#journalLogDate").data("DateTimePicker").minDate(moment());
@@ -1338,6 +1303,7 @@
             journal_datatable.ajax.reload(null, false);
         }
         /*========End Journal Module in Company Single view =========*/
+
 
         function editAccount(){
             var id = '{{$account->id}}';
@@ -1531,7 +1497,11 @@
             $('#journal-customer-id').remove();
 
             $('#journal-modal').modal('show');
+
+            $("#journal_modal_button").text("Complete Task");
+
             $('#journalForm').unbind('submit');
+
             $('#journalForm').on('submit',function(e) {
 
                 e.preventDefault();
@@ -1581,7 +1551,7 @@
                 request.done(function (response) {
 
                     if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
+
                         $('#journal-modal').modal('hide');
                         get_all_task_data();
                         $.notify(response.message, "success");
@@ -1600,6 +1570,14 @@
             });
 
         }
+
+        jQuery('#journal-modal').on('shown.bs.modal', function () {
+            formPrepare();
+        });
+
+        jQuery('#journal-modal').on('hidden.bs.modal', function () {
+            reset_journal_form(jQuery("#journalForm")[0]);
+        });
 
         //Appointment functions
 
