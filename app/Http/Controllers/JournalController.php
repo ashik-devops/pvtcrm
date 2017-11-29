@@ -93,26 +93,29 @@ class JournalController extends Controller
                     }else{
                         return '';
                     }
-            })
+                })
 
 
             ->rawColumns(['id', 'title', 'description', 'followup', 'log_date','action'])
             ->make(true);
     }
 
-    public function createJournal(Request $request){
+    public function createJournal(Request $request)
+    {
+//        $this->authorize('create', Journal::class);
         $this->validator($request->journal)->validate();
         $journal = new Journal();
-//        $journal->customer_id = $request->journal['journalCustomerId'];
+        $journal->customer_id = $request->journal['journalCustomerId'];
         $journal->title = $request->journal['journalTitle'];
         $journal->description = $request->journal['journalDescription'];
         $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
 
-        $followup=null;
 
-        if(isset($request->journal['followup']['type'])){
+        $followup = null;
 
-            if($request->journal['followup']['type'] == 'task'){
+        if (isset($request->journal['followup']['type'])) {
+
+            if ($request->journal['followup']['type'] == 'task') {
                 $followup = new Task();
                 $followup->title = $request->journal['followup']['followupTaskTitle'];
                 $followup->customer_id = $request->journal['journalCustomerId'];
@@ -120,9 +123,7 @@ class JournalController extends Controller
                 $followup->due_date = Carbon::parse($request->journal['followup']['followupTaskDueDate']);
                 $followup->status = "Due";
                 $followup->priority = $request->journal['followup']['followupTaskPriority'];
-            }
-
-            else if($request->journal['followup']['type'] == 'appointment'){
+            } else if ($request->journal['followup']['type'] == 'appointment') {
                 $followup = new Appointment();
                 $followup->title = $request->journal['followup']['followupAppointmentTitle'];
                 $followup->customer_id = $request->journal['journalCustomerId'];
@@ -132,27 +133,24 @@ class JournalController extends Controller
                 $followup->end_time = Carbon::parse($request->journal['followup']['followupAppointmentEndTime']);
             }
 
-        if(!$request->task['taskTitle'] && !$request->appointment['appointmentTitle']){
+        }
+        DB::beginTransaction();
+        $journal->save();
 
-
-            DB::beginTransaction();
-            $journal->save();
-
-            if($followup!=null){
+        if ($followup != null) {
             $followup->save();
             $followup->journals()->save($journal);
-            }
         }
-            DB::commit();
-        }
+        DB::commit();
 
 
         return response()->json([
-            'result'=>'Saved',
-            'message'=>'Journal has been created successfully.'
-        ],200);
+            'result' => 'Saved',
+            'message' => 'Journal has been created successfully.'
+        ], 200);
 
     }
+
 
     public function editJournal(Request $request){
 
@@ -160,7 +158,7 @@ class JournalController extends Controller
         $customer = Customer::findOrFail($journal->customer_id);
         if($journal->related_obj_type == 'App\Task'){
 
-           $task = Task::findOrFail($journal->related_obj_id);
+            $task = Task::findOrFail($journal->related_obj_id);
             return response()->json([
                 'journal' => $journal,
                 'task' => $task,
@@ -169,7 +167,7 @@ class JournalController extends Controller
         }
         if($journal->related_obj_type == 'App\Appointment'){
 
-           $appointment = Appointment::findOrFail($journal->related_obj_id);
+            $appointment = Appointment::findOrFail($journal->related_obj_id);
             return response()->json([
                 'journal' => $journal,
                 'customer' => $customer,
@@ -179,7 +177,7 @@ class JournalController extends Controller
         }
         if(! $journal->related_obj_type ){
 
-           $appointment = Appointment::findOrFail($request->id);
+            $appointment = Appointment::findOrFail($request->id);
             return response()->json([
                 'journal' => $journal,
                 'customer' => $customer

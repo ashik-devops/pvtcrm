@@ -755,6 +755,7 @@
         //updating task
         $('#task_modal_button').val('Add Task');
         $('#modal-new-task-label').text('Add A Task');
+
         $('#taskForm').on('submit',function(e){
             e.preventDefault();
             var _token = $('input[name="_token"]').val();
@@ -837,8 +838,9 @@
 
         }
         function createTask(){
-
+            reset_task_form($('#taskForm')[0]);
             $('#task-modal').modal('show');
+
         }
 
 
@@ -910,6 +912,7 @@
 
                 var journal = {
                     originId : $('#'+journalInputMap.originId).val(),
+                    journalCustomerId : "{{$customer->id}}",
                     journalTitle : $('#'+journalInputMap.journalTitle).val(),
                     journalDescription : $('#'+journalInputMap.journalDescription).val(),
                     journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
@@ -1467,7 +1470,12 @@
 
             });
             $('#task-modal-complete').modal('show');
+
+
+
         }
+
+
 
 
         $('#journalForm').on('submit',function(e) {
@@ -1476,7 +1484,7 @@
 
             var journal = {
                 journalId : $('#'+journalInputMap.journalId).val(),
-                journalCustomerId : "{{$customer->id}}",
+                journalCustomerId : '{{$customer->id}}',
                 journalTitle : $('#'+journalInputMap.journalTitle).val(),
                 journalDescription : $('#'+journalInputMap.journalDescription).val(),
                 journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
@@ -1558,6 +1566,8 @@
             }
 
         });
+
+
 
 
 
