@@ -76,8 +76,7 @@ class JournalController extends Controller
             ->addColumn('action',
                 function ($journal){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-warning"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('followup',
                 function($journal){
