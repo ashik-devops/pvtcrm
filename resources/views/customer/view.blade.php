@@ -1541,7 +1541,7 @@
 
                     if(response.result == 'Saved'){
                         reset_journal_form($('#journalForm')[0]);
-                        $('#journal-modal').modal('hide');
+                        $('#task-modal-complete').modal('hide');
                         get_all_journal_data();
                         $.notify(response.message, "success");
                     }
@@ -1566,7 +1566,7 @@
                 request.done(function (response) {
                     if(response.result == 'Saved'){
                         reset_journal_form($('#journalForm')[0]);
-                        $('#journal-modal').modal('hide');
+                        $('#task-modal-complete').modal('hide');
                         get_all_journal_data();
                         jQuery.notify(response.message, "success");
                     }
@@ -1587,23 +1587,7 @@
 
 
 
-        function editJournal(id){
 
-            $('#journal_modal_button').val('Update Journal');
-            $('#modal-new-journal-label').text('Edit Journal');
-            $('#FollowupSection').hide();
-            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
-                if(data){
-                    $('#journal_id').val(data.journal.id);
-                    $('#journalTitle').val(data.journal.title);
-                    $('#journalDescription').val(data.journal.description);
-                    journalDate=moment(data.journal.log_date);
-                    updateJournalDates();
-                }
-
-            });
-            $('#journal-modal').modal('show');
-        }
         function updateJournalDates(){
             jQuery("#journalLogDate").data("DateTimePicker").date(journalDate);
             jQuery("#journalLogDate").data("DateTimePicker").minDate(moment());

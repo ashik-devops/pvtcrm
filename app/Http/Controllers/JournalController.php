@@ -16,7 +16,7 @@ use Yajra\DataTables\DataTables;
 class JournalController extends Controller
 {
 
-    protected function validator(array $data, $isUpdate=false){
+    protected function validator(array $data){
         $rules=[
             'journalCustomerId'=>'required|integer|exists:customers,id',
             'journalTitle'=>'required|string',
@@ -24,9 +24,6 @@ class JournalController extends Controller
             'journalLogDate'=>'required|date',
         ];
 
-        if($isUpdate){
-            $rules['journalId']='required|integer|exists:journals,id';
-        }
 
         if(isset($data['followup']['type'])){
             if($data['followup']['type']=='task'){
@@ -76,7 +73,7 @@ class JournalController extends Controller
             ->addColumn('action',
                 function ($journal){
                     return
-                        '<a  class="btn btn-xs btn-warning"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('followup',
                 function($journal){
@@ -133,7 +130,7 @@ class JournalController extends Controller
 
         if ($followup != null) {
             $followup->save();
-            $followup->journals()->save($journal);
+            $followup->journal()->save($journal);
         }
         DB::commit();
 
@@ -183,23 +180,4 @@ class JournalController extends Controller
 
     }
 
-    public function updateJournal(Request $request){
-        $this->validator($request->journal, true)->validate();
-        $journal = Journal::findOrFail($request->journal['journalId']);
-        $journal->customer_id = $request->journal['journalCustomerId'];
-        $journal->title = $request->journal['journalTitle'];
-        $journal->description = $request->journal['journalDescription'];
-        $journal->log_date = Carbon::parse($request->journal['journalLogDate']);
-
-        $journal->save();
-
-        return response()->json([
-            'result'=>'Saved',
-            'message'=>'Journal has been updated successfully.'
-        ], 200);
-
-
-
-
-    }
 }
