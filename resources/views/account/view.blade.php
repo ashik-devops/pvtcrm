@@ -104,7 +104,6 @@
                                                     <table class="table table-bordered" id="journals-list" style="width: 100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
                                                             <th>Log Date</th>
                                                             <th>Title</th>
                                                             <th>Description</th>
@@ -130,7 +129,8 @@
                                                         <thead>
                                                         <tr>
                                                             <th>Id</th>
-                                                            <th>Title</th>k
+                                                            <th>Title</th>
+                                                            <th>Customer</th>
                                                             <th>Description</th>
                                                             <th>Due Date</th>
                                                             <th>Status</th>
@@ -162,18 +162,18 @@
                                                             <div class="module-content collapse in" id="customers">
                                                                 <div class="module-content-inner no-padding-bottom">
                                                                     <div class="table-responsive">
-                                                                        <table id="customers-appointment-table" class="table table-bordered display" style="width: 100%;">
+                                                                        <table id="appointments-list" class="table table-bordered display" style="width: 100%;">
                                                                             <thead>
                                                                             <tr>
                                                                                 <th>Id</th>
                                                                                 <th>Title</th>
-                                                                                {{--<th>Customer</th>--}}
-                                                                                <th>Descriptionhuha</th>
+                                                                                <th>Customer</th>
+                                                                                <th>Description</th>
                                                                                 <th>Start Time</th>
                                                                                 <th>End Time</th>
                                                                                 <th>Status</th>
-                                                                                {{--<th></th>--}}
-                                                                                {{--<th></th>--}}
+                                                                                <th></th>
+                                                                                <th></th>
                                                                                 <th>Action</th>
                                                                             </tr>
                                                                             </thead>
@@ -282,7 +282,7 @@
 
                 </div>
                 <div class="modal-body">
-                    @yield('customer-create-from')
+                    @yield('account-create-from')
                 </div>
             </div>
         </div>
@@ -314,19 +314,19 @@
             </div>
         </div>
     </div><!--/modal-->
-    <div class="modal customerModal" id="task-modal-complete" role="dialog" aria-labelledby="task-modal-complete">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-complete-task-label"> Complete Task</h4>
-                </div>
-                <div class="modal-body">
-                    @yield('journal-create-form')
-                </div>
-            </div>
-        </div>
-    </div><!--/modal-->
+    {{--<div class="modal customerModal" id="task-modal-complete" role="dialog" aria-labelledby="task-modal-complete">--}}
+        {{--<div class="modal-dialog" role="document">--}}
+            {{--<div class="modal-content">--}}
+                {{--<div class="modal-header">--}}
+                    {{--<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>--}}
+                    {{--<h4 class="modal-title" id="modal-complete-task-label"> Complete Task</h4>--}}
+                {{--</div>--}}
+                {{--<div class="modal-body">--}}
+                    {{--@yield('journal-create-form')--}}
+                {{--</div>--}}
+            {{--</div>--}}
+        {{--</div>--}}
+    {{--</div><!--/modal-->--}}
     <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -409,10 +409,11 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-                    { data: 'status', name: 'status' },
+                    { data: 'customer_name', name: 'customer_name'},
+                    { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
-                    { data: 'priority', name: 'priority' },
-                    { data: 'customer_name', name: 'customer_name' },
+                    { data: 'status', name: 'status'},
+                    { data: 'priority', name: 'priority'},
                     { data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
@@ -430,12 +431,14 @@
                 columns: [
                     {data: 'id', name: 'id'},
                     {data: 'title', name: 'title'},
+                    {data: 'customer_name', name: 'customer_name'},
                     {data: 'description', name: 'description'},
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
-                    { data: 'customer_name', name: 'customer_name' },
+                    {data: 'status', name: 'status'},
+                    {data: 'customer_first_name', name: 'customer_first_name', visible: false },
+                    {data: 'customer_last_name', name: 'customer_last_name' , visible: false},
                     {data: 'action', name: 'action', orderable: false, searchable: false},
-
                 ]
             });
 
@@ -714,47 +717,6 @@
         }
 
 
-        function deleteAppointment(id){
-            var _token = $('input[name="_token"]').val();
-            var data = {
-                _token : _token,
-                id: id
-            };
-            swal({
-                    title: "Are you sure?",
-                    text: "This Information will be trashed!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel !",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
-
-                        //deletion process is going on....
-
-
-                        $.post("{{ route('delete.appointment') }}", data, function(result){
-
-                            if(result.result == 'Success'){
-                                swal("Deleted!", "Appointment has been deleted.", "success");
-                                get_all_appointment_data();
-                                $.notify('Appointment deleted successfully', "danger");
-                            }
-                            else{
-                                swal("Failed", "Failed to delete the Appointment", "error");
-                            }
-
-                        });
-                    } else {
-                        swal("Cancelled", "Appointment is safe :)", "error");
-                    }
-                });
-        }
-
 
         function get_all_appointment_data(){
 
@@ -904,55 +866,187 @@
         }
 
 
-        function deleteTask(id){
-            var _token = $('input[name="_token"]').val();
-            var data = {
-                _token : _token,
-                id: id
-            };
-            swal({
-                    title: "Are you sure?",
-                    text: "This Information will be trashed!",
-                    type: "warning",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, delete it!",
-                    cancelButtonText: "No, cancel !",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm){
-                    if (isConfirm) {
 
-                        //deletion process is going on....
+        function closeAppointment(id, status){
 
 
-                        $.post("{{ route('delete.task') }}", data, function(result){
 
-                            if(result.result == 'Success'){
-                                swal("Deleted!", "Task has been deleted.", "success");
-                                get_all_task_data();
-                                $.notify('Task deleted successfully', "danger");
-                            }
-                            else{
-                                swal("Failed", "Failed to delete the task", "error");
-                            }
+            $('#journal_modal_button').val(status+ ' Appointment');
+            $('#modal-new-journal-label').val(status+ ' Appointment');
+            if(status=='Complete'){
+                status='Done';
+            }
+            else if(status=='Cancel'){
+                status = 'Cancelled';
+            }
 
-                        });
-                    } else {
-                        swal("Cancelled", "Task is safe :)", "error");
+            $('#origin_id').val(id);
+            $('#journal-customer-id').remove();
+
+            $('#journal-modal').modal('show');
+            $("#journal_modal_button").text("Complete Appointment");
+            $('#journalForm').unbind('submit');
+            $('#journalForm').on('submit',function(e) {
+                e.preventDefault();
+                var _token = $('input[name="_token"]').val();
+
+                var journal = {
+                    originId : $('#'+journalInputMap.originId).val(),
+                    journalTitle : $('#'+journalInputMap.journalTitle).val(),
+                    journalDescription : $('#'+journalInputMap.journalDescription).val(),
+                    journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
+                };
+                if($('input[name=followUpType]:checked').val() === 'appointment'){
+                    journal.followup = {
+                        type : 'appointment',
+                        followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
+                        appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
+                        followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                        followupAppointmentStartTime : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                        followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
+                    };
+                }
+
+                else if($('input[name=followUpType]:checked').val() === 'task'){
+
+                    journal.followup = {
+                        type : 'task',
+                        followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
+                        followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
+                        followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
+                        followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
+                    };
+                }
+
+                var data = {
+                    _token : _token,
+                    journal: journal,
+                    action: status
+                };
+
+
+
+                var request = jQuery.ajax({
+                    url: "{{ route('close.appointment') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+
+                    if(response.result == 'Saved'){
+
+                        $('#journal-modal').modal('hide');
+                        get_all_appointment_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
                     }
                 });
 
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(jqXHT.responseJSON.message, "error");
+                });
+
+
+
+            });
+
+        }
+
+
+        function viewAppointment(id){
+
+            $.get("{{ route('edit.appointment') }}", { id: id} ,function(data){
+                //console.log(data.task);
+                if(data){
+                    $('#appointment_id').val(data.appointment.id);
+                    $('#viewAppointmentCustomer').html(data.appointment.customer.first_name+', '+ data.appointment.customer.last_name+'@'+data.appointment.customer.account.name);
+
+                    $('#viewAppointmentTitle').html(data.appointment.title);
+                    $('#viewAppointmentDescription').html(data.appointment.description);
+                    $('#viewAppointmentStart_time').html(data.appointment.start_time);
+                    $('#viewAppointmentEnd_time').html(data.appointment.end_time);
+
+                    //task_date = moment(data.task.due_date);
+                    //$('#viewTaskPriority').html(data.task.priority);
+
+                    $('#viewAppointmentStatus').html(data.appointment.status);
+                    //console.log(data.appointment.status);
+                    if(data.appointment.status == "Done" || data.appointment.status == "Complete"||data.appointment.status == "Cancel" || data.appointment.status == "Cancelled"){
+
+
+                        $("#complete-appointment-button").hide();
+                        $("#cancel-appointment-button").hide();
+                        $("#edit-appointment-button").hide();
+
+                    }
+                    else {
+                        $("#complete-appointment-button").show();
+                        $("#cancel-appointment-button").show();
+                        $("#edit-appointment-button").show();
+
+                    }
+                    //updateDates();
+                    //var id = data.task.id;
+                    //console.log(id);
+
+                }
+
+            });
+
+            $('#appointment-modal-view').modal('show');
+            $('#appointmentIdForView').val(id);
+
+
+        }
+        function editAppointmentWithClosingView(){
+            var id = $('#appointmentIdForView').val();
+
+            $('#appointment-modal-view').modal('hide');
+
+
+            editAppointment(id);
 
         }
 
 
 
+        function completeAppointmentWithClosingView(){
+            var id = $('#appointmentIdForView').val();
+
+            $('#appointment-modal-view').modal('hide');
+
+
+            closeAppointment(id, 'Complete');
+
+        }
+
+        function cancelAppointmentWithClosingView(id){
+            var id = $('#appointmentIdForView').val();
+
+            $('#appointment-modal-view').modal('hide');
+
+
+            closeAppointment(id, 'Cancel');
+
+        }
+
+        function cancelAppointment(id) {
+            var id = $('#appointmentIdForView').val();
+
+            $('#appointment-modal-view').modal('hide');
+
+
+            closeAppointment(id, 'Cancel');
+        }
+
+
         function viewTask(id){
 
             $.get("{{ route('edit.task.data') }}", { id: id} ,function(data){
-                console.log(data.task);
+
                 if(data){
                     $('#task_id').val(data.task.id);
                     $('#viewTaskCustomer').html(data.task.customer.first_name+', '+ data.task.customer.last_name+'@'+data.task.customer.account.name);
@@ -1053,7 +1147,6 @@
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
             ajax: '{!! route('account-journal-data', $account->id) !!}',
             columns: [
-                {data: 'id', name: 'id'},
                 {data: 'log_date', name: 'log_date'},
                 {data: 'title', name: 'title'},
                 {data: 'description', name: 'description'},
@@ -1066,13 +1159,16 @@
 
 
 
-        function createJournal(){
-            $('#modal-new-journal-label').text('Edit Journal');
-            $('#FollowupSection').show();
-            journalDate=moment();
-            reset_journal_form($('#journalForm')[0]);
+        function createJournal() {
+            $('#journal-modal').modal('show');
+            $('#modal-new-journal-label').text('Create Journal');
+            $("#journal_modal_button").text("Create Journal");
 
-            var customer_select= jQuery("#journalCustomerId").select2({
+            journalDate = moment();
+
+
+        }
+            var journal_customer_select= jQuery("#journalCustomerId").select2({
                 placeholder: "Select a Customer",
                 allowClear:true,
                 ajax: {
@@ -1096,23 +1192,14 @@
                     cache: true
                 }
             });
+
             jQuery('.modal').on('shown.bs.modal', function () {
                 $('#logDateTimePicker').datetimepicker();
 
             });
-            $('#journal-modal').modal('show');
-        }
 
-        function followUpTest(){
-            if($("#followUpCheck").prop('checked') == true) {
-                $('#typeItem').show();
 
-            }else{
-                $('#typeItem').hide();
-                $('#followUpTask').hide();
-                $('#followUpAppointment').hide();
-            }
-        }
+
 
 
         $('#journalForm').on('submit',function(e) {
@@ -1162,7 +1249,7 @@
                 request.done(function (response) {
 
                     if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
+
                         $('#journal-modal').modal('hide');
                         get_all_journal_data();
                         $.notify(response.message, "success");
@@ -1187,7 +1274,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
+
                         $('#journal-modal').modal('hide');
                         get_all_journal_data();
                         jQuery.notify(response.message, "success");
@@ -1204,46 +1291,9 @@
 
         });
 
-        function reset_followup_task_form(){
-            $('#'+journalInputMap.followupTaskTitle).val('');
-                $('#'+journalInputMap.followupTaskDescription).val('');
-                $('#'+journalInputMap.followupTaskDueDate).val('');
-               $('#'+journalInputMap.followupTaskPriority).val('');
-        }
 
-        function reset_journal_form(el){
-            el.reset();
-            $('#'+journalInputMap.journalId).val('');
-            reset_followup_task_form();
-            reset_followup_appointment_form();
-        }
 
-        function reset_followup_appointment_form(){
-            $('#'+journalInputMap.followupAppointmentTitle).val('');
-               $('#f'+journalInputMap.followupAppointmentDescription).val('');
-              $('#'+journalInputMap.followupAppointmentStartTime).val('');
-               $('#'+journalInputMap.followupAppointmentEndTime).val('')
-        }
 
-        function editJournal(id){
-
-            $('#journal_modal_button').val('Update Journal');
-            $('#modal-new-journal-label').text('Edit Journal');
-            $('#FollowupSection').hide();
-            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
-                if(data){
-                    $('#journal_id').val(data.journal.id);
-                    $('#journalCustomerId').val(data.journal.customer_id);
-                    $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.account.name+"</option>");
-                    $('#journalTitle').val(data.journal.title);
-                    $('#journalDescription').val(data.journal.description);
-                    journalDate=moment(data.journal.log_date);
-                    updateJournalDates();
-                }
-
-            });
-            $('#journal-modal').modal('show');
-        }
         function updateJournalDates(){
             jQuery("#journalLogDate").data("DateTimePicker").date(journalDate);
             jQuery("#journalLogDate").data("DateTimePicker").minDate(moment());
@@ -1253,6 +1303,7 @@
             journal_datatable.ajax.reload(null, false);
         }
         /*========End Journal Module in Company Single view =========*/
+
 
         function editAccount(){
             var id = '{{$account->id}}';
@@ -1280,6 +1331,7 @@
                 }
             });
             $('#modal-new-account').modal('show');
+
         }
 
         //This update code for updating account from account single view page....
@@ -1432,7 +1484,7 @@
 
 
             $('#journal_modal_button').val(status+ ' Task');
-            $('#modal-complete-task-label').val(status+ ' Task');
+            $('#modal-new-journal-label').val(status+ ' Task');
             if(status=='Complete'){
                 status='Done';
 
@@ -1444,8 +1496,12 @@
             $('#origin_id').val(id);
             $('#journal-customer-id').remove();
 
-            $('#task-modal-complete').modal('show');
+            $('#journal-modal').modal('show');
+
+            $("#journal_modal_button").text("Complete Task");
+
             $('#journalForm').unbind('submit');
+
             $('#journalForm').on('submit',function(e) {
 
                 e.preventDefault();
@@ -1495,8 +1551,8 @@
                 request.done(function (response) {
 
                     if(response.result == 'Saved'){
-                        reset_journal_form($('#journalForm')[0]);
-                        $('#task-modal-complete').modal('hide');
+
+                        $('#journal-modal').modal('hide');
                         get_all_task_data();
                         $.notify(response.message, "success");
                     }
@@ -1514,6 +1570,17 @@
             });
 
         }
+
+        jQuery('#journal-modal').on('shown.bs.modal', function () {
+            formPrepare();
+        });
+
+        jQuery('#journal-modal').on('hidden.bs.modal', function () {
+            reset_journal_form(jQuery("#journalForm")[0]);
+        });
+
+        //Appointment functions
+
 
     </script>
 

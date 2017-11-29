@@ -13,6 +13,7 @@
 
 //Route::group(['middleware'=>'web'])
 Route::get('/', 'HomeController@dashboard')->name('dashboard');
+Route::get('/home', 'HomeController@dashboard')->name('dashboard');
 
 Auth::routes();
 

@@ -57,7 +57,7 @@
                                         <div class="panel panel-default">
                                             <div class="panel-heading">
                                                 <h3 class="panel-title">Customer Info</h3>
-                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer()" data-target="#modal-new-account"><i class="glyphicon glyphicon-edit"></i>  Edit Customer</button>
+                                                <button class="btn btn-warning pull-right" style="margin-top:-24px;" onClick="editCustomer('{{$customer->id}}')" data-target="#task-modal"><i class="glyphicon glyphicon-edit"></i>  Edit Customer</button>
                                             </div>
                                             <div class="panel-body">
                                                 <div class="col-md-6 col-lg6 col-sm-12 table-responsive">
@@ -270,6 +270,20 @@
             </div>
         </div>
     </div><!--/modal-->
+
+    <div class="modal customerModal" id="task-modal-edit" role="dialog" aria-labelledby="task-modal-edit">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-new-task-label">Edit Customer</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('customer-create-form')
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal customerModal" id="task-modal-view" role="dialog" aria-labelledby="task-modal-view">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -1234,6 +1248,7 @@
         };
 
         function editCustomer(){
+          //  var id = '{{$customer->id}}';
 
             jQuery("#modal_button").val("Update");
             $.get("{{ route('get.customer.data') }}", { id: '{{$customer->id}}' } ,function(data){
@@ -1277,7 +1292,7 @@
             });
 
 
-            $('#new-customer').modal('show');
+            $('#task-modal-edit').modal('show');
 
         }
         //This update code for updating account from account single view page....

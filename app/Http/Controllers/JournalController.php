@@ -51,12 +51,11 @@ class JournalController extends Controller
     }
 
     public function getAccountJournalsAjax(Account $account){
-        return DataTables::of($account->journals()->with(['journalable']))
+        return DataTables::of($account->journals())
             ->addColumn('action',
                 function ($journal){
                     return
-                        '<a  class="btn btn-xs btn-primary"  onClick="editJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> Edit</a>
-                        <a  class="btn btn-xs btn-danger"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-primary"  href="#" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('followup',
                 function($journal){
@@ -68,11 +67,7 @@ class JournalController extends Controller
                         return '';
                     }
                 })
-            ->addColumn('id', function ($journal){
-                return $journal->id;
-            })
-
-            ->rawColumns(['id', 'title', 'description', 'followup', 'log_date','action'])
+            ->rawColumns(['title', 'description', 'followup', 'log_date','action'])
             ->make(true);
     }
 
