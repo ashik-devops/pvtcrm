@@ -249,6 +249,7 @@
             function reset_journal_form(el){
                 el.reset();
                 $('#'+journalInputMap.journalId).val('');
+                $('#journalForm select').val('').trigger('change.select2');
                 reset_followup_task_form();
                 reset_followup_appointment_form();
             }

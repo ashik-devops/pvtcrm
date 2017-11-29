@@ -1138,6 +1138,27 @@
         $('#followUpTask').hide();
         $('#followUpAppointment').hide();
 
+        {{--var journal_datatable = jQuery('#journals-list').DataTable({--}}
+{{--//               responsive: false,--}}
+            {{--select: true,--}}
+            {{--processing: true,--}}
+            {{--serverSide: true,--}}
+            {{--paging:true,--}}
+            {{--lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],--}}
+            {{--ajax: '{!! route('account-journal-data', $account->id) !!}',--}}
+            {{--columns: [--}}
+                {{--{data: 'log_date', name: 'log_date'},--}}
+                {{--{data: 'title', name: 'title'},--}}
+                {{--{data: 'description', name: 'description'},--}}
+                {{--{data: 'followup', name: 'followup', orderable: false, searchable: false},--}}
+                {{--{data: 'action', name: 'action', orderable: false, searchable: false},--}}
+
+            {{--]--}}
+        {{--});--}}
+
+
+
+
         var journal_datatable = jQuery('#journals-list').DataTable({
 //               responsive: false,
             select: true,
@@ -1147,10 +1168,11 @@
             lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],
             ajax: '{!! route('account-journal-data', $account->id) !!}',
             columns: [
+//                {data: 'id', name: 'id'},
                 {data: 'log_date', name: 'log_date'},
                 {data: 'title', name: 'title'},
                 {data: 'description', name: 'description'},
-                {data: 'followup', name: 'followup', orderable: false, searchable: false},
+                {data: 'followup', name: 'followup', orderable: false, searchable:false},
                 {data: 'action', name: 'action', orderable: false, searchable: false},
 
             ]
@@ -1158,8 +1180,8 @@
 
 
 
-
         function createJournal() {
+            reset_journal_form($('#journalForm')[0]);
             $('#journal-modal').modal('show');
             $('#modal-new-journal-label').text('Create Journal');
             $("#journal_modal_button").text("Create Journal");

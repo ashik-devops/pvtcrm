@@ -85,7 +85,7 @@
         </div>
     </div><!--/modal-->
     <!-- Modal for creating customer -->
-    <div class="modal customerModal" id="task-modal" role="dialog" aria-labelledby="task-modal">
+    <div class="modal customerModal" id="task-exitmodal" role="dialog" aria-labelledby="task-modal">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
