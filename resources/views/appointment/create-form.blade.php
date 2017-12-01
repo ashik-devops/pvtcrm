@@ -73,9 +73,10 @@
 
 
 
-        <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Company</button>-->
+        <div class="form-group margin-top-md center-block text-center">
+            <input type="submit" id="appointment_modal_button"  class="btn btn-success " value="Add Appointment">
         <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">Close</button>
-        <input type="submit" id="appointment_modal_button"  class="btn btn-success margin-top-md center-block" value="Add Appointment">
+
 
         </div>
 

@@ -128,7 +128,7 @@
         </div>
 
     <!--<button type="submit" class="btn btn-success margin-top-md center-block">Add Account</button>-->
-    <button type="button" class="btn btn-danger margin-top-md center-block" onclick="goBack()">Cancel</button>
+    <button type="button" class="btn btn-danger margin-top-md center-block" data-dismiss="modal">Cancel</button>
     <input type="submit" id="modal_button"  class="btn btn-success margin-top-md center-block" value="Create">
 
     </div>

@@ -207,7 +207,7 @@
                 {{--<p class="meta">Time Period: 2 weeks (June 01 - June 14, 2016)</p>--}}
                 {{--</div>--}}
 
-                </section>
+                {{--</section>--}}
 
             </div>
 
@@ -651,21 +651,6 @@
 
 @section('modal')
     <!-- Modal for creating customer -->
-    <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-new-appointment-label">Add New Appointment</h4>
-                </div>
-                <div class="modal-body">
-                    @yield('appointment-create-form')
-                </div>
-            </div>
-        </div>
-    </div><!--/modal-->
-
-
     <div class="modal customerModal" id="task-modal-view" role="dialog" aria-labelledby="task-modal-view">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
@@ -1140,9 +1125,7 @@
 
         }
 
-        //creating task
-        $('#task_modal_button').val('Add Task');
-        $('#modal-new-task-label').text('Add A Task');
+
         $('#taskForm').on('submit',function(e){
             e.preventDefault();
             var _token = $('#taskForm input[name="_token"]').val();
@@ -1197,6 +1180,8 @@
         }
 
         function editTask(id){
+            $('#task-modal').modal('show');
+            console.log("test");
             $('#task_modal_button').val('Update Task');
             $('#modal-new-task-label').text('Edit Task');
 
@@ -1216,7 +1201,7 @@
 
             });
 
-            $('#task-modal').modal('show');
+
         }
 
         function viewTask(id) {

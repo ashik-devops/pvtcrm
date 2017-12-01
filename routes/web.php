@@ -14,6 +14,8 @@
 //Route::group(['middleware'=>'web'])
 Route::get('/', 'HomeController@dashboard')->name('dashboard');
 Route::get('/home', 'HomeController@dashboard')->name('dashboard');
+Route::get('/timeline', 'TimelineController@timeline')->name('timeline');
+
 
 Auth::routes();
 
@@ -139,6 +141,7 @@ Route::get('/ajax/customer/journals/data/{customer}', 'JournalController@getCust
 Route::post('/create-journal', 'JournalController@createJournal')->name('create.journal');
 Route::get('/journals/edit/', 'JournalController@editJournal')->name('edit.journal.data');
 Route::post('/journals/update', 'JournalController@updateJournal')->name('update.journal');
+
 
 
 Route::get('activities', 'ActivityController@index')->name('activities-index');
