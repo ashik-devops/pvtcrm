@@ -196,7 +196,7 @@
 
 
         jQuery("#new-customer-btn").click(function (){
-            reset_form(jQuery("#customerForm")[0]);
+            reset_form('customerForm');
             jQuery(".customerModal .modal-title").html('Add New Customer');
             jQuery("#accountId").html('');
             jQuery("#modal_button").val("Create");
@@ -334,7 +334,7 @@
 
                     if(response.result){
                         if(response.result == 'Saved') {
-                            reset_form($('#customerForm')[0]);
+                            reset_form('customerForm');
                             jQuery("#accountId").html("");
                             $('#modal-new-member').modal('hide');
                             get_all_customer_data();
@@ -368,7 +368,7 @@
                 });
                 request.done(function (response) {
                     if(response.result == 'Saved'){
-                        reset_form($('#customerForm')[0]);
+                        reset_form('customerForm');
                         jQuery("#accountId").html("");
                         $('#customerId').val('');
                         $('#modal-new-member').modal('hide');
@@ -399,7 +399,7 @@
         }
         function showParselyError(field, msg){
             if(field.indexOf('.')>=0){
-                field=field.split('.')[1];
+                field=field.split('.').reverse()[0];
             }
             var el = jQuery("#"+inputMap[field]).parsley();
             el.removeError('fieldError');
@@ -407,7 +407,10 @@
         }
 
         function reset_form(el) {
-            el.reset();
+
+            jQuery("#"+el).reset();
+            jQuery("#"+el).parsley().reset();
+
             jQuery("#"+inputMap.addressId).val('');
             jQuery("#"+inputMap.customerId).val('');
             jQuery("#"+inputMap.accountId).val('0');

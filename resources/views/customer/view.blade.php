@@ -404,7 +404,7 @@
                     {data: 'start_time', name: 'start_time'},
                     {data: 'end_time', name: 'end_time'},
                     {data: 'status', name: 'status'},
-                    {data: 'action', name: 'action', orderable: false, searchable: false},
+               odal     {data: 'action', name: 'action', orderable: false, searchable: false},
 
                 ]
             });
@@ -1176,6 +1176,7 @@
 
 
             closeAppointment(id, 'Cancel');
+
 
         }
 

@@ -68,6 +68,8 @@ class CustomersController extends Controller
         else{
             $rules=array_merge($rules, [
                 'account.accountNo' => 'required|unique:accounts,account_no,'.$data['account']['accountId'],
+                'account.accountName' => 'required|string',
+                'account.website' => 'required|string',
             ]);
         }
         return Validator::make($data, $rules);
@@ -168,9 +170,8 @@ class CustomersController extends Controller
             }
 
             DB::beginTransaction();
-            $customer->save();
-            $address->save();
             $account->save();
+            $customer->save();
             $account->addresses()->save($address, ['type' => 'BILLING']);
             $customer->addresses()->save($address, ['type' => 'CONTACT']);
             $account->employees()->save($customer);
@@ -216,24 +217,27 @@ class CustomersController extends Controller
         $this->authorize('update',$customer);
         $address = Address::findOrFail($request->account['addressId']);
         $account = Account::findOrFail($request->account['accountId']);
-        if(is_null($account)){
-            $account = new Account();
 
+        $account = Account::find($request->account['accountId']);
+        if (is_null($account)) {
+            $account = new Account();
+            $account->account_no = $request->account['accountNo'];
             $account->name = $request->account['accountName'];
             $account->website = $request->account['accountWebsite'];
-            $account->phone_no = $request->account['accountPhone'];
-            $account->email = $request->account['accountEmail'];
-
         }
 
-        if(!is_null($customer) && !is_null($address)) {
+
             $customer->first_name = $request->customer['firstName'];
             $customer->last_name = $request->customer['lastName'];
             $customer->title = $request->customer['customerTitle'];
             $customer->email = $request->customer['customerEmail'];
             $customer->phone_no = $request->customer['customerPhone'];
             $customer->priority = $request->customer['customerPriority'];
-            $customer->user_id = $request->customer['userId'];;
+            $customer->user_id = $request->customer['userId'];
+
+            if (is_null($address)) {
+                $address=new Address();
+            }
 
             $address->street_address_1 = $request->account['streetAddress_1'];
             $address->street_address_2 = $request->account['streetAddress_2'];
@@ -244,10 +248,7 @@ class CustomersController extends Controller
             $address->phone_no = $request->account['accountPhone'];
             $address->email = $request->account['accountEmail'];
 
-        }
-        else{
-            return response()->json(['result'=>'Error'], 403);
-        }
+
 
 
         DB::beginTransaction();
