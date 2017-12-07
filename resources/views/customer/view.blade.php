@@ -3,6 +3,7 @@
 @include('appointment.create-form')
 @include('appointment.appointment-view')
 @include('journal.create-form')
+
 @include('task.create-form')
 @include('task.task-view')
 @section('after-head-style')
@@ -310,6 +311,22 @@
             </div>
         </div>
     </div><!--/modal-->
+
+
+
+    <div class="modal customerModal" id="journal-modal-view" role="dialog" aria-labelledby="journal-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-journal-label"> Journal View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-view')
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal appointmentModal" id="appointment-modal" role="dialog" aria-labelledby="appointment-modal">
         <div class="modal-dialog" role="document">
@@ -1604,6 +1621,55 @@
             jQuery("#taskCustomerId").hide();
             jQuery("#aptCustomerId").hide();
         });
+
+
+        function viewJournal(id){
+
+            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
+                //console.log(data.task);
+                if(data){
+                    $('#journal_id').val(data.journal.id);
+                    $('#viewJournalId').val(data.journal.id);
+                    $('#viewJournalCustomer').html(data.journal.journalCustomerId);
+//                    $('#viewJournalCustomer').html(data.journal.customer.first_name+', '+ data.journal.customer.last_name+'@'+data.appointment.customer.account.name);
+
+                    $('#viewJournalTitle').html(data.journal.title);
+                    $('#viewJournalDescription').html(data.journal.description);
+                    $('#viewJournalLogDate').html(data.journal.journalLogDate);
+
+
+
+
+//                    $('#viewAppointmentStatus').html(data.appointment.status);
+//
+//                    if(data.appointment.status == "Done" || data.appointment.status == "Complete"||data.appointment.status == "Cancel" || data.appointment.status == "Cancelled"){
+//
+//
+//                        $("#complete-appointment-button").hide();
+//                        $("#cancel-appointment-button").hide();
+//                        $("#edit-appointment-button").hide();
+//
+//                    }
+//                    else {
+//                        $("#complete-appointment-button").show();
+//                        $("#cancel-appointment-button").show();
+//                        $("#edit-appointment-button").show();
+//
+//                    }
+
+
+                }
+
+            });
+
+            $('#journal-modal-view').modal('show');
+            $('#journalIdForView').val(id);
+
+
+        }
+
+
+
     </script>
 
 @endsection

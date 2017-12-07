@@ -408,7 +408,7 @@
 
         function reset_form(el) {
 
-            jQuery("#"+el).reset();
+            jQuery("#"+el)[0].reset();
             jQuery("#"+el).parsley().reset();
 
             jQuery("#"+inputMap.addressId).val('');

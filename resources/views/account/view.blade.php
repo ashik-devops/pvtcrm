@@ -115,6 +115,10 @@
                                                 </div>
                                             </div>
 
+
+
+
+
                                         </div>
                                     </div>
                                     <div id="tasks" role="tabpanel" class="tab-pane">
@@ -331,7 +335,7 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="reset_appointment_form()" )><span aria-hidden="true">&times;</span></button>
                     <h4 class="modal-title" id="modal-new-appointment-label">Add New Appointment</h4>
                 </div>
                 <div class="modal-body">
@@ -366,7 +370,24 @@
                 </div>
             </div>
         </div>
-    </div><!--/modal-->
+    </div>
+
+
+    <div class="modal customerModal" id="journal-modal-view" role="dialog" aria-labelledby="journal-modal-view">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="modal-view-journal-label"> Journal View</h4>
+                </div>
+                <div class="modal-body">
+                    @yield('journal-view')
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--/modal-->
 @endsection
 
 
@@ -750,6 +771,7 @@
         function createTask(){
 
             $('#task-modal').modal('show');
+            $('#task_modal_button').val('Add Task');
         }
 
 
@@ -835,9 +857,12 @@
         });
 
         function reset_task_form(form_el) {
-            form_el.reset();
-            $('#task_id').val('');
 
+            form_el.reset();
+            min_date = moment();
+            max_date = moment();
+            $('#'+taskInputMap.taskId).val('');
+            $('#'+taskInputMap.taskCustomerId).val('').trigger('change');
 
         }
 
@@ -956,6 +981,55 @@
         }
 
 
+
+
+
+        function viewJournal(id){
+
+            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
+                //console.log(data.task);
+                if(data){
+                    $('#journal_id').val(data.journal.id);
+                    $('#viewJournalId').val(data.journal.journalId);
+                    $('#viewJournalCustomer').html(data.journal.journalCustomerId);
+//                    $('#viewJournalCustomer').html(data.journal.customer.first_name+', '+ data.journal.customer.last_name+'@'+data.journal.customer.account.name);
+
+                    $('#viewJournalTitle').html(data.journal.title);
+                    $('#viewJournalDescription').html(data.journal.description);
+                    $('#viewJournalLogDate').html(data.journal.journalLogDate);
+
+
+
+
+//                    $('#viewAppointmentStatus').html(data.appointment.status);
+//
+//                    if(data.appointment.status == "Done" || data.appointment.status == "Complete"||data.appointment.status == "Cancel" || data.appointment.status == "Cancelled"){
+//
+//
+//                        $("#complete-appointment-button").hide();
+//                        $("#cancel-appointment-button").hide();
+//                        $("#edit-appointment-button").hide();
+//
+//                    }
+//                    else {
+//                        $("#complete-appointment-button").show();
+//                        $("#cancel-appointment-button").show();
+//                        $("#edit-appointment-button").show();
+//
+//                    }
+
+
+                }
+
+            });
+
+            $('#journal-modal-view').modal('show');
+            $('#journalIdForView').val(id);
+
+
+        }
+
+
         function viewAppointment(id){
 
             $.get("{{ route('edit.appointment') }}", { id: id} ,function(data){
@@ -1001,6 +1075,9 @@
 
 
         }
+
+
+
         function editAppointmentWithClosingView(){
             var id = $('#appointmentIdForView').val();
 
@@ -1121,6 +1198,7 @@
             var el = jQuery("#"+taskInputMap[field]).parsley();
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
+
         }
 
         function showAptParselyError(field, msg){
@@ -1177,6 +1255,26 @@
 
             ]
         });
+
+
+        {{--var journal_datatable = jQuery('#journals-list').DataTable({--}}
+{{--//               responsive: false,--}}
+            {{--select: true,--}}
+            {{--processing: true,--}}
+            {{--serverSide: true,--}}
+            {{--paging:true,--}}
+            {{--lengthMenu: [ [10, 25, 50, 100, -1], [10, 25, 50, 100, "All"] ],--}}
+            {{--ajax: '{!! route('customer-journal-data', $customer->id) !!}',--}}
+            {{--columns: [--}}
+                {{--{data: 'id', name: 'id'},--}}
+                {{--{data: 'log_date', name: 'log_date'},--}}
+                {{--{data: 'title', name: 'title'},--}}
+                {{--{data: 'description', name: 'description'},--}}
+                {{--{data: 'followup', name: 'followup', orderable: false, searchable:false},--}}
+                {{--{data: 'action', name: 'action', orderable: false, searchable: false},--}}
+
+            {{--]--}}
+        {{--});--}}
 
 
 
@@ -1600,6 +1698,14 @@
         jQuery('#journal-modal').on('hidden.bs.modal', function () {
             reset_journal_form(jQuery("#journalForm")[0]);
         });
+
+
+
+
+
+
+
+
 
         //Appointment functions
 
