@@ -291,11 +291,16 @@
             zip: 'zip_id'
         };
         jQuery("button#new-account").click(function (){
+            reset_form('accountForm');
             $('#new_edit_account .modal-title').html('Create New account');
         });
         //For creating account....
         $('#accountForm').on('submit',function(e){
             e.preventDefault();
+            if(!$(this).parsley().isValid()){
+                return;
+            }
+
             var _token = $('input[name="_token"]').val();
 
             var account = {
@@ -339,7 +344,11 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
+                });
+
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
 
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -364,7 +373,11 @@
                     else{
                         jQuery.notify(response.message, "error");
                     }
-                })
+                });
+
+                request.error(function(xhr){
+                    handle_error(xhr);
+                });
 
                 request.fail(function (jqXHT, textStatus) {
                     $.notify(textStatus, "error");
@@ -373,9 +386,35 @@
             }
         });
 
+
+
+        function handle_error(xhr) {
+            if(xhr.status==422){
+                jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
+                    showParselyError(key, data[0]);
+                });
+            }
+        }
+        function showParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.').reverse()[0];
+            }
+            var el = jQuery("#"+inputMap[field]).parsley();
+            el.removeError('fieldError');
+            el.addError('fieldError', {message: msg, updateClass: true});
+        }
+
         function reset_form(el) {
-            el.reset();
-            $('#account_id').val('');
+//            el.reset();
+//            $('#account_id').val('');
+
+
+            jQuery("#"+el)[0].reset();
+            jQuery("#"+el).parsley().reset();
+
+            jQuery("#"+inputMap.addressId).val('');
+            jQuery("#"+inputMap.customerId).val('');
+            jQuery("#"+inputMap.accountId).val('0');
         }
 
         function editAccount( id){

@@ -47,12 +47,33 @@ class JournalController extends Controller
         return Validator::make($data, $rules);
     }
 
-    public function getAccountJournalsAjax(Account $account){
-        return DataTables::of($account->journals())
+//    public function getAccountJournalsAjax(Account $account){
+//        return DataTables::of($account->journals())
+//            ->addColumn('action',
+//                function ($journal){
+//                    return
+//                        '<a  class="btn btn-xs btn-warning"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+//                })
+//            ->addColumn('followup',
+//                function($journal){
+//                    if(get_class($journal->journalable) == 'App\Task'){
+//                        return '<a href="javascript:viewTask('.$journal->journalable->id.')">'.$journal->journalable->title;
+//                    }elseif(get_class($journal->journalable) == 'App\Appointment'){
+//                        return '<a href="javascript:viewAppointment('.$journal->journalable->id.')"'.$journal->journalable->title;
+//                    }else{
+//                        return '';
+//                    }
+//                })
+//            ->rawColumns(['title', 'description', 'followup', 'log_date','action'])
+//            ->make(true);
+//    }
+
+    public function getCustomerJournalsAjax(Customer $customer){
+        return DataTables::of($customer->journals()->with(['journalable']))
             ->addColumn('action',
                 function ($journal){
                     return
-                        '<a  class="btn btn-xs btn-primary"  href="#" ><i class="glyphicon glyphicon-edit"></i> View</a>';
+                        '<a  class="btn btn-xs btn-warning"  onClick="viewJournal('.$journal->id.')" ><i class="glyphicon glyphicon-edit"></i> View</a>';
                 })
             ->addColumn('followup',
                 function($journal){
@@ -64,12 +85,16 @@ class JournalController extends Controller
                         return '';
                     }
                 })
-            ->rawColumns(['title', 'description', 'followup', 'log_date','action'])
+
+
+            ->rawColumns(['id', 'title', 'description', 'followup', 'log_date','action'])
             ->make(true);
     }
 
-    public function getCustomerJournalsAjax(Customer $customer){
-        return DataTables::of($customer->journals()->with(['journalable']))
+
+
+    public function getAccountJournalsAjax(Account $account){
+        return DataTables::of($account->journals()->with(['journalable']))
             ->addColumn('action',
                 function ($journal){
                     return
@@ -87,9 +112,11 @@ class JournalController extends Controller
                 })
 
 
-            ->rawColumns(['id', 'title', 'description', 'followup', 'log_date','action'])
+            ->rawColumns(['title', 'description', 'followup', 'log_date','action'])
             ->make(true);
     }
+
+
 
     public function createJournal(Request $request)
     {

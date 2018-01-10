@@ -209,9 +209,10 @@
         });
 
         jQuery('#new-apt-btn').click(function () {
-            if($('#'+inputMap.appointmentId).val() != '' || $('#'+inputMap.aptCustomerId).val() != ''){
-                reset_form($("#appointmentForm")[0]);
-            }
+//            if($('#'+inputMap.appointmentId).val() != '' || $('#'+inputMap.aptCustomerId).val() != ''){
+//                reset_form($("#appointmentForm")[0]);
+//            }
+            reset_form('appointmentForm');
         });
 
         function updateDates(){
@@ -227,6 +228,9 @@
         $('#modal-new-appointment-label').text('Add An Appointment');
         $('#appointmentForm').on('submit',function(e){
             e.preventDefault();
+            if(!$(this).parsley().isValid()){
+                return;
+            }
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
             var appointment = {
@@ -309,28 +313,40 @@
 
         });
         function handle_error(xhr) {
-
             if(xhr.status==422){
                 jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
                     showParselyError(key, data[0]);
                 });
             }
-
         }
 
-        function reset_form(form_el) {
-            form_el.reset();
-            min_date = moment();
-            max_date = moment();
-            $('#'+inputMap.appointmentId).val('');
-            customer_select.val('').trigger('change');
-
-        }
         function showParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.').reverse()[0];
+            }
             var el = jQuery("#"+inputMap[field]).parsley();
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
         }
+
+        function reset_form(el) {
+//            form_el.reset();
+//            task_date=moment();
+//            $('#'+inputMap.taskId).val('');
+//            task_customer_select.val('').trigger('change');
+
+
+
+            jQuery("#"+el)[0].reset();
+            jQuery("#"+el).parsley().reset();
+
+            jQuery("#"+inputMap.addressId).val('');
+            jQuery("#"+inputMap.customerId).val('');
+            jQuery("#"+inputMap.accountId).val('0');
+            jQuery("#"+inputMap.appointmentId).val();
+
+        }
+
 
         function editAppointment(id){
 
@@ -430,6 +446,7 @@
             $('#appointment-modal-complete').modal('show');
             $('#journalForm').on('submit',function(e) {
                 e.preventDefault();
+
                 var _token = $('input[name="_token"]').val();
 
                 var journal = {

@@ -56,7 +56,13 @@ class Customer extends Model
      */
     public function getCustomerNameWithAccount(): string
     {
-        return implode(', ', array_filter([$this->last_name, $this->first_name])) . "({$this->account->account_no})";
+        $name =  implode(', ', array_filter([$this->last_name, $this->first_name]));
+
+        if(!is_null($this->account)){
+            $name.= " ({$this->account->account_no})";
+        }
+
+        return $name;
     }
 
 }

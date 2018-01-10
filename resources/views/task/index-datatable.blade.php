@@ -187,18 +187,29 @@
                 updateDates();
             });
 
-        function reset_form(form_el) {
-            form_el.reset();
-            task_date=moment();
-            $('#'+inputMap.taskId).val('');
-            task_customer_select.val('').trigger('change');
+        function reset_form(el) {
+//            form_el.reset();
+//            task_date=moment();
+//            $('#'+inputMap.taskId).val('');
+//            task_customer_select.val('').trigger('change');
+
+
+
+            jQuery("#"+el)[0].reset();
+            jQuery("#"+el).parsley().reset();
+
+            jQuery("#"+inputMap.addressId).val('');
+            jQuery("#"+inputMap.customerId).val('');
+            jQuery("#"+inputMap.accountId).val('0');
 
         }
-        jQuery('#new-task-btn').click(function () {
-                console.log($('#'+inputMap.taskId).val() != '');
-               if($('#'+inputMap.taskId).val() != ''){
-                   reset_form($("#taskForm")[0]);
-               }
+        jQuery("button#new-task-btn").click(function () {
+
+            reset_form('taskForm');
+//                console.log($('#'+inputMap.taskId).val() != '');
+//               if($('#'+inputMap.taskId).val() != ''){
+//                   reset_form($("#taskForm")[0]);
+//               }
             });
 
         function updateDates(){
@@ -212,6 +223,9 @@
         $('#modal-new-task-label').text('Add A Task');
         $('#taskForm').on('submit',function(e){
             e.preventDefault();
+            if(!$(this).parsley().isValid()){
+                return;
+            }
             var _token = $('input[name="_token"]').val();
             //console.log('hello');
             var task = {
@@ -286,15 +300,16 @@
             }
         });
         function handle_error(xhr) {
-
             if(xhr.status==422){
                 jQuery.map(jQuery.parseJSON(xhr.responseText), function (data, key) {
                     showParselyError(key, data[0]);
                 });
             }
-
         }
         function showParselyError(field, msg){
+            if(field.indexOf('.')>=0){
+                field=field.split('.').reverse()[0];
+            }
             var el = jQuery("#"+inputMap[field]).parsley();
             el.removeError('fieldError');
             el.addError('fieldError', {message: msg, updateClass: true});
@@ -347,6 +362,9 @@
             $('#task-modal-complete').modal('show');
             $('#journalForm').on('submit',function(e) {
                 e.preventDefault();
+                if(!$(this).parsley().isValid()){
+                    return;
+                }
                 var _token = $('input[name="_token"]').val();
 
                 var journal = {
