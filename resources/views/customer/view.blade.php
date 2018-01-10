@@ -105,7 +105,7 @@
                                                     <table class="table table-bordered" id="journals-list" style="width: 100%">
                                                         <thead>
                                                         <tr>
-                                                            <th>#</th>
+                                                            <th>ID</th>
                                                             <th>Log Date</th>
                                                             <th>Title</th>
                                                             <th>Description</th>
@@ -221,6 +221,17 @@
                                                             <th>Type</th>
                                                             <th>Actions</th>
                                                         </tr>
+
+                                                        <tr>
+                                                            <th>#</th>
+                                                            <th> <p>{{implode(', ', [$customer->addresses->first()->city, $customer->addresses->first()->state, $customer->addresses->first()->country, $customer->addresses->first()->zip])}}</p></th>
+                                                            <th>Type</th>
+                                                            <th>Actions</th>
+                                                        </tr>
+
+
+
+
                                                         </thead>
                                                         <tbody>
                                                         {{--@foreach($customer->addresses as $address)--}}
@@ -298,12 +309,12 @@
             </div>
         </div>
     </div><!--/modal-->
-    <div class="modal customerModal" id="task-modal-complete" role="dialog" aria-labelledby="task-modal-complete">
+    <div class="modal customerModal" id="journal-modal-complete" role="dialog" aria-labelledby="journal-modal-complete">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="modal-complete-task-label"> Complete Task</h4>
+                    <h4 class="modal-title" id="modal-complete-task-label"> Edit Journal</h4>
                 </div>
                 <div class="modal-body">
                     @yield('journal-create-form')
@@ -381,6 +392,7 @@
 
     @yield('journal-create-form-script')
 
+
     <script type="text/javascript">
         var task_date=moment();
         var journalDate=moment();
@@ -395,7 +407,6 @@
                 columns: [
                     { data: 'id', name: 'id' },
                     { data: 'title', name: 'title'},
-
                     { data: 'description', name: 'description'},
                     { data: 'due_date', name: 'due_date' },
                     { data: 'status', name: 'status' },
@@ -1488,7 +1499,6 @@
 
 
 
-
         function createJournal(){
             $('#modal-complete-task-label').text('Add Journal');
             $('#journal-customer-id').remove();
@@ -1496,13 +1506,178 @@
             $('#FollowupSection').show();
             journalDate=moment();
             reset_journal_form($('#journalForm')[0]);
-
-
+            var customer_select= jQuery("#journalCustomerId").select2({
+                placeholder: "Select a Customer",
+                allowClear:true,
+                ajax: {
+                    url: "{{route('get-customer-account-wise', [$account->id])}}",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function (params) {
+                        return {
+                            q: params.term, // search term
+                            accountId: account_id,
+                        };
+                    },
+                    processResults : function (data){
+                        return {
+                            results: data.customers
+                        }
+                    },
+                    cache: true
+                }
+            });
             jQuery('.modal').on('shown.bs.modal', function () {
                 $('#logDateTimePicker').datetimepicker();
-
             });
             $('#task-modal-complete').modal('show');
+
+            $('#journal-modal').modal('show');
+        }
+        $('#journalForm').on('submit',function(e) {
+            e.preventDefault();
+            var _token = $('input[name="_token"]').val();
+            var journal = {
+                journalId : $('#'+journalInputMap.journalId).val(),
+                journalCustomerId : $('#'+journalInputMap.journalCustomerId).val(),
+                journalTitle : $('#'+journalInputMap.journalTitle).val(),
+                journalDescription : $('#'+journalInputMap.journalDescription).val(),
+                journalLogDate : $('#'+journalInputMap.journalLogDate).val(),
+            };
+            if($('input[name=followUpType]:checked').val() === 'appointment'){
+                journal.followup = {
+                    type : 'appointment',
+                    followupAppointmentTitle : $('#'+journalInputMap.followupAppointmentTitle).val(),
+                    appointmentDescription : $('#f'+journalInputMap.followupAppointmentDescription).val(),
+                    followupAppointmentDescription : $('#'+journalInputMap.followupAppointmentStartTime).val(),
+                    followupAppointmentEndTime : $('#'+journalInputMap.followupAppointmentEndTime).val()
+                };
+            }
+            else if($('input[name=followUpType]:checked').val() === 'task'){
+                journal.followup = {
+                    type : 'task',
+                    followupTaskTitle : $('#'+journalInputMap.followupTaskTitle).val(),
+                    followupTaskDescription : $('#'+journalInputMap.followupTaskDescription).val(),
+                    followupTaskDueDate : $('#'+journalInputMap.followupTaskDueDate).val(),
+                    followupTaskPriority : $('#'+journalInputMap.followupTaskPriority).val(),
+                };
+            }
+            var data = {
+                _token : _token,
+                journal: journal,
+            };
+            if(journal.journalId === ''){
+                var request = jQuery.ajax({
+                    url: "{{ route('create.journal') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_journal_form($('#journalForm')[0]);
+                        $('#journal-modal').modal('hide');
+                        get_all_journal_data();
+                        $.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            }else{
+                //journal updating
+                var request = jQuery.ajax({
+                    url: "{{ route('update.journal') }}",
+                    data: data,
+                    method: "POST",
+                    dataType: "json"
+                });
+                request.done(function (response) {
+                    if(response.result == 'Saved'){
+                        reset_journal_form($('#journalForm')[0]);
+                        $('#journal-modal').modal('hide');
+                        get_all_journal_data();
+                        jQuery.notify(response.message, "success");
+                    }
+                    else{
+                        jQuery.notify(response.message, "error");
+                    }
+                });
+                request.fail(function (jqXHT, textStatus) {
+                    $.notify(textStatus, "error");
+                });
+            }
+        });
+        function reset_followup_task_form(){
+            $('#'+journalInputMap.followupTaskTitle).val('');
+            $('#'+journalInputMap.followupTaskDescription).val('');
+            $('#'+journalInputMap.followupTaskDueDate).val('');
+            $('#'+journalInputMap.followupTaskPriority).val('');
+        }
+        function reset_journal_form(el){
+            el.reset();
+            $('#'+journalInputMap.journalId).val('');
+            reset_followup_task_form();
+            reset_followup_appointment_form();
+        }
+        function reset_followup_appointment_form(){
+            $('#'+journalInputMap.followupAppointmentTitle).val('');
+            $('#f'+journalInputMap.followupAppointmentDescription).val('');
+            $('#'+journalInputMap.followupAppointmentStartTime).val('');
+            $('#'+journalInputMap.followupAppointmentEndTime).val('')
+        }
+        function editJournal(id){
+            $('#journal_modal_button').val('Update Journal');
+            $('#modal-new-journal-label').text('Edit Journal');
+            $('#FollowupSection').hide();
+            $.get("{{ route('edit.journal.data') }}", { id: id} ,function(data){
+                if(data){
+                    $('#journal_id').val(data.journal.id);
+                    $('#journalCustomerId').val(data.journal.customer_id);
+                    $('#journalCustomerId').html("<option selected value='"+data.customer.id+"'>"+data.customer.first_name+', '+ data.customer.last_name+'@'+data.customer.account.name+"</option>");
+                    $('#journalTitle').val(data.journal.title);
+                    $('#journalDescription').val(data.journal.description);
+                    journalDate=moment(data.journal.log_date);
+                    updateJournalDates();
+                }
+            });
+            $('#journal-modal').modal('show');
+        }
+        function updateJournalDates(){
+            jQuery("#journalLogDate").data("DateTimePicker").date(journalDate);
+            jQuery("#journalLogDate").data("DateTimePicker").minDate(moment());
+        }
+        function get_all_journal_data(){
+            journal_datatable.ajax.reload(null, false);
+        }
+        /*========End Journal Module in Company Single view =========*/
+        function editAccount(){
+            var id = '{{$account->id}}';
+            $('#new_edit_account .modal-title').html('Edit Account');
+            $.get("{{ route('edit.modal.data') }}", { id: id} ,function(data){
+                if(data){
+                    $('#modal_button').val('Update Account');
+                    $('#account_id').val(data.account.id);
+                    $('#accountNo').val(data.account.account_no);
+                    $('#accountName').val(data.account.name);
+                    $('#accountEmail').val(data.account.email);
+                    $('#accountPhone').val(data.account.phone_no);
+                    $('#accountWebsite').val(data.account.website);
+                    if(data.account_address.length > 0){
+                        $('#address_id').val(data.account_address[0].id);
+                        $('#streetAddress_1').val(data.account_address[0].street_address_1);
+                        $('#streetAddress_2').val(data.account_address[0].street_address_2);
+                        $('#city_id').val(data.account_address[0].city);
+                        $('#state_id').val(data.account_address[0].state);
+                        $('#country_id').val(data.account_address[0].country);
+                        $('#zip_id').val(data.account_address[0].zip);
+                    }
+                }
+            });
+            $('#modal-new-account').modal('show');
 
 
 
